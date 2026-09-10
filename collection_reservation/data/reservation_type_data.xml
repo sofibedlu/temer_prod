@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="property_reservation_collection" model="property.reservation.configuration">
+            <field name="name">Collection Reservation</field>
+            <field name="reservation_type">collection</field>
+            <field name="payment_type">fixed</field>
+            <field name="amount">0.0</field>
+            <field name="duration_in">days</field>
+            <field name="duration">0</field>
+            <field name="is_payment_required">False</field>
+        </record>
+    </data>
+</odoo>

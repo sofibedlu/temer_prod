@@ -1,0 +1,419 @@
+<odoo>
+    <data>
+
+        <record id="pproperty_reservation_history_view_tree_id_inherit" model="ir.ui.view">
+            <field name="name">property.reservation.search.inherit</field>
+            <field name="model">property.reservation</field>
+            <field name="inherit_id"
+                ref="ahadubit_property_reservation.property_reservation_history_view_tree_id" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='property_id']" position="after">
+                    <field name="salesperson_ids" />
+
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="property_reservation_view_search_view_inherit" model="ir.ui.view">
+            <field name="name">property.reservation.search.inherit</field>
+            <field name="model">property.reservation</field>
+            <field name="inherit_id"
+                ref="ahadubit_property_reservation.property_reservation_view_search_view" />
+            <field name="arch" type="xml">
+                <xpath expr="//search" position="inside">
+                    <field name="property_id" />
+                    <field name="partner_id" />
+                    <field name="salesperson_ids" />
+                    <field name="supervisor_id" />
+                    <field name="team_id" />
+                    <field name="wing_id" />
+                    <separator />
+                    <filter string="My Team Reservations"
+                        name="my_team_reservations"
+                        domain="[]"
+                        context="{'my_team_filter': True}" />
+                    <group expand="0" string="Group By">
+                        <filter string="Supervisor" name="group_by_supervisor"
+                            context="{'group_by': 'supervisor_id'}" />
+                        
+                        <filter string="Sales Person" name="group_by_salesperson" context="{'group_by': 'salesperson_ids'}" />
+                        <filter string="Team" name="group_by_team" context="{'group_by': 'team_id'}" />
+                        <filter string="Wing" name="group_by_wing" context="{'group_by': 'wing_id'}" />
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Action for Team Reservations -->
+        <!-- <record id="action_view_team_reservations" model="ir.actions.act_window">
+            <field name="name">Team Reservations</field>
+            <field name="res_model">property.reservation</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{
+                'search_default_my_team_reservations': 1,
+                'my_team_filter': True
+                }</field>
+            <field name="search_view_id" ref="property_reservation_view_search_view_inherit" />
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No reservations found in your team
+                </p>
+            </field>
+        </record> -->
+        <record id="action_view_team_reservations" model="ir.actions.act_window">
+    <field name="name">Team Reservations</field>
+    <field name="res_model">property.reservation</field>
+    <field name="view_mode">kanban,tree,form</field>
+    <field name="context">{'search_default_my_team_reservations': 1, 'my_team_filter': True, 'default_order': 'create_date desc'}</field>
+    <field name="domain">[('status', '!=', 'draft')]</field>
+    <field name="search_view_id" ref="property_reservation_view_search_view_inherit"/>
+    <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">
+            No reservations found in your team
+        </p>
+    </field>
+</record>
+
+
+        <!-- Menu Item -->
+        <menuitem id="menu_team_reservations"
+            name="My Team Reservations"
+            action="action_view_team_reservations"
+            parent="ahadubit_property_reservation.reservation_property_menu"
+            sequence="10" groups="temer_structure.access_property_sales_supervisor_group" />
+        <!-- Finally, add the button to the inherited view -->
+
+
+        <record id="property_reservation_extend_view_form_inherit" model="ir.ui.view">
+            <field name="name">property.reservation.extend.history.inherit</field>
+            <field name="model">property.reservation.extend.history</field>
+            <field name="inherit_id"
+                ref="ahadubit_property_reservation.property_reservation_extend_view_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='approve_extension']" position="replace">
+                    <button name="approve_extension"
+                        string="Approve"
+                        type="object"
+                        class="btn-primary"
+                        invisible="status not in ['pending']"
+                        groups="temer_structure.access_property_sales_supervisor_group" />
+                </xpath>
+                <xpath expr="//button[@name='reject_extension']" position="replace">
+                    <button name="reject_extension"
+                        string="Reject"
+                        type="object"
+                        invisible="status not in ['pending']"
+                        groups="temer_structure.access_property_sales_supervisor_group" />
+                </xpath>
+            </field>
+        </record>
+
+        <record id="property_reservation_transfer_view_form_inherit" model="ir.ui.view">
+            <field name="name">property.reservation.transfer.history.inherit</field>
+            <field name="model">property.reservation.transfer.history</field>
+            <field name="inherit_id"
+                ref="ahadubit_property_reservation.property_reservation_transfer_view_form" />
+            <field name="arch" type="xml">
+
+                <xpath expr="//button[@name='approve_transfer']" position="replace">
+                    <button name="approve_transfer"
+                        string="Approve"
+                        type="object"
+                        class="btn-primary"
+                        invisible="status != 'pending'"
+                        groups="temer_structure.access_property_sales_supervisor_group" />
+                </xpath>
+                <xpath expr="//button[@name='reject_transfer']" position="replace">
+                    <button name="reject_transfer"
+                        string="Reject"
+                        type="object"
+                        class="btn-danger"
+                        invisible="status != 'pending'"
+                        groups="temer_structure.access_property_sales_supervisor_group" />
+                </xpath>
+
+               <!-- <xpath expr="//page[1]" position="replace">
+                        <page string="Payment History">
+                            <field name="payment_line_ids">
+                                <tree editable="bottom">
+                                    <field name="document_type_id"  />
+                                    <field name="bank_id" />
+                                    <field name="ref_number"/>
+                                    <field name="transaction_date" />
+                                    <field name="amount" sum="Total"  />
+                                    <field name="payment_receipt" widget="binary_preview"
+                                         />
+                                </tree>
+                            </field>
+                        </page>
+                </xpath> -->
+            </field>
+        </record>
+
+        <record id="property_reservation_history_view_form_inherit" model="ir.ui.view">
+            <field name="name">property.reservation.inherit</field>
+            <field name="model">property.reservation</field>
+            <field name="inherit_id"
+                ref="ahadubit_property_reservation.property_reservation_history_view_form_id" />
+            <field name="arch" type="xml">
+
+                <xpath expr="//button[@name='get_sales_from_reservation']" position="attributes">
+                    <attribute name="groups">temer_structure.access_property_contract_admin_group</attribute>
+                </xpath>
+
+
+                <xpath expr="//button[@name='print_change_history']" position="attributes">
+                    <attribute name="groups">temer_structure.access_property_system_admin_group</attribute>
+                </xpath>
+                
+                <xpath expr="//button[@name='sale_property_reserved']" position="replace">
+                <field name="show_sale_button" invisible="1"/>
+                    <button name="sale_property_reserved"
+                        string="Sold"
+                        type="object"
+                        class="btn-primary"
+                        invisible="show_sale_button != True"
+                        groups="temer_structure.access_property_contract_admin_group" />
+                </xpath>
+
+                <xpath expr="//button[@name='cancel_reservation']" position="replace">
+                    <button name="cancel_reservation"
+                        string="Cancel"
+                        type="object"
+                        class="btn-primary"
+                        invisible="(status in ['canceled','draft', 'expired']) or uid != salesperson_ids" />
+
+                </xpath>
+
+                <xpath expr="//button[@name='transfer_reservation']" position="replace">
+             
+                    <button name="transfer_reservation"
+                        string="Transfer"
+                        type="object"
+                        class="btn-primary"
+                        invisible="(status  != 'reserved' or transfer_status == 'pending') or show_transfer_extend != True or uid != salesperson_ids"
+                        groups="temer_structure.access_property_sales_person_group" />
+                </xpath>
+                <xpath expr="//button[@name='reservation_extend']" position="replace">
+                    <button name="reservation_extend"
+                        string="Extend"
+                        type="object"
+                        class="btn-primary"
+                        invisible="(status  != 'reserved' or transfer_status == 'pending') or show_transfer_extend != True or uid != salesperson_ids"
+                        groups="temer_structure.access_property_sales_person_group" />
+                </xpath>
+                <xpath expr="//div[@class='alert alert-danger']" position="replace">
+                 <div class="alert alert-danger" role="alert" invisible="is_sufficient == True">
+                        <span class="o_stat_value">Insufficient balance! Remaining Amount: <field
+                                name="payment_diff" />
+                        </span>
+                    </div>
+                </xpath>
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <!-- <field name="is_sufficient"  /> -->
+
+                    <!-- <field name="show_transfer_extend" /> -->
+                    <!-- <field name="reservation_type_id"  /> -->
+                    <!-- <field name="show_approve_button_permission" />
+                    <field name="show_approve_button" /> -->
+                    <field name="salesperson_ids" />
+                    <field name="supervisor_id" />
+                    <field name="team_id" />
+                    <field name="wing_id" />
+                </xpath>
+                <!-- <xpath expr="//page[@name='payment_line_ids']/tree" position="attributes">
+                    <attribute name="readonly">uid != salesperson_ids</attribute>
+                </xpath> -->
+                <!-- <xpath expr="//field[@name='payment_line_ids']" position="replace">
+   
+ <field name="payment_line_ids" widget="section_and_note_one2many"
+                                mode="tree,kanban" readonly="(status not in ['draft','requested', False] and is_from_sales != True) or uid not in salesperson_ids">
+                                <tree string="Payment Line" editable="bottom" delete="0">
+                                    <control>
+                                        <create name="add_product_control" string="Add a Line" />
+                                    </control>
+                                    <field name="bank_id" create="0" readonly="id_editable ==True"/>
+                                    <field name="document_type_id" create="0" readonly="id_editable ==True"/>
+                                    <field name="ref_number" readonly="id_editable ==True"/>
+                                    <field name="transaction_date" readonly="id_editable ==True"/>
+                                    <field name="amount" sum="Total" readonly="id_editable ==True"/>
+                                    <field name="id_editable"  column_invisible="True"/>
+                                    <field name="payment_receipt" widget="binary_preview" readonly="id_editable ==True"/>
+                                    <field name="is_verifed" widget="boolean_toggle" groups="ahadubit_property_reservation.finance_team_approval_group"/>
+                                </tree>
+                            </field>
+                </xpath> -->
+                <xpath expr="//page[@name='payment']" position="replace">
+                    <page string="Payment" invisible="is_payment_required != True">
+                            <field name="payment_line_ids" widget="section_and_note_one2many"
+                                mode="tree,kanban,form" readonly="status not in ['draft', False] and is_from_sales != True and is_creator != True">
+                                <tree string="Payment Line" editable="bottom" delete="0">
+                                    <control>
+                                        <create name="add_product_control" string="Add a Line" />
+                                    </control>
+                                    <field name="id_editable"  column_invisible="True"/>
+                                    <field name="is_new_line"  column_invisible="True"/>
+                                    <field name="bank_id" create="0" readonly="id_editable ==True or is_new_line != True and id"/>
+                                    <field name="document_type_id" create="0" readonly="id_editable ==True or is_new_line != True and id"/>
+                                    <field name="ref_number" readonly="id_editable ==True or is_new_line != True and id"/>
+                                    <field name="transaction_date" readonly="id_editable ==True or is_new_line != True and id"/>
+                                    <field name="amount" sum="Total" readonly="id_editable ==True or is_new_line != True and id"/>
+                                    <field name="status" column_invisible="True"/>
+
+                                    <field name="payment_receipt" widget="binary_preview" readonly="id_editable ==True or is_new_line != True and id"/>
+                                    <button name="add_confirm" string="Confirm" type="object" class="oe_highlight" invisible="is_new_line != True or status != 'reserved'" groups="temer_structure.access_property_sales_supervisor_group"/>
+                                    <field name="is_verifed" widget="boolean_toggle" groups="ahadubit_property_reservation.finance_team_approval_group"/>
+
+                                </tree>
+                                 <kanban>
+                                    <templates>
+                                        <t t-name="kanban-box">
+
+                                               <div class="oe_kanban_card oe_kanban_global_click" t-attf-data-id="{{ record.id.raw_value }}">
+                                                   <field name="is_new_line" invisible="1"/>
+                                                <div class="oe_kanban_details">
+                                                    <div>
+                                                        Bank: <span><field name="bank_id" options="{'no_open': True,'no_create': True,'no_edit': True}"/></span>
+                                                    </div>
+                                                    <div>
+                                                       Doc:  <span><field name="document_type_id" options="{'no_open': True,'no_create': True,'no_edit': True}"/></span>
+                                                    </div>
+                                                    <div>
+                                                        Ref:<span><field name="ref_number"/></span>
+                                                    </div>
+                                                    <div>
+                                                        Date: <span><field name="transaction_date"/></span>
+                                                    </div>
+                                                    <div>
+                                                        <strong>Amount:</strong> <field name="amount"/>
+                                                    </div>
+                                                    <div>
+                                                      <button name="add_confirm" string="Confirm" type="object" class="oe_highlight" invisible="is_new_line != True" groups="temer_structure.access_property_sales_supervisor_group"/>
+                                                    </div>
+                                                </div>
+                                               </div>
+
+                                        </t>
+                                    </templates>
+                                </kanban>
+                             </field>
+                        </page>
+                    </xpath>
+                <xpath expr="//page[@name='extensions']" position="replace">
+                     <page name="extensions" string="Extensions" invisible="status in ['draft', 'requested', False] or show_transfer_extend == False">
+                            <field name="extension_ids" widget="section_and_note_one2many"
+                                mode="tree,kanban" readonly= "uid != salesperson_ids">
+                                <tree string="Extension Line" editable="bottom">
+                                    <control>
+                                        <create name="add_product_control" string="Add a Line" />
+                                    </control>
+                                    <field name="extension_date" />
+                                    <field name="old_end_date" />
+                                    <field name="status" />
+                                    <field name="request_letter_file" widget="binary_preview" />
+                                    <field name="remark" invisible="not status" />
+                                    <button name="approve_extension"
+                                        string="Approve"
+                                        type="object"
+                                        class="btn-primary"
+                                        invisible="status != 'pending'" 
+                        groups="temer_structure.access_property_sales_supervisor_group" />
+                                    <button name="reject_extension"
+                                        string="Reject"
+                                        type="object"
+                                        class="btn-danger"
+                                        invisible="status != 'pending'"  
+                        groups="temer_structure.access_property_sales_supervisor_group" />
+                                </tree>
+                                 <kanban>
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                               <div class="oe_kanban_card oe_kanban_global_click" t-attf-data-id="{{ record.id.raw_value }}">
+                                                <div class="oe_kanban_details">
+                                                    <div>
+                                                        Old Date: <span><field name="old_end_date"/></span>
+                                                    </div>
+                                                    <div>
+                                                       Requested Date:  <span><field name="extension_date"/></span>
+                                                    </div>
+                                                    <div>
+                                                        Status:<span><field name="status"/></span>
+                                                    </div>
+                                                </div>
+                                               </div>
+
+                                        </t>
+                                    </templates>
+                                </kanban>
+                            </field>
+                        </page>
+                </xpath>
+
+                <xpath expr="//page[@name='transfer']" position="replace">
+                <page name="transfer" string="Transfer" invisible="status in ['draft', 'requested', 'pending', False] or is_payment_required != True">
+                            <field name="transfer_ids" widget="section_and_note_one2many"
+                                mode="tree,kanban" readonly= "uid != salesperson_ids">
+                                <tree string="Transfer Line" editable="bottom">
+                                    <control>
+                                        <create name="add_product_control" string="Add a Line" />
+                                    </control>
+                                    <field name="old_property_id" />
+                                    <field name="property_id" />
+                                    <field name="total_paid" />
+                                    <field name="status" />
+                                    <field name="request_letter" widget="binary_preview" />
+                                    <button name="transfer_request_detail"
+                                        string="Open"
+                                        type="object"
+                                        icon="fa-edit" />
+                                </tree>
+                            </field>
+                        </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="property_reservation_view_form_id_inherit" model="ir.ui.view">
+            <field name="name">property.reservation.configuration.inherit</field>
+            <field name="model">property.reservation.configuration</field>
+            <field name="inherit_id"
+                ref="ahadubit_property_reservation.property_reservation_view_form_id" />
+            <field name="arch" type="xml">
+
+                <xpath expr="//group" position="after">
+                    <field name="reservation_type" invisible="1" />
+                    <notebook>
+                        <page string="Operation Limits" name="operation_limits">
+                           
+                            <group>
+                             <group string="Creation Limits (Daily Allowed Quick Reservation per property)" invisible="reservation_type != 'quick'">
+                              
+                                <field name="number_of_allowed_quick_reservation" required="reservation_type == 'quick'"/>
+                            </group>
+                                
+                                <group string="Cancellation Limits">
+                                    <field name="max_cancellations" />
+                                    <field name="cancellation_period" />
+                                    <field name="cancellation_penalty_days" />
+                                </group>
+                                <group string="Transfer Limits">
+                                    <field name="max_transfers" />
+                                    <field name="transfer_period" />
+                                    <field name="transfer_penalty_days" />
+                                </group>
+                                <group string="Extension Limits">
+                                    <field name="max_extensions" />
+                                    <field name="extension_period" />
+                                    <field name="extension_penalty_days" />
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
+  

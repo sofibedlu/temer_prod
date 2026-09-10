@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_picking_technical_verify_wizard_form" model="ir.ui.view">
+        <field name="name">picking.technical.verify.wizard.form</field>
+        <field name="model">picking.technical.verify.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Technical Verification">
+                <div class="alert alert-info" role="alert">
+                    Please provide detailed inspection notes. The warehouse team will use these notes to process partial receipts or returns if any items are rejected.
+                </div>
+                <group>
+                    <field name="picking_id" invisible="1"/>
+                </group>
+
+                <field name="notes" widget="html" placeholder="Type '/' for commands. "/>
+                <footer>
+                    <button name="action_confirm" string="Confirm Verification" type="object" class="btn-success"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="property_property_view_form_inherit_set_to_draft" model="ir.ui.view">
+    <field name="name">property.property.view.form.inherit.set.to.draft</field>
+    <field name="model">property.property</field>
+    <field name="inherit_id" ref="advanced_property_management.property_property_view_form"/>
+    <field name="arch" type="xml">
+      <header position="inside">
+        <button name="action_set_to_draft"
+                type="object"
+                string="Change to Draft"
+                class="btn-secondary" />
+      </header>
+    </field>
+  </record>
+</odoo>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_contract_override_wizard_form" model="ir.ui.view">
+        <field name="name">contract.override.wizard.form</field>
+        <field name="model">contract.override.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Manual Contract Override">
+                
+                <group>
+                    <group>
+                        <field name="sale_id"/>
+                    </group>
+                    <group>
+                        <field name="property_payment_term"/>
+                    </group>
+                </group>
+
+                <notebook>
+                    <page string="Payment Schedule">
+                        <field name="line_ids">
+                            <tree editable="bottom">
+                                <field name="sequence" widget="handle"/>
+                                
+                                <field name="payment_term_id"/>
+                                <field name="expected"/>
+                                <field name="expected_amount" sum="Total Expected"/>
+                                <field name="discount" sum="Total Discount"/>
+                                <field name="paid_amount" sum="Total Paid"/>
+                                <field name="remaining" sum="Total Remaining" readonly="1" force_save="1"/>
+                                <field name="state" widget="badge" 
+                                       decoration-success="state=='paid'" 
+                                       decoration-warning="state=='partial'" 
+                                       decoration-danger="state=='not_paid'"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+
+                <footer>
+                    <button string="Update Contract" name="action_confirm_override" type="object" icon="fa-exclamation-circle"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_contract_override_wizard" model="ir.actions.act_window">
+        <field name="name">Manual Contract Override</field>
+        <field name="res_model">contract.override.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

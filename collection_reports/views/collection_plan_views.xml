@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Plan for Collection Report Action -->
+    <record id="action_collection_plan_report" model="ir.actions.client">
+        <field name="name">Plan for Collection</field>
+        <field name="tag">collection_reports.collection_plan</field>
+    </record>
+
+    <!-- Plan for Collection Menu -->
+    <menuitem id="menu_collection_plan_report"
+              name="Plan for Collection"
+              parent="collection_reports.menu_collection_reports"
+              action="action_collection_plan_report"
+              groups="collection_reports.group_collection_plan_report"
+              sequence="110"/>
+
+</odoo>
+

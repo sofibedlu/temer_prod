@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- Rename group from collection_management -->
+        <record id="collection_management.group_collection_due_date_editor" model="res.groups">
+            <field name="name">Extension Requester</field>
+        </record>
+
+        <!-- Approver Group -->
+        <record id="group_collection_extension_approver" model="res.groups">
+            <field name="name">Extension Approver</field>
+            <field name="category_id" ref="collection_management.module_category_collection_management"/>
+        </record>
+    </data>
+</odoo>

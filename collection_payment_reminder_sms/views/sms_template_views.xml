@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_collection_sms_template_form" model="ir.ui.view">
+        <field name="name">collection.sms.template.form</field>
+        <field name="model">collection.sms.template</field>
+        <field name="arch" type="xml">
+            <form string="SMS Template">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" placeholder="e.g., Third Customer Reminder"/>
+                            <field name="template_type"/>
+                        </group>
+                    </group>
+                    
+                    <div class="alert alert-info" role="alert" style="margin-top: 10px;">
+                        <b>Available Placeholders:</b> {company_name}, {company_name_amharic}, {amount}, {due_date}, {due_date_ec}
+                    </div>
+                    <notebook>
+                        <page string="Message Body">
+                            <field name="body" nolabel="1" placeholder="Type your rich-text template here..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_collection_sms_template" model="ir.actions.act_window">
+        <field name="name">SMS Templates</field>
+        <field name="res_model">collection.sms.template</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_collection_sms_template" name="SMS Templates" parent="collection_management.menu_collection_configuration" action="action_collection_sms_template" sequence="50"/>
+</odoo>

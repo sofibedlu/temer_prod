@@ -1,0 +1,50 @@
+.modal-dialog:has(.o_multi_extension_wizard) {
+    max-width: 900px;
+    width: 80%;
+}
+
+.o_multi_extension_wizard,
+.o_multi_extension_request {
+    .o_field_x2many_list,
+    .o_list_table {
+        width: 100%;
+    }
+
+    .o_list_table {
+        table-layout: fixed;
+    }
+
+    .o_list_table th[data-name="installment_id"],
+    .o_list_table td[name="installment_id"] {
+        width: 45%;
+    }
+
+    .o_list_table th[data-name="current_date"],
+    .o_list_table td[name="current_date"],
+    .o_list_table th[data-name="new_date"],
+    .o_list_table td[name="new_date"] {
+        width: 180px;
+    }
+}
+
+.o_multi_extension_request_tree {
+    td[name="installment_summary"],
+    td[name="current_date_summary"],
+    td[name="new_date_summary"] {
+        white-space: pre-line;
+        vertical-align: top;
+        line-height: 1.5;
+    }
+
+    th[data-name="installment_summary"],
+    td[name="installment_summary"] {
+        min-width: 260px;
+    }
+
+    th[data-name="current_date_summary"],
+    td[name="current_date_summary"],
+    th[data-name="new_date_summary"],
+    td[name="new_date_summary"] {
+        min-width: 130px;
+    }
+}

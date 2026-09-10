@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_property_org_unit,Property Org Unit,model_property_org_unit,,1,1,1,1
+access_property_org_assignment,Property Org Assignment,model_property_org_assignment,,1,1,1,1

@@ -1,0 +1,100 @@
+<odoo>
+    <record id="view_property_reservation_form_cancel_request_inherit" model="ir.ui.view">
+        <field name="name">property.reservation.form.cancel.request.inherit</field>
+        <field name="model">property.reservation</field>
+        <field name="inherit_id" ref="temer_structure.property_reservation_history_view_form_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='cancel_reservation']" position="replace">
+                <field name="cancel_request_is_quick_reservation" invisible="1"/>
+                <field name="cancel_request_can_request" invisible="1"/>
+                <button name="action_open_cancel_request_wizard"
+                        string="Cancel Reservation Request"
+                        type="object"
+                        class="btn-primary"
+                        invisible="status not in ['requested', 'reserved'] or cancel_request_is_quick_reservation == True or cancel_request_can_request != True"
+                        groups="temer_structure.access_property_sales_person_group,temer_structure.access_property_sales_supervisor_group,temer_structure.access_property_sales_team_manager_group,temer_structure.access_property_wing_manager_group,temer_structure.access_property_reservation_manager_group"/>
+                <button name="cancel_reservation"
+                        string="Cancel"
+                        type="object"
+                        class="btn-danger"
+                        invisible="status not in ['requested', 'reserved'] or cancel_request_is_quick_reservation != True or cancel_request_can_request != True"/>
+            </xpath>
+            <xpath expr="//field[@name='expire_date']" position="after">
+                <field name="has_cancel_request" invisible="1"/>
+                <group string="Cancellation Request" invisible="not has_cancel_request">
+                    <field name="cancel_request_state"
+                           string="Cancellation Status"
+                           widget="badge"
+                           readonly="1"
+                           decoration-muted="cancel_request_state == 'prepare'"
+                           decoration-warning="cancel_request_state == 'check'"
+                           decoration-success="cancel_request_state == 'approve'"/>
+                    <field name="cancel_request_reason" readonly="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_property_reservation_tree_cancel_request_inherit" model="ir.ui.view">
+        <field name="name">property.reservation.tree.cancel.request.inherit</field>
+        <field name="model">property.reservation</field>
+        <field name="inherit_id" ref="ahadubit_property_reservation.property_reservation_history_view_tree_id"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='status']" position="after">
+                <field name="cancel_request_state"
+                       string="Cancel Request"
+                       widget="badge"
+                       decoration-muted="cancel_request_state == 'prepare'"
+                       decoration-warning="cancel_request_state == 'check'"
+                       decoration-success="cancel_request_state == 'approve'"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_property_reservation_payment_verified_groups_inherit" model="ir.ui.view">
+        <field name="name">property.reservation.payment.verified.groups.inherit</field>
+        <field name="model">property.reservation</field>
+        <field name="inherit_id" ref="temer_structure.property_reservation_history_view_form_inherit"/>
+        <field name="priority">100</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='is_verifed']" position="attributes">
+                <attribute name="groups">ahadubit_property_reservation.finance_team_approval_group,temer_structure.access_property_sales_supervisor_group,temer_structure.access_property_sales_team_manager_group,temer_structure.access_property_wing_manager_group</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_property_reservation_form_hide_direct_cancel_inherit" model="ir.ui.view">
+        <field name="name">property.reservation.form.hide.direct.cancel.inherit</field>
+        <field name="model">property.reservation</field>
+        <field name="inherit_id" ref="property_reservation_cancel_extend.view_property_reservation_form_cancel_extend"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_cancel_active_reservation']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_property_property_form_cancel_request_inherit" model="ir.ui.view">
+        <field name="name">property.property.form.cancel.request.inherit</field>
+        <field name="model">property.property</field>
+        <field name="inherit_id" ref="ahadubit_property_reservation.property_property_view_form_inherit_id"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='cancel_reservation']" position="replace">
+                <field name="latest_active_reservation_is_quick" invisible="1"/>
+                <field name="latest_active_reservation_is_requestable" invisible="1"/>
+                <button name="cancel_reservation"
+                        string="Cancel Reservation"
+                        type="object"
+                        class="btn-primary"
+                        invisible="state != 'reserved' or latest_active_reservation_is_quick != True"
+                        groups="ahadubit_property_reservation.access_property_admin_team"/>
+                <button name="cancel_reservation"
+                        string="Cancel Reservation Request"
+                        type="object"
+                        class="btn-primary"
+                        invisible="state != 'reserved' or latest_active_reservation_is_requestable != True"
+                        groups="ahadubit_property_reservation.access_property_admin_team"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

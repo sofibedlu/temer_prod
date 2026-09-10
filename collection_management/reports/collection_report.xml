@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- 1. Payment Request -->
+    <record id="action_report_collection_letter" model="ir.actions.report">
+        <field name="name">Payment Request Letter</field>
+        <field name="model">collection.installment</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">collection_management.report_collection_letter_template</field>
+        <field name="report_file">collection_management.report_collection_letter_template</field>
+        <field name="print_report_name">'Payment Request - %s' % object.collection_id.partner_id.name</field>
+        <field name="paperformat_id" ref="collection_management.paperformat_collection_letter"/>
+    </record>
+
+    <record id="action_report_warning_letter" model="ir.actions.report">
+        <field name="name">Warning Letter</field>
+        <field name="model">collection.installment</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">collection_management.report_warning_letter_template</field>
+        <field name="report_file">collection_management.report_warning_letter_template</field>
+        <field name="print_report_name">'Warning Letter - %s' % object.collection_id.partner_id.name</field>
+        <field name="paperformat_id" ref="collection_management.paperformat_collection_letter"/>
+    </record>
+
+    <!-- Termination Notice -->
+    <record id="action_report_termination_letter" model="ir.actions.report">
+        <field name="name">Termination Notice</field>
+        <field name="model">collection.installment</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">collection_management.report_termination_letter_template</field>
+        <field name="report_file">collection_management.report_termination_letter_template</field>
+        <field name="print_report_name">'Termination Notice - %s' % object.collection_id.partner_id.name</field>
+        <field name="paperformat_id" ref="collection_management.paperformat_collection_letter"/>
+    </record>
+
+    <!-- 1. THE SHARED STYLE TEMPLATE -->
+    <template id="collection_layout_styles">
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;700&amp;display=swap');
+            body {
+                font-family: 'Noto Sans Ethiopic', 'Roboto', sans-serif;
+                font-size: 16px;
+            }
+            .custom-page {
+                padding: 20px 40px;
+            }
+            .letter-body-text {
+                margin-bottom: 15px;
+                line-height: 1.6;
+            }
+            .p-indent { text-indent: 40px; }
+            
+            table.layout-table, 
+            table.layout-table tbody,
+            table.layout-table tr, 
+            table.layout-table td {
+                border: none !important;
+                border-collapse: collapse !important;
+                padding: 0 !important;
+            }
+            table.layout-table {
+                width: 100%;
+                margin-bottom: 15px;
+            }
+        </style>
+    </template>
+
+    <!-- 2. Payment Request Letter -->
+    <template id="report_collection_letter_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.basic_layout">
+                    <t t-set="res_company" t-value="doc.collection_id.company_id or doc.env.company"/>
+                    <t t-set="ctx_letterhead_id" t-value="doc.env.context.get('letterhead_id')"/>
+                    <t t-set="letterhead" t-value="(ctx_letterhead_id and doc.env['collection.letterhead'].browse(ctx_letterhead_id))"/>
+
+                    <!-- Call the Shared Style -->
+                    <t t-call="collection_management.collection_layout_styles"/>
+
+                    <div class="page custom-page">
+                        <!-- HEADER -->
+                        <table class="layout-table">
+                            <tr>
+                                <td style="width: 25%; text-align: left; vertical-align: middle;">
+                                    <img t-if="res_company.logo" t-att-src="image_data_uri(res_company.logo)" style="max-height:100px;" alt="Logo" />
+                                </td>
+                                <td style="width: 50%; text-align: center; vertical-align: middle;">
+                                    <t t-if="letterhead and letterhead.header_title">
+                                        <h3 style="margin: 0; white-space: nowrap;" t-out="letterhead.header_title"/>
+                                    </t>
+                                </td>
+                                <td style="width: 25%;"></td>
+                            </tr>
+                        </table>
+
+                        <!-- DATE & NUMBER -->
+                        <table class="layout-table" style="margin-bottom: 1.5rem;">
+                            <tr>
+                                <td style="width: 60%;"></td>
+                                <td style="width: 40%; text-align: right;">
+                                    <p style="margin:0;">
+                                        <strong>ቀን፡</strong> <span t-esc="doc.env.context.get('letter_date')"/><br />
+                                        <strong>ቁጥር፡</strong> <span t-esc="doc.env.context.get('letter_number')"/>
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- RECEIVER -->
+                        <p><strong>ለ፡</strong> <span t-field="doc.collection_id.partner_id.name" /></p>
+                        <p>አዲስ አበባ</p>
+                        <br />
+
+                        <!-- SUBJECT (Centered) -->
+                        <p style="text-decoration: underline; font-weight: bold; text-align: center;">
+                            ጉዳዩ፡- ግንባታው የደረሰበት ደረጃ ስለማሳወቅ እና ክፍያ እንዲከፍሉ ስለመጠየቅ
+                        </p>
+                        <br />
+
+                        <!-- BODY CONTENT -->
+                        <p class="letter-body-text p-indent">
+                            ከድርጅታችን እውቀት ትሬዲንግ ኃላ/የተ/የግ/ማህበር 
+                            <strong><span t-field="doc.collection_id.property_id.name"/></strong>
+                            ሳይት በቀን <span t-field="doc.due_date"/> በውል ቁጥር 
+                            <span t-field="doc.collection_id.contract_number"/> በብር 
+                            <span t-field="doc.collection_id.amount_total" t-options='{"widget": "monetary", "display_currency": doc.collection_id.currency_id}'/> 
+                            ሱቅ ግዢ ውል ፈፅመዋል፡፡
+                        </p>
+
+                        <p class="letter-body-text">
+                            በመሆኑም የገዙት የንግድ ሱቅ የመሰረት ስራ ተጠናቋል ፡፡ በውላችን አንቀፅ 5 መሰረት የአራተኛ ዙር ክፍያ ብር 
+                            <span t-field="doc.amount_residual" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/> 
+                            የመሰረት ስራ ሲጠናቀቅ ለመክፈል ተስማምተዋል፡፡
+                        </p>
+
+                        <p class="letter-body-text" style="font-weight: bold;">
+                            ስለሆነም የግንባታው ሂደት የመሰረት ስራ ተጠናቋል በመሆኑ የሚፈለግቦትን ክፍያ ብር 
+                            <span t-field="doc.amount_residual" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/> 
+                            እስከ <span t-field="doc.due_date"/> ድረስ እንዲከፍሉ 
+                            <span style="border-bottom: 2px solid #000;">ስንል እናሳስባለን</span>፡፡
+                        </p>
+                        <br />
+
+                        <!-- SIGNATURE & STAMP -->
+                        <table class="layout-table" style="margin-top: 2rem;">
+                            <tr>
+                                <td style="width: 50%; text-align: center; vertical-align: bottom;">
+                                    <img t-if="letterhead and letterhead.stamp_image" t-att-src="letterhead.get_stamp_data_uri()" style="max-height: 140px; width: auto;" alt="Company Stamp"/>
+                                </td>
+                                <td style="width: 50%; text-align: right; vertical-align: bottom;">
+                                    <p style="margin: 0 0 10px 0;">ከሰላምታ ጋር</p>
+                                    <p style="margin: 0;"><strong>አህመድ ነስሩ</strong></p>
+                                    <p style="margin: 0;">የኮሌክሽን ክፍል ስራ አስኪያጅ</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- FOOTER -->
+                    <div class="footer">
+                        <div style="text-align: center; font-size: 13px; border-top: 1px solid #ccc; padding-top: 10px; margin-left: 40px; margin-right: 40px;"> 
+                            temerrealestate@gmail.com / 0118547115 , 0118722424 , 0909667733 <br /> 
+                            Address: Sarbet on the road to Kera next to Salvatore Woldemariam Building
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- 1. Template: Warning Letter -->
+    <template id="report_warning_letter_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.basic_layout">
+                    <t t-set="res_company" t-value="doc.collection_id.company_id or doc.env.company"/>
+                    <t t-set="ctx_letterhead_id" t-value="doc.env.context.get('letterhead_id')"/>
+                    <t t-set="letterhead" t-value="(ctx_letterhead_id and doc.env['collection.letterhead'].browse(ctx_letterhead_id))"/>
+
+                    <t t-call="collection_management.collection_layout_styles"/>
+
+                    <div class="page custom-page">
+                        <!-- HEADER -->
+                        <table class="layout-table">
+                            <tr>
+                                <td style="width: 25%; text-align: left; vertical-align: middle;">
+                                    <img t-if="res_company.logo" t-att-src="image_data_uri(res_company.logo)" style="max-height:100px;" alt="Logo" />
+                                </td>
+                                <td style="width: 50%; text-align: center; vertical-align: middle;">
+                                    <t t-if="letterhead and letterhead.header_title">
+                                        <h3 style="margin: 0; white-space: nowrap;" t-out="letterhead.header_title"/>
+                                    </t>
+                                </td>
+                                <td style="width: 25%;"></td>
+                            </tr>
+                        </table>
+
+                        <!-- DATE & NUMBER -->
+                        <table class="layout-table" style="margin-bottom: 1.5rem;">
+                            <tr>
+                                <td style="width: 60%;"></td>
+                                <td style="width: 40%; text-align: right;">
+                                    <p style="margin:0;">
+                                        <strong>ቀን፡</strong> <span t-esc="doc.env.context.get('letter_date')"/><br />
+                                        <strong>ቁጥር፡</strong> <span t-esc="doc.env.context.get('letter_number')"/>
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- RECEIVER -->
+                        <p><strong>ለ፡</strong> <span t-field="doc.collection_id.partner_id.name" /></p>
+                        <p>አዲስ አበባ</p>
+                        <br />
+
+                        <!-- SUBJECT (Centered) -->
+                        <p style="text-decoration: underline; font-weight: bold; text-align: center;">
+                            ጉዳዩ፡ ያለቦትን ውዝፍ ክፍያ ባለመክፈሎ የተሰጠ ማስጠንቀቂያ እና ማሳወቂያ መላክ ይመለከታል፡፡
+                        </p>
+                        <br />
+
+                        <!-- BODY CONTENT -->
+                        <p class="letter-body-text p-indent"> 
+                            ከድርጅታችን ፊልተማ ትሬዲንግ ኃ/የተ/የግ/ማህበር <strong><span t-field="doc.collection_id.property_id.name" /></strong>
+                            ሳይት በቀን <strong><span t-field="doc.due_date" /></strong>
+                            ዓ.ም በውል ቁጥር <strong><span t-field="doc.collection_id.contract_number" /></strong>
+                            በጠቅላላ ዋጋ ብር <strong><span t-field="doc.collection_id.amount_total" t-options='{"widget": "monetary", "display_currency": doc.collection_id.currency_id}' /></strong>
+                            <span t-field="doc.property_id.property_type" /> ግዢ ውል መፈጸምዎ ይታወቃል፡፡ 
+                        </p>
+                        
+                        <p class="letter-body-text"> 
+                            በመሆኑም የገዙት <span t-field="doc.property_id.property_type" /> አሁን ያለበት የግንባታ ደረጃ <strong><span t-field="doc.name" /></strong> ስራ ተጠናቋል፡፡ 
+                            በውላችን መሰረት በዚህ የግንባታ ደረጃ ቅድመ ክፍያን ጨምሮ ሊከፈል የሚገባው ብር 
+                            <strong><span t-field="doc.amount_residual" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></strong> ነው፡፡ 
+                        </p>
+
+                        <p class="letter-body-text"> 
+                            ነገር ግን እርሶ እስከዛሬ ድረስ የከፈሉት <strong><span t-field="doc.amount_paid" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></strong>
+                            ብቻ ሲሆን <strong><span t-field="doc.name" /></strong> ስራ ሲጠናቀቅ መክፈል ያለብዎት ክፍያ ብር 
+                            <strong><span t-field="doc.amount_residual" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></strong>
+                            እንዲከፍሉ በቀን <strong><span t-field="doc.due_date" /></strong> ዓ.ም በደብዳቤ ብንጠይቅዎትም እስከዛሬ አልከፈሉም፡፡ 
+                        </p>
+
+                        <p class="letter-body-text"> 
+                            ስለሆነም ግንባታው በደረሰበት መጠን መክፈል የሚገባዉ አጠቃላይ ክፍያ ብር <strong><span t-field="doc.amount_total" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></strong>
+                            ነዉ፡፡ ይኸዉም <strong><span t-field="doc.name" /></strong> ሲጠናቀቅ ያልተከፈለ ብር 
+                            <strong><span t-field="doc.amount_residual" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></strong>
+                            እና በውላችን አንቀጽ 5 ንዑስ አንቀጽ 5.6 መሰረት በወር የሚታሰብ <strong><span t-field="doc.penalty_amount" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></strong>
+                            ቅጣትን ጨምሮ በአንድ ወር ጊዜ ውስጥ እንዲከፍሉ እያሳሰብን በተገለጸው ጊዜ ውስጥ የማይከፍሉ ከሆነ በውላችን መሰረት ውሉን የምናቋርጥ መሆኑን እናሳውቃለን፡፡ 
+                        </p>
+                        <br />
+
+                        <!-- SIGNATURE & STAMP -->
+                        <table class="layout-table" style="margin-top: 2rem;">
+                            <tr>
+                                <td style="width: 50%; text-align: center; vertical-align: bottom;">
+                                    <img t-if="letterhead and letterhead.stamp_image" t-att-src="letterhead.get_stamp_data_uri()" style="max-height: 140px; width: auto;" alt="Company Stamp"/>
+                                </td>
+                                <td style="width: 50%; text-align: right; vertical-align: bottom;">
+                                    <p style="margin: 0 0 10px 0;">ከሰላምታ ጋር</p>
+                                    <p style="margin: 0;"><strong>አህመድ ነስሩ</strong></p>
+                                    <p style="margin: 0;">የኮሌክሽን ክፍል ስራ አስኪያጅ</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- FOOTER -->
+                    <div class="footer">
+                        <div style="text-align: center; font-size: 13px; border-top: 1px solid #ccc; padding-top: 10px; margin-left: 40px; margin-right: 40px;"> 
+                            temerrealestate@gmail.com / 0118547115 , 0118722424 , 0909667733 <br /> 
+                            Address: Sarbet on the road to Kera next to Salvatore Woldemariam Building 
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- 2. Template: Termination Notice -->
+    <template id="report_termination_letter_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.basic_layout">
+                    <t t-set="res_company" t-value="doc.collection_id.company_id or doc.env.company"/>
+                    <t t-set="ctx_letterhead_id" t-value="doc.env.context.get('letterhead_id')"/>
+                    <t t-set="letterhead" t-value="(ctx_letterhead_id and doc.env['collection.letterhead'].browse(ctx_letterhead_id))"/>
+
+                    <t t-call="collection_management.collection_layout_styles"/>
+
+                    <div class="page custom-page">
+                        <!-- HEADER -->
+                        <table class="layout-table">
+                            <tr>
+                                <td style="width: 25%; text-align: left; vertical-align: middle;">
+                                    <img t-if="res_company.logo" t-att-src="image_data_uri(res_company.logo)" style="max-height:100px;" alt="Logo" />
+                                </td>
+                                <td style="width: 50%; text-align: center; vertical-align: middle;">
+                                    <t t-if="letterhead and letterhead.header_title">
+                                        <h3 style="margin: 0; white-space: nowrap;" t-out="letterhead.header_title"/>
+                                    </t>
+                                </td>
+                                <td style="width: 25%;"></td>
+                            </tr>
+                        </table>
+
+                        <!-- DATE & NUMBER -->
+                        <table class="layout-table" style="margin-bottom: 1.5rem;">
+                            <tr>
+                                <td style="width: 60%;"></td>
+                                <td style="width: 40%; text-align: right;">
+                                    <p style="margin:0;">
+                                        <strong>ቀን፡</strong> <span t-esc="doc.env.context.get('letter_date')"/><br />
+                                        <strong>ቁጥር፡</strong> <span t-esc="doc.env.context.get('letter_number')"/>
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- RECEIVER -->
+                        <p><strong>ለ፡</strong> <span t-field="doc.collection_id.partner_id.name" /></p>
+                        <p>አዲስ አበባ</p>
+                        <br />
+
+                        <!-- SUBJECT (Centered) -->
+                        <p style="text-decoration: underline; font-weight: bold; text-align: center;">
+                            ጉዳዩ፡- የውል ማቋረጥ ማስታወቂያ
+                        </p>
+                        <br />
+
+                        <!-- BODY CONTENT -->
+                        <p class="letter-body-text p-indent">
+                            ከድርጅታችን ፊልተማ ትሬዲንግ ኃ/የተ/የግ/ማህበር <strong><span t-field="doc.collection_id.property_id.name"/></strong>
+                            ሳይት በቀን <strong><span t-field="doc.due_date"/></strong> በውል ቁጥር
+                            <strong><span t-field="doc.collection_id.contract_number"/></strong>
+                            <span t-field="doc.property_id.property_type"/> ግዥ ዉል ፈፅመዋል፡፡
+                        </p>
+
+                        <p class="letter-body-text">
+                            በመሆኑም የገዙት <span t-field="doc.property_id.property_type"/> አሁን ያለበት የግንባታ ደረጃ
+                            <strong><span t-field="doc.name"/></strong> ስራ መጠናቀቁን እየገለፅን በውላችን መሰረት የቀሪ ክፍያዎች እንዲሁ ናቸው፡፡
+                        </p>
+
+                        <p class="letter-body-text">
+                            <span t-field="doc.name"/> ቀሪ ክፍያ፡- 
+                            <strong><span t-field="doc.amount_residual" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></strong>
+                        </p>
+
+                        <p class="letter-body-text">
+                            በመሆኑም ይህ ደብዳቤ በደረስዎት በአንድ ወር ጊዜ ውስጥ 
+                            <strong><span t-field="doc.amount_residual" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></strong>
+                            እንዲሁም በውላችን አንቀፅ 5(5.6) መሰረት በወር የሚታሰብ 
+                            <strong><span t-field="doc.penalty_amount" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></strong>
+                            ቅጣትን ጨምሮ ክፍያዎትን አጠቃለው እንዲከፍሉ በተደጋጋሚ ብናሳስብም ክፍያውን ባለመፈጸምዎ በውላችን መሰረት ውሉ የተቋረጠ መሆኑን እናሳውቃለን፡፡
+                        </p>
+                        <br />
+
+                        <!-- SIGNATURE & STAMP -->
+                        <table class="layout-table" style="margin-top: 2rem;">
+                            <tr>
+                                <td style="width: 50%; text-align: center; vertical-align: bottom;">
+                                    <img t-if="letterhead and letterhead.stamp_image" t-att-src="letterhead.get_stamp_data_uri()" style="max-height: 140px; width: auto;" alt="Company Stamp"/>
+                                </td>
+                                <td style="width: 50%; text-align: right; vertical-align: bottom;">
+                                    <p style="margin: 0 0 10px 0;">ከሰላምታ ጋር</p>
+                                    <p style="margin: 0;"><strong>አህመድ ነስሩ</strong></p>
+                                    <p style="margin: 0;">የኮሌክሽን ክፍል ስራ አስኪያጅ</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- FOOTER -->
+                    <div class="footer">
+                        <div style="text-align: center; font-size: 13px; border-top: 1px solid #ccc; padding-top: 10px; margin-left: 40px; margin-right: 40px;"> 
+                            temerrealestate@gmail.com / 0118547115 , 0118722424 , 0909667733 <br /> 
+                            Address: Sarbet on the road to Kera next to Salvatore Woldemariam Building
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

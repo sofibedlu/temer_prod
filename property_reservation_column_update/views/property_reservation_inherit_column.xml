@@ -1,0 +1,16 @@
+<odoo>
+    <record id="property_property_view_form_inherit_start_date" model="ir.ui.view">
+        <field name="name">property.property.form.inherit.start.date</field>
+        <field name="model">property.property</field>
+        <field name="inherit_id" ref="ahadubit_property_reservation.property_property_view_form_inherit_id"/>
+        <field name="arch" type="xml">
+            <!-- Correct: select the reservation_line_ids field and add create_date before expire_date -->
+            <xpath expr="//field[@name='reservation_line_ids']/tree/field[@name='expire_date']" position="before">
+                <field name="create_date" string="Start Date" readonly="1"/>
+            </xpath>
+            <xpath expr="//field[@name='reservation_line_ids']/tree/field[@name='partner_id']" position="before">
+                <field name="salesperson_ids" string="Sales Person" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

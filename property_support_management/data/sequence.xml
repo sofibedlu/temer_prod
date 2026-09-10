@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Sequence for Job Numbers -->
+        <record id="seq_support_management" model="ir.sequence">
+            <field name="name">Job Order</field>
+            <field name="code">support.management.seq</field>
+            <field name="prefix">JO</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

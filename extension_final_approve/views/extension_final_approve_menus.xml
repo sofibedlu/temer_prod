@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!--
+        Add a standalone root menu for extension approval requests.
+        Only visible to users with the Extension Final Approver group.
+    -->
+    <menuitem id="menu_extension_approve_requests"
+              name="Extension Approve Requests"
+              sequence="20"
+              groups="extension_final_approve.group_extension_final_approver"/>
+
+    <menuitem id="menu_extension_pending_final_approval"
+              name="Pending Final Approval"
+              parent="menu_extension_approve_requests"
+              action="action_extension_pending_final_approval"
+              groups="extension_final_approve.group_extension_final_approver"
+              sequence="10"/>
+
+    <menuitem id="menu_extension_approved"
+              name="Approved Extensions"
+              parent="menu_extension_approve_requests"
+              action="action_extension_approved"
+              groups="extension_final_approve.group_extension_final_approver"
+              sequence="20"/>
+</odoo>

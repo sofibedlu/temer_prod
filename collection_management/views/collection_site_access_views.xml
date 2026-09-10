@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_collection_site_access_tree" model="ir.ui.view">
+        <field name="name">collection.site.access.tree</field>
+        <field name="model">collection.site.access</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="user_id"/>
+                <field name="site_ids" widget="many2many_tags"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_collection_site_access_form" model="ir.ui.view">
+        <field name="name">collection.site.access.form</field>
+        <field name="model">collection.site.access</field>
+        <field name="arch" type="xml">
+            <form string="User Site Access">
+                <sheet>
+                    <group>
+                        <field name="user_id"
+                                options="{'no_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                        <field name="site_ids" widget="many2many_tags"
+                               options="{'no_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_collection_site_access" model="ir.actions.act_window">
+        <field name="name">User Site Access</field>
+        <field name="res_model">collection.site.access</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_collection_site_access"
+              name="User Site Access"
+              parent="collection_management.menu_collection_configuration"
+              action="action_collection_site_access"
+              sequence="20"/>
+</odoo>

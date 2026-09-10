@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_attendance_period_tree" model="ir.ui.view">
+        <field name="name">hr.attendance.period.tree</field>
+        <field name="model">hr.attendance.period</field>
+        <field name="arch" type="xml">
+            <tree string="HR Periods">
+                <field name="name"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_hr_attendance_period_form" model="ir.ui.view">
+        <field name="name">hr.attendance.period.form</field>
+        <field name="model">hr.attendance.period</field>
+        <field name="arch" type="xml">
+            <form string="HR Period">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="start_date"/>
+                        <field name="end_date"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_hr_attendance_period" model="ir.actions.act_window">
+        <field name="name">HR Periods</field>
+        <field name="res_model">hr.attendance.period</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

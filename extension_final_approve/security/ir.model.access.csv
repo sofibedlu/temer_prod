@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_extension_final_approver_read,extension.final.approver.read,ahadubit_property_reservation.model_property_reservation_extend_history,extension_final_approve.group_extension_final_approver,1,1,0,0

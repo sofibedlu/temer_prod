@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_res_config_settings_wing_afromessage" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.wing.afromessage</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//block[@name='integration']" position="after">
+                <block title="Wing Distribution - AfroMessage SMS" name="wing_afromessage">
+                    <setting string="AfroMessage Identifier ID" help="Identifier ID from your AfroMessage dashboard (list of identifiers). Find it at api.afromessage.com. Leave empty to use account default. Use short code (e.g. 6033) only if your account supports it.">
+                        <field name="wing_afromessage_from" placeholder="e.g. UUID or 6033"/>
+                    </setting>
+                    <setting string="AfroMessage Sender Name" help="Sender name must be requested and approved in AfroMessage. Use 'AfroMessage' for beta. Use 'Temer Properties' if approved.">
+                        <field name="wing_afromessage_sender" placeholder="e.g. AfroMessage or Temer Properties"/>
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+</odoo>

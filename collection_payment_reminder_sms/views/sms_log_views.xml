@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_collection_sms_log_tree" model="ir.ui.view">
+        <field name="name">collection.sms.log.tree</field>
+        <field name="model">collection.sms.log</field>
+        <field name="arch" type="xml">
+            <tree string="SMS Notifications" create="0" edit="0" delete="0" decoration-success="status == 'sent'" decoration-danger="status == 'failed'">
+                <header>
+                    <button name="%(action_collection_sms_reminder_wizard)d" type="action" string="Send Batch Reminders" class="btn-primary" display="always"/>
+                </header>
+                
+                <field name="create_date" string="Sent On"/>
+                <field name="sender_id" widget="many2one_avatar_user"/>
+                <field name="partner_id"/>
+                <field name="phone"/>
+                <field name="installment_id"/>
+                <field name="message_stage" widget="badge" 
+                       decoration-info="message_stage == 'first'" 
+                       decoration-warning="message_stage == 'second'" 
+                       decoration-danger="message_stage == 'third'" 
+                       decoration-success="message_stage == 'thank_you'"/>
+                <field name="payment_schedule_type" optional="show"/>
+                <field name="due_date"/>
+                <field name="amount" widget="monetary"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="status" widget="badge" decoration-success="status == 'sent'" decoration-danger="status == 'failed'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_collection_sms_log_form" model="ir.ui.view">
+        <field name="name">collection.sms.log.form</field>
+        <field name="model">collection.sms.log</field>
+        <field name="arch" type="xml">
+            <form string="SMS Log Details" create="0" edit="0" delete="0">
+                <header>
+                    <field name="status" widget="statusbar" statusbar_visible="not_sent,sent,failed"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Recipient Info">
+                            <field name="partner_id"/>
+                            <field name="collection_id"/>                           
+                            <field name="phone"/>
+                            <field name="installment_id"/>
+                            <field name="amount" widget="monetary"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group string="Message Info">
+                            <field name="create_date" string="Sent Date"/>
+                            <field name="sender_id"/>
+                            <field name="message_stage"/>
+                            <field name="payment_schedule_type"/>
+                        </group>
+                    </group>
+                    
+                    <separator string="Message Content"/>
+                    <field name="message_body" nolabel="1"/>
+                    
+                    <group string="API Response" invisible="status != 'failed'">
+                        <field name="error_message" nolabel="1" class="text-danger"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search, Filter, and Group By -->
+    <record id="view_collection_sms_log_search" model="ir.ui.view">
+        <field name="name">collection.sms.log.search</field>
+        <field name="model">collection.sms.log</field>
+        <field name="arch" type="xml">
+            <search string="Search SMS Logs">
+                <field name="partner_id" string="Customer"/>
+                <field name="phone" string="Phone Number"/>
+                <field name="sender_id" string="Sender"/>
+                
+                <separator/>
+                <filter string="Sent Successfully" name="filter_sent" domain="[('status', '=', 'sent')]"/>
+                <filter string="Failed" name="filter_failed" domain="[('status', '=', 'failed')]"/>
+                <separator/>
+
+                <filter string="Sent Date" name="filter_sent_date" date="create_date"/>
+                
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_status" context="{'group_by':'status'}"/>
+                    <filter string="Message Stage" name="group_stage" context="{'group_by':'message_stage'}"/>
+                    <filter string="Schedule Type" name="group_schedule" context="{'group_by':'payment_schedule_type'}"/>
+                    <filter string="Sender" name="group_sender" context="{'group_by':'sender_id'}"/>
+                    <filter string="Sent Date" name="group_date" context="{'group_by':'create_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_collection_sms_log" model="ir.actions.act_window">
+        <field name="name">SMS Notifications</field>
+        <field name="res_model">collection.sms.log</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_collection_sms_log"
+              name="SMS Notifications"
+              parent="collection_management.menu_collection_root"
+              groups="collection_management.group_collection_notification_sender"
+              action="action_collection_sms_log"
+              sequence="25"/>
+</odoo>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_void_request_form_inherit_collection" model="ir.ui.view">
+        <field name="name">property.contract.void.request.form.inherit.collection</field>
+        <field name="model">property.contract.void.request</field>
+        <field name="inherit_id" ref="property_contract_extension.view_void_request_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <field name="collection_id" invisible="1"/>
+                <button name="action_view_collection" 
+                        type="object" 
+                        class="oe_stat_button" 
+                        icon="fa-list-alt"
+                        invisible="not collection_id">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">Collection</span>
+                    </div>
+                </button>
+            </div>
+        </field>
+    </record>
+
+    <record id="view_void_request_tree_inherit_collection" model="ir.ui.view">
+        <field name="name">property.contract.void.request.tree.inherit.collection</field>
+        <field name="model">property.contract.void.request</field>
+        <field name="inherit_id" ref="property_contract_extension.view_void_request_tree"/>
+        <field name="arch" type="xml">
+            <field name="sale_id" position="after">
+                <field name="collection_id" optional="hide"/>
+            </field>
+        </field>
+    </record>
+</odoo>

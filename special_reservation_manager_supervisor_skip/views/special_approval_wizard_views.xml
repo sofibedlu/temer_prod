@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Ensure amount/duration/reason stay editable in Draft (same as other salespeople).
+        High priority so this wins over other special-reservation view inheritances.
+    -->
+    <record id="view_special_approval_wizard_form_manager_skip" model="ir.ui.view">
+        <field name="name">special.approval.wizard.form.manager.skip</field>
+        <field name="model">special.approval.wizard</field>
+        <field name="inherit_id" ref="special_reservation.view_special_approval_wizard_form"/>
+        <field name="priority">99999</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='reason']" position="attributes">
+                <attribute name="readonly">state != 'draft' and state_new != 'draft'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='amount']" position="attributes">
+                <attribute name="readonly">state != 'draft' and state_new != 'draft'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='duration']" position="attributes">
+                <attribute name="readonly">state != 'draft' and state_new != 'draft'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='duration_in']" position="attributes">
+                <attribute name="readonly">state != 'draft' and state_new != 'draft'</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

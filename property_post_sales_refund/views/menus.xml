@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Root Menu for Refund -->
+    <menuitem id="menu_post_sales_refund_root" 
+              name="Post Sales Refund"
+              groups="property_post_sales_refund.group_refund_collection_manager,property_post_sales_refund.group_refund_after_sales_director,property_post_sales_refund.group_refund_finance_approver,property_post_sales_refund.group_refund_collection_user"
+              sequence="60"/>
+
+    <!-- Action Menu -->
+    <menuitem id="menu_post_sales_refund_requests" 
+              name="Refund Requests" 
+              parent="menu_post_sales_refund_root" 
+              action="action_post_sales_refund" 
+              sequence="10"/>
+</odoo>

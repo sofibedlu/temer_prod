@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mail_activity_schedule_view_form_inherited_id" model="ir.ui.view">
+            <field name="name">mail.activity.schedule.view.form.inherit.hr</field>
+            <field name="model">mail.activity.schedule</field>
+            <field name="inherit_id" ref="mail.mail_activity_schedule_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='date_deadline']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='activity_user_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_schedule_activities']" position="attributes">
+                  <attribute name="invisible">1</attribute>
+               </xpath>
+                <xpath expr="//button[@name='action_schedule_activities_done']" position="attributes">
+                  <attribute name="string">Save</attribute>
+               </xpath>
+                <xpath expr="//button[@name='action_schedule_activities_done_and_schedule']" position="attributes">
+                  <attribute name="invisible">1</attribute>
+               </xpath>
+
+            </field>
+        </record>
+
+        <record id="mail_activity_type_view_form_inherited_id" model="ir.ui.view">
+            <field name="name">mail.activity.type.form.inherit.hr</field>
+            <field name="model">mail.activity.type</field>
+            <field name="inherit_id" ref="mail.mail_activity_type_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='keep_done']" position="after">
+                    <field name="show_on_crm"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+
+</odoo>

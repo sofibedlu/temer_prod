@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_collection_payment_wizard_form_inherit_bank" model="ir.ui.view">
+        <field name="name">collection.payment.wizard.form.inherit.bank</field>
+        <field name="model">property.payment.register.wizard</field>
+        <field name="inherit_id" ref="payment_approval_new.view_payment_wizard_handler_form"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="//field[@name='bank_id']" position="after">
+                <field name="allowed_bank_ids" invisible="1"/>
+            </xpath>
+
+            <xpath expr="//field[@name='bank_id']" position="attributes">
+                <attribute name="domain">[('id', 'in', allowed_bank_ids)]</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

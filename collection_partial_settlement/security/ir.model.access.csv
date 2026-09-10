@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_partial_settlement_wizard,partial.settlement.wizard,model_partial_settlement_wizard,base.group_user,1,1,1,1
+access_partial_settlement_session,partial.settlement.session,model_partial_settlement_session,base.group_user,1,1,1,1
+access_collection_installment_history,collection.installment.history,model_collection_installment_history,base.group_user,1,1,1,1

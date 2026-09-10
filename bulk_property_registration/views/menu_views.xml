@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_property_bulk_registration" model="ir.actions.act_window">
+        <field name="name">Bulk Registration</field>
+        <field name="res_model">property.bulk.registration</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'default_state': 'draft'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new bulk registration: select site, block, floors and unit count, then Generate Properties. Review the list and Save as Draft or Save as Available.
+            </p>
+        </field>
+    </record>
+    <menuitem id="menu_property_bulk_registration"
+              name="Bulk Registration"
+              parent="advanced_property_management.property_root_menu"
+              action="action_property_bulk_registration"
+              sequence="4"
+              groups="bulk_property_registration.group_bulk_property_registration"/>
+</odoo>

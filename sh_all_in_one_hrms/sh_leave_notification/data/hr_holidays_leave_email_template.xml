@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+	<record id="sh_template_employee_all_leave_email" model="mail.template">
+		<field name="name">Employee Leave Request Email Notification</field>
+		<field name="email_from">{{object.employee_id.work_email}}</field>
+		<field name="subject">Leave Request # {{object.employee_id.name}}</field>
+		<field name="email_to">{{object.employee_id.parent_id.work_email}}</field>
+		<field name="model_id" ref="sh_all_in_one_hrms.model_sh_leave_summary" />
+		<field name="body_html">
+			<![CDATA[
+<br/>
+<p>Dear <t t-out="object.employee_id.parent_id.name"/>,</p>
+<p>
+	<t t-out="object.employee_id.name"/> leave details below,
+</p>
+<html>
+	<br/>
+	<head>Employee's Leave Details</head>		
+
+		<table border="1" bgcolor="#FFF" style="border: 1px solid gray;width:100%;" >
+			<thead style="background-color:#875A7B;text-decoration: none; color: #fff;font-size: 16px;">
+				<tr>
+					<th align="center">Employee Name</th>
+					<th align="center">Department</th>
+					<th align="center">Description</th>
+					<th align="center">Type</th>
+					<th align="center">From</th>
+					<th align="center">To</th>
+					<th align="center">Days</th>
+				</tr>
+			</thead>
+			<tbody>
+				<!-- % if object.leave_ids : -->
+				<t t-if="object.leave">
+					<t t-foreach="object.leave_ids" t-as="line">
+					<tr>
+						<td><span style="margin-left:5px"><t t-out="line.employee_id.name"/></span></td>
+						<td><span style="margin-left:5px"><t t-out="line.department_id.name"/></span></td>
+
+						<t t-if="line.name">
+						<td><span style="margin-left:5px"><t t-out="line.name"/></span></td>
+						</t>
+						<t t-else="">
+						<td><span style="margin-left:5px"></span></td>
+						</t>
+						<td><span style="margin-left:5px"><t t-out="line.holiday_status_id.name"/></span></td>
+						<td><span style="margin-left:5px"><t t-out="line.date_from"/></span></td>
+						<td><span style="margin-left:5px"><t t-out="line.date_to"/></span></td>
+						<td><span style="margin-left:5px"><t t-out="line.number_of_days_display"/></span></td>
+					</tr>
+				</t>
+				</t>
+			</tbody>
+		</table>
+	</html>	
+<br/>
+
+<p>Thank You</p>							
+]]>
+		</field>
+	</record>
+	<record id="sh_template_employee_request_leave_email" model="mail.template">
+		<field name="name">Employee Leave Request Email Notification</field>
+		<field name="email_from">{{object.employee_id.work_email}}</field>
+		<field name="subject">Leave Request # {{object.employee_id.name}}</field>
+		<field name="email_to">{{object.employee_id.parent_id.work_email}}</field>
+		<field name="model_id" ref="hr_holidays.model_hr_leave" />
+		<field name="body_html">
+			<![CDATA[
+            <br/>
+            <p>Dear <t t-out="object.employee_id.parent_id.name"/>,</p>
+            <p>
+            	<t t-out="object.employee_id.name"/> have applied for leave. find leave details below,
+            </p>
+           	
+			<html>
+				<div style="text-align: left; margin-top: 16px;">
+	                <a t-attf-href="/web?#id={{object.id}}&amp;model=hr.leave" style="padding: 5px 10px; font-size: 12px; line-height: 18px; color: #FFFFFF; border-color:#875A7B; text-decoration: none; display: inline-block; margin-bottom: 0px; font-weight: 400; text-align: center; vertical-align: middle; white-space: nowrap; background-image: none; background-color: 
+	                	#875A7B; border: 1px solid #875A7B; border-radius:3px">View Leave</a>
+	            </div>
+				<br/>
+				
+				<head>Employee's Leave Details</head>		
+
+					<table border="1" bgcolor="#FFF" style="border: 1px solid gray;width:100%;" >
+						<thead style="background-color:#875A7B;text-decoration: none; color: #fff;font-size: 16px;">
+							<tr>
+								<th align="center">Employee Name</th>
+								<th align="center">Department</th>
+								<th align="center">Description</th>
+								<th align="center">Type</th>
+								<th align="center">From</th>
+								<th align="center">To</th>
+								<th align="center">Days</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><span style="margin-left:5px"><t t-out="object.employee_id.name"/></span></td>
+								<td><span style="margin-left:5px"><t t-out="object.department_id.name"/></span></td>
+								<t t-if="object.name">
+								<td><span style="margin-left:5px"><t t-out="object.name"/></span></td>
+								</t>
+								<t t-else="">
+								<td><span style="margin-left:5px"></span></td>
+								</t>
+								<td><span style="margin-left:5px"><t t-out="object.holiday_status_id.name"/></span></td>
+								<td><span style="margin-left:5px"><t t-out="object.date_from"/></span></td>
+								<td><span style="margin-left:5px"><t t-out="object.date_to"/></span></td>
+								<td><span style="margin-left:5px"><t t-out="object.number_of_days_display"/></span></td>
+							</tr>
+						</tbody>
+					</table>
+
+				</html>	
+			<br/>
+			<p>Thank You</p> 
+			]]>
+		</field>
+	</record>
+
+	<record id="sh_template_hr_manager_leave_respond_email" model="mail.template">
+		<field name="name">Leave Request Reply Email Notification</field>
+		<field name="email_from">{{object.employee_id.parent_id.work_email}}</field>
+		<field name="subject">Leave Request Status # {{object.employee_id.name}}</field>
+		<field name="email_to">{{object.employee_id.work_email}}</field>
+		<field name="model_id" ref="hr_holidays.model_hr_leave" />
+		<field name="body_html">
+			<![CDATA[ 
+			<br />
+			<br />
+			<p>
+				Dear
+				<t t-out="object.employee_id.name" />
+				,
+			</p>
+			<p>
+				<t t-out="object.employee_id.parent_id.name" />
+				have
+				<t t-if="object.state=='validate'">
+            		approved 
+            	</t>
+				<t t-if="object.state=='refuse'">
+					refused
+				</t>
+				your leave request below.
+			</p>
+
+			<html>
+				<div style="text-align: left; margin-top: 16px;">
+					<a t-attf-href="/web?#id={{object.id}}&amp;model=hr.leave" style="padding: 5px 10px; font-size: 12px; line-height: 18px; color: #FFFFFF; border-color:#875A7B; text-decoration: none; display: inline-block; margin-bottom: 0px; font-weight: 400; text-align: center; vertical-align: middle; white-space: nowrap; background-image: none; background-color: 
+	                	#875A7B; border: 1px solid #875A7B; border-radius:3px">View Leave</a>
+				</div>
+				<br />
+
+				<head>Leave Details</head>
+
+				<table border="1" bgcolor="#FFF" style="border: 1px solid gray;width:100%;">
+					<thead style="background-color:#875A7B;text-decoration: none; color: #fff;font-size: 16px;">
+						<tr>
+							<th align="center">Employee Name</th>
+							<th align="center">Department</th>
+							<th align="center">Description</th>
+							<th align="center">Type</th>
+							<th align="center">From</th>
+							<th align="center">To</th>
+							<th align="center">Days</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<span style="margin-left:5px">
+									<t t-out="object.employee_id.name" />
+								</span>
+							</td>
+							<td>
+								<span style="margin-left:5px">
+									<t t-out="object.department_id.name" />
+								</span>
+							</td>
+							<t t-if="object.name">
+								<td>
+									<span style="margin-left:5px">
+										<t t-out="object.employee_id.name" />
+									</span>
+								</td>
+							</t>
+							<t t-else="">
+
+								<td>
+									<span style="margin-left:5px"></span>
+								</td>
+							</t>
+							<td>
+								<span style="margin-left:5px">
+									<t t-out="object.holiday_status_id.name" />
+								</span>
+							</td>
+							<td>
+								<span style="margin-left:5px">
+									<t t-out="object.date_from" />
+								</span>
+							</td>
+							<td>
+								<span style="margin-left:5px">
+									<t t-out="object.date_to" />
+								</span>
+							</td>
+							<td>
+								<span style="margin-left:5px">
+									<t t-out="object.number_of_days_display" />
+								</span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</html>
+			<br />
+			<p>Thank You</p>
+			]]>
+		</field>
+	</record>
+</odoo>

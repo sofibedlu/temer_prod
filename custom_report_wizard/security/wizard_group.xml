@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Categories -->
+        <record id="team_activity_wizard_category" model="ir.module.category">
+            <field name="name">Team Activity Wizard</field>
+            <field name="sequence">10</field>
+        </record>
+        <record id="lead_analysis_wizard_category" model="ir.module.category">
+            <field name="name">Lead Analysis Wizard</field>
+            <field name="sequence">15</field>
+        </record>
+        <record id="wing_selection_category" model="ir.module.category">
+                <field name="name">Wing Selection Access</field>
+                <field name="sequence">20</field>
+            </record>
+        <record id="agent_group" model="ir.module.category">
+            <field name="name">Agent Group Access</field>
+            <field name="sequence">25</field>
+        </record>
+        <!-- Groups -->
+
+        <record id="lead_analysis_report" model="res.groups">
+            <field name="name">Lead Analysis Report Menu</field>
+            <field name="category_id" ref="custom_report_wizard.lead_analysis_wizard_category"/>
+             <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        <record id="team_activity_report" model="res.groups">
+            <field name="name">Team Activity Report Menu</field>
+            <field name="category_id" ref="custom_report_wizard.team_activity_wizard_category"/>
+             <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+          <!-- Group: No Wing -->
+            <record id="group_no_wing_access" model="res.groups">
+                <field name="name">No Wing Access</field>
+                <field name="category_id" ref="wing_selection_category"/>
+            </record>
+            <!-- Group: Team Ajwa -->
+            <record id="group_team_ajwa_access" model="res.groups">
+                <field name="name">Team Ajwa Access</field>
+                <field name="category_id" ref="wing_selection_category"/>
+            </record>
+            <!-- Group: Team Taj -->
+            <record id="group_team_taj_access" model="res.groups">
+                <field name="name">Team Taj Access</field>
+                <field name="category_id" ref="wing_selection_category"/>
+            </record>
+
+            <!-- Group: Team Raha -->
+            <record id="group_team_Raha_access" model="res.groups">
+                <field name="name">Team Raha Access</field>
+                <field name="category_id" ref="wing_selection_category"/>
+            </record>
+
+            <record id="access_agent_user_group" model="res.groups">
+                <field name="name">Agent User Group</field>
+                <field name="category_id" ref="agent_group"/>
+            </record>
+    </data>
+</odoo>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="hr_view_employee_form_inherit_temer" model="ir.ui.view">
+        <field name="name">hr.employee.form.inherit.temer</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']/.." position="before">
+                <field name="title" class="oe_inline" placeholder="Title (e.g. Ato)"/>
+            </xpath>
+            <xpath expr="//field[@name='job_title']" position="replace">
+                <group colspan="4">
+                    <label for="job_id" string=""  />
+                    <field name="job_id" nolabel="1" placeholder="Job Position"/>
+                </group>
+            </xpath>
+
+            <xpath expr="//label[@for='private_street']" position="replace">
+            </xpath>
+            <xpath expr="//div[hasclass('o_address_format')]" position="replace">
+                <field name="subcity" string="SubCity" placeholder="SubCity"/>
+                <field name="district" string="District" placeholder="District"/>
+                <field name="house_no" string="House No." placeholder="House No."/>
+                <field name="private_city" string="City" placeholder="City"/>
+                <field name="private_country_id" string="Country" placeholder="Country" options='{"no_open": True, "no_create": True}'/>
+                <field name="private_zip" string="Postal Code" placeholder="Postal Code"/>
+            </xpath>
+
+            <xpath expr="//page[@name='personal_information']" position="after">
+                <page string="Identification" name="identification">
+                    <group>
+                        <group string="Identity">
+                            <field name="tin_number"/>
+                            <field name="pension_number"/>
+                            <field name="fayda_fan_number"/>
+                        </group>
+                        <group string="Account Details">
+                            <field name="personal_cbe_account_number"/>
+                            <field name="cbe_branch"/>
+                            <field name="personal_awash_account_number"/>
+                            <field name="awash_branch"/>
+                            <field name="personal_abyssinia_account_number"/>
+                            <field name="abyssinia_branch"/>
+                            <field name="personal_dashen_account_number"/>
+                            <field name="dashen_branch"/>
+                        </group>
+                    </group>
+                </page>
+                <page string="Company Assets" name="company_assets">
+                    <field name="asset_ids">
+                        <tree editable="bottom">
+                            <field name="asset_type"/>
+                            <field name="reference"/>
+                            <field name="other_description" invisible="asset_type != 'other'" required="asset_type == 'other'"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+
+            <xpath expr="//field[@name='work_location_id']" position="after">
+                <field name="assigned_company" widget="radio" options="{'horizontal': true}"/>
+            </xpath>
+
+            
+            <xpath expr="//page[@name='personal_information']/group" position="inside">
+                <group string="Spouse's Detail" name="spouse_detail">
+                    <field name="spouse_name_custom"/>
+                    <field name="spouse_birth_date_custom"/>
+                    <field name="spouse_place_of_birth"/>
+                    <field name="spouse_nationality"/>
+                    <field name="spouse_phone"/>
+                    <field name="marriage_date"/>
+                </group>
+            </xpath>
+
+            <xpath expr="//field[@name='emergency_ids']/.." position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//page[@name='personal_information']" position="inside">
+
+                <group string="Parent Information" name="parent_info">
+                    <group string="Mother's Side">
+                        <field name="mother_name"/>
+                        <field name="mother_birth_date"/>
+                        <field name="mother_place_of_birth"/>
+                    </group>
+                    <group string="Father's Side">
+                        <field name="father_name"/>
+                        <field name="father_birth_date"/>
+                        <field name="father_place_of_birth"/>
+                    </group>
+                </group>
+
+                <separator string="Children Information"/>
+                <field name="family_child_ids">
+                    <tree editable="bottom">
+                        <field name="name"/>
+                        <field name="birth_date"/>
+                        <field name="place_of_birth"/>
+                    </tree>
+                </field>
+            </xpath>
+        </field>
+    </record>
+</odoo>

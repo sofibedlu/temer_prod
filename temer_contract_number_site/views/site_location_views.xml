@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_site_location_tree" model="ir.ui.view">
+        <field name="name">site.location.tree</field>
+        <field name="model">site.location</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="display_name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_site_location_form" model="ir.ui.view">
+        <field name="name">site.location.form</field>
+        <field name="model">site.location</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="abbreviation"/>
+                        </group>
+                        <group></group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_site_location" model="ir.actions.act_window">
+        <field name="name">Locations</field>
+        <field name="res_model">site.location</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_site_location" 
+              name="Locations Site mapping" 
+              parent="temer_contract_number_site.menu_site_company_mapping" 
+              action="action_site_location" 
+              sequence="5"/>
+</odoo>

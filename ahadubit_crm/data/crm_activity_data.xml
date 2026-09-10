@@ -1,0 +1,12 @@
+<odoo>
+    <data noupdate="1">
+        <record id="activity_type_office_visit" model="mail.activity.type">
+            <field name="name">Office Visit</field>
+        </record>
+
+        <record id="activity_type_site_visit" model="mail.activity.type">
+            <field name="name">Site Visit</field>
+        </record>
+    </data>
+</odoo>
+

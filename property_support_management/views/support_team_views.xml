@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_support_team_config_form" model="ir.ui.view">
+        <field name="name">support.team.config.form</field>
+        <field name="model">support.team.config</field>
+        <field name="arch" type="xml">
+            <form string="Support Team Member">
+                <sheet>
+                    <group>
+                        <field name="user_id" options="{'no_create': True}"/>
+                        <field name="department"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_support_team_config_tree" model="ir.ui.view">
+        <field name="name">support.team.config.tree</field>
+        <field name="model">support.team.config</field>
+        <field name="arch" type="xml">
+            <tree string="Support Team Configuration" editable="bottom">
+                <field name="user_id"/>
+                <field name="department"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_support_team_config" model="ir.actions.act_window">
+        <field name="name">Team Configuration</field>
+        <field name="res_model">support.team.config</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_support_management_team_config"
+              name="Team Configuration"
+              parent="menu_support_management_config_root"
+              action="action_support_team_config"
+              sequence="10"/>
+</odoo>

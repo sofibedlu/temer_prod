@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="inherit_crm_lead_kanban" model="ir.ui.view">
+    <field name="name">crm.lead.kanban.inherit</field>
+    <field name="model">crm.lead</field>
+    <field name="inherit_id" ref="crm.crm_case_kanban_view_leads"/>
+    <field name="arch" type="xml">
+        <kanban position="attributes">
+            <attribute name="quick_create">false</attribute>
+        </kanban>
+    </field>
+</record>
+
+    <record id="property_reservation_history_view_form_id_inherit" model="ir.ui.view">
+        <field name="name">property.reservation.inherit</field>
+        <field name="model">property.reservation</field>
+        <field name="inherit_id" ref="ahadubit_property_reservation.property_reservation_history_view_form_id" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='property_id']" position="after">
+            <field name="property_id_domain" invisible="1"/>
+        </xpath>
+            <xpath expr="//field[@name='property_id']" position="replace">
+            <field name="property_id" domain="property_id_domain" readonly="status not in ['draft', False]" />
+        </xpath>
+
+        </field>
+    </record>
+
+    <record id="crm_lead_view_form_inherit_id" model="ir.ui.view">
+        <field name="name">crm.lead.view.form.inherit</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form" />
+        <field name="arch" type="xml">
+
+       <xpath expr="//widget[@name='web_ribbon']" position="after">
+                 <field name="is_reserved" invisible="1"/>
+                 <field name="is_lost" invisible="1"/>
+                 <field name="is_expire_stage" invisible="1"/>
+                 <field name="is_won" invisible="1"/>
+            <widget
+                name="web_ribbon"
+                title="Reservation"
+                invisible="not is_reserved"/>
+
+             <widget
+                name="web_ribbon"
+                title="Lost"
+                bg_color="text-bg-danger"
+                invisible="not is_lost"/>
+            <widget
+                name="web_ribbon"
+                title="Expired"
+                bg_color="text-bg-danger"
+                invisible="not is_expire_stage"/>
+        </xpath>
+
+          <xpath expr="//field[@name='stage_id']" position="attributes">
+                <attribute name="options">'clickable': '0'</attribute>
+            </xpath>
+
+             <xpath expr="//header/button[@name='action_sale_quotations_new']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+           <xpath expr="//header/button[@name='195']" position="attributes">
+               <attribute name="invisible">is_lost == True or is_expire_stage == True or is_won == True</attribute>
+           </xpath>
+            <!-- <xpath expr="//header/button[@name='522']" position="attributes">
+               <attribute name="invisible">is_lost == True or is_expire_stage == True or is_won == True</attribute>
+           </xpath> -->
+             <xpath expr="//header/button[@name='action_set_won_rainbowman']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+             <xpath expr="//header/button[@name='action_set_won_rainbowman']" position="after">
+                <button name="action_reserve"
+                    string="Create Reservation"
+                    type="object"
+                    class="btn-primary"
+                    invisible="is_lost == True or is_expire_stage == True"/>
+                  <button name="print_change_history"
+                        string="Print Log"
+                        type="object"/>
+                    <button name="save_record"
+                        string="Save"
+                        type="object" class="btn-primary btn-mobile-save"/>
+            </xpath>
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+              <button name="action_reserve_list" type="object" string="Reservations" class="oe_stat_button" invisible="not reservation_count">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_value">
+                            Reservations: <field name="reservation_count"/>
+                        </span>
+                    </div>
+              </button>
+            </xpath>
+
+            <xpath expr="//button[@name='action_view_sale_quotation']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_schedule_meeting']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='expected_revenue']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='email_from']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//page[@name='lead']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//page[@name='internal_notes']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+              <xpath expr="//field[@name='probability']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+             <xpath expr="//field[@name='recurring_revenue']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='recurring_plan']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//span[@class='oe_grey p-2' and contains(@groups, '!crm.group_use_recurring_revenues')]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//span[@class='oe_grey p-2' and text()=' %']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='date_deadline']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='priority']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='tag_ids']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='phone']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='user_id']" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+            <xpath expr="//label[@for='phone']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='email_from']" position="attributes">
+                <attribute name="readonly">is_reserved==True or is_lost==True or is_expire_stage == True</attribute>
+            </xpath>
+
+            <xpath expr="//group[@name='opportunity_partner']//field[@name='partner_id']" position="attributes">
+                <attribute name="readonly">is_reserved==True or is_lost==True or is_expire_stage == True</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='partner_name']" position="attributes">
+                <attribute name="readonly">is_reserved==True or is_lost==True or is_expire_stage == True</attribute>
+            </xpath>
+             <xpath expr="//group[@name='opportunity_partner']//field[@name='partner_id']" position="attributes">
+                  <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//label[@for='phone']" position="before">
+                 <field name="customer_name" readonly="is_reserved==True or is_lost==True or is_expire_stage == True"/>
+            </xpath>
+
+             <xpath expr="//label[@for='phone']" position="after">
+                <field name="has_phone"  invisible="1"/>
+                <label for="phone_ids" string="" invisible="is_creator == True or has_phone != True"/>
+                 <div class="address_format">
+                   <field name="phone_ids" string="Phone List"  options="{'no_create': True}"  widget="many2many_tags"  invisible="is_creator == True or has_phone != True" readonly="is_reserved==True or is_lost==True or is_expire_stage == True"/>
+                 </div>
+            </xpath>
+            <xpath expr="//label[@for='phone']" position="after">
+
+               <label for="phone" string="Phone" invisible="is_creator == True"/>
+                <div class="address_format" invisible="is_creator == True">
+                     <field name="country_id" style="width: 35%" options='{"no_open": True}' readonly="is_reserved==True or is_lost==True or is_expire_stage == True"/>
+                     <field name="phone_code" style="width: 10%;" />
+                     <field name="phone_no" style="width: 35%; margin: 1%;" readonly="is_reserved==True or is_lost==True or is_expire_stage == True"/>
+                     <!-- <button name="add_more_phone_list" type="object" string="Add" class="btn-primary" style="width: 18%; margin: 1%;" invisible="is_reserved==True or is_lost==True or is_expire_stage == True"/> -->
+                </div>
+            </xpath>
+
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="is_creator" invisible="1"/>
+                 <field name="site_ids" widget="many2many_tags" readonly="is_reserved==True or is_lost==True or is_expire_stage == True"/>
+                 <field name="source_id" readonly="is_reserved==True or is_lost==True or is_expire_stage == True" widget="selection" options="{'no_create': True}"/>
+            </xpath>
+<!--             <xpath expr="//field[@name='phone']" position="after">-->
+<!--                  <field name="phone_ids" style="width: 20%; margin: 10px;" invisible="is_creator == True"/>-->
+<!--            </xpath>-->
+
+
+        </field>
+    </record>
+    <record id="view_crm_lead_quick__form_inherited" model="ir.ui.view">
+            <field name="name">crm.lead.quick.form.inherited</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.quick_create_opportunity_form"/>
+            <field name="arch" type="xml">
+             <xpath expr="//field[@name='email_from']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+                 <xpath expr="//field[@name='expected_revenue']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='priority']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='email_from']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='phone']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+           <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='phone']" position="after">
+                <field name="is_creator" invisible="1"/>
+                <field name="customer_name"/>
+                <field name="site_ids" widget="many2many_tags"/>
+                <field name="source_id" widget="selection" options="{'no_create': True}"/>
+                <label for="phone" string="Phone" invisible="is_creator == True"/>
+                <div class="address_format" invisible="is_creator == True">
+                     <field name="country_id" style="width: 35%" options='{"no_open": True}'/>
+                     <field name="phone_code" style="width: 10%;" />
+                     <field name="phone_no" style="width: 35%; margin: 1%;"/>
+                     <!-- <button name="add_more_phone_list" type="object" string="Add" class="btn-primary" style="width: 18%; margin: 1%;" invisible="is_reserved==True or is_lost==True or is_expire_stage == True"/> -->
+                </div>
+<!--                <field name="phone_ids"  widget="many2many_tags" options="{'no_create_edit': True}" invisible="is_creator == True"/>-->
+            </xpath>
+            </field>
+        </record>
+
+
+
+     <record id="view_crm_lead_tree_view_inherited" model="ir.ui.view">
+            <field name="name">crm.lead.quick.form.inherited</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>
+            <field name="arch" type="xml">
+            <xpath expr="//field[@name='expected_revenue']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='contact_name']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='contact_name']" position="after">
+                <field name="customer_name"/>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='priority']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='phone']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='city']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='state_id']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='recurring_revenue_monthly']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='recurring_revenue']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='lead_properties']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='email_from']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='city']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='state_id']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='country_id']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='priority']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+         <xpath expr="//field[@name='activity_ids']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='activity_user_id']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='my_activity_date_deadline']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+           <xpath expr="//field[@name='activity_calendar_event_id']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+           <xpath expr="//field[@name='campaign_id']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+           <xpath expr="//field[@name='medium_id']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+           <xpath expr="//field[@name='expected_revenue']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+           <xpath expr="//field[@name='date_deadline']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+           <xpath expr="//field[@name='recurring_revenue_monthly']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+           <xpath expr="//field[@name='recurring_revenue']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+           <xpath expr="//field[@name='recurring_plan']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+           <xpath expr="//field[@name='probability']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+           <xpath expr="//field[@name='tag_ids']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+           <xpath expr="//field[@name='date_deadline']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='204']" position="attributes">
+               <attribute name="column_invisible">1</attribute>
+           </xpath>
+           <xpath expr="//button[@name='225']" position="attributes">
+               <attribute name="column_invisible">1</attribute>
+           </xpath>
+            <xpath expr="//button[@name='action_reschedule_meeting']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_snooze']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            </field>
+        </record>
+
+     <record id="view_crm_lead_filter_view_inherited" model="ir.ui.view">
+            <field name="name">crm.lead.quick.form.inherited</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.view_crm_case_opportunities_filter"/>
+            <field name="arch" type="xml">
+            <field name="name" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="partner_id" position="after">
+                    <field name="phone_ids" string="Phones" widget="many2many_tags"/>
+            </field>
+            <field name="tag_ids" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="user_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="team_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="stage_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="country_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="city" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="phone_mobile_search" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="activity_state" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="lead_properties" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+
+              <xpath expr="//filter[@name='lost']" position="after">
+                <filter string="Expire" name="filter_expire" domain="[('is_expire_stage', '=', True)]" />
+                <filter string="Prospect,Follow Up,Reservation" name="filter_default" domain="[('stage_name', 'in', ['Prospect','Follow Up','Reservation'])]"/>
+            </xpath>
+            </field>
+     </record>
+
+    <record id="view_crm_stage_form_view_inherited" model="ir.ui.view">
+            <field name="name">crm.stage.form.inherited</field>
+            <field name="model">crm.stage</field>
+            <field name="inherit_id" ref="crm.crm_stage_form"/>
+            <field name="arch" type="xml">
+            <xpath expr="//field[@name='fold']" position="after">
+                <field name="is_reservation_stage"/>
+                <field name="is_lost_stage"/>
+                <field name="is_expire_stage"/>
+            </xpath>
+
+
+            </field>
+        </record>
+
+
+    <record id="action_crm_lead_my_pipline" model="ir.actions.act_window">
+        <field name="name">My Pipline</field>
+        <field name="res_model">crm.lead</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="domain">[('create_uid', '=', uid)]</field>
+        <field name="context">{'search_default_filter_default': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                View Your lead
+            </p>
+        </field>
+    </record>
+
+    <record id="action_crm_lead_all_pipeline" model="ir.actions.act_window">
+        <field name="name">All Pipline</field>
+        <field name="res_model">crm.lead</field>
+        <field name="view_mode">tree,kanban,form</field>
+<!--        <field name="domain">[('create_uid', '=', uid)]</field>-->
+        <field name="context">{'search_default_filter_default': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                View Your lead
+            </p>
+        </field>
+    </record>
+
+
+
+    <!-- phone action -->
+    <record id="phone_action" model="ir.actions.act_window">
+        <field name="name">Phone</field>
+        <field name="res_model">crm.phone</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new phone
+            </p>
+        </field>
+    </record>
+
+    <!-- phone tree view -->
+    <record id="phone_tree_id" model="ir.ui.view">
+        <field name="name">phone.tree</field>
+        <field name="model">crm.phone</field>
+        <field name="arch" type="xml">
+            <tree editable="top">
+                <field name="country_id" />
+                <field name="phone" />
+            </tree>
+        </field>
+    </record>
+
+
+    <menuitem id="crm.menu_crm_opportunities"
+                  name="My Pipeline"
+                  action="action_crm_lead_my_pipline"
+                  parent="crm.crm_menu_sales"/>
+
+    <menuitem id="menu_view_crm_all_opportunities"
+                  name="All Pipeline"
+                  action="action_crm_lead_all_pipeline"
+                  parent="crm.crm_menu_sales"
+                  groups="ahadubit_crm.crm_res_groups_view_all_activity1"/>
+
+    <menuitem id="menu_utm_source_id"
+                  name="Source"
+                  action="utm.utm_source_action"
+                  parent="crm.crm_menu_config" />
+    
+
+     <record id="crm.crm_team_config" model="ir.ui.menu">
+            <field name="active">False</field>
+        </record>
+
+    <record id="crm.mail_activity_plan_menu_config_lead" model="ir.ui.menu">
+            <field name="active">False</field>
+        </record>
+
+    <record id="crm.menu_crm_lead_categ" model="ir.ui.menu">
+            <field name="active">False</field>
+        </record>
+
+    <record id="crm_iap_mine.crm_iap_lead_mining_request_menu_action" model="ir.ui.menu">
+            <field name="active">False</field>
+        </record>
+    <record id="crm.crm_team_member_config" model="ir.ui.menu">
+            <field name="active">False</field>
+        </record>
+    <record id="sale_crm.sale_order_menu_quotations_crm" model="ir.ui.menu">
+            <field name="active">False</field>
+        </record>
+    <record id="crm.crm_lead_menu_my_activities" model="ir.ui.menu">
+        <field name="active">False</field>
+    </record>
+
+
+
+    <!-- Make button invisible in Opportunity Tree View -->
+    <record id="crm_lead_view_tree_opportunity_inherit" model="ir.ui.view">
+        <field name="name">crm.lead.view.tree.opportunity.inherit.invisible</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_generate_leads']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Make button invisible in Lead Tree View -->
+    <record id="crm_lead_view_tree_lead_inherit" model="ir.ui.view">
+        <field name="name">crm.lead.view.tree.lead.inherit.invisible</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_tree_view_leads"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_generate_leads']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Make button invisible in Kanban View -->
+    <record id="view_crm_lead_kanban_inherit" model="ir.ui.view">
+        <field name="name">crm.lead.kanban.inherit.invisible</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.view_crm_lead_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_generate_leads']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Make button invisible in Kanban Leads View -->
+    <record id="crm_case_kanban_view_leads_inherit" model="ir.ui.view">
+        <field name="name">crm.lead.kanban.lead.inherit.invisible</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_kanban_view_leads"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_generate_leads']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//progressbar[@field='activity_state']" position="replace">
+                <progressbar field="activity_state" colors="{&quot;planned&quot;: &quot;success&quot;, &quot;today&quot;: &quot;warning&quot;, &quot;overdue&quot;: &quot;danger&quot;}"  help="This bar allows to filter the opportunities based on scheduled activities."/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

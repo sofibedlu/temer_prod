@@ -1,0 +1,27 @@
+<odoo>
+    <record id="view_property_sale_form_inherit_ext" model="ir.ui.view">
+        <field name="name">property.sale.form.inherit.ext</field>
+        <field name="model">property.sale</field>
+        <field name="inherit_id" ref="property_flexible_scheduling.view_property_sale_form_flexible_schedule"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_open_schedule_generator']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_property_sale_form_schedule_gen" model="ir.ui.view">
+        <field name="name">property.sale.form.schedule.gen</field>
+        <field name="model">property.sale</field>
+        <field name="inherit_id" ref="advanced_property_management.property_sale_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='payment_installment_line_ids']" position="before">
+                <button name="action_open_due_date_generator" 
+                        type="object" 
+                        string="Generate Due Dates" 
+                        class="oe_highlight"
+                        invisible="state not in ['draft', 'request_for_confirm', 'confirm'] or payment_schedule_type != 'time'"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

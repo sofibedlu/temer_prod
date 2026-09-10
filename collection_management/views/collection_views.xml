@@ -1,0 +1,152 @@
+<odoo>
+
+    <!-- Collection Order Form View -->
+    <record id="view_collection_order_form" model="ir.ui.view">
+        <field name="name">collection.order.form</field>
+        <field name="model">collection.order</field>
+        <field name="arch" type="xml">
+            <form string="Collection Order">
+                <header>
+                    <button name="action_open_extension_wizard" string="Extend Payment" type="object" class="btn-secondary" invisible="state != 'active'" groups="collection_management.group_collection_due_date_editor"/>
+                    <button name="action_open_apply_penalty_wizard" string="Apply Penalty" type="object" class="btn-secondary" invisible="state != 'active'" groups="collection_management.group_collection_penalty_manager"/>
+                    <button name="%(action_collection_early_settlement_wizard)d" 
+                        string="Early Settlement" 
+                        type="action" 
+                        class="btn-secondary" 
+                        groups="collection_management.group_collection_settlement_manager"
+                        invisible="state != 'active'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="active,completed,terminated,void"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_sale" type="object" class="oe_stat_button" icon="fa-file-text-o" invisible="not sale_id">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Contract</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="sale_id" invisible="1"/>
+                            <field name="partner_id" class="fw-bold" style="font-size: 1.3em;"/>
+                            <field name="payment_schedule_type" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="property_id"/>
+                            <field name="contract_number" readonly="1" />
+                            <field name="company_id" invisible="1"/>
+                        </group>
+                    </group>
+
+                    <!-- Financial Details Section -->
+                    <group string="Financial Details">
+                        <group>
+                            <field name="amount_total" widget="monetary"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="amount_collected" widget="monetary" decoration-success="amount_collected == amount_total"/>
+                            <field name="amount_remaining" widget="monetary" decoration-danger="amount_remaining > 0"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Payment Schedule">
+                            <field name="installment_ids">
+                                <tree string="Installments" delete="0" edit="0" decoration-success="state == 'paid'" decoration-danger="state == 'overdue'">
+                                    <field name="currency_id" invisible="1" column_invisible="1"/>
+                                    <field name="name"/>
+                                    <field name="due_date"/>
+                                    <field name="amount_total" sum="Total Amount" widget="monetary"/>
+                                    <field name="amount_paid" sum="Total Paid" widget="monetary"/>
+                                    <field name="amount_residual" sum="Total Residual" widget="monetary"/>
+                                    <field name="state" widget="badge" decoration-danger="state == 'overdue'" decoration-warning="state == 'partial'" decoration-success="state == 'paid'"/>
+                                    <field name="penalty_amount" sum="Total" optional="hide" widget="monetary"/>
+                                    <field name="penalty_applied" widget="boolean" optional="hide"/>
+                                    <field name="discount_amount" sum="Total Discount" optional="show"/>
+                                    <button name="action_reset_penalty"
+                                        string="Reset Penalty"
+                                        type="object"
+                                        class="btn-secondary o_form_button"
+                                        invisible="not penalty_applied"
+                                        groups="collection_management.group_collection_penalty_manager"/>
+                                    <button name="action_open_payment_wizard" string="Pay" type="object" icon="fa-money" invisible="state == 'paid'" groups="collection_management.group_collection_payment_initiator"/>
+                                    
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Collection Order Tree View -->
+    <record id="view_collection_order_tree" model="ir.ui.view">
+        <field name="name">collection.order.tree</field>
+        <field name="model">collection.order</field>
+        <field name="arch" type="xml">
+            <tree string="Collection Orders" create="0">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="sale_ref"/>
+                <field name="property_id"/>
+                <field name="state" widget="badge" decoration-success="state == 'active'" decoration-muted="state == 'completed'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Search view -->
+    <record id="view_collection_order_search" model="ir.ui.view">
+        <field name="name">collection.order.search</field>
+        <field name="model">collection.order</field>
+        <field name="arch" type="xml">
+            <search string="Collections">
+                <field name="name"/>
+                <field name="sale_ref" string="Sale Reference"/>
+                <field name="contract_number" string="Contract Number"/>
+                <filter string="Active" name="filter_active" domain="[('state','=','active')]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_collection_order" model="ir.actions.act_window">
+        <field name="name">Collection Orders</field>
+        <field name="res_model">collection.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No collection orders found.
+            </p>
+            <p>
+                Collection orders are automatically created when a Property Sale is confirmed.
+            </p>
+        </field>
+        <field name="context">{'create': False}</field>
+    </record>
+
+    <!-- Main Menu Item -->
+    <menuitem id="menu_collection_root"
+              name="Collection"
+              web_icon="collection_management,static/description/icon.png"
+              groups="collection_management.group_collection_user,collection_management.group_collection_manager"
+              sequence="10"/>
+
+    <!-- Sub Menu -->
+    <menuitem id="menu_collection_orders"
+              name="Collection Orders"
+              parent="menu_collection_root"
+              action="action_collection_order"
+              sequence="10"/>
+</odoo>

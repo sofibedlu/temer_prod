@@ -1,0 +1,27 @@
+<odoo>
+    <data noupdate="0">
+        <record id="crm_stage_prospect_stage" model="crm.stage">
+            <field name="name">Prospect</field>
+        </record>
+        <record id="crm_stage_follow_up_stage" model="crm.stage">
+            <field name="name">Follow Up</field>
+        </record>
+        <record id="crm_stage_reservation_stage" model="crm.stage">
+            <field name="name">Reservation</field>
+            <field name="is_reservation_stage">True</field>
+        </record>
+        <record id="crm_stage_won_stage" model="crm.stage">
+            <field name="name">Won</field>
+            <field name="is_won">True</field>
+        </record>
+        <record id="crm_stage_lost_stage" model="crm.stage">
+            <field name="name">Lost</field>
+            <field name="is_lost_stage">True</field>
+        </record>
+        <record id="crm_stage_expired" model="crm.stage">
+            <field name="name">Expired</field>
+            <field name="is_expire_stage">True</field>
+        </record>
+    </data>
+</odoo>
+

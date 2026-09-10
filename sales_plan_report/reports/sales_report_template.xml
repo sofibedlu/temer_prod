@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="action_report_sales_performance" model="ir.actions.report">
+            <field name="name">Sales Performance Report</field>
+            <field name="model">sales.report</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">sales_plan_report.sales_performance_report_template</field>
+            <field name="report_file">sales_plan_report.sales_performance_report_template</field>
+            <field name="print_report_name">'Sales Performance Report - %s' % (object.name or 'Report')</field>
+        </record>
+
+        <template id="sales_performance_report_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <div class="oe_structure"/>
+                            <div class="row">
+                                <div class="col-12">
+                                    <h2>Sales Performance Report</h2>
+                                    <p>
+                                        <strong>Report Type:</strong> <t t-esc="doc.report_type"/><br/>
+                                        <t t-if="doc.report_type == 'wing'">
+                                            <strong>Wing:</strong> <t t-esc="doc.wing_id.name if doc.wing_id else ''"/>
+                                        </t>
+                                        <t t-if="doc.report_type == 'supervisor'">
+                                            <strong>Supervisor:</strong> <t t-esc="doc.supervisor_id.name if doc.supervisor_id else ''"/>
+                                        </t>
+                                        <br/>
+                                        <strong>Period:</strong> <t t-esc="doc.date_from"/> to <t t-esc="doc.date_to"/>
+                                    </p>
+                                    
+                                    <table style="width: 100%; margin-top: 20px;">
+                                        <tr>
+                                            <td style="width: 70%; vertical-align: top;">
+                                                <table class="table table-bordered" style="width: 100%;">
+                                                    <thead>
+                                                        <tr style="background-color: #343a40; color: white;">
+                                                            <th style="padding: 12px; text-align: left;">Metric</th>
+                                                            <th style="padding: 12px; text-align: center;">Actual Previous Week</th>
+                                                            <th style="padding: 12px; text-align: center; color: red;">Plan</th>
+                                                            <th style="padding: 12px; text-align: center;">Actual</th>
+                                                            <th style="padding: 12px; text-align: center;">Difference<br/>(This week - Previous week)</th>
+                                                            <th style="padding: 12px; text-align: center;">Difference<br/>(Actual - Plan)</th>
+                                                            <th style="padding: 12px; text-align: center;">% Achievement</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                            <tr>
+                                                <td style="padding: 10px;"><strong>Prospects (Leads)</strong></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.actual_previous_week_prospects"/></td>
+                                                <td style="padding: 10px; text-align: center; color: red;"><t t-esc="doc.plan_prospects"/></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.actual_prospects"/></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.diff_week_prospects"/></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.diff_prospects"/></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.percent_prospects"/>%</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 10px;"><strong>Follow-ups</strong></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.actual_previous_week_follow_ups"/></td>
+                                                <td style="padding: 10px; text-align: center; color: red;"><t t-esc="doc.plan_follow_ups"/></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.actual_follow_ups"/></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.diff_week_follow_ups"/></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.diff_follow_ups"/></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.percent_follow_ups"/>%</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 10px;"><strong>Site Visits</strong></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.actual_previous_week_site_visits"/></td>
+                                                <td style="padding: 10px; text-align: center; color: red;"><t t-esc="doc.plan_site_visits"/></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.actual_site_visits"/></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.diff_week_site_visits"/></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.diff_site_visits"/></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.percent_site_visits"/>%</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 10px;"><strong>Office Visits</strong></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.actual_previous_week_office_visits"/></td>
+                                                <td style="padding: 10px; text-align: center; color: red;"><t t-esc="doc.plan_office_visits"/></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.actual_office_visits"/></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.diff_week_office_visits"/></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.diff_office_visits"/></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.percent_office_visits"/>%</td>
+                                            </tr>
+                                            <tr style="background-color: #e3f2fd;">
+                                                <td style="padding: 10px;"><strong>Total Visits (Site + Office)</strong></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.actual_previous_week_total_visits"/></td>
+                                                <td style="padding: 10px; text-align: center; color: red;"><t t-esc="doc.plan_total_visits"/></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.actual_total_visits"/></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.diff_week_total_visits"/></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.diff_total_visits"/></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.percent_total_visits"/>%</td>
+                                            </tr>
+                                            <tr style="background-color: #fff3cd;">
+                                                <td style="padding: 10px;"><strong>Total unit reservations</strong></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.actual_previous_week_unit_reservations"/></td>
+                                                <td style="padding: 10px; text-align: center; color: red;"><t t-esc="doc.plan_unit_reservations"/></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.actual_unit_reservations"/></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.diff_week_unit_reservations"/></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.diff_unit_reservations"/></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.percent_unit_reservations"/>%</td>
+                                            </tr>
+                                            <tr style="background-color: #d4edda;">
+                                                <td style="padding: 10px;"><strong>Deals Closed (QTY)</strong></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.actual_previous_week_deals_closed"/></td>
+                                                <td style="padding: 10px; text-align: center; color: red;"><t t-esc="doc.plan_deals_closed"/></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.actual_deals_closed"/></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.diff_week_deals_closed"/></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.diff_deals_closed"/></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.percent_deals_closed"/>%</td>
+                                            </tr>
+                                                <tr>
+                                                    <td style="padding: 10px;"><strong>Conversion (sales/leads)</strong></td>
+                                                    <td style="padding: 10px; text-align: center;"><t t-esc="doc.actual_previous_week_conversion_rate"/></td>
+                                                    <td style="padding: 10px; text-align: center; color: red;"><t t-esc="doc.plan_conversion_rate"/></td>
+                                                    <td style="padding: 10px; text-align: center;"><t t-esc="doc.conversion_rate"/></td>
+                                                    <td style="padding: 10px; text-align: center;"><t t-esc="doc.diff_week_conversion_rate"/></td>
+                                                    <td style="padding: 10px; text-align: center;"><t t-esc="doc.diff_conversion_rate"/></td>
+                                                    <td style="padding: 10px; text-align: center;"><t t-esc="doc.percent_conversion_rate"/>%</td>
+                                                </tr>
+                                            <tr>
+                                                <td style="padding: 10px;"><strong>Cash Collected (Birr)</strong></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.actual_previous_week_cash_collected"/> Birr</td>
+                                                <td style="padding: 10px; text-align: center; color: red;"><t t-esc="doc.plan_cash_collected"/> Birr</td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.actual_cash_collected"/> Birr</td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.diff_week_cash_collected"/> Birr</td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.diff_cash_collected"/> Birr</td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.percent_cash_collected"/>%</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 10px;"><strong>Total Deal Value (Birr)</strong></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.actual_previous_week_total_deal_value"/> Birr</td>
+                                                <td style="padding: 10px; text-align: center; color: red;"><t t-esc="doc.plan_total_deal_value"/> Birr</td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.actual_total_deal_value"/> Birr</td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.diff_week_total_deal_value"/> Birr</td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.diff_total_deal_value"/> Birr</td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.percent_total_deal_value"/>%</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 10px;"><strong>IAR (sales/opening stock)</strong></td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.actual_previous_week_iar_rate"/>%</td>
+                                                <td style="padding: 10px; text-align: center; color: red;"><t t-esc="doc.plan_iar_rate"/>%</td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.iar_rate"/>%</td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.diff_week_iar_rate"/>%</td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.diff_iar_rate"/>%</td>
+                                                <td style="padding: 10px; text-align: center;"><t t-esc="doc.percent_iar_rate"/>%</td>
+                                            </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                            <td style="width: 30%; vertical-align: top; padding-left: 10px;">
+                                                <h3 style="margin-top: 0;">Opening Stock</h3>
+                                                <table class="table table-bordered" style="width: 100%; margin-top: 10px;">
+                                                    <thead>
+                                                        <tr style="background-color: #f0f0f0;">
+                                                            <th style="padding: 10px; text-align: left;">Type</th>
+                                                            <th style="padding: 10px; text-align: center;">QTY</th>
+                                                            <th style="padding: 10px; text-align: center;">Estimated Value (Birr)</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td style="padding: 10px;"><strong>Residence</strong></td>
+                                                            <td style="padding: 10px; text-align: center;"><t t-esc="doc.plan_opening_stock_residence_qty"/></td>
+                                                            <td style="padding: 10px; text-align: center;"><t t-esc="doc.plan_opening_stock_residence_value"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding: 10px;"><strong>Shops</strong></td>
+                                                            <td style="padding: 10px; text-align: center;"><t t-esc="doc.plan_opening_stock_shops_qty"/></td>
+                                                            <td style="padding: 10px; text-align: center;"><t t-esc="doc.plan_opening_stock_shops_value"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding: 10px;"><strong>Total</strong></td>
+                                                            <td style="padding: 10px; text-align: center;"><t t-esc="doc.plan_opening_stock_total_qty"/></td>
+                                                            <td style="padding: 10px; text-align: center;"><t t-esc="doc.plan_opening_stock_total_value"/></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
+

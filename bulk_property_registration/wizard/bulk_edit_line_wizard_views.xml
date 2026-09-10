@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="bulk_edit_line_wizard_view_form" model="ir.ui.view">
+        <field name="name">bulk.edit.line.wizard.form</field>
+        <field name="model">bulk.edit.line.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Edit property line">
+                <sheet>
+                    <group>
+                        <group string="Unit">
+                            <field name="line_id" invisible="1"/>
+                            <field name="unit_number"/>
+                            <field name="site_floor_ids" invisible="1"/>
+                            <field name="floor_id" options="{'no_create': True}"/>
+                            <field name="property_type"/>
+                            <field name="commercial_location" invisible="property_type != 'commercial'"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="price_per_m2_override"/>
+                            <field name="estimated_sales_price_override"/>
+                        </group>
+                        <group string="Property type details">
+                            <field name="property_type_bedroom"/>
+                            <field name="property_type_bathroom"/>
+                            <field name="property_type_has_maid_room"/>
+                            <field name="property_type_gross_area"/>
+                            <field name="property_type_net_area"/>
+                            <field name="finishing"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_save" string="Save" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

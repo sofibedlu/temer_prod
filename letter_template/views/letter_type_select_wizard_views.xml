@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ── Step-1 wizard: pick a letter type with a card-grid UI ─────────── -->
+    <record id="view_letter_type_select_wizard_form" model="ir.ui.view">
+        <field name="name">letter.type.select.wizard.form</field>
+        <field name="model">letter.type.select.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Select Letter Type">
+                <sheet>
+                    <field name="collection_id" invisible="1"/>
+
+                    <!-- ── Title ──────────────────────────────────────── -->
+                    <div style="text-align:center; margin-bottom:24px;">
+                        <h3 style="margin:0; color:#1a1a2e; font-size:18px; font-weight:700;">
+                            Select Letter Type
+                        </h3>
+                        <p style="margin:6px 0 0 0; color:#6c757d; font-size:13px;">
+                            Choose the type of letter you want to print
+                        </p>
+                    </div>
+
+                    <!-- ── Card-style radio buttons ───────────────────── -->
+                    <div style="padding: 0 8px;">
+                        <field name="letter_type_id"
+                               widget="radio"
+                               options="{'no_create': True}"
+                               nolabel="1"
+                               style="
+                                   display: flex;
+                                   flex-wrap: wrap;
+                                   gap: 12px;
+                                   justify-content: center;
+                               "/>
+                    </div>
+
+                    <!-- ── Inline CSS to style the radio items as cards ── -->
+                    <style>
+                        /* Target the radio widget items */
+                        .o_field_radio .o_radio_item {
+                            display: inline-flex !important;
+                            align-items: center;
+                            gap: 10px;
+                            padding: 14px 22px;
+                            margin: 6px;
+                            border: 2px solid #dee2e6;
+                            border-radius: 10px;
+                            cursor: pointer;
+                            background: #fff;
+                            transition: all 0.2s ease;
+                            min-width: 160px;
+                            font-size: 14px;
+                            font-weight: 500;
+                            color: #343a40;
+                            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+                        }
+                        .o_field_radio .o_radio_item:hover {
+                            border-color: #0d6efd;
+                            background: #f0f6ff;
+                            color: #0d6efd;
+                            box-shadow: 0 2px 8px rgba(13,110,253,0.15);
+                        }
+                        .o_field_radio .o_radio_item input[type="radio"]:checked + label,
+                        .o_field_radio .o_radio_item.o_checked {
+                            border-color: #0d6efd !important;
+                            background: #e7f0ff !important;
+                            color: #0d6efd !important;
+                            font-weight: 700;
+                        }
+                        /* Icon before each label */
+                        .o_field_radio .o_radio_item label::before {
+                            content: "\f15c";
+                            font-family: "FontAwesome";
+                            margin-right: 8px;
+                            font-size: 16px;
+                            color: #6c757d;
+                        }
+                        .o_field_radio .o_radio_item:hover label::before,
+                        .o_field_radio .o_radio_item.o_checked label::before {
+                            color: #0d6efd;
+                        }
+                        /* Wrap items in a flex row */
+                        .o_field_radio {
+                            display: flex !important;
+                            flex-wrap: wrap;
+                            gap: 8px;
+                            justify-content: center;
+                            padding: 8px 0;
+                        }
+                    </style>
+
+                </sheet>
+
+                <footer>
+                    <button name="action_confirm"
+                            string="Next →"
+                            type="object"
+                            class="btn-primary"
+                            icon="fa-arrow-right"/>
+                    <button string="Cancel"
+                            class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- ── Action bound to Collection Order form ─────────────────────────── -->
+    <record id="action_letter_type_select_wizard" model="ir.actions.act_window">
+        <field name="name">Print Letter</field>
+        <field name="res_model">letter.type.select.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="collection_management.model_collection_order"/>
+        <field name="binding_view_types">form</field>
+        <field name="context">{'default_collection_id': active_id}</field>
+    </record>
+
+    <!-- Hide the old action from the collection_management module -->
+    <record id="collection_management.action_print_letter_wizard" model="ir.actions.act_window">
+        <field name="binding_model_id" eval="False"/>
+        <field name="binding_view_types" eval="False"/>
+    </record>
+
+</odoo>

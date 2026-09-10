@@ -1,0 +1,51 @@
+<odoo>
+    <template id="report_special_approval_wizard_pdf">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <h2>Special Approval Request</h2>
+                <table class="table table-condensed">
+                    <tr>
+                        <th>Reservation</th>
+                        <td><span t-field="o.reservation_id.name"/></td>
+                    </tr>
+                    <tr>
+                        <th>Reason</th>
+                        <td><span t-field="o.reason"/></td>
+                    </tr>
+                    <tr>
+                        <th>Amount</th>
+                        <td><span t-field="o.amount"/></td>
+                    </tr>
+                    <tr>
+                        <th>Duration (months)</th>
+                        <td><span t-field="o.duration"/></td>
+                    </tr>
+                    <tr>
+                        <th>Date</th>
+                        <td><span t-field="o.date"/></td>
+                    </tr>
+                    <tr>
+                        <th>Requested By</th>
+                        <td><span t-field="o.requester_name"/></td>
+                    </tr>
+                    <tr>
+                        <th>State</th>
+                        <td><span t-field="o.state"/></td>
+                    </tr>
+                </table>
+                <t t-if="o.supervisor_signature">
+                    <p>Supervisor Signature: <img t-att-src="'/web/image?model=special.approval.wizard&amp;id=%s&amp;field=supervisor_signature' % o.id" style="max-height:80px;"/></p>
+                </t>
+                <t t-if="o.manager_signature">
+                    <p>Manager Signature: <img t-att-src="'/web/image?model=special.approval.wizard&amp;id=%s&amp;field=manager_signature' % o.id" style="max-height:80px;"/></p>
+                </t>
+                <t t-if="o.ceo_signature">
+                    <p>CEO Signature: <img t-att-src="'/web/image?model=special.approval.wizard&amp;id=%s&amp;field=ceo_signature' % o.id" style="max-height:80px;"/></p>
+                </t>
+                <t t-if="not o.reservation_id">
+                    <p style="color:red;">No reservation linked to this wizard. Please check your data.</p>
+                </t>
+            </div>
+        </t>
+    </template>
+</odoo>

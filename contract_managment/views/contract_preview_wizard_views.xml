@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_contract_preview_wizard_form" model="ir.ui.view">
+        <field name="name">contract.preview.wizard.form</field>
+        <field name="model">contract.preview.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Contract Editor">
+                <field name="sale_id" invisible="1"/>
+                <sheet style="padding:0; margin:0; background:#fff;">
+                    <div>
+                        <style>
+                            .modal-dialog { max-width:860px !important; width:860px !important; }
+                            .modal-content { border-radius:4px; overflow:hidden; }
+
+                            /* ── Full white editor area, no grey gaps ── */
+                            .cp-editor-wrap {
+                                background: #ffffff;
+                                padding: 40px 60px 60px 60px;
+                                overflow-y: auto;
+                                max-height: 74vh;
+                            }
+
+                            /* ── Company header ── */
+                            .cp-header-box {
+                                text-align: center;
+                                border-bottom: 2px solid #000;
+                                padding-bottom: 12px;
+                                margin-bottom: 35px;
+                            }
+                            .cp-company-et {
+                                display: block;
+                                font-size: 20pt;
+                                color: #66853f;
+                                font-weight: bold;
+                            }
+                            .cp-company-en {
+                                font-size: 14pt;
+                                font-weight: bold;
+                                color: #66853f;
+                            }
+
+                            /* ── Signature footer ── */
+                            .cp-sig-footer {
+                                display: flex;
+                                justify-content: space-between;
+                                border-top: 1px solid #000;
+                                padding-top: 8px;
+                                margin-top: 20px;
+                                font-size: 10pt;
+                                color: #333;
+                            }
+
+                            /* ── Strip ALL editor chrome and force white ── */
+                            .cp-editor-wrap .o_field_html,
+                            .cp-editor-wrap .odoo-editor-editable,
+                            .cp-editor-wrap .o_editable,
+                            .cp-editor-wrap .odoo-editor-wrapper {
+                                border: none !important;
+                                box-shadow: none !important;
+                                outline: none !important;
+                                padding: 0 !important;
+                                margin: 0 !important;
+                                background: #ffffff !important;
+                            }
+
+                            /* Force white on every element inside editor */
+                            .cp-editor-wrap .odoo-editor-editable,
+                            .cp-editor-wrap .o_editable {
+                                font-family: 'Noto Sans Ethiopic', 'Roboto', Arial, sans-serif !important;
+                                font-size: 12pt !important;
+                                line-height: 1.6 !important;
+                                color: #111 !important;
+                                text-align: justify !important;
+                                min-height: 600px;
+                                background: #ffffff !important;
+                            }
+
+                            .cp-editor-wrap .odoo-editor-editable *,
+                            .cp-editor-wrap .o_editable * {
+                                background-color: #ffffff !important;
+                            }
+
+                            /* Restore specific elements */
+                            .cp-editor-wrap .odoo-editor-editable th,
+                            .cp-editor-wrap .o_editable th {
+                                background-color: #f2f2f2 !important;
+                            }
+
+                            .cp-editor-wrap .odoo-editor-editable h1,
+                            .cp-editor-wrap .o_editable h1 {
+                                text-align: center !important;
+                                text-decoration: underline !important;
+                            }
+                            .cp-editor-wrap .odoo-editor-editable h2,
+                            .cp-editor-wrap .o_editable h2 {
+                                text-align: center !important;
+                            }
+
+                            .cp-editor-wrap .odoo-editor-editable table,
+                            .cp-editor-wrap .o_editable table {
+                                border-collapse: collapse;
+                                width: 100%;
+                                margin: 15px 0;
+                                font-size: 17px;
+                                font-family: 'Nyala', 'Abyssinica SIL', sans-serif;
+                            }
+                            .cp-editor-wrap .odoo-editor-editable td,
+                            .cp-editor-wrap .odoo-editor-editable th,
+                            .cp-editor-wrap .o_editable td,
+                            .cp-editor-wrap .o_editable th {
+                                border: 1px solid black;
+                                padding: 8px;
+                            }
+                        </style>
+                    </div>
+
+                    <!-- Title bar -->
+                    <div style="background:#fff; border-bottom:2px solid #66853f; padding:7px 18px; display:flex; align-items:center; justify-content:space-between;">
+                        <span style="font-weight:700; color:#333; font-size:14px;">
+                            <i class="fa fa-file-text-o" style="color:#66853f; margin-right:7px;"/>
+                            Contract Editor
+                        </span>
+                        <span style="font-size:11px; color:#aaa;">Edit · then Save PDF or Print</span>
+                    </div>
+
+                    <!-- Full white editor area -->
+                    <div class="cp-editor-wrap">
+
+                        <!-- Company header -->
+                        <!-- <div class="cp-header-box">
+                            <span class="cp-company-et">ቴምር ሆልዲንግ ካምፓኒ</span>
+                            <span class="cp-company-en">TEMER HOLDING COMPANY</span>
+                        </div> -->
+
+                        <!-- Editable body -->
+                        <field name="preview_html"
+                               widget="html"
+                               options="{'collaborative': false, 'resizable': false}"/>
+
+                    </div>
+
+                </sheet>
+                <footer>
+                    <button name="action_print_pdf"
+                            string="Print PDF"
+                            type="object"
+                            class="btn-primary"
+                            icon="fa-print"/>
+                    <button string="Discard" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_contract_preview_wizard" model="ir.actions.act_window">
+        <field name="name">Contract Editor</field>
+        <field name="res_model">contract.preview.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_contract_preview_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

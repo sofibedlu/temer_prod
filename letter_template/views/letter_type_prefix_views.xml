@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_letter_type_prefix_tree" model="ir.ui.view">
+        <field name="name">letter.type.prefix.tree</field>
+        <field name="model">letter.type.prefix</field>
+        <field name="arch" type="xml">
+            <tree string="Letter Type Prefixes" editable="bottom">
+                <field name="letter_type_id" options="{'no_create': True}"/>
+                <field name="prefix"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_letter_type_prefix" model="ir.actions.act_window">
+        <field name="name">Letter Type Prefixes</field>
+        <field name="res_model">letter.type.prefix</field>
+        <field name="view_mode">tree</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a prefix for each Letter Type
+            </p>
+        </field>
+    </record>
+
+</odoo>

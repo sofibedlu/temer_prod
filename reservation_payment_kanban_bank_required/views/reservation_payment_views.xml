@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Mobile popup form (Add on Kanban opens this view) -->
+    <record id="view_property_reservation_payment_form_bank_required" model="ir.ui.view">
+        <field name="name">property.reservation.payment.form.bank.required</field>
+        <field name="model">property.reservation.payment</field>
+        <field name="inherit_id" ref="ahadubit_property_reservation.view_property_reservation_payment_form"/>
+        <field name="priority">50</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='bank_id']" position="attributes">
+                <attribute name="required">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Inline form for payment_line_ids Kanban quick-create on mobile -->
+    <record id="view_property_reservation_payment_kanban_form_bank_required" model="ir.ui.view">
+        <field name="name">property.reservation.payment.kanban.form.bank.required</field>
+        <field name="model">property.reservation</field>
+        <field name="inherit_id" ref="temer_structure.property_reservation_history_view_form_inherit"/>
+        <field name="priority">50</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='payment_line_ids']/kanban" position="after">
+                <form string="Payment Line">
+                    <group>
+                        <field name="document_type_id" required="1"/>
+                        <field name="bank_id" required="1"/>
+                        <field name="ref_number" required="1"/>
+                        <field name="transaction_date" required="1"/>
+                        <field name="amount" required="1"/>
+                    </group>
+                    <group>
+                        <field name="payment_receipt" widget="binary_preview" required="1"/>
+                    </group>
+                </form>
+            </xpath>
+        </field>
+    </record>
+</odoo>

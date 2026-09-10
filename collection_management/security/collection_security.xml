@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.module.category" id="module_category_collection_management">
+            <field name="name">Collection Management</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <record id="group_collection_user" model="res.groups">
+            <field name="name">User</field>
+            <field name="category_id" ref="module_category_collection_management"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="group_collection_payment_initiator" model="res.groups">
+            <field name="name">Payment Initiator</field>
+            <field name="category_id" ref="module_category_collection_management"/>
+        </record>
+
+        <record id="group_collection_due_date_editor" model="res.groups">
+            <field name="name">Due Date Editor</field>
+            <field name="category_id" ref="module_category_collection_management"/>
+        </record>
+
+        <record id="group_collection_penalty_manager" model="res.groups">
+            <field name="name">Penalty Manager</field>
+            <field name="category_id" ref="module_category_collection_management"/>
+        </record>
+
+        <record id="group_collection_milestone_manager" model="res.groups">
+            <field name="name">Milestone Batch Updater</field>
+            <field name="category_id" ref="module_category_collection_management"/>
+        </record>
+
+        <record id="group_collection_notification_sender" model="res.groups">
+            <field name="name">Notification Sender (SMS/Email)</field>
+            <field name="category_id" ref="module_category_collection_management"/>
+        </record>
+
+        <record id="group_collection_settlement_manager" model="res.groups">
+            <field name="name">Early Settlement Manager</field>
+            <field name="category_id" ref="module_category_collection_management"/>
+        </record>
+
+        <record id="group_collection_dashboard_viewer" model="res.groups">
+            <field name="name">Dashboard Viewer</field>
+            <field name="category_id" ref="module_category_collection_management"/>
+        </record>
+
+
+        <record id="group_collection_manager" model="res.groups">
+            <field name="name">Manager</field>
+            <field name="category_id" ref="module_category_collection_management"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+            <field name="implied_ids" eval="[
+                (4, ref('collection_management.group_collection_payment_initiator')),
+                (4, ref('collection_management.group_collection_due_date_editor')),
+                (4, ref('collection_management.group_collection_penalty_manager')),
+                (4, ref('collection_management.group_collection_milestone_manager')),
+                (4, ref('collection_management.group_collection_notification_sender')),
+                (4, ref('collection_management.group_collection_settlement_manager')),
+                (4, ref('collection_management.group_collection_dashboard_viewer')),
+                (4, ref('collection_management.group_collection_user'))
+            ]"/>
+        </record>
+    </data>
+</odoo>

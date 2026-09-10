@@ -1,0 +1,56 @@
+<odoo>
+    <data>
+
+        <!-- Search -->
+        <record id="view_collection_installment_search_inherit_progress_flag" model="ir.ui.view">
+            <field name="name">collection.installment.search.inherit.progress.flag</field>
+            <field name="model">collection.installment</field>
+            <field name="inherit_id" ref="collection_management.view_collection_installment_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//search" position="inside">
+                    <separator/>
+                    <filter string="Due Date Set by Progress"
+                            name="due_date_set_by_progress"
+                            domain="[('due_date_set_by_progress','=',True)]"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Tree -->
+        <record id="view_collection_installment_analysis_tree_inherit_progress_cols" model="ir.ui.view">
+            <field name="name">collection.installment.analysis.tree.inherit.progress.cols</field>
+            <field name="model">collection.installment</field>
+            <field name="inherit_id" ref="collection_management.view_collection_installment_analysis_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree/field[@name='due_date']" position="after">
+                    <field name="due_date_ethiopian" optional="show"/>
+                    <field name="due_date_set_by_progress" optional="show"/>
+                    <field name="progress_due_date_set_date" optional="hide"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- action for installments whose due date was set by construction progress -->
+        <record id="action_collection_details_progress_shifted" model="ir.actions.act_window">
+            <field name="name">Progress-Shifted Installments</field>
+            <field name="res_model">collection.installment</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="view_id" ref="collection_management.view_collection_installment_analysis_tree"/>
+            <field name="search_view_id" ref="collection_management.view_collection_installment_search"/>
+            <field name="domain">[
+                ('due_date_set_by_progress','=',True),
+                ('collection_id.state','=','active'),
+                ('state','!=','paid')
+            ]</field>
+            <field name="context">{'search_default_group_site': 1}</field>
+        </record>
+
+        <!-- menu item -->
+        <menuitem id="menu_collection_details_progress_shifted"
+                  name="Progress-Shifted Installments"
+                  parent="collection_management.menu_collection_root"
+                  action="action_collection_details_progress_shifted"
+                  sequence="25"/>
+
+    </data>
+</odoo>

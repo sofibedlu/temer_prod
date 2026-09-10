@@ -1,0 +1,11 @@
+<template id="contract_document">
+    <div class="contract-text">
+        <div class="contract-header">
+            ይህ ውል ዛሬ --------- ቀን 20---------ዓ.ም የሚከተሉት ምስክሮች ባሉበት በሻጭ ቡራት ሪልእስቴት
+            አክሲዮን ማህበር እና በገዢ ------------ መካከል በአዲስ አበባ ከተማ ተፈርሟል፡፡
+        </div>
+        <div class="contract-paragraph">
+            ይህ ስምምነት በሁለት ኮፒ ተዘጋጅቶ አንድ ኮፒ ለገዢ፣ አንድ ኮፒ ለሻጭ እንዲደርስ ተደርጓል፡፡
+        </div>
+    </div>
+</template> 

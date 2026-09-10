@@ -1,0 +1,83 @@
+<odoo>
+    <record id="ethiopian_bank_cbe" model="ethiopian.bank">
+        <field name="name">Commercial Bank of Ethiopia (CBE)</field>
+    </record>
+    <record id="ethiopian_bank_awash" model="ethiopian.bank">
+        <field name="name">Awash Bank</field>
+    </record>
+    <record id="ethiopian_bank_dashen" model="ethiopian.bank">
+        <field name="name">Dashen Bank</field>
+    </record>
+    <record id="ethiopian_bank_abyssinia" model="ethiopian.bank">
+        <field name="name">Bank of Abyssinia</field>
+    </record>
+    <record id="ethiopian_bank_wegagen" model="ethiopian.bank">
+        <field name="name">Wegagen Bank</field>
+    </record>
+    <record id="ethiopian_bank_nib" model="ethiopian.bank">
+        <field name="name">Nib International Bank</field>
+    </record>
+    <record id="ethiopian_bank_hibret" model="ethiopian.bank">
+        <field name="name">United Bank (HIBRET Bank)</field>
+    </record>
+    <record id="ethiopian_bank_zemen" model="ethiopian.bank">
+        <field name="name">Zemen Bank</field>
+    </record>
+    <record id="ethiopian_bank_oromia" model="ethiopian.bank">
+        <field name="name">Oromia International Bank</field>
+    </record>
+    <record id="ethiopian_bank_lion" model="ethiopian.bank">
+        <field name="name">Lion International Bank</field>
+    </record>
+    <record id="ethiopian_bank_coop" model="ethiopian.bank">
+        <field name="name">Cooperative Bank of Oromia</field>
+    </record>
+    <record id="ethiopian_bank_berhan" model="ethiopian.bank">
+        <field name="name">Berhan Bank</field>
+    </record>
+    <record id="ethiopian_bank_abay" model="ethiopian.bank">
+        <field name="name">Abay Bank</field>
+    </record>
+    <record id="ethiopian_bank_addis" model="ethiopian.bank">
+        <field name="name">Addis International Bank</field>
+    </record>
+    <record id="ethiopian_bank_bunna" model="ethiopian.bank">
+        <field name="name">Bunna International Bank</field>
+    </record>
+    <record id="ethiopian_bank_debub" model="ethiopian.bank">
+        <field name="name">Debub Global Bank</field>
+    </record>
+    <record id="ethiopian_bank_enat" model="ethiopian.bank">
+        <field name="name">Enat Bank</field>
+    </record>
+    <record id="ethiopian_bank_goh" model="ethiopian.bank">
+        <field name="name">Goh Betoch Bank</field>
+    </record>
+    <record id="ethiopian_bank_siinqee" model="ethiopian.bank">
+        <field name="name">Siinqee Bank</field>
+    </record>
+    <record id="ethiopian_bank_hijra" model="ethiopian.bank">
+        <field name="name">Hijra Bank</field>
+    </record>
+    <record id="ethiopian_bank_shabelle" model="ethiopian.bank">
+        <field name="name">Shabelle Bank</field>
+    </record>
+    <record id="ethiopian_bank_tsedey" model="ethiopian.bank">
+        <field name="name">Tsedey Bank</field>
+    </record>
+    <record id="ethiopian_bank_ahadu" model="ethiopian.bank">
+        <field name="name">Ahadu Bank</field>
+    </record>
+    <record id="ethiopian_bank_gadaa" model="ethiopian.bank">
+        <field name="name">Gadaa Bank</field>
+    </record>
+    <record id="ethiopian_bank_sidama" model="ethiopian.bank">
+        <field name="name">Sidama Bank</field>
+    </record>
+    <record id="ethiopian_bank_rammis" model="ethiopian.bank">
+        <field name="name">Rammis Bank</field>
+    </record>
+    <record id="ethiopian_bank_kacha" model="ethiopian.bank">
+        <field name="name">Kacha Digital Bank</field>
+    </record>
+</odoo>

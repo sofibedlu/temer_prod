@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!--
+            These groups control MENU VISIBILITY only.
+            Assign a user to exactly one of these groups to show only that section's menu.
+
+            Data access (read/write/create) is still governed by the original groups in crm_custom_menu:
+              - crm_custom_menu.group_reception
+              - crm_custom_menu.group_Crmwebsite
+              - crm_custom_menu.group_call_center
+              - crm_custom_menu.group_affilater
+
+            Typical setup:
+              Reception user   → crm_custom_menu.group_reception  +  crm_menu_access_control.group_menu_reception
+              Website user     → crm_custom_menu.group_Crmwebsite  +  crm_menu_access_control.group_menu_website
+              Call Center user → crm_custom_menu.group_call_center +  crm_menu_access_control.group_menu_callcenter
+              Affiliate user   → crm_custom_menu.group_affilater   +  crm_menu_access_control.group_menu_affilater
+        -->
+
+        <record id="module_category_crm_menu_access" model="ir.module.category">
+            <field name="name">CRM Menu Access</field>
+            <field name="sequence">99</field>
+        </record>
+
+        <!-- Menu-visibility group: Reception -->
+        <record id="group_menu_reception" model="res.groups">
+            <field name="name">Reception</field>
+            <field name="category_id" ref="crm_menu_access_control.module_category_crm_menu_access"/>
+            <field name="comment">Controls visibility of the Reception CRM menu item. Assign this group to a user who should only see the Reception CRM menu. Data access (read/write/create on crm.reception) is still governed by crm_custom_menu / Reception group.</field>
+        </record>
+
+        <!-- Menu-visibility group: Website -->
+        <record id="group_menu_website" model="res.groups">
+            <field name="name">Website</field>
+            <field name="category_id" ref="crm_menu_access_control.module_category_crm_menu_access"/>
+            <field name="comment">Controls visibility of the Website CRM menu item. Assign this group to a user who should only see the Website CRM menu. Data access (read/write/create on crm.website) is still governed by crm_custom_menu / Website CRM group.</field>
+        </record>
+
+        <!-- Menu-visibility group: Call Center -->
+        <record id="group_menu_callcenter" model="res.groups">
+            <field name="name">Call Center</field>
+            <field name="category_id" ref="crm_menu_access_control.module_category_crm_menu_access"/>
+            <field name="comment">Controls visibility of the Call Center CRM menu item. Assign this group to a user who should only see the Call Center CRM menu. Data access (read/write/create on crm.callcenter) is still governed by crm_custom_menu / Call Center group.</field>
+        </record>
+
+        <!-- Menu-visibility group: Affiliate -->
+        <record id="group_menu_affilater" model="res.groups">
+            <field name="name">Affiliate</field>
+            <field name="category_id" ref="crm_menu_access_control.module_category_crm_menu_access"/>
+            <field name="comment">Controls visibility of the Affiliate (Referral) CRM menu item. Assign this group to a user who should only see the Referral CRM menu. Data access (read/write/create on crm.affilater) is still governed by crm_custom_menu / Affilater group.</field>
+        </record>
+
+    </data>
+</odoo>

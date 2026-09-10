@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_site_company_mapping_system,site.company.mapping.system,model_site_company_mapping,,1,1,1,1
+access_site_company_mapping_line_system,site.company.mapping.line.system,model_site_company_mapping_line,,1,1,1,1
+access_site_location_system,site.location.system,model_site_location,,1,1,1,1

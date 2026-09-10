@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+<record id="action_chart_js_oo" model="ir.actions.client">
+        <field name="name">Chart js Sample</field>
+        <field name="tag">supervisor_dashboard_jjokacha</field>
+        <field name="target"></field>
+
+    </record>
+
+  
+
+<menuitem id="menu_chart_js_sample_klkl" action="action_chart_js_oo"
+              name="Dashboard" sequence="1" parent="crm.crm_menu_root" groups="sales_dashboard.group_dashboard_new_123_supervisors"/>
+             
+
+</odoo>

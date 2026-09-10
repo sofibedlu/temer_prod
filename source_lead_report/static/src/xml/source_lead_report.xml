@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="source_lead_report.SourceLeadReport" owl="1">
+        <div class="source_lead_report_container">
+            <div class="report_header">
+                <h1>Source Lead Report</h1>
+                <div class="filters">
+                    <div class="filter_group">
+                        <label>Source:</label>
+                        <select t-att-value="state.source_id" t-on-change="onSourceChange">
+                            <option value="">Select Source</option>
+                            <t t-foreach="state.sources" t-as="source" t-key="source.id">
+                                <option t-att-value="source.id" t-esc="source.name"/>
+                            </t>
+                        </select>
+                    </div>
+                    <div class="filter_group">
+                        <label>Date From:</label>
+                        <input type="date" t-att-value="state.date_from" t-on-change="onDateFromChange"/>
+                    </div>
+                    <div class="filter_group">
+                        <label>Date To:</label>
+                        <input type="date" t-att-value="state.date_to" t-on-change="onDateToChange"/>
+                    </div>
+                    <div class="filter_group">
+                        <button class="btn btn-primary o_button" type="button" t-on-click="onShowClick" t-att-disabled="state.loading">
+                            <t t-if="state.loading">Loading...</t>
+                            <t t-if="!state.loading">Show</t>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="report_content">
+                <t t-if="state.show_table">
+                    <div class="table_header">
+                        <div class="table_info">
+                            <strong>Total Leads: <span t-esc="state.search_text ? state.filtered_data.length : state.count"/></strong>
+                        </div>
+                        <div class="table_controls">
+                            <div class="search_group">
+                                <label>Search:</label>
+                                <input type="text" t-model="state.search_text" placeholder="Search..." class="search-input" t-on-input="onSearchChange"/>
+                            </div>
+                            <div class="export_buttons">
+                                <button class="btn btn-primary o_button" type="button" t-on-click="exportExcel">Export Excel</button>
+                                <button class="btn btn-primary o_button" type="button" t-on-click="exportPDF">Export PDF</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="table_wrapper">
+                        <div class="table_container">
+                            <table class="source_lead_table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Salesperson</th>
+                                        <th>Created on</th>
+                                        <th>Status</th>
+                                        <th>Created By</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-if="state.filtered_data.length === 0">
+                                        <tr>
+                                            <td t-att-colspan="5" class="no_data">No data available</td>
+                                        </tr>
+                                    </t>
+                                    <t t-foreach="state.filtered_data" t-as="lead" t-key="lead.id">
+                                        <tr>
+                                            <td t-esc="lead.name"/>
+                                            <td t-esc="lead.salesperson_name"/>
+                                            <td t-esc="lead.created_date"/>
+                                            <td t-esc="lead.status"/>
+                                            <td t-esc="lead.created_by"/>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </t>
+                <t t-if="!state.show_table and !state.loading">
+                    <div class="no_data_message">
+                        <t t-if="state.source_id">
+                            Date range selected. Click "Show" to display the report.
+                        </t>
+                        <t t-if="!state.source_id">
+                            Select a source and date range, then click "Show" to display the report.
+                        </t>
+                    </div>
+                </t>
+            </div>
+        </div>
+    </t>
+</templates>
+

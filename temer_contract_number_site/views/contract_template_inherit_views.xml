@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_contract_section_form_inherit_site" model="ir.ui.view">
+        <field name="name">contract.template.form.inherit.site</field>
+        <field name="model">contract.template</field>
+        <field name="inherit_id" ref="contract_sections.view_contract_section_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/group/group/field[@name='name']" position="after">
+                <field name="site_id" required="1"/>
+
+                <field name="use_property_type_sequences" widget="boolean_toggle"/>
+                <field name="residential_sequence_id" 
+                       invisible="not use_property_type_sequences" 
+                       required="use_property_type_sequences"/>
+                <field name="commercial_sequence_id" 
+                       invisible="not use_property_type_sequences" 
+                       required="use_property_type_sequences"/>
+                
+                <field name="office_sequence_id" 
+                       invisible="not use_property_type_sequences" 
+                       required="use_property_type_sequences"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

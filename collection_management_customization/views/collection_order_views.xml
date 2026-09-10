@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_collection_order_form_inherit_reactivate" model="ir.ui.view">
+        <field name="name">collection.order.form.reactivate.custom</field>
+        <field name="model">collection.order</field>
+        <field name="inherit_id" ref="property_contract_collection.view_collection_order_form_inherit_termination"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_reactivate']" position="attributes">
+                <attribute name="groups">collection_management_customization.group_collection_reactivate_order</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

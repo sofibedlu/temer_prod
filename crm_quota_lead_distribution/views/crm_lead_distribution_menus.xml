@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!-- Property → Configuration → Lead Distribution (group) -->
+  <menuitem id="menu_lead_distribution_group"
+      name="Lead Distribution"
+      parent="advanced_property_management.property_configuration_menu"
+      sequence="12"/>
+
+</odoo>

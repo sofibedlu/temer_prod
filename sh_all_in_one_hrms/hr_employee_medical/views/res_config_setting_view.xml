@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- <odoo>
+    <record id="sh_res_config_setting_view_medical" model="ir.ui.view">
+        <field name="name">sh.res.config.setting.view</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="hr.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group string="Notification before employee medical expires" groups="sh_all_in_one_hrms.group_hide_menu_emp_medical">
+                        <field name="sh_notify_day" groups="hr.group_hr_user"/>
+                        <field name="sh_partner_ids" widget="many2many_tags" groups="hr.group_hr_user"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo> -->
+<odoo>
+
+    <record id="sh_res_config_setting_view_medical" model="ir.ui.view">
+        <field name="name">sh.res.config.setting.view.medical</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="hr.res_config_settings_view_form"/>
+
+        <field name="arch" type="xml">
+
+            <!-- Insert inside the HR app block (this is stable and correct in Odoo 17) -->
+            <xpath expr="//app[@name='hr']" position="inside">
+
+                <block title="Employee Medical Examination"
+                       groups="sh_all_in_one_hrms.group_hide_menu_emp_medical">
+
+                    <setting id="medical_expiry_notification_setting">
+
+                        <h2>Notification Before Medical Expiry</h2>
+
+                        <div class="row o_settings_container">
+                            <div class="col-lg-6 col-12 o_setting_box">
+
+                                <!-- Right pane only (like Odoo’s own settings) -->
+                                <div class="o_setting_right_pane">
+
+                                    <label for="sh_notify_day"/>
+                                    <field name="sh_notify_day"
+                                           placeholder="Days before expiry"
+                                           groups="hr.group_hr_user"/>
+
+                                    <br/><br/>
+
+                                    <label for="sh_partner_ids"/>
+                                    <field name="sh_partner_ids"
+                                           widget="many2many_tags"
+                                           groups="hr.group_hr_user"/>
+
+                                </div>
+
+                                <!-- Left pane (empty but required for layout consistency) -->
+                                <div class="o_setting_left_pane"></div>
+
+                            </div>
+                        </div>
+
+                    </setting>
+
+                </block>
+
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

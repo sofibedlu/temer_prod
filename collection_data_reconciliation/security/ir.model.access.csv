@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_collection_recon_wizard,Collection Recon Wizard,model_collection_recon_wizard,,1,1,1,1
+access_collection_recon_line,Collection Recon Line,model_collection_recon_line,,1,1,1,1

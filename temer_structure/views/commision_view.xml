@@ -1,0 +1,114 @@
+<odoo>
+
+    
+     <record id="property_property_view_form_inherit_temer" model="ir.ui.view">
+        <field name="name">property.property.inherit</field>
+        <field name="model">property.property</field>
+
+        <field name="inherit_id" ref="ahadubit_property_base.property_property_view_form_inherit" />
+        <field name="arch" type="xml">
+           
+            <xpath expr="//button[@name='action_draft']" position="replace"> 
+            
+                <button name="action_draft"
+                        string="Draft"
+                        type="object"
+                        class="btn-primary"
+                        invisible="state not in ['available']"
+                        groups="temer_structure.change_property_to_draft_group"
+                        confirm="Are you sure you want to mark this property as Draft?" />
+            </xpath>
+    
+        <!-- <xpath expr="//field[@name='price']" position="attributes">
+            <attribute name="readonly">0</attribute>
+        </xpath> -->
+        <xpath expr="//field[@name='price']" position="attributes">
+    <attribute name="readonly">state not in ('draft')</attribute>
+</xpath>
+
+         <xpath expr="//field[@name='bedroom']" position="attributes">
+            <attribute name="readonly">1</attribute>
+        </xpath>
+        <xpath expr="//field[@name='bathroom']" position="attributes">
+            <attribute name="readonly">1</attribute>
+        </xpath>
+            </field>
+    </record>
+
+    <record id="inherit_property_sale_form_view_temer" model="ir.ui.view">
+        <field name="name">property.sale.form.no_create</field>
+        <field name="model">property.sale</field>
+        <field name="inherit_id" ref="ahadubit_property_base.property_sale_view_form_inherit_id" />
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_cancel_sale']" position="replace"> 
+                 
+            </xpath>
+       
+              <xpath expr="//field[@name='state']" position="before">
+               <button name="action_cancel_sale"
+                        string="Cancel"
+                        type="object"
+                        groups="temer_structure.cancel_property_sale_group"
+                        confirm="Are you sure you want Cancel?" />
+                    <button name="calculate_commission" type="object" string="Calculate Commission" class="btn-primary" invisible="state == 'cancel'"/>
+              </xpath>
+               <xpath expr="//field[@name='broker_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+              </xpath>
+              <xpath expr="//field[@name='any_broker']" position="after">
+                    <field name="reservation_id" invisible="1"/>
+                    <field name="sales_person" readonly="reservation_id != False"/>
+              </xpath>
+              <xpath expr="//page[1]" position="after">
+                   
+                <page string="Commission Details">
+                    <field name="commission_detail_ids">
+                        <tree>
+                            <field name="user_id"/>
+                            <field name="amount"/>
+                            <field name="percentage"/>
+                            <field name="payment_date"/>
+                            <field name="state"/>
+                        </tree>
+                    </field>
+                </page> 
+              </xpath>
+        </field>
+    </record>
+
+     <!-- Action for Commission Configuration -->
+    <record id="action_commission_configuration" model="ir.actions.act_window">
+        <field name="name">Commission Configurations</field>
+        <field name="res_model">commission.configuration</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <!-- Tree View for Commission Configuration -->
+    <record id="view_commission_configuration_tree" model="ir.ui.view">
+        <field name="name">commission.configuration.tree</field>
+        <field name="model">commission.configuration</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+                <field name="sales_type"/>
+                <field name="commission_type"/>
+                <field name="site_id"/>
+                <field name="hierarchy_type" invisible="sales_type == 'external'"/>
+                 <field name="amount"/>
+                <field name="percentage"/>
+                <field name="self_rate_percentage"/>
+            </tree>
+        </field>
+    </record>
+
+   
+
+    <!-- Menu Item for Commission Configuration -->
+    <menuitem id="menu_commission_configuration" 
+              name="Commission Configurations" 
+              action="action_commission_configuration" 
+              parent="ahadubit_property_base.property_payment_menu" 
+              sequence="24"
+              groups="temer_structure.access_property_contract_admin_group"
+              />
+</odoo>

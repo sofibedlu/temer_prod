@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ── Tree ─────────────────────────────────────────────────────────── -->
+    <record id="view_letter_number_generator_tree" model="ir.ui.view">
+        <field name="name">letter.number.generator.tree</field>
+        <field name="model">letter.number.generator</field>
+        <field name="arch" type="xml">
+            <tree string="Letter Number Generators">
+                <field name="letter_type_id"/>
+                <field name="director_id"/>
+                <field name="length"/>
+                <field name="start_from"/>
+                <field name="current_value"/>
+                <field name="suffix"/>
+                <field name="preview"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- ── Form ─────────────────────────────────────────────────────────── -->
+    <record id="view_letter_number_generator_form" model="ir.ui.view">
+        <field name="name">letter.number.generator.form</field>
+        <field name="model">letter.number.generator</field>
+        <field name="arch" type="xml">
+            <form string="Letter Number Generator">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="letter_type_id"
+                                   placeholder="Select Letter Type…"
+                                   options="{'no_create': True}"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="Sequence Configuration">
+                            <field name="director_id" options="{'no_create': True}"/>
+                            <field name="length"/>
+                            <field name="start_from"/>
+                            <field name="suffix"
+                                   placeholder="e.g. 2018 (Ethiopian year)"/>
+                            <field name="active" widget="boolean_toggle"/>
+                        </group>
+                        <group string="Current State">
+                            <field name="current_value"/>
+                            <field name="preview"
+                                   string="Next Number Preview"
+                                   readonly="1"/>
+                        </group>
+                    </group>
+
+                    <footer>
+                        <button name="reset_sequence"
+                                string="Reset Sequence"
+                                type="object"
+                                class="btn-warning"
+                                confirm="This will reset the counter to 0. The next number will start from 'Start From'. Continue?"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ── Action ───────────────────────────────────────────────────────── -->
+    <record id="action_letter_number_generator" model="ir.actions.act_window">
+        <field name="name">Letter Number Generators</field>
+        <field name="res_model">letter.number.generator</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a number generator for each Letter Type
+            </p>
+            <p>
+                Configure prefix, length, start value and suffix.
+                The system will auto-increment the number each time a letter is issued.
+            </p>
+        </field>
+    </record>
+
+</odoo>

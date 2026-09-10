@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherit form view to add validation -->
+    <record id="property_property_view_form_house_validation" model="ir.ui.view">
+        <field name="name">property.property.form.house.validation</field>
+        <field name="model">property.property</field>
+        <field name="inherit_id" ref="advanced_property_management.property_property_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Find a good position to add the unit_number field -->
+            <xpath expr="//field[@name='site']" position="after">
+                <field name="unit_number" 
+                       string="House Number"
+                       placeholder="Enter unique house number for this floor"
+                       help="House number must be unique within the same floor. Example: For Floor 1, you can have 1,2,3 but not duplicate 1."/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Tree view with color coding for duplicates -->
+    <record id="property_property_view_tree_house_validation" model="ir.ui.view">
+        <field name="name">property.property.tree.house.validation</field>
+        <field name="model">property.property</field>
+        <field name="inherit_id" ref="advanced_property_management.property_property_view_tree"/>
+        <field name="arch" type="xml">
+            <!-- Add unit_number_duplicate field (hidden) for decoration -->
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="unit_number_duplicate" invisible="1"/>
+            </xpath>
+            
+            <!-- Add unit_number field to tree view with decoration -->
+            <xpath expr="//tree" position="inside">
+                <field name="unit_number" 
+                       string="House Number"
+                       decoration-danger="unit_number_duplicate == True"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

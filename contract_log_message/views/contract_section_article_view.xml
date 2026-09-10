@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_contract_template_article_form_inherit_log" model="ir.ui.view">
+        <field name="name">contract.template.article.form.inherit.log</field>
+        <field name="model">contract.section.article</field>
+        <field name="inherit_id" ref="contract_managment.view_contract_template_article_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="after">
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

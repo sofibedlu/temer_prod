@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Tree View for Mail Activities -->
+        <!-- <record id="view_mail_activity_tree" model="ir.ui.view">
+            <field name="name">mail.activity.schedule.tree</field>
+            <field name="model">mail.activity.schedule</field>
+            <field name="arch" type="xml">
+                <tree string="My Activities">
+                    <field name="summary"/>
+                    <field name="date_deadline"/>
+                  <field name="user_id" string="Assigned To"/> 
+                    <field name="res_id" string="Related Document"/>
+                    <field name="activity_type_id" string="Activity Type"/>
+                </tree>
+            </field>
+        </record>
+
+       
+        <record id="action_my_activities" model="ir.actions.act_window">
+            <field name="name">My Activities</field>
+            <field name="res_model">mail.activity.schedule</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('user_id', '=', uid)]</field> 
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    You have no activities assigned to you.
+                </p>
+            </field>
+        </record>
+        <record id="custom_mail_activity_all_action" model="ir.actions.act_window">
+        <field name="name">Activity</field>
+        <field name="res_model">mail.activity</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                View Your activity
+            </p>
+        </field>
+    </record> -->
+    <record id="custom_mail_activity_view_tree" model="ir.ui.view">
+        <field name="name">mail.activity.view.tree</field>
+        <field name="model">mail.activity</field>
+        <field name="arch" type="xml">
+            <tree create="0">
+                <field name="activity_type_id"/>
+                <field name="summary"/>
+<!--                <field name="state"/>-->
+            </tree>
+        </field>
+    </record>
+
+        <!-- <menuitem id="mail_activity_all_action_source_id"
+                  name="All Activity"
+                  action="custom_mail_activity_all_action"
+                  parent="crm.crm_menu_sales"/> -->
+
+        <!-- Menu Item for My Activities -->
+        <!-- <menuitem id="menu_my_activities_schedule"
+                  name="My Activities"
+                  parent="crm.crm_menu_sales"
+                  action="action_my_activities"
+                  sequence="10"/> -->
+
+
+    </data>
+
+
+
+</odoo>

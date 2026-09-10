@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Wing Report Action -->
+    <record id="action_wing_report_page" model="ir.actions.act_url">
+        <field name="name">Wing Plan Report</field>
+        <field name="url">/sales_plan/wing_report</field>
+        <field name="target">self</field>
+    </record>
+
+    <!-- Supervisor Report Action -->
+    <record id="action_supervisor_report_page" model="ir.actions.act_url">
+        <field name="name">Supervisor Plan Report</field>
+        <field name="url">/sales_plan/supervisor_report</field>
+        <field name="target">self</field>
+    </record>
+
+    <!-- ========== MENUS ========== -->
+    <!-- Main Sales Planning Menu -->
+    <menuitem id="menu_sales_plan_root" name="Sales Planning" sequence="100"/>
+
+    <!-- Wing Report Menu -->
+    <menuitem id="menu_wing_report"
+              name="Wing Plan Report"
+              parent="menu_sales_plan_root"
+              action="action_wing_report_page"
+              sequence="10"/>
+
+    <!-- Supervisor Report Menu -->
+    <menuitem id="menu_supervisor_report"
+              name="Supervisor Plan Report"
+              parent="menu_sales_plan_root"
+              action="action_supervisor_report_page"
+              sequence="20"/>
+</odoo>

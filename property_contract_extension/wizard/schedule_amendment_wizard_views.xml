@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_schedule_amendment_wizard_form" model="ir.ui.view">
+        <field name="name">schedule.amendment.wizard.form</field>
+        <field name="model">schedule.amendment.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Amend Payment Schedule">
+                <group>
+                    <field name="sale_id" invisible="1"/>
+                    <field name="reason" placeholder="Why is the schedule being amended?"/>
+                </group>
+                <footer>
+                    <button name="action_unlock" string="Unlock Schedule" type="object" class="btn-warning"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

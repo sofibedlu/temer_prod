@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_collection_order_form_inherit_linked_installment" model="ir.ui.view">
+        <field name="name">collection.order.form.inherit.linked.installment</field>
+        <field name="model">collection.order</field>
+        <field name="inherit_id" ref="collection_management.view_collection_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='installment_ids']/tree/field[@name='due_date']" position="after">
+                <field name="linked_installment_id" 
+                       optional="hide" 
+                       readonly="1" 
+                       options="{'no_open': True}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

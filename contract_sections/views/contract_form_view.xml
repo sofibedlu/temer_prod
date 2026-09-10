@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- First define the form view -->
+    <record id="view_contract_application_form1" model="ir.ui.view">
+        <field name="name">contract.application.form</field>
+        <field name="model">contract.application</field>
+        <field name="arch" type="xml">
+            <form string="Contract Application">
+                <header>
+                    <button name="action_add_person" 
+                                type="object" 
+                                class="oe_stat_button" 
+                                icon="fa-user"
+                                invisible="not id">  <!-- New syntax for Odoo 17.0 -->
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Add</span>
+                                <span class="o_stat_text">Person</span>
+                            </div>
+                        </button>
+                </header>
+                <sheet>
+                    
+                   
+                        
+                    <group>
+                        <group>
+                            <div class="oe_title">
+                                <h1>
+                                    <field name="name" readonly="1"/>
+                                </h1>
+                            </div>
+                        </group>
+                        <group>
+                          
+                                <field name="contract_date_char"  />
+                           
+                        </group>
+                    </group>
+                        
+                   
+                    <notebook>
+                        <page string="Persons Information" name="persons">
+                            <field name="person_ids">
+                                <tree editable="bottom">
+                                    <field name="person_type"/>
+                                    <field name="first_name"/>
+                                    <field name="father_name"/>
+                                    <field name="gfather_name"/>
+                                    <field name="phone"/>
+                                    <field name="email"/>
+                                    <field name="house_number"/>
+                                    <field name="city"/>
+                                    <field name="subcity"/>
+                                    <field name="woreda"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+            
+                    <group>
+                    
+                          <div style="margin-top: 10px;">
+                        
+        <label class="o_form_label" style="font-weight: bold; font-size: 1.3em; margin-bottom: 5px; display: block;" for="property_description"><b><u>Property Description</u></b></label>
+          <div style="color: red; font-size: 0.8em; margin-top: 0px;">
+            Please make sure you update this field based on the contract. This will print on the contract.
+        </div>
+        <field name="property_description" id="property_description"/>
+        
+    </div>
+                        <!-- <group string="Witness Information (ሐ)">
+                            <field name="witness_father_name" />
+                            <field name="witness_gfather_name" />
+                            <field name="witness_house_number" />
+                            <field name="witness_kebele" />
+                            <field name="witness_woreda" />
+                            <field name="witness_email" />
+                            <field name="witness_id_number" />
+                            <field name="witness_issue_date" />
+                        </group> -->
+                        <group string="Contract Information">
+                            <field name="previous_contract_number" />
+                            <field name="previous_contract_type" />
+                            <field name="current_contract_number" />
+                            <field name="current_contract_block" />
+                            <field name="current_contract_floor" />
+                            <field name="payment_amount" />
+                            <field name="advance_payment" />
+                            <!-- <field name="advance_payment_date" />
+                            <field name="is_previous_owner" />
+                            <field name="previous_owner_name" />
+                            <field name="previous_owner_date" /> -->
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Save" name="save_contract" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+                
+            </form>
+        </field>
+    </record>
+
+    <!-- Person Form View -->
+    <record id="view_contract_person_form" model="ir.ui.view">
+        <field name="name">contract.person.form</field>
+        <field name="model">contract.person</field>
+        <field name="arch" type="xml">
+            <form string="Person Information">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="person_type" />
+                            <field name="first_name" />
+                            <field name="father_name" />
+                            <field name="gfather_name" />
+                            <field name="house_number" />
+                            <field name="city" />
+                            <field name="subcity" />
+                            <field name="woreda" />
+                        </group>
+                        <group>
+                            <field name="subcity" />
+                            <field name="phone" />
+                            <field name="mobile" />
+                            <field name="email" />
+                            <field name="pobox" />
+                            <field name="id_number" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <!-- Then define the action that uses the view -->
+    <record id="action_contract_application_form1" model="ir.actions.act_window">
+        <field name="name">Contract Application</field>
+        <field name="res_model">contract.application</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="contract_sections.view_contract_application_form1" />
+    </record>
+
+    <!-- Finally, add the button to the inherited view -->
+    <record id="property_sale_view_form_contract_inherit2" model="ir.ui.view">
+        <field name="name">property.sale.inherit</field>
+        <field name="model">property.sale</field>
+        <field name="inherit_id" ref="advanced_property_management.property_sale_view_form" />
+        <field name="arch" type="xml">
+            <div class="oe_button_box" position="inside">
+                <button name="action_view_contract" 
+                        type="object" 
+                        class="oe_stat_button" 
+                        icon="fa-file-text">
+                    <span class="o_stat_text">Contract</span>
+                </button>
+            </div>
+            <field name="state" position="after">
+                <field name="contract_id" invisible="1"/>  <!-- Invisible field for reference -->
+            </field>
+            <xpath expr="//button[@name='action_confirm']" position="before">
+                <button
+                    name="action_open_contract_form"
+                    string="Fill Contract Form"
+                    type="object"
+                    class="oe_highlight mx-1"
+                    invisible="state == False or contract_id"
+                />
+                <button 
+                name="action_print_contract" 
+                string="Print Contract" 
+                type="object"
+                class="oe_highlight"
+                invisible="not contract_id"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

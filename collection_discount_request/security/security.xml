@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- Discount Requesters -->
+        <record id="group_collection_discount_requester" model="res.groups">
+            <field name="name">Discount Requester</field>
+            <field name="category_id" ref="collection_management.module_category_collection_management"/>
+        </record>
+
+        <!-- Discount Approvers -->
+        <record id="group_collection_discount_approver" model="res.groups">
+            <field name="name">Discount Approver</field>
+            <field name="category_id" ref="collection_management.module_category_collection_management"/>
+        </record>
+    </data>
+</odoo>

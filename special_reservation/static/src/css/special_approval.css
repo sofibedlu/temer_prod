@@ -1,0 +1,50 @@
+/* special_approval.css */
+.special-approval-flex-row {
+    display: flex;
+    flex-direction: row;
+    gap: 32px;
+    align-items: stretch;
+    background: linear-gradient(90deg, #f7fafc 60%, #e3e9f3 100%);
+    padding: 22px 12px;
+    border-radius: 18px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 12px 0 #d6dbe7;
+}
+.special-approval-card {
+    flex: 1 1 0px;
+    background: #fffbe8;
+    border-radius: 12px;
+    padding: 20px 18px;
+    box-shadow: 0 1px 6px #e9e3c4;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.special-label {
+    font-weight: bold;
+    color: #125c9e;
+    font-size: 1.1em;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.special-label .fa {
+    font-size: 1.3em;
+    color: #49a5f6;
+}
+.o_form_label {
+    font-weight: bold !important;
+    color: #49575b !important;
+}
+/* Responsive styles for mobile */
+@media (max-width: 700px) {
+    .special-approval-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+    }
+    .special-approval-signatures {
+        flex-direction: column !important;
+        gap: 12px !important;
+    }
+}

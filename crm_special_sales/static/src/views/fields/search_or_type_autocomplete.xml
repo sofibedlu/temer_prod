@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="crm_special_sales.SearchOrTypeAutocomplete">
+        <t t-if="props.readonly">
+            <span class="o_field_widget" t-esc="displayValue" />
+        </t>
+        <t t-else="">
+            <div class="o_input_dropdown" t-ref="inputContainer">
+                <AutoComplete
+                    value="displayValue"
+                    id="props.id"
+                    placeholder="props.placeholder"
+                    sources="sources"
+                    autoSelect="false"
+                    onSelect.bind="onSelect"
+                    onBlur.bind="onBlur"
+                    onChange.bind="onChange"
+                    onCancel.bind="onCancel"
+                    dropdown="true"
+                />
+                <span class="o_dropdown_button" />
+            </div>
+        </t>
+    </t>
+</templates>

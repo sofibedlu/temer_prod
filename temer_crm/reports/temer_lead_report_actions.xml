@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="action_report_temer_lead_activities" model="ir.actions.report">
+            <field name="name">Lead Activities Report</field>
+            <field name="model">temer.lead</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">temer_crm.report_temer_lead_activities</field>
+            <field name="report_file">temer_crm.report_temer_lead_activities</field>
+            <field name="binding_model_id" ref="model_temer_lead"/>
+            <field name="print_report_name">'Lead Activities - %s' % (object.name)</field>
+        </record>
+    </data>
+</odoo>

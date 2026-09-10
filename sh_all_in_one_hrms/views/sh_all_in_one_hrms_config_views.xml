@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_all_in_one_employee_config_setting_view" model="ir.ui.view">
+        <field name="name">hr.employee.config.setting.view</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="hr.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//app[@name='hr']" position="after">
+                <app name="sh_all_in_one_hrms" string="All in one HRMS">
+
+                    <block title="All in one HRMS Configurations">
+
+                        <setting string="Enable Employee Sequence">
+                            <field name="group_enable_emp_sequence" />
+                        </setting>
+
+                        <setting string="Enable HR Dashboard">
+                            <field name="group_enable_hr_dashboard" />
+                        </setting>
+
+                        <setting string="Enable Complain Management">
+                            <field name="group_enable_sh_complain" />
+                        </setting>
+
+                        <setting string="Enable Idea Management">
+                            <field name="group_enable_sh_idea" />
+                        </setting>
+
+                        <setting string="Show Medical Details">
+                            <field name="group_hide_menu_emp_medical" />
+                        </setting>
+
+                        <setting string="Show Passport Details">
+                            <field name="group_hide_menu_emp_passport" />
+                        </setting>
+
+                        <setting string="Enable Leave Notification">
+                            <field name="group_enable_emp_leave_notification" />
+                        </setting>
+
+                        <setting string="Enable Mass Approve Leave">
+                            <field name="group_enable_mass_approve_leave" />
+                        </setting>
+
+                        <setting string="Enable Checklist">
+                            <field name="group_enable_check_list" />
+                        </setting>
+
+                        <setting string="Enable Custom Checklist">
+                            <field name="group_enable_custom_check_list" />
+                        </setting>
+
+                        <setting string="Enable Mass Update">
+                            <field name="group_enable_mass_update" />
+                        </setting>
+
+                        <setting string="Enable Extra Fields">
+                            <field name="group_enable_emp_extra_field" />
+                        </setting>
+
+                        <setting string="Enable HR Promotion">
+                            <field name="group_enable_emp_hr_promotion" />
+                        </setting>
+
+                        <setting string="Show Mass Tag Menu">
+                            <field name="group_hide_menu_emp_mass_tag" />
+                        </setting>
+
+                        <setting string="Enable Own Records">
+                            <field name="group_enable_own_records" />
+                        </setting>
+
+                        <setting string="Dynamic Payslip Approval">
+                            <field name="group_enable_sh_payslip_dynamic_approval" />
+                        </setting>
+
+                        <setting string="Dynamic Payslip Cheque">
+                            <field name="group_enable_sh_payslip_dynamic_cheque" />
+                        </setting>
+
+                        <setting string="Send Payslip by Email">
+                            <field name="group_enable_sh_payslip_send_email" />
+                        </setting>
+
+                        <setting string="Enable Leave Attachment">
+                            <field name="group_enable_sh_leave_attachment" />
+                        </setting>
+
+                    </block>
+
+                </app>
+
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

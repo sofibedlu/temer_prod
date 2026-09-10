@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_crm_reception_form_customer_phone" model="ir.ui.view">
+        <field name="name">crm.reception.form.customer.phone.tab</field>
+        <field name="model">crm.reception</field>
+        <field name="inherit_id" ref="crm_custom_menu.view_crm_reception_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/field[@name='full_phone']" position="replace">
+                <notebook>
+                    <page string="Customer Phone">
+                        <field name="full_phone" mode="tree" nolabel="1">
+                            <tree string="Phone Numbers" create="false" delete="true" editable="bottom">
+                                <field name="country_id" string="Country"/>
+                                <field name="name" string="Phone Number"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+                <field name="full_phone" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

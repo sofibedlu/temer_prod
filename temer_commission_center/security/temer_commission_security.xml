@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <!-- Commission Center groups -->
+
+    <record id="group_commission_manager" model="res.groups">
+      <field name="name">Commission Manager</field>
+      <field name="category_id" ref="base.module_category_hidden"/>
+    </record>
+  </data>
+</odoo>

@@ -1,0 +1,139 @@
+<odoo>
+    <data>
+        <record id="ahadubit_property_base.property_type_menu" model="ir.ui.menu">
+            <field name="name">Property Typography</field>
+        </record>
+        <record id="ahadubit_property_base.property_type_action" model="ir.actions.act_window">
+            <field name="name">Property Typography</field>
+        </record>
+
+        <record id="property_site_form_inherit_2" model="ir.ui.view">
+            <field name="name">advanced.property.site.form.inherit</field>
+            <field name="model">property.site</field>
+            <field name="inherit_id" ref="ahadubit_property_base.property_site_view_form_id"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[field[@name='property_type_lin_ids']]" position="attributes">
+                    <attribute name="string">Property Typography</attribute>
+                </xpath>
+                <xpath expr="//field[@name='property_type_lin_ids']" position="attributes">
+                    <attribute name="context">{'default_site': active_id}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='property_type_lin_ids']/tree//field[@name='property_type_id']"
+                       position="attributes">
+                    <attribute name="domain">[('site_id','=', site)]</attribute>
+                </xpath>
+                <xpath expr="//field[@name='property_type_lin_ids']/tree//field[@name='property_type_id']"
+                       position="after">
+                    <field name="site" invisible="1" column_invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='price_per_m2']"
+                       position="after">
+                    <field name="is_fixed_price"/>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="property_type_form_site_ids_added" model="ir.ui.view">
+            <field name="name">temer.property.type.form.add.sites</field>
+            <field name="model">property.type</field>
+            <field name="inherit_id" ref="ahadubit_property_base.property_type_view_form_id"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form//field[@name='code']" position="after">
+                    <field name="site_id" options="{'no_create': True}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="property_property_form_payment_inherit_readonly" model="ir.ui.view">
+            <field name="name">temer.property.property.form.payment.inherit</field>
+            <field name="model">property.property</field>
+            <field name="inherit_id" ref="ahadubit_property_base.property_property_view_form_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='payment_structure_id']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='site']" position="replace">
+                    <field name="site" no_create="1" readonly="state not in  ['draft',False]"
+                           domain="[('state', '=', 'active')]"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="property_site_view_form_inheritted_titles" model="ir.ui.view">
+            <field name="name">property.site.form.inheritted.titles</field>
+            <field name="model">property.site</field>
+            <field name="inherit_id" ref="temer_property_modify.property_site_view_form_inheritted2"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet/group/group[2]/field[@name='floor_id']" position="attributes">
+                    <attribute name="string">Floor Number</attribute>
+                </xpath>
+                <xpath expr="//sheet/group/group[2]/field[@name='block_number']" position="attributes">
+                    <attribute name="string">Block Number</attribute>
+                </xpath>
+                <xpath expr="//sheet/group/group[2]/field[@name='house_number_floor']" position="attributes">
+                    <attribute name="string">House Number Per Floor</attribute>
+                </xpath>
+                <xpath expr="//sheet/group/group[2]/field[@name='stock_number']" position="attributes">
+                    <attribute name="string">Stock Number</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="property_property_view_form_inherit_type" model="ir.ui.view">
+            <field name="name">property.property.form.inherit.type</field>
+            <field name="model">property.property</field>
+            <field name="inherit_id" ref="advanced_property_management.property_property_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='property_type']" position="attributes">
+                    <attribute name="readonly">is_property_mixed != True</attribute>
+                </xpath>
+                <xpath expr="//field[@name='property_type']" position="after">
+                    <field name="is_property_mixed" invisible="1"/>
+                    <field name="is_property_type_readonly" invisible="1"/>
+                    <field name="is_single_block" invisible="1"/>
+                </xpath>
+                <!--                <xpath expr="//field[@name='price']" position="attributes">-->
+                <!--                    <attribute name="readonly">is_property_type_readonly == True or state not in ['draft',False]-->
+                <!--                    </attribute>-->
+                <!--                </xpath>-->
+                <xpath expr="//field[@name='unit_price']" position="after">
+                    <field name="manual_unit_price"
+                           invisible="state.is_fixed_price == False or is_property_type_readonly == False"
+                           placeholder="Enter Unit Price" readonly="state not in  ['draft',False]"/>
+                </xpath>
+                <!-- <xpath expr="//field[@name='block']" position="attributes">
+                    <attribute name="readonly">is_single_block == True or state not in ['draft',False]</attribute>
+                    
+                </xpath> -->
+                <xpath expr="//field[@name='unit_price']" position="attributes">
+                    <attribute name="invisible">is_property_type_readonly == True</attribute>
+                </xpath>
+                <xpath expr="//field[@name='site_property_type_id']" position="replace">
+                    <field name="site_property_type_id" required="1" options='{"no_open": True, "no_create": True}'
+                           readonly="state not in  ['draft',False]" domain="[('site','=',site)]"/>
+                </xpath>
+                <!--                <xpath expr="//field[@name='gross_area']" position="attributes">-->
+                <!--                    <attribute name="invisible">is_property_type_readonly == True</attribute>-->
+                <!--                </xpath>-->
+                <!--                <xpath expr="//field[@name='net_area']" position="attributes">-->
+                <!--                    <attribute name="invisible">is_property_type_readonly == True</attribute>-->
+                <!--                </xpath>-->
+            </field>
+        </record>
+        <record id="property_type_view_tree_inherited" model="ir.ui.view">
+            <field name="name">property.type.tree.inherited</field>
+            <field name="model">property.type</field>
+            <field name="inherit_id" ref="ahadubit_property_base.property_type_view_tree_id"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='code']" position="before">
+                    <field name="site_id" string="Site"/>
+                </xpath>
+            </field>
+        </record>
+        <record id="ahadubit_property_base.property_block_action" model="ir.actions.act_window">
+            <field name="context">{'group_by': ['site']}</field>
+        </record>
+
+    </data>
+</odoo>

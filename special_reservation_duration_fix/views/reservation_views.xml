@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_reservation_special_duration_in" model="ir.ui.view">
+        <field name="name">property.reservation.special.duration.in</field>
+        <field name="model">property.reservation</field>
+        <field name="inherit_id" ref="special_reservation.inherit_property_reservation_history_view_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Add special_duration_in as hidden field for persistence -->
+            <xpath expr="//field[@name='special_duration']" position="after">
+                <field name="special_duration_in" invisible="1"/>
+            </xpath>
+
+            <!-- Hide "View Special Form" button when reservation is expired/canceled/sold -->
+            <xpath expr="//button[@name='action_view_special_approval']" position="attributes">
+                <attribute name="invisible">state == 'draft' or status in ('expired', 'canceled', 'sold')</attribute>
+            </xpath>
+
+            <!-- Hide "Request Special Form" button when reservation is expired/canceled/sold -->
+            <xpath expr="//button[@name='action_request_special_approval']" position="attributes">
+                <attribute name="invisible">not is_special_reservation or state != 'draft' or status in ('expired', 'canceled', 'sold')</attribute>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Collection Report Based on Collection Stage Action -->
+    <record id="action_collection_stage_report" model="ir.actions.client">
+        <field name="name">Collection Report Based on Collection Stage</field>
+        <field name="tag">collection_reports.collection_stage</field>
+    </record>
+
+    <!-- Collection Report Based on Actual Paid Amount Action -->
+    <record id="action_actual_paid_report" model="ir.actions.client">
+        <field name="name">Collection Report Based on Actual Paid Amount</field>
+        <field name="tag">collection_reports.actual_paid</field>
+    </record>
+
+    <!-- Communication Report Action -->
+    <record id="action_communication_report" model="ir.actions.client">
+        <field name="name">Communication Report</field>
+        <field name="tag">collection_reports.communication</field>
+    </record>
+
+    <!-- Customer Service Report Action -->
+    <record id="action_customer_service_report" model="ir.actions.client">
+        <field name="name">Customer Service Report</field>
+        <field name="tag">collection_reports.customer_service</field>
+    </record>
+
+    <!-- General Information Report Action (New Summary Format) -->
+    <record id="action_general_info_report_2" model="ir.actions.client">
+        <field name="name">General Information</field>
+        <field name="tag">collection_reports.general_info</field>
+    </record>
+
+    <!-- Menu items directly under Reports menu (no submenu) -->
+    <!-- General Information Report -->
+    <menuitem id="menu_general_info_report_2"
+              name="General Information"
+              parent="collection_reports.menu_collection_reports"
+              action="action_general_info_report_2"
+              groups="collection_reports.group_collection_general_info_report"
+              sequence="60"/>
+
+    <!-- Collection Report Based on Collection Stage -->
+    <menuitem id="menu_collection_stage_report"
+              name="Collection Report Based on Collection Stage"
+              parent="collection_reports.menu_collection_reports"
+              action="action_collection_stage_report"
+              groups="collection_reports.group_collection_stage_report"
+              sequence="70"/>
+
+    <!-- Collection Report Based on Actual Paid Amount -->
+    <menuitem id="menu_actual_paid_report"
+              name="Collection Report Based on Actual Paid Amount"
+              parent="collection_reports.menu_collection_reports"
+              action="action_actual_paid_report"
+              groups="collection_reports.group_collection_actual_paid_report"
+              sequence="80"/>
+
+    <!-- Communication Report -->
+    <!-- <menuitem id="menu_communication_report"
+              name="Communication Report"
+              parent="collection_reports.menu_collection_reports"
+              action="action_communication_report"
+              sequence="90"/> -->
+
+    <!-- Customer Service Report -->
+    <!-- <menuitem id="menu_customer_service_report"
+              name="Customer Service Report"
+              parent="collection_reports.menu_collection_reports"
+              action="action_customer_service_report"
+              sequence="100"/> -->
+
+</odoo>
+

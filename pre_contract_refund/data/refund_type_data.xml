@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="refund_type_full_cancellation" model="property.pre.contract.refund.type">
+            <field name="name">Full Cancellation</field>
+            <field name="code">full_cancellation</field>
+        </record>
+        <record id="refund_type_overpayment" model="property.pre.contract.refund.type">
+            <field name="name">Overpayment</field>
+            <field name="code">overpayment</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="inherit_property_reservation_history_view_form" model="ir.ui.view">
+        <field name="name">property.reservation.form.inherit</field>
+        <field name="model">property.reservation</field>
+        <field name="inherit_id" ref="ahadubit_property_reservation.property_reservation_history_view_form_id"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='payment_line_ids']/tree/field[@name='bank_id']" position="before">
+                <field name="document_type_id" position="move"/>
+
+            </xpath>
+            <xpath expr="//field[@name='payment_line_ids']/tree/field[@name='bank_id']" position="attributes">
+                <attribute name="readonly">not document_type_id</attribute>
+            </xpath>
+            <xpath expr="//field[@name='payment_line_ids']/kanban/templates/t/div/div[@class='oe_kanban_details']/div[contains(., 'Bank:')]"
+                   position="before">
+                <xpath expr="//field[@name='payment_line_ids']/kanban/templates/t/div/div[@class='oe_kanban_details']/div[contains(., 'Doc:')]"
+                       position="move"/>
+            </xpath>
+
+            <xpath expr="//field[@name='payment_line_ids']" position="attributes">
+                <attribute name="readonly">not property_id</attribute>
+            </xpath>
+            <xpath expr="//field[@name='payment_line_ids']/tree" position="inside">
+                <field name="developer_id" invisible="1" column_invisible="1"/>
+                <field name="is_international" invisible="1" column_invisible="1"/>
+                <field name="company_filtered" invisible="1" column_invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='payment_line_ids']/tree/field[@name='bank_id']" position="replace">
+                <field name="bank_ethiopian" required="False" invisible="company_filtered == False "
+                       readonly="is_international == True or company_filtered != True"/>
+
+                <field name="bank_id" required="True" domain="[('bank_type', '=', 'none')]"
+                       readonly="id_editable ==True or is_new_line != True and id"/>
+                <!-- options="{'always_reload': True, 'reload_on_change': ['document_type_id']}"
+                company_filtered == True or is_international == True  or -->
+            </xpath>
+
+        </field>
+    </record>
+    <record id="inherit_document_type_tree_id" model="ir.ui.view">
+        <field name="name">bank.document.type.inherit</field>
+        <field name="model">bank.document.type</field>
+        <field name="inherit_id" ref="ahadubit_property_reservation.document_type_tree_id"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="is_international"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

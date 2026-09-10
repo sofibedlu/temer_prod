@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Fix the Special Approval Wizard button flow to insert a Manager Approval step.
+
+        OLD flow (broken):
+          submitted → [Supervisor Approve calls action_manager_approve → state=ceo] → Final Approve
+
+        NEW flow (correct):
+          submitted  → Supervisor Approve (action_supervisor_approve → state=supervisor)
+          supervisor → Manager Approve    (action_manager_approve    → state=manager)
+          manager    → Final Approve      (action_final_approve      → state=approved)
+
+        The "Manager Approve" button is restricted to the Call Center Manager group
+        (special_reservation.group_manager).
+    -->
+    <record id="view_special_approval_wizard_form_manager_step" model="ir.ui.view">
+        <field name="name">special.approval.wizard.form.manager.step</field>
+        <field name="model">special.approval.wizard</field>
+        <field name="inherit_id" ref="special_reservation.view_special_approval_wizard_form"/>
+        <field name="arch" type="xml">
+
+            <!--
+                Replace the old "Supervisor Approve" button that incorrectly called
+                action_manager_approve (jumping straight to ceo state) with:
+                  1. A correct "Supervisor Approve" → action_supervisor_approve (state=supervisor)
+                  2. A new    "Manager Approve"     → action_manager_approve    (state=ceo)
+            -->
+            <xpath expr="//button[@name='action_manager_approve']" position="replace">
+                <!-- Step 1: Supervisor approves — visible when state=submitted, for Supervisor group -->
+                <button string="Supervisor Approve"
+                        type="object"
+                        name="action_supervisor_approve"
+                        class="btn btn-warning"
+                        invisible="state != 'submitted'"
+                        groups="special_reservation.group_supervisor"/>
+
+                <!-- Step 2: Manager approves — visible when state=supervisor, for Manager group only → state=manager -->
+                <button string="Manager Approve"
+                        type="object"
+                        name="action_manager_approve"
+                        class="btn btn-success"
+                        invisible="state != 'supervisor'"
+                        groups="special_reservation.group_manager"/>
+            </xpath>
+
+            <!--
+                Allow managers to write their response when reviewing (state = supervisor).
+            -->
+            <xpath expr="//field[@name='manager_response']" position="attributes">
+                <attribute name="readonly">state not in ('supervisor', 'ceo')</attribute>
+                <attribute name="groups">special_reservation.group_manager,special_reservation.group_ceo</attribute>
+            </xpath>
+
+            <!--
+                Allow manager to record a voice response during manager approval step.
+            -->
+            <xpath expr="//field[@name='manager_response_recording']" position="attributes">
+                <attribute name="readonly">state not in ('supervisor', 'ceo')</attribute>
+            </xpath>
+
+            <!--
+                "Return to Draft" and "Final Approve" must now trigger from 'manager' state
+                (not 'ceo'), because action_manager_approve writes state='manager' so that
+                the chatter correctly logs "Manager Approval" as a distinct step.
+            -->
+            <xpath expr="//button[@name='action_return_to_draft']" position="attributes">
+                <attribute name="invisible">state not in ('manager', 'ceo')</attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='action_final_approve']" position="attributes">
+                <attribute name="invisible">state not in ('manager', 'ceo')</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+
+    <!--
+        Update the CEO queue action so it shows reservations waiting at 'manager' state
+        (the new "waiting for final approve" state).  We keep 'ceo' in the domain too
+        so any legacy records that were already at ceo state remain visible.
+    -->
+    <record id="special_reservation.action_special_approval_ceo_requests" model="ir.actions.act_window">
+        <field name="domain">[('state', 'in', ['manager', 'ceo'])]</field>
+    </record>
+
+
+    <!-- ─── Menu item for Manager group: see requests waiting for manager approval ─── -->
+
+    <record id="action_special_approval_manager_step_requests" model="ir.actions.act_window">
+        <field name="name">Manager Approval Requests</field>
+        <field name="res_model">property.reservation</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', '=', 'supervisor')]</field>
+    </record>
+
+    <menuitem id="menu_special_approval_manager_step_requests"
+              name="Special Reservation Requests"
+              action="action_special_approval_manager_step_requests"
+              groups="special_reservation.group_manager"
+              sequence="-100"/>
+
+</odoo>

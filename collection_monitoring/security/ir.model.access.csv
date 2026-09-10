@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_payment_approval_record_collection_monitoring,payment.approval.record.collection.monitoring.read,model_payment_approval_record,collection_monitoring.group_collection_monitoring,1,0,0,0

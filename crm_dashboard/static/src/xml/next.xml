@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="crm_dashboard.UserDashboard" owl="1">
+        <div class="container-fluid p-3">
+            <!-- Date Filter -->
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>My CRM Dashboard</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label>From</label>
+                                    <input type="date" class="form-control" t-model="state.startDate"/>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>To</label>
+                                    <input type="date" class="form-control" t-model="state.endDate"/>
+                                </div>
+                                <div class="col-md-3 d-flex align-items-end">
+                                    <button class="btn btn-primary" t-on-click="loadUserData">
+                                        <t t-if="state.loading">Loading...</t>
+                                        <t t-else="">Refresh</t>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="row">
+                <!-- My Leads Card -->
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="card-title mb-0">My Leads</h5>
+                        </div>
+                        <div class="card-body text-center">
+                            <h1 t-esc="state.userLeads" class="display-4"/>
+                            <button class="btn btn-outline-primary" t-on-click="goToMyLeads">
+                                View Leads
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- My Prospects Card -->
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="card-title mb-0">My Prospects</h5>
+                        </div>
+                        <div class="card-body text-center">
+                            <h1 t-esc="state.userProspects" class="display-4"/>
+                            <button class="btn btn-outline-success" t-on-click="goToMyProspects">
+                                View Prospects
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- My Activities Card -->
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="card-title mb-0">My Activities</h5>
+                        </div>
+                        <div class="card-body text-center">
+                            <h1 t-esc="state.userActivities" class="display-4"/>
+                            <button class="btn btn-outline-info" t-on-click="goToMyActivities">
+                                View Activities
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

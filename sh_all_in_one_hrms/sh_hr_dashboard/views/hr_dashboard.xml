@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="sh_action_hr_dashboard" model="ir.actions.client">
+    <field name="name">My Dashboard</field>
+    <field name="tag">hr_dashboard.dashboard</field>
+  </record>
+
+  <record id="sh_action_hr_manager_dashboard" model="ir.actions.client">
+    <field name="name">HR Dashboard</field>
+    <field name="tag">hr_manager_dashboard.dashboard</field>
+  </record>
+  <!-- Menus -->
+  <menuitem id="sh_hr_dashboard_action_menu" web_icon="sh_all_in_one_hrms,static/description/icons/hrdashboard.png" groups="sh_all_in_one_hrms.group_enable_hr_dashboard" name="My Dashboard" action="sh_action_hr_dashboard" sequence="10" />
+
+  <menuitem id="sh_hr_manager_dashboard_action_menu" web_icon="sh_all_in_one_hrms,static/description/icons/hrdashboard.png" groups="hr.group_hr_manager" name="HR Dashboard" action="sh_action_hr_manager_dashboard" sequence="11" />
+</odoo>

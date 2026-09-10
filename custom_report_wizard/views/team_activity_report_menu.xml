@@ -1,0 +1,27 @@
+<odoo>
+
+    <menuitem id="crm_menu_team_activity_reports"
+              name="Team Activity Report"
+              action="action_team_activity_wizard"
+              sequence="260"
+              groups="custom_report_wizard.team_activity_report"
+              web_icon="custom_report_wizard,static/src/reporting3.png"
+              />
+              <!-- parent="advanced_property_management.property_report_menu" -->
+    <!-- <menuitem id="crm_menu_lead_analysis_reports"
+              name="Lead Analysis Report"
+              action="action_lead_analysis_wizard"
+              sequence="261"
+              groups="custom_report_wizard.lead_analysis_report"
+              web_icon="custom_report_wizard,static/src/reporting2.png"
+              /> -->
+    <menuitem id="temer_lead_analysis_reports"
+              name="Lead Analysis Report"
+              action="action_temer_lead_analysis_wizard"
+              sequence="263"
+              groups="custom_report_wizard.lead_analysis_report"
+              web_icon="custom_report_wizard,static/src/reporting2.png"
+              />          
+              <!-- parent="advanced_property_management.property_report_menu" -->
+
+</odoo>

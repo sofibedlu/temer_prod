@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Property Discount Views -->
+    <record id="property_discount_action" model="ir.actions.act_window">
+        <field name="name">Special Discounts</field>
+        <field name="res_model">property.special.discount</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new special discount for properties
+            </p>
+            <p>Track and manage special discounts for property sales.</p>
+        </field>
+    </record>
+
+    <record id="property_discount_view_tree" model="ir.ui.view">
+        <field name="name">property.special.discount.tree</field>
+        <field name="model">property.special.discount</field>
+        <field name="arch" type="xml">
+            <tree decoration-info="status=='pending'"
+                decoration-success="status=='approved'"
+                decoration-danger="status=='rejected'">
+                <field name="partner_id" />
+                <field name="property_id" />
+                <field name="discount" widget="percentage" />
+                <field name="status" widget="badge" />
+                <field name="create_date" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="property_discount_view_form_id2" model="ir.ui.view">
+        <field name="name">property.special.discount</field>
+        <field name="model">property.special.discount</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="approve_discount"
+                        string="Approve"
+                        type="object"
+                        class="btn-primary"
+                        invisible="status != 'pending'"
+                        groups="ahadubit_property_reservation.discount_approval_group" />
+
+                    <button name="reject_discount"
+                        string="Reject"
+                        type="object"
+                        invisible="status != 'pending'"
+                        groups="ahadubit_property_reservation.discount_approval_group" />
+                    <field name="status" widget="statusbar"
+                        statusbar_visible="pending,approved,rejected" />
+                </header>
+                <sheet>
+                    <group string="Special Discount">
+                        <group>
+                            <field name="partner_id" readonly="status != 'pending'" />
+                            <field name="property_id" readonly="status != 'pending'" />
+                        </group>
+                        <group>
+                            <field name="discount" widget="percentage"
+                                readonly="status != 'pending'" />
+                            <field name="attachment" widget="binary_preview" />
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" />
+                    <field name="activity_ids" />
+                    <field name="message_ids" />
+                </div>
+            </form>
+        </field>
+    </record>
+
+</odoo>

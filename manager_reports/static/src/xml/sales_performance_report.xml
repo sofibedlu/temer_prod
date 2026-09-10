@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="manager_reports.SalesPerformanceReportClient" owl="1">
+        <div class="manager_reports_container">
+            <div class="report_header">
+                <h2>Sales Report</h2>
+                <div class="filter_section">
+                    <div class="filter_row">
+                        <label class="filter_checkbox_label">
+                            <input type="checkbox" t-model="state.use_all_dates" t-on-change="onAllDatesChange"/>
+                            <span t-esc="t('All data (no date filter)')"/>
+                        </label>
+                        <label>Date From:</label>
+                        <input type="date" t-model="state.date_from" t-on-change="onDateChange" class="date_input" t-att-disabled="state.use_all_dates"/>
+                        <label>Date To:</label>
+                        <input type="date" t-model="state.date_to" t-on-change="onDateChange" class="date_input" t-att-disabled="state.use_all_dates"/>
+                        <label>Wing:</label>
+                        <select t-model="state.wing_id" t-on-change="onWingChange" class="wing_select" style="width: 120px;">
+                            <option value="all">All</option>
+                            <t t-foreach="state.wings" t-as="wing" t-key="wing.id">
+                                <option t-att-value="wing.id" t-esc="wing.name"/>
+                            </t>
+                        </select>
+                        <button class="btn btn-primary" t-on-click="loadData">Show</button>
+                        <button class="btn btn-secondary" t-on-click="exportExcel">Export Excel</button>
+                        <button class="btn btn-secondary" t-on-click="exportPDF">Export PDF</button>
+                    </div>
+                </div>
+            </div>
+            
+            <t t-if="state.loading">
+                <div class="loading_message">Loading data...</div>
+            </t>
+            
+            <t t-if="!state.loading">
+                <div class="report_content mr_scroll_y" t-ref="reportContent">
+                    <!-- Opening Stock Table with Pie Chart - FIRST -->
+                    <div class="table_section">
+                        <h3>Opening Stock</h3>
+                        <div class="mr_table_graph_grid">
+                            <div class="mr_card">
+                                <div class="mr_table_scroll">
+                                    <table class="report_table">
+                                        <thead>
+                                            <tr>
+                                                <th>Type</th>
+                                                <th>QTY</th>
+                                                <th>Value</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Residence</td>
+                                                <td class="number_cell" t-esc="formatNumber(getOpeningStockQty('residence'))"/>
+                                                <td class="number_cell" t-esc="formatCurrency(getOpeningStockValue('residence'))"/>
+                                            </tr>
+                                            <tr>
+                                                <td>Shops</td>
+                                                <td class="number_cell" t-esc="formatNumber(getOpeningStockQty('shops'))"/>
+                                                <td class="number_cell" t-esc="formatCurrency(getOpeningStockValue('shops'))"/>
+                                            </tr>
+                                            <tr>
+                                                <td>Mixed use</td>
+                                                <td class="number_cell" t-esc="formatNumber(getOpeningStockQty('mixed_use'))"/>
+                                                <td class="number_cell" t-esc="formatCurrency(getOpeningStockValue('mixed_use'))"/>
+                                            </tr>
+                                            <tr class="total_row">
+                                                <td><strong>Total</strong></td>
+                                                <td class="total_cell"><t t-esc="formatNumber(getOpeningStockQty('total'))"/></td>
+                                                <td class="total_cell"><t t-esc="formatCurrency(getOpeningStockValue('total'))"/></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="mr_card mr_graph_side">
+                                <div class="mr_graph_mini">
+                                    <div class="mr_graph_mini_title">Opening Stock Distribution</div>
+                                    <canvas t-ref="openingStockPieChart"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Per Wing: Table + QTY chart + Money chart for each wing -->
+                    <t t-foreach="state.wingComparisonData" t-as="wing" t-key="wing.wing_id">
+                        <div class="table_section wing_block">
+                            <h3 t-esc="wing.wing_name"/>
+                            <div class="mr_table_graph_grid">
+                                <div class="mr_card">
+                                    <div class="mr_table_scroll">
+                                        <table class="report_table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Sales Metrics</th>
+                                                    <th>Plan</th>
+                                                    <th>Actual</th>
+                                                    <th>Achievement %</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Prospects</td>
+                                                    <td class="number_cell" t-esc="formatNumber(wing.prospect_plan)"/>
+                                                    <td class="number_cell" t-esc="formatNumber(wing.prospect)"/>
+                                                    <td><div class="mr_progress"><div class="mr_progress_bar" t-att-style="'width:' + Math.min(wing.prospect_ach || 0, 100) + '%'"/><span class="mr_progress_label"><t t-esc="formatNumber(wing.prospect_ach)"/>%</span></div></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Reservations</td>
+                                                    <td class="number_cell" t-esc="formatNumber(wing.reservation_plan)"/>
+                                                    <td class="number_cell" t-esc="formatNumber(wing.reservation)"/>
+                                                    <td><div class="mr_progress"><div class="mr_progress_bar" t-att-style="'width:' + Math.min(wing.reservation_ach || 0, 100) + '%'"/><span class="mr_progress_label"><t t-esc="formatNumber(wing.reservation_ach)"/>%</span></div></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Sales QTY</td>
+                                                    <td class="number_cell" t-esc="formatNumber(wing.sales_qty_plan)"/>
+                                                    <td class="number_cell" t-esc="formatNumber(wing.sales_qty)"/>
+                                                    <td><div class="mr_progress"><div class="mr_progress_bar" t-att-style="'width:' + Math.min(wing.sales_qty_ach || 0, 100) + '%'"/><span class="mr_progress_label"><t t-esc="formatNumber(wing.sales_qty_ach)"/>%</span></div></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Sales Value</td>
+                                                    <td class="number_cell" t-esc="formatNumber(wing.sales_value_plan)"/>
+                                                    <td class="number_cell" t-esc="formatNumber(wing.sales_value)"/>
+                                                    <td><div class="mr_progress"><div class="mr_progress_bar" t-att-style="'width:' + Math.min(wing.sales_value_ach || 0, 100) + '%'"/><span class="mr_progress_label"><t t-esc="formatNumber(wing.sales_value_ach)"/>%</span></div></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Advance paid</td>
+                                                    <td class="number_cell" t-esc="formatNumber(wing.advance_paid_plan)"/>
+                                                    <td class="number_cell" t-esc="formatNumber(wing.advance_paid)"/>
+                                                    <td><div class="mr_progress"><div class="mr_progress_bar" t-att-style="'width:' + Math.min(wing.advance_paid_ach || 0, 100) + '%'"/><span class="mr_progress_label"><t t-esc="formatNumber(wing.advance_paid_ach)"/>%</span></div></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Conversion rate (deal/leads)</td>
+                                                    <td class="number_cell" t-esc="formatNumber(wing.conversion_rate_plan)"/>
+                                                    <td class="number_cell" t-esc="formatNumber(wing.conversion_rate)"/>
+                                                    <td><div class="mr_progress"><div class="mr_progress_bar" t-att-style="'width:' + Math.min(wing.conversion_rate_ach || 0, 100) + '%'"/><span class="mr_progress_label"><t t-esc="formatNumber(wing.conversion_rate_ach)"/>%</span></div></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>IAR (Inventory absorption rate)</td>
+                                                    <td class="number_cell" t-esc="formatNumber(wing.iar_plan)"/>
+                                                    <td class="number_cell" t-esc="formatNumber(wing.iar)"/>
+                                                    <td><div class="mr_progress"><div class="mr_progress_bar" t-att-style="'width:' + Math.min(wing.iar_ach || 0, 100) + '%'"/><span class="mr_progress_label"><t t-esc="formatNumber(wing.iar_ach)"/>%</span></div></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="mr_card mr_graph_side">
+                                    <div class="mr_graph_side_grid">
+                                        <div class="mr_graph_mini">
+                                            <div class="mr_graph_mini_title">Plan vs Actual (QTY)</div>
+                                            <canvas t-att-id="'wing-qty-' + wing.wing_id"/>
+                                        </div>
+                                        <div class="mr_graph_mini">
+                                            <div class="mr_graph_mini_title">Plan vs Actual (Money)</div>
+                                            <canvas t-att-id="'wing-money-' + wing.wing_id"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                    
+                    <!-- Charts: Wing Comparison Timeline (All) + Activity Timeline -->
+                    <div class="mr_graphs table_section">
+                        <div class="mr_graph_row">
+                            <t t-if="state.wing_id === 'all'">
+                                <div class="mr_graph_card mr_graph_mini timeline_chart">
+                                    <div class="mr_graph_mini_title">Wing Comparison Timeline</div>
+                                    <canvas t-ref="wingComparisonTimelineChart"/>
+                                </div>
+                            </t>
+                            <div class="mr_graph_card mr_graph_mini timeline_chart">
+                                <div class="mr_graph_mini_title">Activity Timeline</div>
+                                <canvas t-ref="activityTimeseriesChart"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>

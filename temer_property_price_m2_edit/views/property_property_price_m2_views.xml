@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Make override Price(m2) editable in Price Details section (property form) -->
+        <record id="property_property_view_form_inherit_price_m2_edit"
+                model="ir.ui.view">
+            <field name="name">property.property.view.form.price.m2.edit</field>
+            <field name="model">property.property</field>
+            <field name="inherit_id"
+                   ref="ahadubit_property_base.property_property_view_form_inherit"/>
+            <field name="arch" type="xml">
+                <!-- Replace the computed price field with our manual override field in Price Details -->
+                <xpath expr="//group[@name='price_details']//field[@name='price']" position="replace">
+                    <field name="override_price_m2"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
+

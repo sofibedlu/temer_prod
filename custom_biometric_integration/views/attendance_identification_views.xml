@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_attendance_identification_tree" model="ir.ui.view">
+        <field name="name">attendance.identification.tree</field>
+        <field name="model">attendance.identification</field>
+        <field name="arch" type="xml">
+            <tree string="Attendance Identification">
+                <field name="employee_id"/>
+                <field name="partner_id"/>
+                <field name="badge_id"/>
+                <field name="bio_id"/>
+                <field name="machine_id"/>
+            </tree>
+        </field>
+    </record>
+    <record id="action_attendance_identification" model="ir.actions.act_window">
+        <field name="name">Attendance Identification</field>
+        <field name="res_model">attendance.identification</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

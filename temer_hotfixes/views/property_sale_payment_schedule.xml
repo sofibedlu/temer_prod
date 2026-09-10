@@ -1,0 +1,16 @@
+<odoo>
+    <record id="view_property_sale_payment_schedule_edit_until_confirm" model="ir.ui.view">
+        <field name="name">property.sale.payment.schedule.edit.until.confirm</field>
+        <field name="model">property.sale</field>
+        <field name="inherit_id" ref="ahadubit_property_base.property_sale_view_form_inherit_id"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='payment_installment_line_ids']" position="attributes">
+                <attribute name="readonly">state in ['void', 'done', 'cancel'] or (state in ['approve', 'audited'] and not is_schedule_unlocked)</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='payment_installment_line_ids']/tree" position="attributes">
+                <attribute name="editable">bottom</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

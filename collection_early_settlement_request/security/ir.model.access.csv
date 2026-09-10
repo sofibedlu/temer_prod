@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_early_settlement_request,early.settlement.request,model_early_settlement_request,,1,1,1,1
+access_settlement_reject_wizard,settlement.reject.wizard,model_settlement_reject_wizard,,1,1,1,1
+access_early_settlement_history,early.settlement.history,model_early_settlement_history,,1,1,1,1

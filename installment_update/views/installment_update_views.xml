@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ================================================================
+         Standalone Tree View for property.payment.line
+         ================================================================ -->
+    <record id="view_property_payment_line_tree_standalone" model="ir.ui.view">
+        <field name="name">property.payment.line.tree.standalone</field>
+        <field name="model">property.payment.line</field>
+        <field name="priority">50</field>
+        <field name="arch" type="xml">
+            <tree string="Property Sale Lines" create="0" edit="0">
+                <field name="sale_id" string="Sale"/>
+
+                <field name="payment_term_id" string="Installment"/>
+                <field name="sequence" optional="hide"/>
+                <field name="expected" string="%" optional="hide"/>
+                <field name="expected_amount" sum="Total Expected"/>
+                <field name="paid_amount" sum="Total Paid"/>
+                <field name="discount" sum="Total Discount" optional="show"/>
+                <field name="remaining" sum="Total Remaining"/>
+                <field name="due_date" optional="show"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'paid'"
+                       decoration-warning="state == 'partial'"
+                       decoration-danger="state == 'not_paid'"
+                       decoration-info="state == 'discounted'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- ================================================================
+         Standalone Form View for property.payment.line
+         ================================================================ -->
+    <record id="view_property_payment_line_form_standalone" model="ir.ui.view">
+        <field name="name">property.payment.line.form.standalone</field>
+        <field name="model">property.payment.line</field>
+        <field name="priority">50</field>
+        <field name="arch" type="xml">
+            <form string="Property Sale Line" create="0">
+                <sheet>
+                    <group>
+                        <group string="Reference">
+                            <field name="sale_id" string="Sale" readonly="1"/>
+                            <!-- <field name="property_id" string="Property" readonly="1"/> -->
+                            <field name="payment_term_id" string="Installment" readonly="1"/>
+                            <field name="sequence" readonly="1"/>
+                        </group>
+                        <group string="Amounts">
+                            <field name="expected" string="Expected (%)"/>
+                            <field name="expected_amount"/>
+                            <field name="paid_amount"/>
+                            <field name="discount"/>
+                            <field name="remaining"/>
+                            <field name="due_date"/>
+                            <field name="state" widget="badge"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ================================================================
+         Search View
+         ================================================================ -->
+    <record id="view_installment_update_wizard_search" model="ir.ui.view">
+        <field name="name">installment.update.wizard.search</field>
+        <field name="model">installment.update.wizard</field>
+        <field name="arch" type="xml">
+            <search string="Search Installment Update">
+                <field name="site_id" string="Site / Project"/>
+                <field name="term_line_id" string="Old Installment"/>
+                <field name="new_installment_id" string="New Installment"/>
+                <separator/>
+                <filter name="filter_has_site" string="Site Selected"
+                        domain="[('site_id', '!=', False)]"/>
+                <filter name="filter_has_term" string="Old Installment Selected"
+                        domain="[('term_line_id', '!=', False)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="group_site" string="Site"
+                            context="{'group_by': 'site_id'}"/>
+                    <filter name="group_term" string="Old Installment"
+                            context="{'group_by': 'term_line_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ================================================================
+         Form View
+         ================================================================ -->
+    <record id="view_installment_update_wizard_form" model="ir.ui.view">
+        <field name="name">installment.update.wizard.form</field>
+        <field name="model">installment.update.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Update Installment">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Update Installment</h1>
+                    </div>
+
+                    <!-- Stat buttons — visible once old installment is chosen -->
+                    <div class="oe_button_box" name="button_box"
+                         invisible="not term_line_id">
+                        <button name="action_view_collection_installments"
+                                type="object" class="oe_stat_button" icon="fa-money">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="collection_installment_count"/>
+                                </span>
+                                <span class="o_stat_text">Collection Installments</span>
+                            </div>
+                        </button>
+                        <button name="action_view_sale_lines"
+                                type="object" class="oe_stat_button" icon="fa-handshake-o">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="sale_line_count"/>
+                                </span>
+                                <span class="o_stat_text">Property Sale Lines</span>
+                            </div>
+                        </button>
+                        <button name="action_view_legacy_lines"
+                                type="object" class="oe_stat_button" icon="fa-history">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="legacy_line_count"/>
+                                </span>
+                                <span class="o_stat_text">Legacy Sale Lines</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Selectors -->
+                    <group>
+                        <group>
+                            <field name="site_id"
+                                   options="{'no_create': true, 'no_open': true}"
+                                   placeholder="Select a Site / Project…"/>
+                        </group>
+                        <group>
+                            <field name="payment_structure_id" invisible="1"/>
+                            <field name="term_line_id"
+                                   options="{'no_create': true, 'no_open': true}"
+                                   domain="[('payment_term_id', '=', payment_structure_id)]"
+                                   invisible="not site_id"
+                                   placeholder="Select the Old Installment to replace…"/>
+                        </group>
+                    </group>
+
+                    <group invisible="not term_line_id">
+                        <group>
+                            <field name="new_installment_id"
+                                   options="{'no_create': true, 'no_open': true}"
+                                   domain="[('payment_term_id', '=', payment_structure_id), ('id', '!=', term_line_id)]"
+                                   placeholder="Select the New Installment…"/>
+                        </group>
+                    </group>
+
+                    <!-- Substitute button -->
+                    <div name="substitute_action_box" class="mt8 mb8"
+                         invisible="not new_installment_id">
+                        <button name="action_update_installments"
+                                type="object"
+                                class="btn btn-danger"
+                                confirm="This will substitute ALL matching records (collection installments, property sale lines, and legacy sale lines) with the new installment and DELETE the old installment term line. This action cannot be undone. Continue?">
+                            <i class="fa fa-exchange"/> Substitute &amp; Delete Old Installment
+                        </button>
+                    </div>
+
+                    <!-- Guidance banners -->
+                    <div class="alert alert-info" role="alert" invisible="site_id">
+                        <i class="fa fa-info-circle"/> Select a <strong>Site</strong> to get started.
+                    </div>
+                    <div class="alert alert-info" role="alert"
+                         invisible="not site_id or term_line_id">
+                        <i class="fa fa-info-circle"/> Select the <strong>Old Installment</strong> to be replaced.
+                    </div>
+                    <div class="alert alert-warning" role="alert"
+                         invisible="not term_line_id or new_installment_id">
+                        <i class="fa fa-exclamation-triangle"/> Now select the <strong>New Installment</strong> that will replace it.
+                    </div>
+                    <div class="alert alert-success" role="alert"
+                         invisible="not new_installment_id">
+                        <i class="fa fa-check-circle"/> Ready. Click <strong>Substitute &amp; Delete Old Installment</strong> to apply.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ================================================================
+         Action
+         ================================================================ -->
+    <record id="action_installment_update" model="ir.actions.act_window">
+        <field name="name">Update Installment</field>
+        <field name="res_model">installment.update.wizard</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_installment_update_wizard_search"/>
+        <field name="target">current</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create a new Installment Update entry</p>
+            <p>Select a Site and an Old Installment to search for matching records across collections, sales, and legacy data.</p>
+        </field>
+    </record>
+
+    <!-- ================================================================
+         Menu
+         ================================================================ -->
+    <menuitem
+        id="menu_installment_update_root"
+        name="Update Installment"
+        parent="advanced_property_management.property_configuration_menu"
+        action="action_installment_update"
+        groups="installment_update.group_installment_update_manager"
+        sequence="90"/>
+
+</odoo>

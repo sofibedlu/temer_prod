@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_crm_reception_form_location" model="ir.ui.view">
+        <field name="name">crm.reception.form.location</field>
+        <field name="model">crm.reception</field>
+        <field name="inherit_id" ref="crm_custom_menu.view_crm_reception_form"/>
+        <field name="arch" type="xml">
+            <field name="customer_name" position="after">
+                <field name="distribution_location_id"
+                    string="Location"
+                    options="{'no_create': True}"
+                    readonly="state_crm == 'sent'"/>
+                <field name="source_id" string="Source"
+                    readonly="state_crm == 'sent'"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_crm_reception_tree_location" model="ir.ui.view">
+        <field name="name">crm.reception.tree.location</field>
+        <field name="model">crm.reception</field>
+        <field name="inherit_id" ref="crm_custom_menu.view_crm_reception_tree"/>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <xpath expr="//tree/field[@name='name']" position="after">
+                <field name="distribution_location_id" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_crm_reception_search_location" model="ir.ui.view">
+        <field name="name">crm.reception.search.location</field>
+        <field name="model">crm.reception</field>
+        <field name="inherit_id" ref="crm_custom_menu.view_crm_reception_search"/>
+        <field name="arch" type="xml">
+            <field name="customer_name" position="after">
+                <field name="distribution_location_id"/>
+            </field>
+            <search position="inside">
+                <filter name="group_location" string="Location" context="{'group_by': 'distribution_location_id'}"/>
+            </search>
+        </field>
+    </record>
+
+</odoo>

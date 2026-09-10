@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_contract_application_form1_inherit_nationality" model="ir.ui.view">
+        <field name="name">contract.application.form.inherit.nationality</field>
+        <field name="model">contract.application</field>
+        <field name="inherit_id" ref="contract_sections.view_contract_application_form1"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='person_ids']/tree/field[@name='email']" position="after">
+                <field name="nationality_id"/>
+                <field name="place_of_birth"/>
+                <field name="passport_id_number"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_contract_person_form_inherit_nationality" model="ir.ui.view">
+        <field name="name">contract.person.form.inherit.nationality</field>
+        <field name="model">contract.person</field>
+        <field name="inherit_id" ref="contract_sections.view_contract_person_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='email']" position="after">
+                <field name="nationality_id"/>
+                <field name="place_of_birth"/>
+                <field name="passport_id_number"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

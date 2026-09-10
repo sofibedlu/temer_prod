@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_post_sales_refund_form_inherit_eth_date" model="ir.ui.view">
+        <field name="name">post.sales.refund.request.form.inherit.eth.date</field>
+        <field name="model">post.sales.refund.request</field>
+        <field name="inherit_id" ref="property_post_sales_refund.view_post_sales_refund_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='pay_date']" position="replace">
+                <label for="pay_date" string="Expected Refund Date"/>
+                <div class="o_row">
+                    <field name="pay_date" 
+                           readonly="state in ['finance_approved', 'refunded']" 
+                           placeholder="Gregorian"/>
+                    <span class="mx-2">/</span>
+                    <field name="pay_date_eth" 
+                           readonly="state in ['finance_approved', 'refunded']" 
+                           placeholder="dd/mm/yyyy (E.C)"/>
+                </div>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

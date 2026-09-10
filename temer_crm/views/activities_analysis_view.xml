@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Activity Analysis Tree View -->
+        <record id="view_temer_lead_activity_analysis_tree" model="ir.ui.view">
+            <field name="name">temer.lead.activity.analysis.tree</field>
+            <field name="model">temer.lead.activity.analysis</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="activity_type"/>
+                    <field name="salesperson_id"/>
+                    <field name="activity_date"/>
+                    <field name="year"/>
+                    <field name="month"/>
+                    <field name="activity_count"/>
+                    <field name="lead_count"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Activity Analysis Pivot View -->
+        <record id="view_temer_lead_activity_analysis_pivot" model="ir.ui.view">
+            <field name="name">temer.lead.activity.analysis.pivot</field>
+            <field name="model">temer.lead.activity.analysis</field>
+            <field name="arch" type="xml">
+                <pivot>
+                    <field name="activity_type" type="col"/>
+                    <field name="year" type="row"/>
+                    <field name="month" type="row"/>
+                    <field name="salesperson_id" type="row"/>
+                    <field name="activity_count" type="measure"/>
+                    <field name="lead_count" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <!-- Activity Analysis Graph View -->
+        <record id="view_temer_lead_activity_analysis_graph" model="ir.ui.view">
+            <field name="name">temer.lead.activity.analysis.graph</field>
+            <field name="model">temer.lead.activity.analysis</field>
+            <field name="arch" type="xml">
+                <graph type="bar">
+                    <field name="activity_type" type="row"/>
+                    <field name="salesperson_id" type="row"/>
+                    <field name="activity_count" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <!-- Activity Analysis Search View -->
+        <record id="view_temer_lead_activity_analysis_search" model="ir.ui.view">
+            <field name="name">temer.lead.activity.analysis.search</field>
+            <field name="model">temer.lead.activity.analysis</field>
+            <field name="arch" type="xml">
+                <search>
+                    <!-- Default filter for current user -->
+                    <filter name="my_activities" string="My Activities"
+                            domain="[('salesperson_id', '=', uid)]"/>
+
+                    <filter name="activity_type" string="Activity Type" domain="[]" context="{'group_by': 'activity_type'}"/>
+                    <filter name="salesperson" string="Salesperson" domain="[]" context="{'group_by': 'salesperson_id'}"/>
+                    
+                    <!-- Simple time-based filters -->
+                    <filter name="last_30_days" string="Last 30 Days"
+                            domain="[('activity_date', '>=', (context_today() - datetime.timedelta(days=30)).strftime('%Y-%m-%d'))]"/>
+                    <filter name="last_7_days" string="Last 7 Days"
+                            domain="[('activity_date', '>=', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+                    <filter name="today" string="Today"
+                            domain="[('activity_date', '>=', context_today().strftime('%Y-%m-%d'))]"/>
+
+                    <separator/>
+
+                    <group expand="0" string="Group By">
+                        <filter name="group_by_activity" string="Activity Type" context="{'group_by': 'activity_type'}"/>
+                        <filter name="group_by_salesperson" string="Salesperson" context="{'group_by': 'salesperson_id'}"/>
+                        <filter name="group_by_year" string="Year" context="{'group_by': 'year'}"/>
+                        <filter name="group_by_month" string="Month" context="{'group_by': 'month'}"/>
+                        <filter name="group_by_quarter" string="Quarter" context="{'group_by': 'quarter'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action for Activity Analytics -->
+        <record id="action_temer_lead_activity_analysis" model="ir.actions.act_window">
+            <field name="name">Activity Analytics</field>
+            <field name="res_model">temer.lead.activity.analysis</field>
+            <field name="view_mode">pivot,tree,graph</field>
+            <field name="search_view_id" ref="view_temer_lead_activity_analysis_search"/>
+            <field name="context">{
+                'search_default_my_activities': 1,
+                'search_default_group_by_activity': 1,
+                'search_default_group_by_month': 1
+            }</field>
+        </record>
+
+        <!-- Menu Item for Activity Analytics -->
+        <menuitem id="menu_temer_lead_activity_analysis"
+                  name="Activity Analytics"
+                  parent="menu_temer_leads_root"
+                  action="action_temer_lead_activity_analysis"
+                  sequence="15"
+                  groups="temer_crm.group_temer_lead_manager"/>
+    </data>
+</odoo>

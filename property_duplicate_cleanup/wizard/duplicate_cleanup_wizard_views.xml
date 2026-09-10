@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_property_duplicate_cleanup_wizard_form" model="ir.ui.view">
+        <field name="name">property.duplicate.cleanup.wizard.form</field>
+        <field name="model">property.duplicate.cleanup.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Property Duplicate Cleanup">
+                <div class="alert alert-warning" role="alert">
+                    recover legitimate transactions like reservations from duplicated properties. 
+                    Once transferred, the source property will be permanently flagged as an <b>Invalid Duplicate</b> so it can be safely deleted.
+                </div>
+                
+                <group>
+                    <group string="Valid Target (Keep)">
+                        <field name="valid_property_id" options="{'no_create': True}"/>
+                        <field name="valid_summary" nolabel="1" readonly="1" colspan="2"/>
+                    </group>
+                    
+                    <group string="Invalid Source (Drop)">
+                        <field name="invalid_property_id" options="{'no_create': True}"/>
+                        <field name="invalid_summary" nolabel="1" readonly="1" colspan="2"/>
+                    </group>
+                </group>
+
+                <group string="What to Transfer from Invalid to Valid?">
+                    <field name="transfer_reservations" widget="boolean_toggle"/>
+                    
+
+                    <field name="update_valid_sale_reservation" 
+                           widget="boolean_toggle" 
+                           invisible="not transfer_reservations"
+                           class="ms-4"/>
+                           
+                    <!-- <field name="transfer_sales" widget="boolean_toggle"/>
+                    <field name="transfer_collections" widget="boolean_toggle"/> -->
+                </group>
+
+                <footer>
+                    <button name="action_execute_transfer" string="Execute Transfer &amp; Flag Invalid" type="object" class="btn-danger" icon="fa-exchange" confirm="Are you sure you want to execute this data transfer?"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_property_duplicate_cleanup_wizard" model="ir.actions.act_window">
+        <field name="name">Data Merge &amp; Cleanup</field>
+        <field name="res_model">property.duplicate.cleanup.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_property_duplicate_cleanup"
+              name="Duplicate Cleanup Tool"
+              parent="advanced_property_management.property_configuration_menu"
+              action="action_property_duplicate_cleanup_wizard"
+              groups="base.group_system"
+              sequence="200"/>
+</odoo>

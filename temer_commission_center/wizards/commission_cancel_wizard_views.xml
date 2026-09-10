@@ -1,0 +1,20 @@
+<odoo>
+    <record id="view_temer_commission_cancel_wizard_form" model="ir.ui.view">
+        <field name="name">temer.commission.cancel.wizard.form</field>
+        <field name="model">temer.commission.cancel.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Cancel Commission Sheet">
+                <sheet>
+                    <group>
+                        <field name="sheet_id" readonly="1"/>
+                        <field name="reason"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_confirm" type="object" string="Close" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

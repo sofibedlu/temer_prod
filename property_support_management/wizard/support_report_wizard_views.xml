@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_support_report_wizard_form" model="ir.ui.view">
+        <field name="name">support.report.wizard.form</field>
+        <field name="model">support.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Add Task Report">
+                <group>
+                    <field name="support_id" invisible="1"/>
+                    <field name="work_update" placeholder="Describe your work progress or resolution here..." style="font-size: 1.2em; height: 150px;"/>
+                </group>
+                <separator string="Main Achievements"/>
+                <field name="achievement_ids" nolabel="1">
+                    <tree editable="bottom">
+                        <field name="sequence" widget="handle"/>
+                        <field name="text" placeholder="Achievement..."/>
+                    </tree>
+                </field>
+                <footer>
+                    <button name="action_confirm" string="Submit Report" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_support_report_wizard" model="ir.actions.act_window">
+        <field name="name">Task Report</field>
+        <field name="res_model">support.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

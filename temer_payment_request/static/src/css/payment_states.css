@@ -1,0 +1,14 @@
+.o_list_view .o_data_row .o_field_cell.o_field_widget[name="state"] .badge,
+.o_kanban_view .o_field_widget[name="state"] .badge {
+    padding: 5px !important;
+}
+
+.o_list_view .o_data_row .o_field_cell.o_field_widget[name="state"] .badge.text-bg-primary,
+.o_kanban_view .o_field_widget[name="state"] .badge.text-bg-primary {
+    background-color: #7b1f3d !important;
+    color: #ffffff !important;
+}
+
+.o_list_view .o_data_row .o_field_cell.o_field_widget[name="Status"] {
+    padding-right: 20px !important;
+}

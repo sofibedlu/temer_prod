@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Graph View -->
+    <record id="view_reservation_graph" model="ir.ui.view">
+        <field name="name">property.reservation.graph</field>
+        <field name="model">property.reservation</field>
+        <field name="arch" type="xml">
+            <graph string="Reservation Analysis" type="bar" sample="1">
+                <field name="property_id"/>
+                <field name="status"/>
+                <field name="create_date" interval="month"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Pivot View -->
+    <record id="view_reservation_pivot" model="ir.ui.view">
+        <field name="name">property.reservation.pivot</field>
+        <field name="model">property.reservation</field>
+        <field name="arch" type="xml">
+            <pivot string="Reservation Analysis" sample="1">
+                <field name="property_id" type="row"/>
+                <field name="status" type="row"/>
+                <field name="create_date" interval="month" type="col"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_reservation_search" model="ir.ui.view">
+        <field name="name">property.reservation.search</field>
+        <field name="model">property.reservation</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="property_id"/>
+                <field name="partner_id"/>
+                <field name="reservation_type_id"/>
+                
+                <filter string="Requested" name="requested" domain="[('status', '=', 'requested')]"/>
+                <filter string="Reserved" name="reserved" domain="[('status', '=', 'reserved')]"/>
+                <filter string="Canceled" name="canceled" domain="[('status', '=', 'canceled')]"/>
+                <filter string="Expired" name="expired" domain="[('status', '=', 'expired')]"/>
+                <filter string="Sold" name="sold" domain="[('status', '=', 'sold')]"/>
+                
+                <separator/>
+                <filter string="Extension Pending" name="ext_pending" domain="[('extension_status', '=', 'pending')]"/>
+                <filter string="Extension Approved" name="ext_approved" domain="[('extension_status', '=', 'approved')]"/>
+                <filter string="Extension Rejected" name="ext_rejected" domain="[('extension_status', '=', 'rejected')]"/>
+                
+                <separator/>
+                <filter string="Transfer Pending" name="trans_pending" domain="[('transfer_status', '=', 'pending')]"/>
+                <filter string="Transfer Approved" name="trans_approved" domain="[('transfer_status', '=', 'approved')]"/>
+                <filter string="Transfer Rejected" name="trans_rejected" domain="[('transfer_status', '=', 'rejected')]"/>
+                
+                 <!-- Date Filters -->
+                <separator/>
+                <filter string="Today" name="today" 
+                        domain="[('create_date', '&gt;=', context_today().strftime('%Y-%m-%d')),
+                                ('create_date', '&lt;', (context_today() + relativedelta(days=1)).strftime('%Y-%m-%d'))]"/>
+                <filter string="This Week" name="this_week" 
+                        domain="[('create_date', '&gt;=', (context_today() + relativedelta(weeks=-1, days=1, weekday=0)).strftime('%Y-%m-%d')),
+                                ('create_date', '&lt;', (context_today() + relativedelta(days=1)).strftime('%Y-%m-%d'))]"/>
+                <filter string="This Month" name="this_month" 
+                        domain="[('create_date', '&gt;=', (context_today() + relativedelta(day=1)).strftime('%Y-%m-%d')),
+                                ('create_date', '&lt;', (context_today() + relativedelta(months=1, day=1)).strftime('%Y-%m-%d'))]"/>
+                <filter string="Last Month" name="last_month" 
+                        domain="[('create_date', '&gt;=', (context_today() + relativedelta(months=-1, day=1)).strftime('%Y-%m-%d')),
+                                ('create_date', '&lt;', (context_today() + relativedelta(day=1)).strftime('%Y-%m-%d'))]"/>
+                
+                <!-- Other Filters -->
+                <separator/>
+                <filter string="Special Reservations" name="special" domain="[('is_special', '=', True)]"/>
+                <!-- <filter string="Sufficient Payment" name="sufficient" domain="[('is_sufficient', '=', True)]"/> -->
+
+                <group expand="1" string="Group By">
+                    <filter string="Site" name="group_site" context="{'group_by': 'site_id'}"/>
+                    <filter string="Property" name="group_property" context="{'group_by': 'property_id'}"/>
+                    <filter string="Customer" name="group_partner" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Status" name="group_status" context="{'group_by': 'status'}"/>
+                    <filter string="Reservation Type" name="group_type" context="{'group_by': 'reservation_type_id'}"/>
+                    <filter string="Extension Status" name="group_extension" context="{'group_by': 'extension_status'}"/>
+                    <filter string="Transfer Status" name="group_transfer" context="{'group_by': 'transfer_status'}"/>
+                    <filter string="Month" name="group_month" context="{'group_by': 'create_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_reservation_report_analysis" model="ir.actions.act_window">
+        <field name="name">Reservation Analysis</field>
+        <field name="res_model">property.reservation</field>
+        <field name="view_mode">graph,pivot</field>
+        <field name="search_view_id" ref="view_reservation_search"/>
+        
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No reservations found.
+            </p>
+        </field>
+    </record>
+
+
+</odoo>

@@ -1,0 +1,177 @@
+<odoo>
+    <data>
+        <!-- Sequence for Legacy Sales -->
+        <record id="seq_property_legacy_sale" model="ir.sequence">
+            <field name="name">Legacy Sale Sequence</field>
+            <field name="code">property.legacy.sale</field>
+            <field name="prefix">LEG/</field>
+            <field name="padding">4</field>
+        </record>
+
+        <!-- 1. Legacy Sale Staging Form View -->
+        <record id="view_property_legacy_sale_form" model="ir.ui.view">
+            <field name="name">property.legacy.sale.form</field>
+            <field name="model">property.legacy.sale</field>
+            <field name="arch" type="xml">
+                <form string="Legacy Sale Entry">
+                    <header>
+                        <button name="action_check" string="Check" 
+                                type="object" class="oe_highlight" 
+                                invisible="state != 'draft'"/>
+                        <button name="action_approve" string="Approve &amp; Create Sale" 
+                                type="object" class="oe_highlight" 
+                                invisible="state != 'checked'"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <field name="installment_below" invisible="1"></field>
+                        <field name="installment_exceeds" invisible="1"></field>
+                        <div invisible="not installment_exceeds" class="alert alert-danger" role="alert">
+                            <field name="installment_exceed_message" readonly="1" nolabel="1"/>
+                        </div>
+                        <div invisible="not installment_below"
+                            style="background:#fff8e1; border:1px solid #f6e58d; padding:10px; border-radius:4px; margin-bottom:10px;">
+                            <field name="installment_below_message" readonly="1" nolabel="1"/>
+                        </div>
+
+
+                        <div class="oe_title">
+                            <h1><field name="name"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="partner_id"/>
+                                <field name="contract_number"/>
+                                <field name="contract_date_char" placeholder="dd/mm/yyyy"/>
+                                <field name="created_sale_id" readonly="1"/>
+                                <field name="date"/>
+                            </group>
+                            <group>
+                                <field name="property_id"/>
+                                <field name="salesperson_id"/>
+                                <field name="sale_price"/>
+                                <field name="payment_term_id"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Installments">
+                                <field name="installment_ids">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                        <field name="percentage"/>
+                                        <field name="amount" sum="Total"/>
+                                        <field name="paid_amount"/>
+                                        <field name="remaining" readonly="1"/>
+                                        <field name="status" readonly="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- 2. Legacy Sale Staging Tree View -->
+        <record id="view_property_legacy_sale_tree" model="ir.ui.view">
+            <field name="name">property.legacy.sale.tree</field>
+            <field name="model">property.legacy.sale</field>
+            <field name="arch" type="xml">
+                <tree string="Legacy Sales">
+                    <field name="name"/>
+                    <field name="contract_number"/>
+                    <field name="partner_id"/>
+                    <field name="property_id"/>
+                    <field name="sale_price"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- 3. Action for Legacy Sales Staging -->
+        <record id="action_property_legacy_sale" model="ir.actions.act_window">
+            <field name="name">Legacy Sales</field>
+            <field name="res_model">property.legacy.sale</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- 4. Inherit Property Form to add Is Legacy flag -->
+        <record id="view_property_property_form_legacy_inherit" model="ir.ui.view">
+            <field name="name">property.property.form.legacy.inherit</field>
+            <field name="model">property.property</field>
+            <field name="inherit_id" ref="advanced_property_management.property_property_view_form"/>
+            <field name="arch" type="xml">
+                <field name="payment_structure_id" position="after">
+                    <field name="is_legacy" readonly="1" force_save="1"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- Exclude Legacy Properties from Standard Reservation Form -->
+        <record id="view_property_reservation_form_exclude_legacy" model="ir.ui.view">
+            <field name="name">property.reservation.form.exclude.legacy</field>
+            <field name="model">property.reservation</field>
+            <field name="inherit_id" ref="ahadubit_property_reservation.property_reservation_history_view_form_id"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='property_id']" position="attributes">
+                    <attribute name="context">{'hide_legacy_properties': True}</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Action for Legacy Properties (Filtered) -->
+        <record id="action_property_legacy_property" model="ir.actions.act_window">
+            <field name="name">Legacy Properties</field>
+            <field name="res_model">property.property</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="domain">[('is_legacy', '=', True)]</field>
+            <field name="context">{'default_is_legacy': True}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Legacy Property
+                </p>
+            </field>
+        </record>
+        
+        <!-- Root Menu -->
+        <menuitem id="menu_legacy_root"
+                  name="Legacy Sales Entry"
+                  web_icon="property_legacy_data,static/description/icon.png"
+                  sequence="50"
+                  groups="property_legacy_data.group_property_legacy_user"/>
+        
+        <!-- Sub Menu: Properties (Custom Action for Legacy) -->
+        <menuitem id="menu_legacy_property"
+                  name="Properties"
+                  parent="menu_legacy_root"
+                  action="action_property_legacy_property"
+                  sequence="10"/>
+
+        <!-- Sub Menu: Property Typography (Standard Action) -->
+        <menuitem id="menu_legacy_typography"
+                  name="Property Typography"
+                  parent="menu_legacy_root"
+                  action="ahadubit_property_base.property_type_action"
+                  sequence="20"/>
+
+        <!-- Sub Menu: Payment Terms (Standard Action) -->
+        <menuitem id="menu_legacy_payment_term"
+                  name="Payment Terms"
+                  parent="menu_legacy_root"
+                  action="ahadubit_property_base.property_payment_term_action"
+                  sequence="30"/>
+
+        <!-- Sub Menu: Legacy Sales (Custom Staging Action) -->
+        <menuitem id="menu_legacy_sales_entry_child"
+                  name="Legacy Sales"
+                  parent="menu_legacy_root"
+                  action="action_property_legacy_sale"
+                  sequence="9"/>
+
+    </data>
+</odoo>

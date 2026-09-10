@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="collection_reports.ReportStageReportClient" owl="1">
+        <div class="collection-report-container">
+            <div class="report-header">
+                <h1 class="report-title">Report Based on Collection Stage</h1>
+                <div class="filter-section">
+                    <div class="filters-row">
+                        <div class="filter-group">
+                            <label>
+                                <input type="checkbox" t-model="state.show_all_dates" t-on-change="onShowAllDatesChange"/>
+                                Show All
+                            </label>
+                        </div>
+                        <div class="filter-group">
+                            <label>From:</label>
+                            <input type="date" t-model="state.date_from" class="date-input" t-att-disabled="state.show_all_dates"/>
+                        </div>
+                        <div class="filter-group">
+                            <label>To:</label>
+                            <input type="date" t-model="state.date_to" class="date-input" t-att-disabled="state.show_all_dates"/>
+                        </div>
+                        <div class="filter-group">
+                            <label>Search:</label>
+                            <input type="text" t-model="state.search_text" class="search-input" placeholder="Search table..." t-on-input="onSearchChange"/>
+                        </div>
+                        <button class="btn-show" t-on-click="loadData">
+                            Show
+                        </button>
+                        <div class="export-buttons" style="margin-left: auto;">
+                            <button class="btn-export btn-export-excel" t-on-click="exportExcel">
+                                Export Excel
+                            </button>
+                            <button class="btn-export btn-export-pdf" t-on-click="exportPDF">
+                                Export PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="report-table-container" t-if="!state.loading" style="overflow-x: auto; overflow-y: auto; max-height: calc(100vh - 300px);">
+                <table class="report-table report-stage-table" style="min-width: 100%; border-collapse: separate; border-spacing: 0;">
+                    <thead>
+                        <!-- Row 1: Main headers -->
+                        <tr class="header-row-1">
+                            <th rowspan="2" class="sno-col">S.NO</th>
+                            <th rowspan="2" class="project-col">PROJECT NAME</th>
+                            <th colspan="2">EXPECTED</th>
+                            <th colspan="3">PENALITY</th>
+                            <th colspan="2">TERMINATION</th>
+                            <th colspan="3">OTHER COLLECTION</th>
+                            <th colspan="3" class="green-header">TOTAL COLLECTION REPORT</th>
+                        </tr>
+                        <!-- Row 2: Sub-headers -->
+                        <tr class="header-row-2">
+                            <th>NO OF CUS TO ME</th>
+                            <th>AMOUNT IN BIRR</th>
+                            <th>NO OF CUS TO ME</th>
+                            <th>AMOUNT IN BIRR</th>
+                            <th>AMONT IN DOLLAR</th>
+                            <th>NO OF CUST OMERS</th>
+                            <th>AMOU NT IN BIRR</th>
+                            <th>NO OF CUS TO MER</th>
+                            <th>AMOUNT IN BIRR</th>
+                            <th>AMONT IN DOLLAR</th>
+                            <th class="green-header">NO OF CUST OMERS</th>
+                            <th class="green-header">AMOUNT IN BIRR</th>
+                            <th class="green-header">AMONT IN DOLLAR</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-if="state.filtered_data.length === 0">
+                            <td colspan="15" style="text-align:center;padding:20px;">No data available</td>
+                        </tr>
+                        <tr t-foreach="state.filtered_data" t-as="row" t-key="row.sno" t-att-class="row.is_total ? 'total-row' : ''">
+                            <td><t t-esc="row.sno"/></td>
+                            <td style="text-align:left;padding-left:10px;"><t t-esc="row.project_name"/></td>
+                            <td><t t-esc="row.actual_expected_customers || 0"/></td>
+                            <td><t t-esc="(row.actual_expected_amount_birr || 0).toFixed(2)"/> Birr</td>
+                            <td><t t-esc="row.actual_penalty_customers || 0"/></td>
+                            <td><t t-esc="(row.actual_penalty_amount_birr || 0).toFixed(2)"/> Birr</td>
+                            <td>$<t t-esc="(row.actual_penalty_amount_dollar || 0).toFixed(2)"/></td>
+                            <td><t t-esc="row.actual_termination_customers || 0"/></td>
+                            <td><t t-esc="(row.actual_termination_amount_birr || 0).toFixed(2)"/> Birr</td>
+                            <td><t t-esc="row.other_customers || 0"/></td>
+                            <td><t t-esc="(row.other_amount_birr || 0).toFixed(2)"/> Birr</td>
+                            <td>$<t t-esc="(row.other_amount_dollar || 0).toFixed(2)"/></td>
+                            <td class="green-cell"><t t-esc="row.actual_total_customers || 0"/></td>
+                            <td class="green-cell"><t t-esc="(row.actual_total_amount_birr || 0).toFixed(2)"/> Birr</td>
+                            <td class="green-cell">$<t t-esc="(row.actual_total_amount_dollar || 0).toFixed(2)"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div t-if="state.loading" class="loading-spinner">
+                Loading...
+            </div>
+        </div>
+    </t>
+</templates>
+

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_temer_reservation_history_tree" model="ir.ui.view">
+        <field name="name">temer.reservation.history.tree</field>
+        <field name="model">property.reservation</field>
+        <field name="arch" type="xml">
+            <tree string="Reservation History" create="false" delete="false" edit="false" duplicate="0">
+                <header>
+                    <button string="Export Excel" name="action_temer_export_reservation_history" type="object" display="always"/>
+                </header>
+                <field name="property_id" string="Property Name"/>
+                <field name="report_property_type" string="Property Type"/>
+                <field name="report_unit_type" string="Unit Type"/>
+                <field name="salesperson_ids"/>
+                <field name="partner_id"/>
+                <field name="reservation_type_id"/>
+                <field name="create_date" string="Requested"/>
+                <field name="expire_date"/>
+                <field name="canceled_time"/>
+                <field name="create_uid" string="Reserved By"/>
+                <field name="status" widget="badge"
+                    decoration-muted="status == 'requested'"
+                    decoration-primary="status == 'reserved'"
+                    decoration-danger="status == 'canceled'"
+                    decoration-warning="status == 'expired'"
+                    decoration-success="status == 'sold'"/>
+                <field name="report_total_payment" string="Reservation Payment" sum="Reservation Payment"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_temer_reservation_history_search" model="ir.ui.view">
+        <field name="name">temer.reservation.history.search</field>
+        <field name="model">property.reservation</field>
+        <field name="arch" type="xml">
+            <search string="Reservation History">
+                <field name="property_id"/>
+                <field name="partner_id"/>
+                <field name="salesperson_ids"/>
+                <field name="reservation_type_id"/>
+                <filter string="Residential" name="filter_residential" domain="[('report_property_type_stored','=','residential')]"/>
+                <filter string="Commercial" name="filter_commercial" domain="[('report_property_type_stored','=','commercial')]"/>
+                <filter name="filter_requested" string="Requested" domain="[('status', '=', 'requested')]"/>
+                <filter name="filter_reserved" string="Reserved" domain="[('status', '=', 'reserved')]"/>
+                <filter name="filter_canceled" string="Canceled" domain="[('status', '=', 'canceled')]"/>
+                <filter name="filter_expired" string="Expired" domain="[('status', '=', 'expired')]"/>
+                <filter name="filter_sold" string="Sold" domain="[('status', '=', 'sold')]"/>
+                <separator/>
+                <filter string="Property" name="group_property" context="{'group_by': 'property_id'}"/>
+                <filter string="Property Type" name="group_property_type" context="{'group_by': 'report_property_type_stored'}"/>
+                <filter string="Bedrooms" name="group_bedroom" context="{'group_by': 'report_bedroom_stored'}"/>
+                <filter string="Customer" name="group_customer" context="{'group_by': 'partner_id'}"/>
+                <filter string="Salesperson" name="group_salesperson" context="{'group_by': 'salesperson_ids'}"/>
+                <filter string="Status" name="group_status" context="{'group_by': 'status'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_temer_reservation_history" model="ir.actions.act_window">
+        <field name="name">Reservation Report</field>
+        <field name="res_model">property.reservation</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_temer_reservation_history_tree"/>
+        <field name="search_view_id" ref="view_temer_reservation_history_search"/>
+        <field name="context">{'default_order': 'create_date desc'}</field>
+    </record>
+
+</odoo>

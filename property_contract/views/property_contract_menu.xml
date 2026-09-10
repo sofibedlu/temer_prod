@@ -1,0 +1,58 @@
+<odoo>
+    <data>
+        <!-- Search View -->
+        <record id="view_property_contract_search" model="ir.ui.view">
+            <field name="name">property.contract.search</field>
+            <field name="model">property.sale</field>
+            <field name="arch" type="xml">
+                <search string="Search Contracts">
+                    <!-- Search Fields -->
+                    <field name="partner_id" string="Customer"/>
+                    <field name="property_id" string="Property"/>
+                    <field name="contract_number" string="Contract Number"/>
+                    
+                    <separator/>
+                    
+                    <!-- Filters -->
+                    <filter string="Approved" name="state_approved" domain="[('state', '=', 'approve')]"/>
+                    <filter string="Confirmed" name="state_confirmed" domain="[('state', '=', 'confirm')]"/>
+                    <filter string="Voided" name="state_void" domain="[('state', '=', 'void')]"/>
+                    <filter string="Draft" name="state_draft" domain="[('state', '=', 'draft')]"/>
+                    
+                    <separator/>
+
+                    <!-- Group By -->
+                    <group expand="0" string="Group By">
+                        <filter string="Customer" name="group_partner" context="{'group_by': 'partner_id'}"/>
+                        <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                        <filter string="Site" name="group_site" context="{'group_by': 'site_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action to use this Search View and Default Filter -->
+        <record id="action_property_contracts" model="ir.actions.act_window">
+            <field name="name">Contracts</field>
+            <field name="res_model">property.sale</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_property_contract_search"/>
+            <field name="context">{'search_default_state_approved': 1}</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                No contracts found
+              </p>
+              <p>
+                Create a new property sale to generate a contract.
+              </p>
+            </field>
+        </record>
+
+        <!-- The Menu Item -->
+        <menuitem id="menu_property_contract_main"
+                  name="Contracts"
+                  groups="temer_structure.access_property_contract_admin_group"
+                  action="action_property_contracts"
+                  sequence="20"/>
+    </data>
+</odoo>

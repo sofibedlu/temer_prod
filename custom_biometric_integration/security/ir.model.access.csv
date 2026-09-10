@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_attendance_period,hr.attendance.period,model_hr_attendance_period,hr_attendance.group_hr_attendance_manager,1,1,1,1
+access_attendance_identification,attendance.identification,model_attendance_identification,hr_attendance.group_hr_attendance_manager,1,1,1,1
+access_attendance_log_analysis,attendance.log.analysis,model_attendance_log_analysis,hr_attendance.group_hr_attendance_manager,1,1,1,1
+access_attendance_last_read,attendance.last.read,model_attendance_last_read,hr_attendance.group_hr_attendance_manager,1,1,1,1
+access_manual_read_wizard,manual.read.wizard,model_manual_read_wizard,hr_attendance.group_hr_attendance_manager,1,1,1,1

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Parent Menu - Managerial Dashboard -->
+    <menuitem id="menu_manager_reports"
+              name="Managerial Dashboard"
+              sequence="200"
+              groups="manager_reports.group_manager_reports"/>
+    
+    <!-- Report 1: Stock/Inventory Report -->
+    <record id="action_stock_inventory_report" model="ir.actions.client">
+        <field name="name">Stock/Inventory Report</field>
+        <field name="tag">manager_reports.stock_inventory</field>
+    </record>
+    
+    <menuitem id="menu_stock_inventory_report"
+              name="Stock/Inventory Report"
+              parent="menu_manager_reports"
+              action="action_stock_inventory_report"
+              sequence="10"
+              groups="manager_reports.group_manager_reports"/>
+    
+    <!-- Report 2: Sales Report -->
+    <record id="action_sales_performance_report" model="ir.actions.client">
+        <field name="name">Sales Report</field>
+        <field name="tag">manager_reports.sales_performance</field>
+    </record>
+    
+    <menuitem id="menu_sales_performance_report"
+              name="Sales Report"
+              parent="menu_manager_reports"
+              action="action_sales_performance_report"
+              sequence="20"
+              groups="manager_reports.group_manager_reports"/>
+    
+    <!-- Report 3: Collection Report -->
+    <record id="action_collection_report" model="ir.actions.client">
+        <field name="name">Collection Report</field>
+        <field name="tag">manager_reports.collection</field>
+    </record>
+    
+    <menuitem id="menu_collection_report"
+              name="Collection Report"
+              parent="menu_manager_reports"
+              action="action_collection_report"
+              sequence="30"
+              groups="manager_reports.group_manager_reports"/>
+    
+    <!-- Report 4: Consolidate Report -->
+    <record id="action_stock_collection_summary" model="ir.actions.client">
+        <field name="name">Consolidate Report</field>
+        <field name="tag">manager_reports.stock_collection_summary</field>
+    </record>
+    
+    <menuitem id="menu_stock_collection_summary"
+              name="Consolidate Report"
+              parent="menu_manager_reports"
+              action="action_stock_collection_summary"
+              sequence="40"
+              groups="manager_reports.group_manager_reports"/>
+
+    <!-- Report 5: Weekly Sales Report By Wing (requires Weekly Reports privilege) -->
+    <record id="action_weekly_sales_by_wing" model="ir.actions.client">
+        <field name="name">Weekly Sales Report By Wing</field>
+        <field name="tag">manager_reports.weekly_sales_by_wing</field>
+    </record>
+
+    <menuitem id="menu_weekly_sales_by_wing"
+              name="Weekly Sales Report By Wing"
+              parent="menu_manager_reports"
+              action="action_weekly_sales_by_wing"
+              sequence="25"
+              groups="manager_reports.group_weekly_reports"/>
+
+    <!-- Report 6: Weekly Report (requires Weekly Reports privilege) -->
+    <record id="action_weekly_report" model="ir.actions.client">
+        <field name="name">Weekly Report</field>
+        <field name="tag">manager_reports.weekly_report</field>
+    </record>
+
+    <menuitem id="menu_weekly_report"
+              name="Weekly Report"
+              parent="menu_manager_reports"
+              action="action_weekly_report"
+              sequence="26"
+              groups="manager_reports.group_weekly_reports"/>
+
+</odoo>
+

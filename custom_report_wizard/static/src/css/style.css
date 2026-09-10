@@ -1,0 +1,24 @@
+.custom-list ol {
+    counter-reset: list-counter; /* Initialize the list counter for ordered lists */
+}
+
+.custom-list ol li {
+    list-style: none; /* Remove default numbering for ordered list items */
+    counter-increment: list-counter; /* Increment the counter for each list item */
+    position: relative;
+    font-size: 2.5em; /* Set the font size to match the <h3> tag or adjust as necessary */
+}
+
+.custom-list ol li::before {
+    content: counter(list-counter) ". "; /* Display the list item number */
+    position: absolute;
+    left: -30px; /* Adjust the number position if needed */
+    font-size: inherit; /* Ensure the number has the same font size as the <li> */
+    font-weight: inherit; /* Inherit font weight from <li> */
+}
+
+.custom-list ul li {
+    list-style: disc inside; /* Keep the default list styling for unordered lists */
+    font-size: 1em; /* Keep the font size for <ul> items as normal */
+    position: relative;
+}

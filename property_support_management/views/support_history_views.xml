@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Tree View -->
+        <record id="view_support_history_tree" model="ir.ui.view">
+            <field name="name">support.management.history.tree</field>
+            <field name="model">support.management.history</field>
+            <field name="arch" type="xml">
+                <tree string="Not Completed History" create="0" edit="0">
+                    <field name="support_id"/>
+                    <field name="user_id"/>
+                    <field name="date"/>
+                    <field name="assigned_date"/>
+                    <field name="category_ids" widget="many2many_tags"/>
+                    <field name="description"/>
+                    <button name="action_open_job" type="object" string="View Job" class="btn-primary" icon="fa-arrow-right"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_support_history" model="ir.actions.act_window">
+            <field name="name">Not Completed History</field>
+            <field name="res_model">support.management.history</field>
+            <field name="view_mode">tree</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_empty_folder">
+                No history of uncompleted tasks found.
+              </p>
+            </field>
+        </record>
+
+        <!-- Menu Item -->
+        <menuitem id="menu_support_history_report" name="Not Completed History" parent="property_support_management.menu_support_management_root" action="action_support_history" sequence="30" groups="property_support_management.group_support_manager"/>
+    </data>
+</odoo>

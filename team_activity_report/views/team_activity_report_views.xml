@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_team_activity_report" model="ir.actions.client">
+        <field name="name">Detailed Sales Report</field>
+        <field name="tag">team_activity_report.report</field>
+    </record>
+
+    <menuitem id="menu_team_activity_report"
+              name="Detail Report"
+              parent="supervisor_sales_report.menu_supervisor_sales_report"
+              action="action_team_activity_report"
+              groups="temer_structure.access_property_sales_supervisor_group,temer_structure.access_property_sales_team_manager_group"
+              sequence="20"/>
+
+</odoo>
+

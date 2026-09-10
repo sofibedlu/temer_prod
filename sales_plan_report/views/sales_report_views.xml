@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+    <!-- Form View with improved UI -->
+    <record id="view_sales_report_form" model="ir.ui.view">
+        <field name="name">sales.report.form</field>
+        <field name="model">sales.report</field>
+        <field name="arch" type="xml">
+            <form string="Sales Performance Report" create="0" write="0" delete="0">
+                <sheet>
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 6px; flex-wrap: wrap;">
+                        <label for="wing_id" string="Wing:" invisible="report_type == 'supervisor'"/>
+                        <field name="wing_id" 
+                               required="report_type == 'wing'"
+                               invisible="report_type == 'supervisor'"
+                               options="{'no_create': True, 'no_create_edit': True}"
+                               on_change="1"
+                               style="min-width: 200px;"/>
+                        <label for="supervisor_id" string="Supervisor:" invisible="report_type == 'wing'"/>
+                        <field name="supervisor_id"
+                               required="report_type == 'supervisor'"
+                               invisible="report_type == 'wing'"
+                               options="{'no_create': True, 'no_create_edit': True}"
+                               on_change="1"
+                               style="min-width: 200px;"/>
+                        <label for="date_from" string="From Date:"/>
+                        <field name="date_from" widget="date" on_change="1" style="min-width: 150px;"/>
+                        <label for="date_to" string="To Date:"/>
+                        <field name="date_to" widget="date" on_change="1" style="min-width: 150px;"/>
+                        <button name="action_refresh_report" string="Refresh Report" type="object" class="btn-primary" style="margin-left: 0;"/>
+                        <button name="action_export_pdf" string="Export PDF" type="object" class="btn-secondary"/>
+                        <button name="action_export_excel" string="Export Excel" type="object" class="btn-secondary"/>
+                    </div>
+                    
+                    <div class="oe_title" style="text-align: center; margin-bottom: 20px;">
+                        <h2>Sales Performance Metrics</h2>
+                    </div>
+                    <div style="display: flex; justify-content: center; width: 100%;">
+                        <table class="table table-bordered table-striped" style="width: 100%; max-width: 1400px; margin: 0 auto;">
+                                <thead>
+                                    <tr style="background-color: #343a40; color: white;">
+                                        <th style="padding: 12px; text-align: left; font-weight: bold;">Metric</th>
+                                        <th style="padding: 12px; text-align: center; font-weight: bold;">Actual Previous Week</th>
+                                        <th style="padding: 12px; text-align: center; font-weight: bold; color: red;">Plan</th>
+                                        <th style="padding: 12px; text-align: center; font-weight: bold;">Actual</th>
+                                        <th style="padding: 12px; text-align: center; font-weight: bold;">Difference<br/>(This week - Previous week)</th>
+                                        <th style="padding: 12px; text-align: center; font-weight: bold;">Difference<br/>(Actual - Plan)</th>
+                                        <th style="padding: 12px; text-align: center; font-weight: bold;">% Achievement</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="padding: 10px; font-weight: 600;"><strong>Prospects (Leads)</strong></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="actual_previous_week_prospects" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center; color: red;"><field name="plan_prospects" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="actual_prospects" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="diff_week_prospects" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="diff_prospects" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;">
+                                            <field name="percent_prospects" widget="progressbar" nolabel="1" readonly="1" options="{'max_value': 100}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 10px; font-weight: 600;"><strong>Follow-ups</strong></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="actual_previous_week_follow_ups" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center; color: red;"><field name="plan_follow_ups" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="actual_follow_ups" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="diff_week_follow_ups" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="diff_follow_ups" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;">
+                                            <field name="percent_follow_ups" widget="progressbar" nolabel="1" readonly="1" options="{'max_value': 100}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 10px; font-weight: 600;"><strong>Site Visits</strong></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="actual_previous_week_site_visits" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center; color: red;"><field name="plan_site_visits" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="actual_site_visits" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="diff_week_site_visits" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="diff_site_visits" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;">
+                                            <field name="percent_site_visits" widget="progressbar" nolabel="1" readonly="1" options="{'max_value': 100}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 10px; font-weight: 600;"><strong>Office Visits</strong></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="actual_previous_week_office_visits" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center; color: red;"><field name="plan_office_visits" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="actual_office_visits" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="diff_week_office_visits" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="diff_office_visits" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;">
+                                            <field name="percent_office_visits" widget="progressbar" nolabel="1" readonly="1" options="{'max_value': 100}"/>
+                                        </td>
+                                    </tr>
+                                    <tr style="background-color: #e3f2fd;">
+                                        <td style="padding: 10px; font-weight: 600;"><strong>Total Visits (Site + Office)</strong></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="actual_previous_week_total_visits" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center; color: red;"><field name="plan_total_visits" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="actual_total_visits" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="diff_week_total_visits" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="diff_total_visits" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;">
+                                            <field name="percent_total_visits" widget="progressbar" nolabel="1" readonly="1" options="{'max_value': 100}"/>
+                                        </td>
+                                    </tr>
+                                    <tr style="background-color: #fff3cd;">
+                                        <td style="padding: 10px; font-weight: 600;"><strong>Total unit reservations</strong></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="actual_previous_week_unit_reservations" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center; color: red;"><field name="plan_unit_reservations" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="actual_unit_reservations" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="diff_week_unit_reservations" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="diff_unit_reservations" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;">
+                                            <field name="percent_unit_reservations" widget="progressbar" nolabel="1" readonly="1" options="{'max_value': 100}"/>
+                                        </td>
+                                    </tr>
+                                    <tr style="background-color: #d4edda;">
+                                        <td style="padding: 10px; font-weight: 600;"><strong>Deals Closed (QTY)</strong></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="actual_previous_week_deals_closed" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center; color: red;"><field name="plan_deals_closed" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="actual_deals_closed" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="diff_week_deals_closed" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="diff_deals_closed" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;">
+                                            <field name="percent_deals_closed" widget="progressbar" nolabel="1" readonly="1" options="{'max_value': 100}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 10px; font-weight: 600;"><strong>Conversion (sales/leads)</strong></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="actual_previous_week_conversion_rate" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center; color: red;"><field name="plan_conversion_rate" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="conversion_rate" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="diff_week_conversion_rate" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="diff_conversion_rate" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;">
+                                            <field name="percent_conversion_rate" widget="progressbar" nolabel="1" readonly="1" options="{'max_value': 100}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 10px; font-weight: 600;"><strong>Cash Collected (Birr)</strong></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="actual_previous_week_cash_collected" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center; color: red;"><field name="plan_cash_collected" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="actual_cash_collected" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="diff_week_cash_collected" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="diff_cash_collected" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 10px; font-weight: 600;"><strong>Total Deal Value (Birr)</strong></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="actual_previous_week_total_deal_value" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center; color: red;"><field name="plan_total_deal_value" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="actual_total_deal_value" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="diff_week_total_deal_value" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;"><field name="diff_total_deal_value" nolabel="1" readonly="1"/></td>
+                                        <td style="padding: 10px; text-align: center;">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 10px; font-weight: 600;"><strong>IAR (sales/opening stock)</strong></td>
+                                        <td style="padding: 10px; text-align: center;">-</td>
+                                        <td style="padding: 10px; text-align: center; color: red;">-</td>
+                                        <td style="padding: 10px; text-align: center;">-</td>
+                                        <td style="padding: 10px; text-align: center;">-</td>
+                                        <td style="padding: 10px; text-align: center;">-</td>
+                                        <td style="padding: 10px; text-align: center;"><field name="iar_rate" nolabel="1" readonly="1"/>%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                    </div>
+                </sheet>
+                <field name="report_type" invisible="1"/>
+                <field name="plan_prospects" invisible="1"/>
+                <field name="actual_prospects" invisible="1"/>
+                <field name="actual_previous_week_prospects" invisible="1"/>
+                <field name="diff_prospects" invisible="1"/>
+                <field name="diff_week_prospects" invisible="1"/>
+                <field name="plan_follow_ups" invisible="1"/>
+                <field name="actual_follow_ups" invisible="1"/>
+                <field name="actual_previous_week_follow_ups" invisible="1"/>
+                <field name="diff_follow_ups" invisible="1"/>
+                <field name="diff_week_follow_ups" invisible="1"/>
+                <field name="plan_site_visits" invisible="1"/>
+                <field name="actual_site_visits" invisible="1"/>
+                <field name="actual_previous_week_site_visits" invisible="1"/>
+                <field name="diff_site_visits" invisible="1"/>
+                <field name="diff_week_site_visits" invisible="1"/>
+                <field name="plan_office_visits" invisible="1"/>
+                <field name="actual_office_visits" invisible="1"/>
+                <field name="actual_previous_week_office_visits" invisible="1"/>
+                <field name="diff_office_visits" invisible="1"/>
+                <field name="diff_week_office_visits" invisible="1"/>
+                <field name="plan_total_visits" invisible="1"/>
+                <field name="actual_total_visits" invisible="1"/>
+                <field name="actual_previous_week_total_visits" invisible="1"/>
+                <field name="diff_total_visits" invisible="1"/>
+                <field name="diff_week_total_visits" invisible="1"/>
+                <field name="plan_unit_reservations" invisible="1"/>
+                <field name="actual_unit_reservations" invisible="1"/>
+                <field name="actual_previous_week_unit_reservations" invisible="1"/>
+                <field name="diff_unit_reservations" invisible="1"/>
+                <field name="diff_week_unit_reservations" invisible="1"/>
+                <field name="plan_deals_closed" invisible="1"/>
+                <field name="actual_deals_closed" invisible="1"/>
+                <field name="actual_previous_week_deals_closed" invisible="1"/>
+                <field name="diff_deals_closed" invisible="1"/>
+                <field name="diff_week_deals_closed" invisible="1"/>
+                <field name="plan_cash_collected" invisible="1"/>
+                <field name="actual_cash_collected" invisible="1"/>
+                <field name="actual_previous_week_cash_collected" invisible="1"/>
+                <field name="diff_cash_collected" invisible="1"/>
+                <field name="diff_week_cash_collected" invisible="1"/>
+                <field name="plan_total_deal_value" invisible="1"/>
+                <field name="actual_total_deal_value" invisible="1"/>
+                <field name="actual_previous_week_total_deal_value" invisible="1"/>
+                <field name="diff_total_deal_value" invisible="1"/>
+                <field name="diff_week_total_deal_value" invisible="1"/>
+                <field name="iar_rate" invisible="1"/>
+                <field name="conversion_rate" invisible="1"/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Delete old actions -->
+    <delete id="action_sales_report_wing" model="ir.actions.act_window"/>
+    <delete id="action_sales_report_supervisor" model="ir.actions.act_window"/>
+    
+    <!-- Action for Wing Report - Client Action -->
+    <record id="action_sales_report_wing" model="ir.actions.client">
+        <field name="name">Sales Performance Report by Wing</field>
+        <field name="tag">sales_plan_report.wing_report</field>
+        <field name="context">{'default_report_type': 'wing'}</field>
+    </record>
+
+    <!-- Action for Supervisor Report - Client Action -->
+    <record id="action_sales_report_supervisor" model="ir.actions.client">
+        <field name="name">Sales Performance Report by Supervisor</field>
+        <field name="tag">sales_plan_report.supervisor_report</field>
+        <field name="context">{'default_report_type': 'supervisor'}</field>
+    </record>
+
+</data>
+</odoo>

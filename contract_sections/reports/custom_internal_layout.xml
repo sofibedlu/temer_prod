@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- better support for long company name -->
+        <template id="report_custom_internal_layout" inherit_id="web.internal_layout" primary="True">
+            <xpath expr="//div[hasclass('header')]" position="replace">
+                
+                    <div class="header" style="padding-bottom: 0 !important; ">
+                        <div class="row">
+                            <div class="col-2" style="font-size: 10px;">
+                                <span >Printed on: </span><span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/>
+                            </div>
+                            <div class="col-3 offset-2 text-center">
+                                
+                                <t t-set="property_id" t-value="property"/>
+
+
+                                <t t-set="property_details" t-value="request.env['property.sale'].sudo().search([('id','=',property_id)])"/>
+                                <t t-esc="property_details.contract_number"/>
+                            </div>
+                            <div class="col-2 offset-3 text-end">
+                                <ul class="list-inline">
+                                    <li class="list-inline-item"><span class="page"/></li>
+                                    <li class="list-inline-item">/</li>
+                                    <li class="list-inline-item"><span class="topage"/></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="footer" >
+                        <div class="row">
+                            <div class="col-6" >
+                                <span>የሻጭ ፊርማ: </span>----------------------
+                            </div>
+                            <div class="col-6" style="text-align: right;">
+                                <span>የገዢ ፊርማ: </span>----------------------
+                            </div>
+                        </div>
+                    </div>
+            </xpath>
+            
+        </template>
+        
+    </data>
+</odoo>

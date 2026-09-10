@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_crm_wing_member_tree_location" model="ir.ui.view">
+        <field name="name">crm.wing.member.tree.location</field>
+        <field name="model">crm.wing.member</field>
+        <field name="inherit_id" ref="crm_quota_lead_distribution.view_crm_wing_member_tree"/>
+        <field name="arch" type="xml">
+            <field name="type" position="after">
+                <field name="location_id" required="1"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_crm_wing_member_form_location" model="ir.ui.view">
+        <field name="name">crm.wing.member.form.location</field>
+        <field name="model">crm.wing.member</field>
+        <field name="inherit_id" ref="crm_quota_lead_distribution.view_crm_wing_member_form"/>
+        <field name="arch" type="xml">
+            <field name="type" position="after">
+                <field name="location_id" required="1"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_crm_wing_member_search_location" model="ir.ui.view">
+        <field name="name">crm.wing.member.search.location</field>
+        <field name="model">crm.wing.member</field>
+        <field name="inherit_id" ref="crm_quota_lead_distribution.view_crm_wing_member_search"/>
+        <field name="arch" type="xml">
+            <field name="type" position="after">
+                <field name="location_id"/>
+            </field>
+            <filter name="walkin" position="after">
+                <filter name="group_location" string="Location" context="{'group_by': 'location_id'}"/>
+            </filter>
+        </field>
+    </record>
+
+</odoo>

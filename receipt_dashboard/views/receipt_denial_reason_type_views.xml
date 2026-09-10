@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_receipt_denial_reason_type_tree" model="ir.ui.view">
+        <field name="name">receipt.denial.reason.type.tree</field>
+        <field name="model">receipt.denial.reason.type</field>
+        <field name="arch" type="xml">
+            <tree string="Reason Types">
+                <field name="name" string="Reason Type"/>
+                <field name="active" widget="boolean_toggle"/>
+                <field name="denial_count" string="Usage Count"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id="view_receipt_denial_reason_type_form" model="ir.ui.view">
+        <field name="name">receipt.denial.reason.type.form</field>
+        <field name="model">receipt.denial.reason.type</field>
+        <field name="arch" type="xml">
+            <form string="Reason Type">
+                <sheet>
+                    <group>
+                        <field name="name" string="Reason Type"/>
+                        <field name="active" widget="boolean_toggle"/>
+                    </group>
+                    <group>
+                        <field name="description" string="Description" placeholder="Enter description of this reason type..."/>
+                    </group>
+                    <notebook>
+                        <page string="Denial Reasons">
+                            <field name="denial_reason_ids" nolabel="1">
+                                <tree>
+                                    <field name="receipt_record_id" string="Receipt Record"/>
+                                    <field name="description" string="Description"/>
+                                    <field name="denied_date" string="Denied Date"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <record id="action_receipt_denial_reason_type" model="ir.actions.act_window">
+        <field name="name">Denial Reason Types</field>
+        <field name="res_model">receipt.denial.reason.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('active', '=', True)]</field>
+    </record>
+</odoo>
+

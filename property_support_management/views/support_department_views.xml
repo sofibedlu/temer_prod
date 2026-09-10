@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Form View -->
+        <record id="view_support_department_form" model="ir.ui.view">
+            <field name="name">support.department.form</field>
+            <field name="model">support.department</field>
+            <field name="arch" type="xml">
+                <form string="Department">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Tree View -->
+        <record id="view_support_department_tree" model="ir.ui.view">
+            <field name="name">support.department.tree</field>
+            <field name="model">support.department</field>
+            <field name="arch" type="xml">
+                <tree string="Departments">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_support_department" model="ir.actions.act_window">
+            <field name="name">Department Configuration</field>
+            <field name="res_model">support.department</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create a new Department
+              </p>
+            </field>
+        </record>
+
+        <!-- Menu Item -->
+        <menuitem id="menu_support_department_config" name="Department Configuration" parent="menu_support_management_config_root" action="action_support_department" sequence="30"/>
+    </data>
+</odoo>

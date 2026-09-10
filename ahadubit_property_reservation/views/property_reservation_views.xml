@@ -1,0 +1,752 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Property Cancellation Reason -->
+    <record id="property_reservation_cancel_action" model="ir.actions.act_window">
+        <field name="name">Cancellation Reason</field>
+        <field name="res_model">property.reservation.cancel</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create a new Cancellation Reason</p>
+        </field>
+    </record>
+
+    <record id="property_reservation_cancel_view_tree_id" model="ir.ui.view">
+        <field name="name">property.reservation.cancel</field>
+        <field name="model">property.reservation.cancel</field>
+        <field name="arch" type="xml">
+            <tree editable="top">
+                <field name="name" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="property_reservation_cancel_view_form_id2" model="ir.ui.view">
+        <field name="name">property.reservation.cancel</field>
+        <field name="model">property.reservation.cancel</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group string="Cancellation Reason">
+                        <field name="name" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Reservation Configuration -->
+    <record id="property_reservation_view_tree_id" model="ir.ui.view">
+        <field name="name">property.reservation.configuration.tree</field>
+        <field name="model">property.reservation.configuration</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="reservation_type" />
+                <field name="is_payment_required" />
+                <field name="payment_type" />
+                <field name="amount" />
+                <field name="duration_in" />
+                <field name="duration" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="property_reservation_view_form_id" model="ir.ui.view">
+        <field name="name">property.reservation.configuration.form</field>
+        <field name="model">property.reservation.configuration</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group string="Reservation Configuration">
+                        <group>
+                            <field name="name" />
+                            <field name="reservation_type" />
+                            <field name="is_payment_required" />
+                            <field name="one_time_use" invisible="reservation_type != 'special'"/>
+                            <field name="is_used_use" readonly="1" invisible="one_time_use != True"/>
+                            <field name="used_by_id" readonly="1" invisible="one_time_use != True"/>
+                            <field name="payment_type" />
+                        </group>
+                        <group>
+                            <field name="amount" />
+                            <field name="amount_string" string="" />
+                            <field name="duration_in" />
+                            <field name="duration" />
+                        </group>
+                    </group>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Reservation History -->
+    <record id="property_reservation_history_view_tree_id" model="ir.ui.view">
+        <field name="name">property.reservation.tree</field>
+        <field name="model">property.reservation</field>
+        <field name="arch" type="xml">
+            <tree duplicate="0" create="false">
+                <field name="property_id" />
+                <field name="partner_id" />
+                <field name="reservation_type_id" />
+                <field name="create_date" string="Requested"/>
+                <field name="expire_date" />
+                <field name="canceled_time" />
+                <field name="create_uid" string="Reserved By" />
+                <field name="status" widget="badge"
+                    decoration-muted="status == 'requested'"
+                    decoration-primary="status == 'reserved'"
+                    decoration-danger="status == 'canceled'"
+                    decoration-warning="status == 'expired'"
+                    decoration-success="status == 'sold'" />
+                <field name="extension_status" widget="badge"
+                    decoration-success="extension_status == 'approved'"
+                    decoration-warning="extension_status == 'pending'"
+                    decoration-danger="extension_status == 'rejected'" />
+                <field name="transfer_status" widget="badge"
+                    decoration-success="transfer_status == 'approved'"
+                    decoration-warning="transfer_status == 'pending'"
+                    decoration-danger="transfer_status == 'rejected'" />
+            </tree>
+        </field>
+    </record>
+    <record id="property_reservation_view_kanban" model="ir.ui.view">
+    <field name="name">property.reservation.view.kanban</field>
+    <field name="model">property.reservation</field>
+    <field name="arch" type="xml">
+        <kanban create="False" class="o_hr_employee_kanban" js_class="hr_employee_kanban" sample="1">
+            <field name="id"/>
+            <field name="property_id"  />
+            <field name="partner_id"/>
+            <field name="reservation_type_id"/>
+            <field name="status"/>
+            <field name="extension_status"/>
+            <field name="transfer_status"/>
+            <field name="create_date"/>
+            <field name="expire_date"/>
+            <field name="canceled_time"/>
+            <field name="create_uid"/>
+            <templates>
+                <t t-name="kanban-box">
+                    <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_hr_kanban_record">
+                        <div class="oe_kanban_details">
+                            <div class="o_kanban_record_top">
+                                <div class="o_kanban_record_headings">
+                                    <strong class="o_kanban_record_title">
+                                        <h3>
+                                            <field name="property_id" options="{'no_open': True,'no_create': True,'no_edit': True}"/>
+                                        </h3>
+                                    </strong>
+                                    <span t-if="record.partner_id.raw_value" class="o_kanban_record_subtitle">
+                                       Customer: <field name="partner_id"/>
+                                    </span>
+                                     <span t-if="record.create_uid.raw_value" class="o_kanban_record_subtitle">
+                                       Sales Person: <field name="create_uid"/>
+                                    </span>
+                                    <span t-if="record.reservation_type_id.raw_value" class="o_kanban_record_subtitle">
+                                        <field name="reservation_type_id"/>
+                                    </span>
+                                    <span t-if="record.reservation_type_id.raw_value" class="o_kanban_record_subtitle">
+                                        <field name="create_date"/> - <field name="expire_date"/>
+                                    </span>
+                                </div>
+                            </div>
+                                <div>
+                                    <span>
+                                    Status: <field name="status" widget="badge"
+                                                decoration-muted="status == 'requested'"
+                                                decoration-primary="status == 'reserved'"
+                                                decoration-danger="status == 'canceled'"
+                                                decoration-warning="status == 'expired'"
+                                                decoration-success="status == 'sold'" />
+
+                                </span>
+                                </div>
+                                <t t-if="record.extension_status.raw_value">
+                                 <div><span >
+                                                     Extension: <field name="extension_status" widget="badge"
+                                                     decoration-success="extension_status == 'approved'"
+                                                     decoration-warning="extension_status == 'pending'"
+                                                     decoration-danger="extension_status == 'rejected'" />
+                                </span></div>
+                                </t>
+                                <t t-if="record.transfer_status.raw_value">
+                                <div><span>
+                                            Transfer: <field name="transfer_status" widget="badge"
+                                            decoration-success="transfer_status == 'approved'"
+                                            decoration-warning="transfer_status == 'pending'"
+                                            decoration-danger="transfer_status == 'rejected'" />
+                                </span></div>
+                                </t>
+                        </div>
+                    </div>
+                </t>
+            </templates>
+        </kanban>
+    </field>
+</record>
+
+
+    <record id="property_reservation_history_view_form_id" model="ir.ui.view">
+        <field name="name">property.reservation.form</field>
+        <field name="model">property.reservation</field>
+        <field name="arch" type="xml">
+            <form duplicate="0" create="0">
+                <header>
+                    <field name="status" invisible="1" />
+                    <field name="is_sufficient" invisible="1" />
+                    <field name="is_special" invisible="1" />
+                    <field name="transfer_status" invisible="1" />
+                    <field name="extension_status" invisible="1" />
+                    <field name="show_approve_button" invisible="1" />
+                    <field name="show_transfer_extend" invisible="1" />
+                    <field name="is_payment_required" invisible="1" />
+                    <field name="is_from_sales" invisible="1" />
+                    <field name="is_creator" invisible="1" />
+                    <!-- <button name="save_record"
+                        string="Save"
+                        type="object" class="btn-primary btn-mobile-save"/> -->
+
+                    <button name="approve_reservation"
+                        string="Reserve"
+                        type="object"
+                        class="btn-primary"
+                        invisible="not show_approve_button" />
+
+                    <button name="special_reservation_approve"
+                        string="Special Approval"
+                        type="object"
+                        class="btn-primary"
+                        groups="ahadubit_property_reservation.special_reservation_approved_id"
+                        invisible="status != 'requested' or not is_special" />
+
+                    <button name="transfer_reservation"
+                        string="Transfer"
+                        type="object"
+                        class="btn-primary"
+                        invisible="(status != 'reserved' or transfer_status == 'pending') or show_transfer_extend != True" />
+
+                    <button name="reservation_extend"
+                        string="Extend"
+                        type="object"
+                        class="btn-primary"
+                        invisible="(status != 'reserved' or extension_status == 'pending') or show_transfer_extend != True" />
+
+                    <button name="sale_property_reserved"
+                        string="Sold"
+                        type="object"
+                        class="btn-primary"
+                        invisible="status  != 'reserved'" />
+
+                    <button name="cancel_reservation"
+                        string="Cancel"
+                        type="object"
+                        class="btn-danger"
+                        invisible="status not in ['reserved', 'draft', 'requested']"
+                        groups="ahadubit_property_reservation.special_reservation_approved_id"
+                       />
+
+                    <button name="print_change_history"
+                        string="Print Log"
+                        type="object"/>
+                    <button name="action_print_reservation_details"
+                        type="object"
+                        string="Print"
+                        class="btn-primary"
+                        invisible="status  not in ['reserved','pending_sales','sold']" />
+
+                    <field name="status" widget="statusbar" />
+                </header>
+                <sheet>
+                     <div name="button_box" position="inside">
+                        <button class="oe_stat_button"
+                                type="object"
+                                icon="fa-dollar"
+                                invisible="status not in ['pending_sales','sold']"
+                                name="get_sales_from_reservation">Sale
+                        </button>
+                    </div>
+                    <div class="alert alert-danger" role="alert" invisible="is_sufficient == True">
+                        <span class="o_stat_value">Insufficient balance! Remaining Amount: <field
+                                name="payment_diff" />
+                        </span>
+                    </div>
+                    <group string="Reservation Form">
+                        <group>
+                            <field name="property_id"  readonly="status not in ['draft', 'requested', False]" />
+                            <field name="partner_id" readonly="1" />
+                            <field name="request_letter" widget="binary_preview"
+                                invisible="not is_special"
+                                required="is_special"
+                                readonly="status not in ['draft', False]" />
+                            <field name="canceled_reason" invisible="status != 'canceled'"
+                                readonly="status not in ['draft', False]" />
+                        </group>
+                        <group>
+                            <field name="reservation_type_id"
+                                readonly="status not in ['draft', False]" />
+                            <field name="expire_date" readonly="1" />
+                            <field name="extension_status" readonly="1"
+                                invisible="status != 'reserved'" />
+                            <field name="canceled_time" readonly="1"
+                                invisible="status != 'canceled'" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Payment" name="payment" invisible="is_payment_required != True">
+                            <field name="payment_line_ids" widget="section_and_note_one2many"
+                                mode="tree,kanban,form" readonly="status not in ['draft', False] and is_from_sales != True and is_creator != True">
+                                <tree string="Payment Line" editable="bottom" delete="0">
+                                    <control>
+                                        <create name="add_product_control" string="Add a Line" />
+                                    </control>
+                                    <field name="id_editable"  column_invisible="True"/>
+                                    <field name="is_new_line"  column_invisible="True"/>
+                                    <field name="bank_id" create="0" readonly="id_editable ==True or is_new_line != True and id"/>
+                                    <field name="document_type_id" create="0" readonly="id_editable ==True or is_new_line != True and id"/>
+                                    <field name="ref_number" readonly="id_editable ==True or is_new_line != True and id"/>
+                                    <field name="transaction_date" readonly="id_editable ==True or is_new_line != True and id"/>
+                                    <field name="amount" sum="Total" readonly="id_editable ==True or is_new_line != True and id"/>
+
+                                    <field name="payment_receipt" widget="binary_preview" readonly="id_editable ==True or is_new_line != True and id"/>
+                                    <button name="add_confirm" string="Confirm" type="object" class="oe_highlight" invisible="is_new_line != True" />
+                                    <field name="is_verifed" widget="boolean_toggle" groups="ahadubit_property_reservation.finance_team_approval_group"/>
+
+                                </tree>
+                                 <kanban>
+                                    <templates>
+                                        <t t-name="kanban-box">
+
+                                               <div class="oe_kanban_card oe_kanban_global_click" t-attf-data-id="{{ record.id.raw_value }}">
+                                                   <field name="is_new_line" invisible="1"/>
+                                                <div class="oe_kanban_details">
+                                                    <div>
+                                                        Bank: <span><field name="bank_id" options="{'no_open': True,'no_create': True,'no_edit': True}"/></span>
+                                                    </div>
+                                                    <div>
+                                                       Doc:  <span><field name="document_type_id" options="{'no_open': True,'no_create': True,'no_edit': True}"/></span>
+                                                    </div>
+                                                    <div>
+                                                        Ref:<span><field name="ref_number"/></span>
+                                                    </div>
+                                                    <div>
+                                                        Date: <span><field name="transaction_date"/></span>
+                                                    </div>
+                                                    <div>
+                                                        <strong>Amount:</strong> <field name="amount"/>
+                                                    </div>
+                                                    <div>
+                                                      <button name="add_confirm" string="Confirm" type="object" class="oe_highlight" invisible="is_new_line != True"/>
+                                                    </div>
+                                                </div>
+                                               </div>
+
+                                        </t>
+                                    </templates>
+                                </kanban>
+                             </field>
+                        </page>
+                         <page name="extensions" string="Extensions" invisible="status in ['draft', 'requested', 'pending', False] or is_payment_required != True">
+                            <field name="extension_ids" widget="section_and_note_one2many"
+                                mode="tree,kanban">
+                                <tree string="Extension Line" editable="bottom">
+                                    <control>
+                                        <create name="add_product_control" string="Add a Line" />
+                                    </control>
+                                    <field name="extension_date" />
+                                    <field name="old_end_date" />
+                                    <field name="status" />
+                                    <field name="request_letter_file" widget="binary_preview" />
+                                    <field name="remark" invisible="not status" />
+                                    <button name="approve_extension"
+                                        string="Approve"
+                                        type="object"
+                                        class="btn-primary"
+                                        invisible="status != 'pending'" />
+                                    <button name="reject_extension"
+                                        string="Reject"
+                                        type="object"
+                                        class="btn-danger"
+                                        invisible="status != 'pending'" />
+                                </tree>
+                                  <kanban>
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                               <div class="oe_kanban_card oe_kanban_global_click" t-attf-data-id="{{ record.id.raw_value }}">
+                                                <div class="oe_kanban_details">
+                                                    <div>
+                                                        Old Date: <span><field name="old_end_date"/></span>
+                                                    </div>
+                                                    <div>
+                                                       Requested Date:  <span><field name="extension_date"/></span>
+                                                    </div>
+                                                    <div>
+                                                        Status:<span><field name="status"/></span>
+                                                    </div>
+                                                </div>
+                                               </div>
+
+                                        </t>
+                                    </templates>
+                                </kanban>
+                            </field>
+                        </page>
+                        <page name="transfer" string="Transfer" invisible="status in ['draft', 'requested', 'pending', False] or is_payment_required != True">
+                            <field name="transfer_ids" widget="section_and_note_one2many"
+                                mode="tree,kanban">
+                                <tree string="Transfer Line" editable="bottom">
+                                    <control>
+                                        <create name="add_product_control" string="Add a Line" />
+                                    </control>
+                                    <field name="old_property_id" />
+                                    <field name="property_id" />
+                                    <field name="total_paid" />
+                                    <field name="status" />
+                                    <field name="request_letter" widget="binary_preview" />
+                                    <button name="transfer_request_detail"
+                                        string="Open"
+                                        type="object"
+                                        icon="fa-edit" />
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" />
+                    <field name="activity_ids" />
+                    <field name="message_ids" />
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="property_reservation_view_search_view" model="ir.ui.view">
+        <field name="name">property.reservation.search</field>
+        <field name="model">property.reservation</field>
+        <field name="arch" type="xml">
+            <search>
+                <filter name="filter_requested" string="Requested"
+                    domain="[('status', '=', 'requested')]" />
+                <filter name="filter_reserved" string="Reserved"
+                    domain="[('status', '=', 'reserved')]" />
+                <filter name="filter_canceled" string="Canceled"
+                    domain="[('status', '=', 'canceled')]" />
+                <filter name="filter_expired" string="Expired" domain="[('status', '=', 'expired')]" />
+                <filter name="filter_sold" string="Sold" domain="[('status', '=', 'sold')]" />
+                <group expand="0" string="Group By">
+                    <filter name="group_by_site" string="Site" context="{'group_by': 'site_id'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Property Form Inheritance -->
+    <record id="property_property_view_form_inherit_id" model="ir.ui.view">
+        <field name="name">property.property.inherit</field>
+        <field name="model">property.property</field>
+        <field name="inherit_id" ref="advanced_property_management.property_property_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//header/field[@name='state']" position="after">
+                <button name="action_reserve"
+                    string="Reserve"
+                    type="object"
+                    class="btn-primary"
+                    invisible="1" />
+                <button name="cancel_reservation"
+                    string="Cancel Reservation"
+                    type="object"
+                    class="btn-primary"
+                    invisible="state != 'reserved'"
+                    groups="ahadubit_property_reservation.access_property_admin_team" />
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Reservation">
+                    <field name="reservation_line_ids"
+                        widget="section_and_note_one2many"
+                        mode="tree,kanban"
+                        readonly="1">
+                        <tree string="Property Reservation" editable="bottom">
+                            <control>
+                                <create name="add_product_control" string="Add Line" />
+                            </control>
+                            <field name="partner_id" readonly="status not in ['requested', False]" />
+                            <field name="reservation_type_id"
+                                readonly="status not in ['requested', False]" />
+                            <field name="expire_date" readonly="status not in ['requested', False]" />
+                            <field name="status" readonly="status not in ['requested', False]" />
+                             <button name="property_reservation_detail"
+                                        string="Open"
+                                        type="object"
+                                        icon="fa-edit" />
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+    <record id="property_sale_view_form_inherit_id" model="ir.ui.view">
+    <field name="name">property.sale.view.form.inherit</field>
+    <field name="model">property.sale</field>
+    <field name="inherit_id" ref="advanced_property_management.property_sale_view_form" />
+    <field name="arch" type="xml">
+         <xpath expr="//header/button[@name='action_confirm']" position="after">
+            <button name="add_payment_list"
+                    string="Add Payment"
+                    type="object"
+                    class="btn primary"
+                    invisible="state not in ['draft','request_for_confirm']"
+                    />
+
+        </xpath>
+           <xpath expr="//field[@name='property_id']" position="after">
+                <field name="reservation_id" invisible="not reservation_id" readonly="1" widget="many2one" options="{'no_open': False}" decoration-success="1" />
+                <field name="on_reservation_amount" invisible="1"/>
+            </xpath>
+
+    </field>
+</record>
+
+    <!-- Actions -->
+    <record id="property_site_reservation_action" model="ir.actions.act_window">
+        <field name="name">Reservation</field>
+        <field name="res_model">property.reservation.configuration</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create a new Reservation Configuration</p>
+        </field>
+    </record>
+
+    <record id="property_reservation_history_action" model="ir.actions.act_window">
+        <field name="name">Reservation History</field>
+        <field name="res_model">property.reservation</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create a new Reservation</p>
+        </field>
+    </record>
+
+      <!-- Action -->
+        <record id="action_property_reservation_payment" model="ir.actions.act_window">
+            <field name="name">Reservation Payments</field>
+            <field name="res_model">property.reservation.payment</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('reservation_id.status', 'not in',['requested','draft'])]</field>
+            <field name="help" type="html">
+                <p>
+                    Manage reservation payments here.
+                </p>
+            </field>
+        </record>
+
+        <!-- Tree View -->
+        <record id="view_property_reservation_payment_tree" model="ir.ui.view">
+            <field name="name">property.reservation.payment.tree</field>
+            <field name="model">property.reservation.payment</field>
+            <field name="arch" type="xml">
+                <tree string="Reservation Payments" create="0" >
+                    
+                    <field name="property_id"/>
+                    <field name="customer_id"/>
+                    <!-- <field name="salesperson_id"/> -->
+                    <field name="reservation_id"/>
+                    <field name="document_type_id"/> 
+                    <field name="bank_id"/> 
+                    <field name="ref_number"/>
+                    <field name="amount"/>
+                    <field name="status"  string="Reservation Status"/>
+                    <field name="payment_status" widget="badge"
+                        decoration-success="payment_status == 'approved'"
+                        decoration-danger="payment_status == 'canceled'"
+                        decoration-warning="payment_status == 'requested'"
+                        decoration-info="payment_status == 'draft'"/>
+                    <!-- <field name="is_verifed" widget="boolean_toggle" groups="ahadubit_property_reservation.finance_team_approval_group"/> -->
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form View -->
+       <record id="view_property_reservation_payment_form" model="ir.ui.view">
+        <field name="name">property.reservation.payment.form</field>
+        <field name="model">property.reservation.payment</field>
+        <field name="arch" type="xml">
+            <form string="Reservation Payment" create="0">
+                <header>
+                    <field name="payment_status" widget="statusbar" />
+                    <button name="cancel_payment"
+                        string="Cancel"
+                        type="object"
+                        invisible="payment_status in ['canceled']"/>
+
+<!--                    <button name="approve_payment"-->
+<!--                        string="Approve"-->
+<!--                        type="object"-->
+<!--                        class="btn-primary"-->
+<!--                        invisible="payment_status  not in ['draft']"/>-->
+
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                      <field name="status" invisible="1"/>
+                           Reservation: <field name="reservation_id" readonly="payment_status not in [False]"/>
+                        </h1>
+                        <br/>
+                    </div>
+                    <group>
+                    <group>
+
+                        <field name="bank_id" readonly="payment_status not in ['draft','canceled']"   />
+                         <field name="document_type_id" readonly="payment_status not in ['draft','canceled']"/>
+                        <field name="transaction_date" readonly="payment_status not in ['draft','canceled']"/>
+                        <field name="payment_receipt"  widget="binary_preview" readonly="payment_status not in ['draft','canceled']"/>
+                    </group>
+                    <group>
+
+                        <field name="ref_number" readonly="payment_status not in ['draft','canceled']"/>
+                        <field name="amount" readonly="payment_status not in ['draft','canceled']"/>
+                        <field name="is_verifed" groups="ahadubit_property_reservation.finance_team_approval_group"/>
+                        <field name="cancel_reason" readonly="1"  invisible="payment_status  not in ['canceled']"/>
+                        <field name="canceled_time" readonly="1"  invisible="payment_status  not in ['canceled']"/>
+                    </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" />
+                    <field name="activity_ids" />
+                    <field name="message_ids" />
+                </div>
+            </form>
+        </field>
+    </record>
+    
+    <record id="property_reservation_payment_search_view" model="ir.ui.view">
+        <field name="name">property.reservation.payment.search</field>
+        <field name="model">property.reservation.payment</field>
+        <field name="arch" type="xml">
+            <search>
+                <filter name="filter_verified" string="Verified" domain="[('is_verifed', '=', True)]" />
+                <filter name="filter_unverified" string="Unverified" domain="[('is_verifed', '=', False)]" />
+                <group expand="0" string="Group By">
+                    <filter name="group_by_status" string="Reservation Status" context="{'group_by': 'status'}" />
+                    <filter name="group_by_payment_status" string="Payment Status" context="{'group_by': 'payment_status'}" />
+                    <filter name="group_by_bank" string="Bank" context="{'group_by': 'bank_id'}" />
+                </group>
+       
+            </search>
+        </field>
+    </record>
+    <record id="property_sale_view_form_inherit_id7" model="ir.ui.view">
+        <field name="name">property.sale.inherit</field>
+        <field name="model">property.sale</field>
+        <field name="inherit_id" ref="advanced_property_management.property_sale_view_form" />
+        <field name="arch" type="xml">
+              <xpath expr="//field[@name='property_id']" position="after">
+                 <field name="is_from_reservation" invisible="1"/>
+                 <field name="state" invisible="1"/>
+
+            </xpath>
+             <xpath expr="//field[@name='property_id']" position="attributes">
+                 <attribute name="readonly">state in ['confirm','cancel'] or is_from_reservation == True</attribute>
+            </xpath>
+            <xpath expr="//field[@name='sale_price']" position="attributes">
+                 <attribute name="readonly">state in ['confirm','cancel'] or is_from_reservation == True</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="property_reservation_history_action_report" model="ir.actions.act_window">
+        <field name="name">Reservation History</field>
+        <field name="res_model">property.reservation</field>
+        <field name="view_mode">tree,graph</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create a new Reservation</p>
+        </field>
+    </record>
+
+    <record id="property_action_report" model="ir.actions.act_window">
+        <field name="name">Property</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">property.property</field>
+        <field name="view_mode">tree,graph</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create Your First Property!
+            </p>
+        </field>
+    </record>
+     <record id="property_sale_action_report" model="ir.actions.act_window">
+        <field name="name">Property Sale</field>
+        <field name="res_model">property.sale</field>
+        <field name="view_mode">tree,graph</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Sale Order
+            </p>
+        </field>
+    </record>
+
+
+
+
+
+    <menuitem id="property_reservation_cancel_menu"
+        name="Reservation Cancel Reason"
+        parent="property_reserveation_config_menu"
+        action="property_reservation_cancel_action"
+        sequence="27" />
+
+    <menuitem id="property_site_reservation_menu_id"
+        name="Reservation Type"
+        parent="property_reserveation_config_menu"
+        action="property_site_reservation_action"
+        sequence="23" />
+
+
+    
+    <menuitem id="reservation_property_menu" name="Reservation" 
+    parent="advanced_property_management.property_root_menu"
+    groups="advanced_property_management.group_property_manager,ahadubit_property_reservation.finance_team_approval_group"
+              sequence="3"/>
+     <!-- Menus -->
+    <menuitem id="property_special_discount_menu"
+        name="Special Discount"
+        parent="reservation_property_menu"
+        action="property_discount_action"
+        sequence="30" />
+
+    <menuitem id="property_site_reservation_history_menu_id"
+        name="Reservation"
+        parent="reservation_property_menu"
+        action="property_reservation_history_action"
+        sequence="1" />
+    <menuitem id="property_sale_on_reporting_menu"
+          name="Property Sale"
+          parent="advanced_property_management.property_report_menu"
+          groups="advanced_property_management.group_property_manager"
+          action="property_sale_action_report" sequence="10"/>
+
+    <menuitem id="property_property_on_reporting_menu" name="Properties"
+          parent="advanced_property_management.property_report_menu"
+          groups="advanced_property_management.group_property_manager,ahadubit_property_reservation.finance_team_approval_group"
+          action="property_action_report" sequence="12"/>
+
+    <menuitem id="property_reservation_history_on_report_menu_id"
+        name="Reservation"
+        parent="advanced_property_management.property_report_menu"
+        action="property_reservation_history_action_report"
+        groups="advanced_property_management.group_property_manager,ahadubit_property_reservation.finance_team_approval_group"
+        sequence="12"/>
+
+
+
+     <menuitem id="menu_property_reservation_payment" 
+                  name="Reservation Payments" 
+                  parent="reservation_property_menu" 
+                  action="action_property_reservation_payment" 
+                  sequence="2"  groups="ahadubit_property_reservation.finance_team_approval_group" />
+
+      
+
+</odoo>

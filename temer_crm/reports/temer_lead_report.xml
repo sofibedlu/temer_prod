@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_temer_lead_activities">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <t t-foreach="docs" t-as="doc">
+                        <!-- Header Section -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h2>Lead Activity Report</h2>
+                            </div>
+                        </div>
+
+                        <!-- Customer Information Section -->
+                        <div class="row mb-4">
+                            <div class="col-4">
+                                <strong>Customer Name:</strong>
+                                <p><span t-field="doc.customer_name"/></p>
+                            </div>
+                            <div class="col-4">
+                                <strong>Sales Person:</strong>
+                                <p><span t-field="doc.user_id"/></p>
+                            </div>
+                            <div class="col-4">
+                                <strong>Lead Name:</strong>
+                                <p><span t-field="doc.name"/></p>
+                            </div>
+                        </div>
+
+                        <!-- Additional Numbers Section -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h4>Phone Numbers</h4>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr style="background-color: #f8f9fa;">
+                                            <th>Phone Number</th>
+                                            <th>Description</th>
+                                            <th>Added Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr t-foreach="doc.additional_numbers_ids" t-as="phone">
+                                            <td>
+                                                <span t-field="phone.number"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="phone.description"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="phone.created_date"/>
+                                            </td>
+                                        </tr>
+                                        <tr t-if="not doc.additional_numbers_ids">
+                                            <td colspan="3" class="text-center">No phone numbers found</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Activity Log Table -->
+                        <div class="row">
+                            <div class="col-12">
+                                <h4>Activity Log</h4>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr style="background-color: #f8f9fa;">
+                                            <th>Date</th>
+                                            <th>Activity Type</th>
+                                            <th>Description</th>
+                                            <th>Performed By</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr t-foreach="doc.followup_line_ids" t-as="activity">
+                                            <td>
+                                                <span t-field="activity.activity_date"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="activity.activity_type"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="activity.description"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="activity.user_id"/>
+                                            </td>
+                                        </tr>
+                                        <tr t-if="not doc.followup_line_ids">
+                                            <td colspan="4" class="text-center">No activities found</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Summary Section -->
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <h5>Activity Summary</h5>
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td><strong>Total Calls:</strong></td>
+                                        <td><span t-field="doc.call_count"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Total SMS:</strong></td>
+                                        <td><span t-field="doc.sms_count"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Total Emails:</strong></td>
+                                        <td><span t-field="doc.email_count"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Total Office Visits:</strong></td>
+                                        <td><span t-field="doc.office_visit_count"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Total Site Visits:</strong></td>
+                                        <td><span t-field="doc.site_visit_count"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Total Activities:</strong></td>
+                                        <td><span t-field="doc.total_activities"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Total Phone Numbers:</strong></td>
+                                        <td><span t-esc="len(doc.additional_numbers_ids)"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

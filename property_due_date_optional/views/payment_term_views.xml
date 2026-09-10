@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_property_payment_term_form_inherit_date_optional" model="ir.ui.view">
+        <field name="name">property.payment.term.form.inherit.date.optional</field>
+        <field name="model">property.payment.term</field>
+        <field name="inherit_id" ref="ahadubit_property_base.property_site_view_form"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="//field[@name='payment_line']/tree/field[@name='percentage']" position="after">
+                <field name="date_optional" optional="show"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

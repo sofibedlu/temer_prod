@@ -1,0 +1,164 @@
+<odoo>
+    <!-- Report Action -->
+    <record id="lead_analysis_pdf" model="ir.actions.report">
+        <field name="name">Lead Analysis PDF</field>
+        <field name="model">lead.analysis.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">custom_report_wizard.lead_analysis_report_template</field>
+        <field name="report_file">custom_report_wizard.lead_analysis_report_template</field>
+        <field name="print_report_name">'Lead Analysis Report - %s' % (object.date_from)</field>
+    </record>
+
+    <record id="lead_analysis_html" model="ir.actions.report">
+        <field name="name">Lead Analysis HTML</field>
+        <field name="model">lead.analysis.wizard</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">custom_report_wizard.lead_analysis_report_template</field>
+        <field name="print_report_name">'Lead Analysis Report - %s' % (object.date_from)</field>
+    </record>
+
+    <!-- Report Template -->
+    <template id="lead_analysis_report_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+
+                <!-- Header Section -->
+                <div style="font-size:22px; font-weight:700; color:#2563eb; margin-bottom:8px;">
+                    <t t-if="report_by == 'wing'">
+                        <t t-esc="wing_name"/> Lead Analysis Report
+                    </t>
+                    <t t-if="report_by == 'supervisor'">
+                        Supervisor Lead Analysis Report
+                    </t>
+                    <t t-if="report_by == 'salesperson'">
+                        Salesperson Lead Analysis Report
+                    </t>
+                </div>
+
+                <!-- Date Range -->
+                <div style="font-size:14px; color:#4a5568; margin-bottom:18px;">
+                    <t t-if="date_from">
+                        <span style="background:#e2e8f0;padding:2px 8px;border-radius:6px;margin-right:8px;">
+                            From: <t t-esc="date_from"/>
+                        </span>
+                    </t>
+                    <t t-if="date_to">
+                        <span style="background:#e2e8f0;padding:2px 8px;border-radius:6px;">
+                            To: <t t-esc="date_to"/>
+                        </span>
+                    </t>
+                </div>
+                <!-- Legend Section -->
+                <div style="margin-bottom:10px;">
+                    <span style="display:inline-block;background:#e0e7ff;color:#3730a3;border-radius:10px;padding:2px 10px;font-size:13px;margin-right:8px;">Prospect</span>
+                    <span style="display:inline-block;background:#fef9c3;color:#b45309;border-radius:10px;padding:2px 10px;font-size:13px;margin-right:8px;">Follow Up</span>
+                    <span style="display:inline-block;background:#A8AF94;color:#334155;border-radius:10px;padding:2px 10px;font-size:13px;margin-right:8px;">Reservations</span>
+                    <span style="display:inline-block;background:#fde68a;color:#b45309;border-radius:10px;padding:2px 10px;font-size:13px;">Sold</span>
+                    <span style="display:inline-block;background:#fee2e2;color:#991b1b;border-radius:10px;padding:2px 10px;font-size:13px;margin-right:8px;">Expired</span>
+                    <span style="display:inline-block;background:#fee2e2;color:#991b1b;border-radius:10px;padding:2px 10px;font-size:13px;margin-right:8px;">Lost</span>
+                    <span style="display:inline-block;background:#e0e8f0;color:#334155;border-radius:10px;padding:2px 10px;font-size:13px;">Total (Row Sum)</span>
+                </div>
+                
+                <!-- TABLE: Direct Child, NO wrapping div! -->
+                <table style="width:100%; margin-top:40px; margin-bottom:16px; border-collapse:collapse; page-break-inside:auto; font-size:13px;">
+                    <thead style="background: #f3f4f6; display: table-header-group;">
+                        <tr style="font-size:15px; color:#374151;">
+                            <th style="padding:7px 10px; border:1px solid #e5e7eb;">Wing</th>
+                            <th style="padding:7px 10px; border:1px solid #e5e7eb;">Wing Manager</th>
+                            <t t-if="report_by in ('supervisor', 'salesperson')">
+                                <th style="padding:7px 10px; border:1px solid #e5e7eb;">Supervisor</th>
+                            </t>
+                            <t t-if="report_by == 'salesperson'">
+                                <th style="padding:7px 10px; border:1px solid #e5e7eb;">Salesperson</th>
+                            </t>
+                            <th style="text-align:center; border:1px solid #e5e7eb;">Prospect</th>
+                            <th style="text-align:center; border:1px solid #e5e7eb;">Follow Up</th>
+                            <th style="text-align:center; border:1px solid #e5e7eb;">Reservations</th>
+                            <th style="text-align:center; border:1px solid #e5e7eb;">Sold</th>
+                            <th style="text-align:center; border:1px solid #e5e7eb;">Expired</th>
+                            <th style="text-align:center; border:1px solid #e5e7eb;">Lost</th>
+                            <th style="text-align:center; border:1px solid #e5e7eb;">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody style="page-break-inside:auto;">
+                        <t t-foreach="rows" t-as="row" t-index="i">
+                            <tr t-att-style="'background-color:' + ('#f9fafb' if ((i or 0) % 2) else '#fff') + '; page-break-inside: avoid;'">
+                                <td style="padding:6px 10px; font-weight:600; color:#0891b2; border:1px solid #e5e7eb;">
+                                    <t t-esc="row['wing_name']"/>
+                                </td>
+                                <td style="padding:6px 10px; color:#1e293b; border:1px solid #e5e7eb;">
+                                    <t t-esc="row['wing_manager_name']"/>
+                                </td>
+                                <t t-if="report_by in ('supervisor', 'salesperson')">
+                                    <td style="padding:6px 10px; color:#6366f1; border:1px solid #e5e7eb;">
+                                        <t t-esc="row['supervisor_name']"/>
+                                    </td>
+                                </t>
+                                <t t-if="report_by == 'salesperson'">
+                                    <td style="padding:6px 10px; font-weight:500; border:1px solid #e5e7eb;">
+                                        <t t-esc="row['sales_person']"/>
+                                    </td>
+                                </t>
+                                <td style="text-align:center; border:1px solid #e5e7eb;"><t t-esc="row['prospect']"/></td>
+                                <td style="text-align:center; border:1px solid #e5e7eb;"><t t-esc="row['follow_up']"/></td>
+                                <td style="text-align:center; border:1px solid #e5e7eb;">
+                                    <span style="display:inline-block;background:#A8AF94;color:#334155;padding:2px 10px;border-radius:12px;font-weight:bold;">
+                                        <t t-esc="row['reservation_count']"/>
+                                    </span>
+                                </td>
+                                <td style="text-align:center; border:1px solid #e5e7eb;"><t t-esc="row['sold_reservation_count']"/></td>
+                                <td style="text-align:center; border:1px solid #e5e7eb;"><t t-esc="row['expired']"/></td>
+                                <td style="text-align:center; border:1px solid #e5e7eb;">
+                                    <span style="display:inline-block;background:#fee2e2;color:#991b1b;padding:2px 10px;border-radius:12px;font-weight:bold;">
+                                        <t t-esc="row['lost']"/>
+                                    </span>
+                                </td>
+                                <td style="text-align:center; border:1px solid #e5e7eb;">
+                                    <span style="display:inline-block;background:#e0e8f0;color:#334155;padding:2px 10px;border-radius:12px;font-weight:bold;">
+                                        <t t-esc="row['total']"/>
+                                    </span>
+                                </td>
+                            </tr>
+                        </t>
+                        <!-- TOTAL ROW -->
+                        <tr style="font-weight: bold; background: #A8AF94;">
+                            <td>Total</td>
+                            <td></td>
+                            <t t-if="report_by in ('supervisor',)">
+                                <td></td>
+                            </t>
+                            <t t-if="report_by == 'salesperson'">
+                                <td></td>
+                                <td></td>
+                            </t>
+                            <td style="text-align:center; border:1px solid #e5e7eb;"><t t-esc="totals['prospect']"/></td>
+                            <td style="text-align:center; border:1px solid #e5e7eb;"><t t-esc="totals['follow_up']"/></td>
+                            <td style="text-align:center; border:1px solid #e5e7eb;">
+                                <span style="display:inline-block;background:#A8AF94;color:#334155;padding:2px 10px;border-radius:12px;font-weight:bold;">
+                                    <t t-esc="totals['reservation_count']"/>
+                                </span>
+                            </td>
+                            <td style="text-align:center; border:1px solid #e5e7eb;"><t t-esc="totals['sold_reservation_count']"/></td>
+                            <td style="text-align:center; border:1px solid #e5e7eb;"><t t-esc="totals['expired']"/></td>
+                            <td style="text-align:center; border:1px solid #e5e7eb;">
+                                <span style="display:inline-block;background:#fee2e2;color:#991b1b;padding:2px 10px;border-radius:12px;font-weight:bold;">
+                                    <t t-esc="totals['lost']"/>
+                                </span>
+                            </td>
+                            <td style="text-align:center; border:1px solid #e5e7eb;">
+                                <span style="display:inline-block;background:#e0e8f0;color:#334155;padding:2px 10px;border-radius:12px;font-weight:bold;">
+                                    <t t-esc="totals['total']"/>
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <!-- Footer or Remark -->
+                <div style="margin-top:20px; font-size:12px; color:#94a3b8;">
+                    <i>Lead Analysis Wizard Report Generated - Temer Properties Dev Team</i>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

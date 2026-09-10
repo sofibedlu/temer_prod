@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+    <!-- ── Wizard Form ──────────────────────────────────────────────────── -->
+    <record id="view_installment_bulk_letter_wizard_form" model="ir.ui.view">
+        <field name="name">installment.bulk.letter.wizard.form</field>
+        <field name="model">installment.bulk.letter.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Generate Bulk Letters by Installment">
+                <sheet>
+
+                    <!-- ── Filter Header ──────────────────────────────────── -->
+                    <group string="Filters">
+                        <group>
+                            <field name="site_id"
+                                   options="{'no_create': True}"
+                                   required="1"/>
+                            <field name="installment_name_filter"
+                                   options="{'no_create': True, 'no_open': True}"/>
+                            <field name="letter_type_id"
+                                   options="{'no_create': True}"
+                                   required="1"/>
+                            <field name="letter_template_id"
+                                   options="{'no_create': True}"
+                                   domain="[('letter_type_id','=',letter_type_id),('site_id','=',site_id)]"/>
+                        </group>
+                        <group>
+                            <field name="letter_date" required="1"/>
+                            <field name="state" invisible="1"/>
+                            <field name="generated_file" invisible="1"/>
+                            <field name="generated_filename" invisible="1"/>
+                            <!-- Hidden fields to prevent onchange data loss -->
+                            <field name="loaded_site_id" invisible="1"/>
+                            <field name="loaded_filter_id" invisible="1"/>
+                        </group>
+                    </group>
+
+                    <!-- ── Load / select controls ─────────────────────────── -->
+                    <div class="o_row mb-2">
+                        <button name="action_load_installments"
+                                string="🔍 Load Installments"
+                                type="object"
+                                class="btn btn-primary"/>
+                        <button name="action_select_all"
+                                string="✅ Select All"
+                                type="object"
+                                class="btn btn-secondary ml-1"
+                                invisible="not line_ids"/>
+                        <button name="action_deselect_all"
+                                string="☐ Deselect All"
+                                type="object"
+                                class="btn btn-secondary ml-1"
+                                invisible="not line_ids"/>
+                    </div>
+
+                    <!-- ── Installment Lines ───────────────────────────────── -->
+                    <field name="line_ids"
+                           widget="one2many_list"
+                           invisible="not line_ids">
+                        <tree string="Installments" editable="bottom">
+                            <field name="selected" widget="boolean_toggle"/>
+                            <field name="installment_name"/>
+                            <field name="collection_ref"/>
+                            <field name="partner_name"/>
+                            <field name="property_name"/>
+                            <field name="contract_number"/>
+                            <field name="due_date"/>
+                            <field name="amount_residual"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="state"
+                                   decoration-success="state == 'paid'"
+                                   decoration-warning="state == 'partial'"
+                                   decoration-danger="state == 'overdue'"
+                                   widget="badge"/>
+                        </tree>
+                    </field>
+
+                    <!-- ── Empty state hint ────────────────────────────────── -->
+                    <div invisible="line_ids" class="text-muted text-center py-3">
+                        Select a site and click <b>Load Installments</b> to populate the list.
+                    </div>
+
+                </sheet>
+
+                <!-- ── Footer buttons ─────────────────────────────────────── -->
+                <footer>
+                    <button name="action_generate_letters"
+                            string="⬇ Generate &amp; Download Letters"
+                            type="object"
+                            class="btn btn-primary"
+                            invisible="not line_ids"/>
+                    <button name="action_download"
+                            string="⬇ Download Again"
+                            type="object"
+                            class="btn btn-success ml-1"
+                            invisible="state != 'done'"/>
+                    <button string="Close"
+                            class="btn btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- ── Window Action ────────────────────────────────────────────────── -->
+    <record id="action_installment_bulk_letter_wizard" model="ir.actions.act_window">
+        <field name="name">Bulk Letter by Installment</field>
+        <field name="res_model">installment.bulk.letter.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</data>
+</odoo>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_draft_contract_archive_form" model="ir.ui.view">
+        <field name="name">draft.contract.archive.form</field>
+        <field name="model">draft.contract.archive</field>
+        <field name="arch" type="xml">
+            <form string="Draft Contract Archive">
+                <header>
+                    <button name="action_set_signed" string="Sign" type="object"
+                            class="btn-primary" invisible="status != 'active'"/>
+                    <button name="action_set_void" string="Void" type="object"
+                            class="btn-secondary" invisible="status == 'void'"/>
+                    <button name="action_promote_to_archive" string="Promote to Archive"
+                            type="object" class="btn-success"
+                            invisible="not source_archive_id"/>
+                    <field name="status" widget="statusbar"
+                           statusbar_visible="active,signed,void"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Contract Info">
+                            <field name="sale_id" readonly="1"/>
+                            <field name="customer_name"/>
+                            <field name="property_name"/>
+                            <field name="sales_no"/>
+                            <field name="date_created"/>
+                            <field name="source_archive_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Articles" name="articles">
+                            <field name="article_ids" widget="many2many_list" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="main_title"/>
+                                    <field name="subtitle" optional="show"/>
+                                    <field name="is_dynamic_content" widget="boolean_toggle"/>
+                                    <field name="is_active" widget="boolean_toggle"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Rendered HTML" name="rendered">
+                            <field name="rendered_html" widget="html" sanitize="0"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_draft_contract_archive_tree" model="ir.ui.view">
+        <field name="name">draft.contract.archive.tree</field>
+        <field name="model">draft.contract.archive</field>
+        <field name="arch" type="xml">
+            <tree string="Draft Contract Archives">
+                <field name="name"/>
+                <field name="customer_name"/>
+                <field name="property_name"/>
+                <field name="sales_no"/>
+                <field name="date_created"/>
+                <field name="status" widget="badge"
+                       decoration-success="status == 'signed'"
+                       decoration-danger="status == 'void'"
+                       decoration-info="status == 'active'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_draft_contract_archive" model="ir.actions.act_window">
+        <field name="name">Draft Contract Archives</field>
+        <field name="res_model">draft.contract.archive</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

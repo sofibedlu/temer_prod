@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_collection_extension_request_manager,extension.request.manager,model_collection_payment_extension_request,,1,1,1,1
+access_collection_extension_request_reject_wizard,extension.request.reject.wizard,model_extension_request_reject_wizard,,1,1,1,1
+access_extension_order_approver,extension.order.approver,collection_management.model_collection_order,group_collection_extension_approver,1,1,1,0
+access_extension_installment_approver,extension.installment.approver,collection_management.model_collection_installment,group_collection_extension_approver,1,1,1,0

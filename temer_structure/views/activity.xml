@@ -1,0 +1,336 @@
+<odoo>
+  <data>
+     <!-- <record id="custom_mail_activity_view_tree_inherit" model="ir.ui.view">
+        <field name="name">mail.activity.schedule.inherit</field>
+        <field name="model">mail.activity.schedule</field>
+
+        <field name="inherit_id" ref="ahadubit_crm.custom_mail_activity_view_tree" />
+        <field name="arch" type="xml">
+        <xpath expr="//field[@name='activity_type_id']" position="before">
+          
+            <field name="salesperson_id"  string="User"/> -->
+            <!-- <field name="activity_type_id" />
+            <field name="summary" /> -->
+            <!-- <field name="supervisor_id" />
+            <field name="team_id" />
+            <field name="wing_id" /> -->
+        <!-- </xpath>
+        <xpath expr="//field[@name='summary']" position="after">
+              <field name="create_date" />
+              </xpath>
+
+        </field>
+    </record> -->
+
+
+
+<!-- First: Define the Search View -->
+<!-- <record id="custom_mail_activity_search_view" model="ir.ui.view">
+    <field name="name">mail.activity.schedule.search</field>
+    <field name="model">mail.activity.schedule</field>
+    <field name="arch" type="xml">
+        <search string="Search Activities">
+            <field name="activity_type_id"/>
+            <field name="salesperson_id"/>
+            <field name="supervisor_id"/>
+            <field name="team_id"/>
+            <field name="wing_id"/>
+       
+            
+            <group expand="0" string="Group By">
+
+                <filter string="Activity Type" name="group_by_activity_type"
+                        context="{'group_by': 'activity_type_id'}"/>
+                        <filter string="Salesperson" name="group_by_salesperson"
+                        context="{'group_by': 'salesperson_id'}"/>
+                <filter string="Supervisor" name="group_by_supervisor"
+                        context="{'group_by': 'supervisor_id'}"/>
+                <filter string="Team" name="group_by_team"
+                        context="{'group_by': 'team_id'}"/>
+                <filter string="Wing" name="group_by_wing"
+                        context="{'group_by': 'wing_id'}"/>
+            </group>
+        </search>
+    </field>
+</record> -->
+
+<!-- Then: Define the Action Window -->
+<!-- <record id="custom_mail_activity_all_action" model="ir.actions.act_window">
+    <field name="name">Activity</field>
+    <field name="res_model">mail.activity.schedule</field>
+    <field name="view_mode">tree,kanban,form</field>
+    <field name="domain">[]</field>
+   <field name="context">{
+    'search_default_my_team_activities': 1,
+    'my_team_activities': True,
+    'default_order': 'create_date desc',
+    'active_test': True,
+    'force_active_test': True 
+}</field>
+    <field name="search_view_id" ref="custom_mail_activity_search_view"/>
+    <field name="view_id" ref="custom_mail_activity_view_tree_inherit"/>
+    <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">
+            View Your activity
+        </p>
+    </field>
+</record> -->
+
+<record id="crm_activity_report_copy_view_pivot" model="ir.ui.view">
+    <field name="name">crm.activity.report.copy.view.pivot</field>
+    <field name="model">crm.activity.report.copy</field>
+    <field name="arch" type="xml">
+        <pivot string="Pipeline Analysis" sample="1"  disable_linking="1">
+            <field name="stage_id" type="col"/>
+        </pivot>
+    </field>
+</record>
+<record id="crm_activity_report_copy_view_pivot_admin" model="ir.ui.view">
+    <field name="name">crm.activity.report.copy.view.pivot</field>
+    <field name="model">crm.activity.report.copy</field>
+    <field name="arch" type="xml">
+        <pivot string="Pipeline Analysis" sample="1"  >
+            <field name="stage_id" type="col"/>
+        </pivot>
+    </field>
+</record>
+
+<!-- build tree tree for crm.activity.report.copy -->
+<record id="crm_activity_report_copy_view_tree" model="ir.ui.view">
+    <field name="name">crm.activity.report.copy.tree</field>
+    <field name="model">crm.activity.report.copy</field>
+    <field name="arch" type="xml">
+        <tree>
+            <!-- <field name="sync_sales_team"/> -->
+            <field name="date"/>
+            <field name="user_id"/>
+            <field name="mail_activity_type_id"/>
+            <field name="supervisor_id" />
+            <field name="team_id"/>
+            <field name="wing_id"/>
+        </tree>
+    </field>
+</record>
+
+     <record id="view_crm_lead_search" model="ir.ui.view">
+            <field name="name">crm.lead.search</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id"
+                ref="crm.view_crm_case_leads_filter" />
+            <field name="arch" type="xml">
+                <xpath expr="//search" position="inside">
+                    <field name="user_id" />
+                    <field name="supervisor_id" />
+                    <field name="sales_team_id" />
+                    <field name="wing_id" />
+                    
+
+               <field name="phone_ids" options="{'no_group_by': True, 'no_filter': True}"/>
+                    <separator />
+                    <filter string="My Team Leads"
+                        name="my_team_leads"
+                        domain="[]"
+                        
+                        context="{'my_team_leads': True}" />
+                    <group expand="0" string="Group By">
+<filter string="Stage" name="group_by_stage"
+                        context="{'group_by': 'stage_id'}"/>
+                <filter string="Salesperson" name="group_by_user"
+                        context="{'group_by': 'user_id'}"/>
+                        <filter string="Supervisor" name="group_by_supervisor"
+                            context="{'group_by': 'supervisor_id'}" />
+                        <filter string="Team" name="group_by_team" context="{'group_by': 'sales_team_id'}" />
+                        <filter string="Wing" name="group_by_wing" context="{'group_by': 'wing_id'}" />
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+
+<!-- First: Define the Search View -->
+<record id="crm_activity_report_copy_search_view" model="ir.ui.view">
+    <field name="name">crm.activity.report.copy.search</field>
+    <field name="model">crm.activity.report.copy</field>
+    <field name="arch" type="xml">
+        <search string="Search Activities">
+            <!-- Basic Search Fields -->
+            <field name="mail_activity_type_id"/>
+            <field name="salesperson_id"/>
+            <field name="supervisor_id"/>
+            <field name="team_id"/>
+            <field name="wing_id"/>
+       
+            <separator />
+                    <filter string="My Team Activities"
+                        name="my_team_activities_copy"
+                        domain="[]"
+                        context="{'my_team_activities_copy': True}" />
+            
+            <!-- Group By Options -->
+            <group expand="0" string="Group By">
+
+                <filter string="Activity Type" name="group_by_activity_type"
+                        context="{'group_by': 'mail_activity_type_id'}"/>
+                        <filter string="Salesperson" name="group_by_salesperson"
+                        context="{'group_by': 'salesperson_id'}"/>
+                <filter string="Supervisor" name="group_by_supervisor"
+                        context="{'group_by': 'supervisor_id'}"/>
+                <filter string="Team" name="group_by_team"
+                        context="{'group_by': 'team_id'}"/>
+                <filter string="Wing" name="group_by_wing"
+                        context="{'group_by': 'wing_id'}"/>
+            </group>
+        </search>
+    </field>
+</record>
+
+<record id="crm_activity_report_action_inherit" model="ir.actions.act_window">
+    <field name="name">Team Activity</field>
+    <field name="res_model">crm.activity.report.copy</field>
+    <field name="view_mode">tree,pivot</field>
+    <field name="domain">[]</field>
+   <field name="context">{
+    'search_default_my_team_activities_copy': 1,
+    'my_team_activities_copy': True,
+    'default_order': 'create_date desc',
+    'active_test': True,
+    'force_active_test': True 
+}</field>
+    <field name="search_view_id" ref="crm_activity_report_copy_search_view"/>
+    <field name="view_id" ref="crm_activity_report_copy_view_pivot"/>
+    <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">
+            View Your activity
+        </p>
+    </field>
+
+   
+</record>
+<record id="crm_activity_report_action_inherit" model="ir.actions.act_window">
+    <field name="name">Team Activity</field>
+    <field name="res_model">crm.activity.report.copy</field>
+    <field name="view_mode">tree,pivot</field>
+    <field name="domain">[]</field>
+   <field name="context">{
+    'search_default_my_team_activities_copy': 1,
+    'my_team_activities_copy': True,
+    'default_order': 'create_date desc',
+    'active_test': True,
+    'force_active_test': True 
+}</field>
+    <field name="search_view_id" ref="crm_activity_report_copy_search_view"/>
+    <field name="view_id" ref="crm_activity_report_copy_view_pivot"/>
+    <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">
+            View Your activity
+        </p>
+    </field>
+
+   
+</record>
+
+
+<!-- <record id="crm_activity_report_view_tree_inherit" model="ir.ui.view">
+        <field name="name">crm.activity.report.inherit</field>
+        <field name="model">crm.activity.report</field>
+
+        <field name="inherit_id" ref="crm.crm_activity_report_view_tree" />
+        <field name="arch" type="xml">
+        <xpath expr="//field[@name='date']" position="after">
+               <button name="copy_to_report_copy" type="object" string="Copy" icon="fa-copy"/>
+            
+            
+        </xpath>
+       
+
+        </field>
+    </record>  -->
+
+
+
+<!-- Finally: Define the Menu Item -->
+<menuitem id="mail_activity_all_action_source_id"
+          name="Team Activities"
+          action="crm_activity_report_action_inherit"
+          parent="crm.crm_menu_sales"
+          sequence="20"/>
+
+
+<record id="all_team_crm_activity_report_action_inherit" model="ir.actions.act_window">
+    <field name="name">Team Activity</field>
+    <field name="res_model">crm.activity.report.copy</field>
+    <field name="view_mode">tree,pivot</field>
+    <field name="domain">[]</field>
+   <field name="context">{}</field>
+    <field name="search_view_id" ref="crm_activity_report_copy_search_view"/>
+    <field name="view_id" ref="crm_activity_report_copy_view_pivot"/>
+    <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">
+            View Your activity
+        </p>
+    </field>
+
+   
+</record>
+
+
+
+
+
+
+        <record id="all_team_crm_activity_report_action_inherit_admin" model="ir.actions.act_window">
+    <field name="name">Team Activity</field>
+    <field name="res_model">crm.activity.report.copy</field>
+    <field name="view_mode">tree,pivot</field>
+    <field name="domain">[]</field>
+   <field name="context">{}</field>
+    <field name="search_view_id" ref="crm_activity_report_copy_search_view"/>
+    <field name="view_id" ref="crm_activity_report_copy_view_pivot_admin"/>
+    <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">
+            View Your activity
+        </p>
+    </field>
+
+   
+</record>
+
+
+    <!-- Menu Item -->
+    <menuitem id="all_team_crm_activity_report_action_inherit_menu_admin"
+              name="All Team Activity For Admin"
+              parent="advanced_property_management.property_report_menu"
+              action="all_team_crm_activity_report_action_inherit_admin"
+              sequence="6" 
+        groups="temer_structure.access_property_dev_admin_group1"/>
+
+   
+
+
+<record id="all_team_action_crm_lead_pivot" model="ir.actions.act_window">
+    <field name="name">All Team Lead Analysis</field>
+    <field name="res_model">crm.lead</field>
+    <field name="view_mode">pivot</field>
+    <field name="view_id" ref="temer_structure.crm_lead_view_pivot1"/>
+    <field name="search_view_id" ref="temer_structure.view_crm_lead_search"/>
+   <field name="context">{}</field>
+    <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">
+            Define filters to get CRM Lead Analysis.
+        </p>
+    </field>
+</record>
+
+    <!-- Menu Item -->
+    <menuitem id="all_team_action_crm_lead_pivot_menu"
+              name="All Team Lead Analysis"
+              parent="advanced_property_management.property_report_menu"
+              action="all_team_action_crm_lead_pivot"
+              sequence="7"/>
+              </data>
+
+
+
+
+
+</odoo>

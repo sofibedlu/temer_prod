@@ -1,0 +1,39 @@
+<odoo>
+    <data noupdate="1">
+        <!-- Commission Configuration for Wing Manager -->
+        <record id="commission_config_wing" model="commission.configuration">
+            <field name="name">Wing Manager Commission</field>
+            <field name="sales_type">internal</field>
+            <field name="hierarchy_type">wing</field>
+            <field name="commission_type">percentage</field>
+            <field name="percentage">1.0</field>
+        </record>
+
+        <!-- Commission Configuration for Sales Manager -->
+        <record id="commission_config_sales_manager" model="commission.configuration">
+            <field name="name">Sales Manager Commission</field>
+            <field name="sales_type">internal</field>
+            <field name="hierarchy_type">sales_manager</field>
+            <field name="commission_type">percentage</field>
+            <field name="amount">1.0</field>
+        </record>
+
+        <!-- Commission Configuration for Sales Supervisor -->
+        <record id="commission_config_supervisor" model="commission.configuration">
+            <field name="name">Sales Supervisor Commission</field>
+            <field name="sales_type">internal</field>
+            <field name="hierarchy_type">supervisor</field>
+            <field name="commission_type">percentage</field>
+            <field name="percentage">2.0</field>
+        </record>
+
+        <!-- Commission Configuration for Sales Person -->
+        <record id="commission_config_sales_person" model="commission.configuration">
+            <field name="name">Sales Person Commission</field>
+            <field name="sales_type">internal</field>
+            <field name="hierarchy_type">sales_person</field>
+            <field name="commission_type">percentage</field>
+            <field name="amount">4.0</field>
+        </record>
+    </data>
+</odoo>

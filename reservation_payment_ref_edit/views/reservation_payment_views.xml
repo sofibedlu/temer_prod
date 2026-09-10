@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inject ref_editable into temer_structure view -->
+    <record id="reservation_payment_ref_edit_view" model="ir.ui.view">
+        <field name="name">property.reservation.payment.ref.edit</field>
+        <field name="model">property.reservation</field>
+        <field name="inherit_id" ref="temer_structure.property_reservation_history_view_form_inherit"/>
+        <field name="priority">999</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='payment_line_ids']//field[@name='id_editable']" position="after">
+                <field name="ref_editable" column_invisible="True"/>
+            </xpath>
+            <xpath expr="//field[@name='payment_line_ids']//field[@name='ref_number']" position="attributes">
+                <attribute name="readonly">id_editable == True or not ref_editable</attribute>
+            </xpath>
+        </field>
+    </record>
+    <!-- Inject ref_editable into base view (used by popups/CRM) -->
+    <record id="reservation_payment_ref_edit_base_view" model="ir.ui.view">
+        <field name="name">property.reservation.payment.ref.edit.base</field>
+        <field name="model">property.reservation</field>
+        <field name="inherit_id" ref="ahadubit_property_reservation.property_reservation_history_view_form_id"/>
+        <field name="priority">999</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='payment_line_ids']//field[@name='id_editable']" position="after">
+                <field name="ref_editable" column_invisible="True"/>
+            </xpath>
+            <xpath expr="//field[@name='payment_line_ids']//field[@name='ref_number']" position="attributes">
+                <attribute name="readonly">id_editable == True or not ref_editable</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Override ref_number readonly in the standalone payment form (used by mobile popup) -->
+    <record id="reservation_payment_ref_edit_payment_form_view" model="ir.ui.view">
+        <field name="name">property.reservation.payment.ref.edit.form</field>
+        <field name="model">property.reservation.payment</field>
+        <field name="inherit_id" ref="ahadubit_property_reservation.view_property_reservation_payment_form"/>
+        <field name="priority">999</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='ref_number']" position="before">
+                <field name="ref_editable" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='ref_number']" position="attributes">
+                <attribute name="readonly">not ref_editable</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

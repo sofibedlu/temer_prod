@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_discount_request_allocation,Access Discount Request Allocation,model_discount_request_allocation,,1,1,1,1
+access_discount_request_preview_line,Access Discount Request Preview Line,model_discount_request_preview_line,,1,1,1,1

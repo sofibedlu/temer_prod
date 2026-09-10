@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_property_sale_form_inherit_check" model="ir.ui.view">
+        <field name="name">property.sale.form.inherit.check</field>
+        <field name="model">property.sale</field>
+        <field name="inherit_id" ref="advanced_property_management.property_sale_view_form"/>
+        <field name="arch" type="xml">
+            
+            <!-- audit button -->
+            <xpath expr="//header" position="inside">
+                <button name="action_audit_sale" 
+                        string="Check" 
+                        type="object" 
+                        class="oe_highlight" 
+                        invisible="state != 'confirm'" 
+                        groups="property_sale_audit.group_property_sale_auditor"/>
+            </xpath>
+
+            <!-- Adjust visibility of existing Approve button -->
+            <xpath expr="//button[@name='action_approve_sale']" position="attributes">
+                <attribute name="invisible">state != 'check'</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='state']" position="attributes">
+                <attribute name="statusbar_visible">draft,request_for_confirm,confirm,check,approve,done,void</attribute>
+            </xpath>
+            
+        </field>
+    </record>
+
+    <!-- Tree View Extension -->
+    <record id="view_property_sale_tree_inherit_audit" model="ir.ui.view">
+        <field name="name">property.sale.tree.inherit.audit</field>
+        <field name="model">property.sale</field>
+        <field name="inherit_id" ref="advanced_property_management.property_sale_view_tree"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//tree" position="attributes">
+                <attribute name="decoration-warning">state == 'check'</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='state']" position="attributes">
+                <attribute name="decoration-warning">state == 'check'</attribute>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

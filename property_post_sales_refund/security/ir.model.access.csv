@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_post_sales_refund_request_user,post.sales.refund.request.user,model_post_sales_refund_request,base.group_user,1,1,1,0

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_property_sale_form_amharic_btn" model="ir.ui.view">
+        <field name="name">property.sale.form.amharic.btn</field>
+        <field name="model">property.sale</field>
+        <field name="inherit_id" ref="advanced_property_management.property_sale_view_form"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="//field[@name='payment_installment_line_ids']" position="before">
+                <field name="is_schedule_unlocked" invisible="1"/>
+                <button name="action_render_amharic_names" 
+                        type="object" 
+                        string="Render Amharic Names" 
+                        class="btn-secondary"
+                        icon="fa-language"
+                        invisible="state not in ['draft', 'request_for_confirm', 'confirm'] and not (state == 'approve' and is_schedule_unlocked)"/>
+            </xpath>
+
+            <xpath expr="//field[@name='payment_installment_line_ids']/tree/field[@name='due_date']" position="after">
+                <field name="ethiopian_due_date" optional="hide" readonly="1" force_save="1"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

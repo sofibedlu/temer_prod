@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherit property form view to add Property Type Details section -->
+    <record id="inherit_property_form_property_type_details" model="ir.ui.view">
+        <field name="name">property.property.form.inherit.property.type.details</field>
+        <field name="model">property.property</field>
+        <field name="inherit_id" ref="advanced_property_management.property_property_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Hide only site_property_type_id field (the Many2one field under Block No) - keep property_type radio buttons visible -->
+            <xpath expr="//field[@name='site_property_type_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <!-- Add Property Type Details section BEFORE Address Details and Price Details -->
+            <!-- Insert before the parent group containing both Address Details and Price Details -->
+            <xpath expr="//group[.//group[@id='address_group_id']]" position="before">
+                <group string="Property Type Details">
+                    <group>
+                        <field name="property_type_bedroom"/>
+                        <field name="property_type_bathroom"/>
+                        <field name="property_type_has_maid_room"/>
+                        <field name="property_type_no_kitchen"/>
+                    </group>
+                    <group>
+                        <field name="property_type_gross_area"/>
+                        <field name="property_type_net_area"/>
+                        <field name="property_type_floor_plan" filename="property_type_floor_plan_filename"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+

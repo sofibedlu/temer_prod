@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="collection_reports.PlanStageReportClient" owl="1">
+        <div class="collection-report-container">
+            <div class="report-header">
+                <h1 class="report-title">Plan Based on Collection Stage</h1>
+                <div class="filter-section">
+                    <div class="filters-row">
+                        <div class="filter-group">
+                            <label>
+                                <input type="checkbox" t-model="state.show_all_dates" t-on-change="onShowAllDatesChange"/>
+                                Show All
+                            </label>
+                        </div>
+                        <div class="filter-group">
+                            <label>From:</label>
+                            <input type="date" t-model="state.date_from" class="date-input" t-att-disabled="state.show_all_dates"/>
+                        </div>
+                        <div class="filter-group">
+                            <label>To:</label>
+                            <input type="date" t-model="state.date_to" class="date-input" t-att-disabled="state.show_all_dates"/>
+                        </div>
+                        <div class="filter-group">
+                            <label>Search:</label>
+                            <input type="text" t-model="state.search_text" class="search-input" placeholder="Search table..." t-on-input="onSearchChange"/>
+                        </div>
+                        <button class="btn-show" t-on-click="loadData">
+                            Show
+                        </button>
+                        <div class="export-buttons" style="margin-left: auto;">
+                            <button class="btn-export btn-export-excel" t-on-click="exportExcel">
+                                Export Excel
+                            </button>
+                            <button class="btn-export btn-export-pdf" t-on-click="exportPDF">
+                                Export PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="report-table-container" t-if="!state.loading" style="overflow-x: auto; overflow-y: auto; max-height: calc(100vh - 300px);">
+                <table class="report-table plan-stage-table" style="min-width: 100%; border-collapse: separate; border-spacing: 0;">
+                    <thead>
+                        <!-- Row 1: Main headers -->
+                        <tr class="header-row-1">
+                            <th rowspan="3" class="sno-col">S.N O</th>
+                            <th rowspan="3" class="project-col">PROJECT NAME</th>
+                            <th colspan="9">PLAN</th>
+                            <th colspan="3">EXPECTED</th>
+                            <th colspan="9">ACTUAL</th>
+                            <th colspan="12">DIFFERENCE</th>
+                            <th colspan="3">TOTAL COLLECTION PLAN</th>
+                        </tr>
+                        <!-- Row 2: Sub-headers for PLAN, EXPECTED, ACTUAL, DIFFERENCE -->
+                        <tr class="header-row-2">
+                            <th colspan="3">PLAN (Normal)</th>
+                            <th colspan="3">PENALTY</th>
+                            <th colspan="3">TERMINATION</th>
+                            <th colspan="3" rowspan="2">EXPECTED<br/>(from sold leads)</th>
+                            <th colspan="3">PLAN (Normal)</th>
+                            <th colspan="3">PENALTY</th>
+                            <th colspan="3">TERMINATION</th>
+                            <th colspan="3">PLAN (Normal)</th>
+                            <th colspan="3">EXPECTED</th>
+                            <th colspan="3">PENALTY</th>
+                            <th colspan="3">TERMINATION</th>
+                            <th rowspan="2">NO OF<br/>CUSTOMERS</th>
+                            <th rowspan="2">AMOUNT<br/>IN BIRR</th>
+                            <th rowspan="2">AMOUNT<br/>IN DOLLAR</th>
+                        </tr>
+                        <!-- Row 3: Column headers for each section -->
+                        <tr class="header-row-3">
+                            <th>NO OF<br/>CUSTOMERS</th>
+                            <th>AMOUNT<br/>IN BIRR</th>
+                            <th>AMOUNT<br/>IN DOLLAR</th>
+                            <th>NO OF<br/>CUSTOMERS</th>
+                            <th>AMOUNT<br/>IN BIRR</th>
+                            <th>AMOUNT<br/>IN DOLLAR</th>
+                            <th>NO OF<br/>CUSTOMERS</th>
+                            <th>AMOUNT<br/>IN BIRR</th>
+                            <th>AMOUNT<br/>IN DOLLAR</th>
+                            <th>NO OF<br/>CUSTOMERS</th>
+                            <th>AMOUNT<br/>IN BIRR</th>
+                            <th>AMOUNT<br/>IN DOLLAR</th>
+                            <th>NO OF<br/>CUSTOMERS</th>
+                            <th>AMOUNT<br/>IN BIRR</th>
+                            <th>AMOUNT<br/>IN DOLLAR</th>
+                            <th>NO OF<br/>CUSTOMERS</th>
+                            <th>AMOUNT<br/>IN BIRR</th>
+                            <th>AMOUNT<br/>IN DOLLAR</th>
+                            <th>NO OF<br/>CUSTOMERS</th>
+                            <th>AMOUNT<br/>IN BIRR</th>
+                            <th>AMOUNT<br/>IN DOLLAR</th>
+                            <th>NO OF<br/>CUSTOMERS</th>
+                            <th>AMOUNT<br/>IN BIRR</th>
+                            <th>AMOUNT<br/>IN DOLLAR</th>
+                            <th>NO OF<br/>CUSTOMERS</th>
+                            <th>AMOUNT<br/>IN BIRR</th>
+                            <th>AMOUNT<br/>IN DOLLAR</th>
+                            <th>NO OF<br/>CUSTOMERS</th>
+                            <th>AMOUNT<br/>IN BIRR</th>
+                            <th>AMOUNT<br/>IN DOLLAR</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-if="state.filtered_data.length === 0">
+                            <td colspan="38" style="text-align:center;padding:20px;">No data available</td>
+                        </tr>
+                        <tr t-foreach="state.filtered_data" t-as="row" t-key="row.sno" t-att-class="row.is_total ? 'total-row' : ''">
+                            <td><t t-esc="row.sno"/></td>
+                            <td style="text-align:left;padding-left:10px;"><t t-esc="row.item_name"/></td>
+                            <!-- PLAN columns (from plan model) -->
+                            <td><t t-esc="row.plan_customers || 0"/></td>
+                            <td><t t-esc="(row.plan_amount_birr || 0).toFixed(2)"/> Birr</td>
+                            <td>$<t t-esc="(row.plan_amount_dollar || 0).toFixed(2)"/></td>
+                            <td><t t-esc="row.penalty_customers"/></td>
+                            <td><t t-esc="(row.penalty_amount_birr || 0).toFixed(2)"/> Birr</td>
+                            <td>$<t t-esc="(row.penalty_amount_dollar || 0).toFixed(2)"/></td>
+                            <td><t t-esc="row.termination_customers"/></td>
+                            <td><t t-esc="(row.termination_amount_birr || 0).toFixed(2)"/> Birr</td>
+                            <td>$<t t-esc="(row.termination_amount_dollar || 0).toFixed(2)"/></td>
+                            <!-- EXPECTED columns (from sold leads) -->
+                            <td><t t-esc="row.expected_customers || 0"/></td>
+                            <td><t t-esc="(row.expected_amount_birr || 0).toFixed(2)"/> Birr</td>
+                            <td>$<t t-esc="(row.expected_amount_dollar || 0).toFixed(2)"/></td>
+                            <!-- ACTUAL columns -->
+                            <td><t t-esc="row.actual_expected_customers || 0"/></td>
+                            <td><t t-esc="((row.actual_expected_amount_birr || 0)).toFixed(2)"/> Birr</td>
+                            <td>$<t t-esc="((row.actual_expected_amount_dollar || 0)).toFixed(2)"/></td>
+                            <td><t t-esc="row.actual_penalty_customers || 0"/></td>
+                            <td><t t-esc="((row.actual_penalty_amount_birr || 0)).toFixed(2)"/> Birr</td>
+                            <td>$<t t-esc="((row.actual_penalty_amount_dollar || 0)).toFixed(2)"/></td>
+                            <td><t t-esc="row.actual_termination_customers || 0"/></td>
+                            <td><t t-esc="((row.actual_termination_amount_birr || 0)).toFixed(2)"/> Birr</td>
+                            <td>$<t t-esc="((row.actual_termination_amount_dollar || 0)).toFixed(2)"/></td>
+                            <!-- DIFFERENCE columns -->
+                            <td><t t-esc="row.diff_plan_customers || 0"/></td>
+                            <td><t t-esc="((row.diff_plan_amount_birr || 0)).toFixed(2)"/> Birr</td>
+                            <td>$<t t-esc="((row.diff_plan_amount_dollar || 0)).toFixed(2)"/></td>
+                            <td><t t-esc="row.diff_expected_customers || 0"/></td>
+                            <td><t t-esc="((row.diff_expected_amount_birr || 0)).toFixed(2)"/> Birr</td>
+                            <td>$<t t-esc="((row.diff_expected_amount_dollar || 0)).toFixed(2)"/></td>
+                            <td><t t-esc="row.diff_penalty_customers || 0"/></td>
+                            <td><t t-esc="((row.diff_penalty_amount_birr || 0)).toFixed(2)"/> Birr</td>
+                            <td>$<t t-esc="((row.diff_penalty_amount_dollar || 0)).toFixed(2)"/></td>
+                            <td><t t-esc="row.diff_termination_customers || 0"/></td>
+                            <td><t t-esc="((row.diff_termination_amount_birr || 0)).toFixed(2)"/> Birr</td>
+                            <td>$<t t-esc="((row.diff_termination_amount_dollar || 0)).toFixed(2)"/></td>
+                            <!-- TOTAL COLLECTION PLAN -->
+                            <td><t t-esc="row.total_customers"/></td>
+                            <td><t t-esc="(row.total_amount_birr || 0).toFixed(2)"/> Birr</td>
+                            <td>$<t t-esc="(row.total_amount_dollar || 0).toFixed(2)"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div t-if="state.loading" class="loading-spinner">
+                Loading...
+            </div>
+        </div>
+    </t>
+</templates>
+

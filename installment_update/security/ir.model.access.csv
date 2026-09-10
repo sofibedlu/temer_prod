@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_installment_update_wizard_user,installment.update.wizard.user,model_installment_update_wizard,installment_update.group_installment_update_user,1,1,1,0
+access_installment_update_wizard_manager,installment.update.wizard.manager,model_installment_update_wizard,installment_update.group_installment_update_manager,1,1,1,0
+access_installment_update_log_user,installment.update.log.user,model_installment_update_log,installment_update.group_installment_update_user,1,1,1,0
+access_installment_update_log_manager,installment.update.log.manager,model_installment_update_log,installment_update.group_installment_update_manager,1,1,1,0

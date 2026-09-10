@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_property_reservation_form_payment_edit" model="ir.ui.view">
+            <field name="name">property.reservation.form.payment.edit.v4</field>
+            <field name="model">property.reservation</field>
+            <field name="inherit_id" ref="ahadubit_property_reservation.property_reservation_history_view_form_id"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='payment_line_ids']//tree//field[@name='bank_id']" position="attributes">
+                    <attribute name="readonly">context.get('from_sales_wizard') != True and (id_editable == True or (is_new_line != True and id))</attribute>
+                </xpath>
+                <xpath expr="//field[@name='payment_line_ids']//tree//field[@name='document_type_id']" position="attributes">
+                    <attribute name="readonly">context.get('from_sales_wizard') != True and (id_editable == True or (is_new_line != True and id))</attribute>
+                </xpath>
+                <xpath expr="//field[@name='payment_line_ids']//tree//field[@name='ref_number']" position="attributes">
+                    <attribute name="readonly">context.get('from_sales_wizard') != True and (id_editable == True or (is_new_line != True and id))</attribute>
+                </xpath>
+                <xpath expr="//field[@name='payment_line_ids']//tree//field[@name='transaction_date']" position="attributes">
+                    <attribute name="readonly">context.get('from_sales_wizard') != True and (id_editable == True or (is_new_line != True and id))</attribute>
+                </xpath>
+                <xpath expr="//field[@name='payment_line_ids']//tree//field[@name='amount']" position="attributes">
+                    <attribute name="readonly">context.get('from_sales_wizard') != True and (id_editable == True or (is_new_line != True and id))</attribute>
+                </xpath>
+                <xpath expr="//field[@name='payment_line_ids']//tree//field[@name='payment_receipt']" position="attributes">
+                    <attribute name="readonly">context.get('from_sales_wizard') != True and (id_editable == True or (is_new_line != True and id))</attribute>
+                </xpath>
+
+            </field>
+        </record>
+    </data>
+</odoo>

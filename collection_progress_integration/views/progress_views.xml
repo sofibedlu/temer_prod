@@ -1,0 +1,88 @@
+<odoo>
+    <data>
+
+        <record id="view_property_site_construction_progress_form_inherit_workflow" model="ir.ui.view">
+            <field name="name">property.site.construction.progress.form.inherit.workflow</field>
+            <field name="model">property.site.construction.progress</field>
+            <field name="inherit_id" ref="temer_payment_modify.view_property_site_construction_progress_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/sheet" position="before">
+                    <header>
+                        <button name="action_check" type="object" string="Check Progress" class="oe_highlight" 
+                            invisible="progress_percentage != 100 or state != 'draft'"
+                            groups="collection_progress_integration.group_collection_progress_checker"/>
+                        <button name="action_approve" type="object" string="Approve Progress" class="oe_highlight" 
+                            invisible="progress_percentage != 100 or state != 'checked' or state == 'done'"
+                            groups="collection_progress_integration.group_collection_progress_approver"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,checked,done"/>
+                    </header>
+                </xpath>
+
+                <xpath expr="//field[@name='image']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='image']" position="after">
+                    <field name="progress_percentage" 
+                           widget="smooth_slider" 
+                           options="{'max_value': 100, 'step': 0.5}" 
+                           readonly="state == 'done'"/>
+                </xpath>
+
+                <xpath expr="//field[@name='date']" position="attributes">
+                    <attribute name="invisible">state != 'done'</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='site_id']" position="attributes">
+                    <attribute name="readonly">state == 'done'</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='payment_term_line_id']" position="attributes">
+                    <attribute name="readonly">state == 'done'</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_property_site_construction_progress_tree_inherit" model="ir.ui.view">
+            <field name="name">property.site.construction.progress.tree.inherit.progress</field>
+            <field name="model">property.site.construction.progress</field>
+            <field name="inherit_id" ref="temer_payment_modify.view_property_site_construction_progress_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="decoration-success">state == 'done'</attribute>
+                </xpath>
+                <xpath expr="//tree" position="inside">
+                    <field name="state" column_invisible="True"/>
+                    <field name="progress_percentage" widget="smooth_slider"/>
+                </xpath>
+                <xpath expr="//tree/field[@name='date']" position="attributes">
+                    <attribute name="invisible">state != 'done'</attribute>
+                </xpath>
+
+                <xpath expr="//tree/field[@name='site_id']" position="after">
+                    <field name="payment_term_line_id"></field>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_property_site_construction_progress_search_inherit_filters" model="ir.ui.view">
+            <field name="name">property.site.construction.progress.search.inherit.filters</field>
+            <field name="model">property.site.construction.progress</field>
+            <field name="arch" type="xml">
+                <search string="Search Construction Progress">
+                    <field name="name"/>
+                    <field name="site_id"/>
+                    <field name="payment_term_line_id"/>
+                    <filter string="In Progress" name="filter_draft" domain="[('state','=','draft')]"/>
+                    <filter string="Completed" name="filter_done" domain="[('state','=','done')]"/>
+                    <separator/>
+
+                    <filter string="Group By Site" name="group_by_site" context="{'group_by':'site_id'}"/>
+                    <filter string="Group By Term" name="group_by_term" context="{'group_by':'payment_term_line_id'}"/>
+                    <filter string="Group By State" name="group_by_state" context="{'group_by':'state'}"/>
+                </search>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree view -->
+    <record id="property_property_view_tree_ref" model="ir.ui.view">
+        <field name="name">property.property.tree.ref</field>
+        <field name="model">property.property</field>
+        <field name="inherit_id" ref="advanced_property_management.property_property_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="inside">
+                <field name="computed_reference" string="Reference"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Form view - Reference at TOP, conditional Inside/Outside -->
+    <record id="property_property_view_form_ref" model="ir.ui.view">
+        <field name="name">property.property.form.ref</field>
+        <field name="model">property.property</field>
+        <field name="inherit_id" ref="advanced_property_management.property_property_view_form"/>
+        <field name="arch" type="xml">
+            <!-- 1. Add reference at the VERY TOP (after name field) -->
+            <xpath expr="//field[@name='name']" position="after">
+                <div class="o_row mt-4">
+                    <span class="col-form-label col-3 fs-5 fw-bold">Reference Number:</span>
+                    <div class="col-6">
+                        <field name="computed_reference"
+                               widget="char"
+                               readonly="1"
+                               nolabel="1"
+                               class="form-control form-control-lg"
+                               placeholder="Enter unit number to generate reference"/>
+                    </div>
+                </div>
+            </xpath>
+
+            <!-- 2. Add unit number field and site information fields after site field -->
+            <xpath expr="//field[@name='site']" position="after">
+                <!-- Unit number field -->
+                <field name="unit_number" string="House Number"/>
+                <!-- Site information (project_number from ahadubit_property_base_custom) -->
+                <field name="site_project_number" readonly="1" string="Project Number" widget="char"/>
+                <field name="company_abbreviation" readonly="1" string="Company Abbreviation" widget="char"/>
+            </xpath>
+
+            <!-- 3. Add commercial location with conditional visibility -->
+            <xpath expr="//field[@name='property_type']" position="after">
+                <field name="commercial_location"
+                       string="Site Location"
+                       widget="radio"
+                       invisible="property_type != 'commercial'"
+                       options="{'horizontal': true}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

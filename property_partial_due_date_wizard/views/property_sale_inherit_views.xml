@@ -1,0 +1,28 @@
+<odoo>
+    <record id="inherit_property_sale_form_add_wizard_button" model="ir.ui.view">
+        <field name="name">inherit.property.sale.form.add.wizard.button</field>
+        <field name="model">property.sale</field>
+        <field name="inherit_id" ref="advanced_property_management.property_sale_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='payment_schedule_type']" position="after">
+                <field name="has_partial_due_date" invisible="1"/>
+            </xpath>
+
+            <xpath expr="//field[@name='payment_installment_line_ids']" position="before">
+                <field name="is_schedule_unlocked" invisible="1"/>
+                <button string="Set Partial Due Date" type="object" name="action_open_set_due_date_wizard"
+                        invisible="payment_schedule_type != 'progress' or (state not in ['draft', 'request_for_confirm', 'confirm'] and not (state == 'approve' and is_schedule_unlocked))"/>
+            </xpath>
+
+            <xpath expr="//field[@name='payment_installment_line_ids']//tree/field[@name='due_date']" position="before">
+                <field name="is_fully_paid" column_invisible="1"/>
+            </xpath>
+
+            <xpath expr="//field[@name='payment_installment_line_ids']//tree/field[@name='due_date']" position="attributes">
+                <attribute name="column_invisible">parent.payment_schedule_type == 'progress' and not parent.has_partial_due_date</attribute>
+                <attribute name="readonly">parent.payment_schedule_type == 'progress'</attribute>
+                <attribute name="required">parent.payment_schedule_type == 'time' and not is_fully_paid</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

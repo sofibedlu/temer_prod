@@ -1,0 +1,33 @@
+<odoo>
+    <data noupdate="1">
+        <record id="property_reservation_quick" model="property.reservation.configuration">
+            <field name="name">Quick Reservation</field>
+            <field name="reservation_type">quick</field>
+            <field name="payment_type">percentage</field>
+            <field name="amount">0.0</field>
+            <field name="duration_in">hours</field>
+            <field name="duration">2</field>
+            <field name="is_payment_required">False</field>
+        </record>
+
+        <record id="property_reservation_regular" model="property.reservation.configuration">
+            <field name="name">Regular Reservation</field>
+            <field name="reservation_type">regular</field>
+            <field name="payment_type">percentage</field>
+            <field name="amount">5.0</field>
+            <field name="duration_in">days</field>
+            <field name="duration">8</field>
+            <field name="is_payment_required">True</field>
+        </record>
+
+        <record id="property_reservation_regular" model="property.reservation.configuration">
+            <field name="name">Special Reservation</field>
+            <field name="reservation_type">special</field>
+            <field name="payment_type">percentage</field>
+            <field name="amount">5.0</field>
+            <field name="duration_in">days</field>
+            <field name="duration">8</field>
+            <field name="is_payment_required">True</field>
+        </record>
+    </data>
+</odoo>

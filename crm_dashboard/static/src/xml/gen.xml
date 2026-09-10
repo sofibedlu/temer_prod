@@ -1,0 +1,1078 @@
+<templates xml:space="preserve">
+    <t t-name="chart_sample.chartjs_sample_hr_gen" owl="1">
+        <div class="big-card p-4 rounded-4 mt-4">
+            
+            <!-- 🏷️ Navbar Card (Smaller Height) -->
+            <div class="navbar-card d-flex flex-wrap flex-md-row flex-column justify-content-between align-items-center p-2 mb-3 shadow rounded-4 bg-white">
+
+            
+                <div class="d-flex flex-column flex-md-row gap-2 w-100">
+                                    <label for="dateFrom" class="form-label">Date From</label>
+                    <input type="date" id="dateFrom" class="form-control" t-on-change="onStartDateChange"/>
+                    <label for="dateTo" class="form-label">Date To</label>
+                    <input type="date" id="dateTo" class="form-control" t-on-change="onEndDateChange"/>
+                    <input type="text" class="form-control" placeholder="Search..." t-on-input="onSearchQueryChange"/>
+                    <!-- <button class="btn btn-primary" t-on-click="fetchData">🔄 Reset</button> -->
+                </div>
+            </div>  
+            <!-- 📊 Statistic Cards -->
+            <div class="d-flex flex-wrap flex-md-nowrap gap-3 mb-4">
+        
+
+                <!-- <div id="jobsCard" class="stat-card red text-start p-3 rounded-5 shadow position-relative flex-fill" t-on-click="() => goToCRMPage_1('opportunity')">
+                    <div class="icon-box rounded-5 position-absolute top-0 end-1 mt-4">📈</div>
+                    <div class="stat-content">
+                        <p class="stat-value fw-bold fs-8 mb-2"><t t-esc="stats.totalOpportunities"/></p>
+                        <h6 class="stat-label text-dark">CRM Total Opportunities_NEW</h6>
+
+                    </div>
+                                 <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h6 class="text-dark">Total Lost</h6>
+                    </div>
+                    <div class="value-oval position-absolute bottom-0 start-0 ms-2 mb-2">
+                        <p class="fw-bold fs-6"><t t-esc="stats.totalLost"/></p>
+                    </div>
+                </div> -->
+<div id="jobsCard" 
+     class="stat-card red text-start p-3 rounded-5 shadow position-relative flex-fill" 
+    >
+    
+    <!-- Icon Box -->
+   
+    
+    <!-- Stat Content -->
+    <div class="stat-content">
+               <div class="d-flex flex-row align-items-center justify-content-between mb-4">
+      <div class="icon-box rounded-5 position-absolute top-0 end-1 mt-1">📈 </div>
+        </div>
+        <div class="push_downward" >
+    
+        <!-- Total Opportunities -->
+        <div class="d-flex flex-row align-items-center justify-content-between mb-2">
+       
+            <h6 class="text-dark mb-0 custom-dd" t-on-click="() => goToCRMPage_1('opportunities')" >Total Opportunities</h6>
+            <div class="value-oval bg-white rounded-pill text-center px-3 py-1 shadow-sm">
+                <p class="fw-bold fs-6 mb-0"><t t-esc="stats.totalOpportunities"/></p>
+            </div>
+        </div>
+
+        <!-- Total Lost -->
+        <div class="d-flex flex-row align-items-center justify-content-between mb-2">
+            <h6 class="text-dark mb-0 custom-dd" t-on-click="() => goToCRMPage_1('Leads')" >Total Lead</h6>
+            <div class="value-oval bg-white rounded-pill text-center px-3 py-1 shadow-sm">
+                <p class="fw-bold fs-6 mb-0"><t t-esc="stats.totalLeads"/></p>
+            </div>
+        </div>
+
+        <!-- Total Won -->
+        <div class="d-flex flex-row align-items-center justify-content-between mb-2">
+            <h6 class="text-dark mb-0 custom-dd" t-on-click="() => goToCRMPage_1('won')">Total Won</h6>
+            <div class="value-oval bg-white rounded-pill text-center px-3 py-1 shadow-sm">
+                <p class="fw-bold fs-6 mb-0"><t t-esc="stats.totalWon"/></p>
+            </div>
+        </div>
+
+        </div>
+<!--         
+                    <div class="icon-container">
+                        <span class="icon" t-on-click="editCard">✏️</span>
+                        <span class="icon" >🔄</span>
+                        <span class="icon" >📤</span>
+                        <span class="icon" >🗑️</span>
+                    </div> -->
+                    <!-- <div class="export-options">
+                        <button >Export PDF</button>
+                        <button >Export Excel</button>
+                    </div> -->
+
+    </div>
+</div>
+
+           <div id="jobsCard" class="stat-card yellow text-start p-3 rounded-5 shadow position-relative flex-fill" >
+                    <!-- <div class="icon-box rounded-5 position-absolute top-0 end-1 mt-4">📦</div> -->
+    <div class="stat-content">
+               <div class="d-flex flex-row align-items-center justify-content-between mb-2">
+      <div class="icon-box rounded-5 position-absolute top-0 end-1 mt-1">📦 </div>
+        </div>
+        <div class="push_downward" >
+                <!-- Total Opportunities -->
+        <div class="d-flex flex-row align-items-center justify-content-between mb-2">
+       
+            <h6 class="text-dark mb-0 custom-dd" t-on-click="() => goToInventoryPage('products')">Total Products</h6>
+            <div class="value-oval bg-white rounded-pill text-center px-3 py-1 shadow-sm">
+                <p class="fw-bold fs-6 mb-0"><t t-esc="stats.totalProducts"/></p>
+            </div>
+        </div>
+
+        <!-- Total Lost -->
+        <div class="d-flex flex-row align-items-center justify-content-between mb-2">
+            <h6 class="text-dark mb-0 custom-dd" t-on-click="() => goToInventoryPage('stock_value')">Total StockValue</h6>
+            <div class="value-oval bg-white rounded-pill text-center px-3 py-1 shadow-sm">
+                <p class="fw-bold fs-6 mb-0"><t t-esc="stats.totalStockValue"/></p>
+            </div>
+        </div>
+
+        <!-- Total Won -->
+        <div class="d-flex flex-row align-items-center justify-content-between mb-2">
+            <h6 class="text-dark mb-0 custom-dd" t-on-click="() => goToInventoryPage('stock_value')">Total Movements</h6>
+            <div class="value-oval bg-white rounded-pill text-center px-3 py-1 shadow-sm">
+                <p class="fw-bold fs-6 mb-0"><t t-esc="stats.stockMovements"/></p>
+            </div>
+        </div>
+ </div>
+                     <!-- <div class="icon-container">
+                        <span class="icon" t-on-click="editCard">✏️</span>
+                        <span class="icon" t-on-click="toggleExportOptions('jobsCard')">🔄</span>
+                        <span class="icon" t-on-click="exportCard('jobsCard')">📤</span>
+                        <span class="icon" t-on-click="deleteCard('jobsCard')">🗑️</span>
+                    </div> -->
+                    <!-- <div class="export-options" t-if="state.showExportOptions === 'jobsCard'">
+                        <button t-on-click="exportPDF('jobsCard')">Export PDF</button>
+                        <button t-on-click="exportExcel('jobsCard')">Export Excel</button>
+                    </div> -->
+    </div>
+                </div>
+                       <div id="jobsCard" class="stat-card green text-start p-3 rounded-5 shadow position-relative flex-fill">
+                    <!-- <div class="icon-box rounded-5 position-absolute top-0 end-1 mt-4">💰</div> -->
+               <div class="stat-content">
+               <div class="d-flex flex-row align-items-center justify-content-between mb-2">
+      <div class="icon-box rounded-5 position-absolute top-0 end-1 mt-1">💰 </div>
+        </div>
+        <div class="push_downward" >
+        <!-- Total Opportunities -->
+        <div class="d-flex flex-row align-items-center justify-content-between mb-2">
+       
+            <h6 class="text-dark mb-0 custom-dd" t-on-click="() => goToSalesPage('sale')">Total Sales</h6>
+            <div class="value-oval bg-white rounded-pill text-center px-3 py-1 shadow-sm">
+                <p class="fw-bold fs-6 mb-0"><t t-esc="stats.totalSales"/></p>
+            </div>
+        </div>
+
+        <!-- Total Lost -->
+        <div class="d-flex flex-row align-items-center justify-content-between mb-2">
+            <h6 class="text-dark mb-0 custom-dd" t-on-click="() => goToSalesPage('order')">Total Orders</h6>
+            <div class="value-oval bg-white rounded-pill text-center px-3 py-1 shadow-sm">
+                <p class="fw-bold fs-6 mb-0"><t t-esc="stats.totalOrders"/></p>
+            </div>
+        </div>
+
+        <!-- Total Won -->
+        <div class="d-flex flex-row align-items-center justify-content-between mb-2">
+            <h6 class="text-dark mb-0 custom-dd" t-on-click="() => goToSalesPage('revenue')">Total Revenue</h6>
+            <div class="value-oval bg-white rounded-pill text-center px-3 py-1 shadow-sm">
+                <p class="fw-bold fs-6 mb-0"><t t-esc="stats.totalRevenue"/></p>
+            </div>
+        </div>
+
+ </div>
+                     <!-- <div class="icon-container">
+                        <span class="icon" t-on-click="editCard">✏️</span>
+                        <span class="icon" t-on-click="toggleExportOptions('jobsCard')">🔄</span>
+                        <span class="icon" t-on-click="exportCard('jobsCard')">📤</span>
+                        <span class="icon" t-on-click="deleteCard('jobsCard')">🗑️</span>
+                    </div> -->
+                    <!-- <div class="export-options" t-if="state.showExportOptions === 'jobsCard'">
+                        <button t-on-click="exportPDF('jobsCard')">Export PDF</button>
+                        <button t-on-click="exportExcel('jobsCard')">Export Excel</button>
+                    </div> -->
+    </div>
+                </div>
+                <!-- <div id="employeesCard" class="stat-card blue text-start p-3 rounded-5 shadow position-relative flex-fill" t-on-click="() => goToHRPage('employees')">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h6 class="text-dark">Total Leaves</h6>
+                    </div>
+                    <div class="value-oval position-absolute bottom-0 start-0 ms-2 mb-2">
+                        <p class="fw-bold fs-8 "><t t-esc="stats.totalLeaves"/></p>
+                    </div>
+                         <div class="value-oval position-absolute bottom-0 start-0 ms-2 mb-2">
+                        <p class="fw-bold fs-8 "><t t-esc="stats.totalLeaves"/></p>
+                    </div>
+                         <div class="value-oval position-absolute bottom-0 start-0 ms-2 mb-2">
+                        <p class="fw-bold fs-8 "><t t-esc="stats.totalLeaves"/></p>
+                    </div>
+                    <span class="hr-icon position-absolute bottom-0 end-0 me-2 mb-2">👥</span>
+                </div> -->
+                   <div id="jobsCard" class="stat-card orange text-start p-3 rounded-5 shadow position-relative flex-fill" >
+                    <!-- <div class="icon-box rounded-5 position-absolute top-0 end-1 mt-4">💰</div> -->
+            <div class="stat-content">
+               <div class="d-flex flex-row align-items-center justify-content-between mb-2">
+      <div class="icon-box rounded-5 position-absolute top-0 end-1 mt-1">👥</div>
+        </div>
+        <div class="push_downward" >
+        <!-- Total Opportunities -->
+        <div class="d-flex flex-row align-items-center justify-content-between mb-2">
+       
+            <h6 class="text-dark mb-0 custom-dd" t-on-click="() => goToHRPage('departments')">Total Departments</h6>
+            <div class="value-oval bg-white rounded-pill text-center px-3 py-1 shadow-sm">
+                <p class="fw-bold fs-6 mb-0"><t t-esc="stats.totalDepartments"/></p>
+            </div>
+        </div>
+
+        <!-- Total Lost -->
+        <div class="d-flex flex-row align-items-center justify-content-between mb-2">
+            <h6 class="text-dark mb-0 custom-dd" t-on-click="() => goToHRPage('leaves')">Total Leaves</h6>
+            <div class="value-oval bg-white rounded-pill text-center px-3 py-1 shadow-sm">
+                <p class="fw-bold fs-6 mb-0"><t t-esc="stats.totalLeaves"/></p>
+            </div>
+        </div>
+
+        <!-- Total Won -->
+        <div class="d-flex flex-row align-items-center justify-content-between mb-2">
+            <h6 class="text-dark mb-0 custom-dd" t-on-click="() => goToHRPage('employees')">Total Employees</h6>
+            <div class="value-oval bg-white rounded-pill text-center px-3 py-1 shadow-sm">
+                <p class="fw-bold fs-6 mb-0"><t t-esc="stats.totalActiveEmployees"/></p>
+            </div>
+        </div>
+ </div>
+                     <!-- <div class="icon-container">
+                        <span class="icon" t-on-click="editCard">✏️</span>
+                        <span class="icon" t-on-click="toggleExportOptions('jobsCard')">🔄</span>
+                        <span class="icon" t-on-click="exportCard('jobsCard')">📤</span>
+                        <span class="icon" t-on-click="deleteCard('jobsCard')">🗑️</span>
+                    </div> -->
+                    <!-- <div class="export-options" t-if="state.showExportOptions === 'jobsCard'">
+                        <button t-on-click="exportPDF('jobsCard')">Export PDF</button>
+                        <button t-on-click="exportExcel('jobsCard')">Export Excel</button>
+                    </div> -->
+    </div>
+                </div>
+                    <div id="jobsCard" class="stat-card burgendi text-start p-3 rounded-5 shadow position-relative flex-fill" >
+                    <!-- <div class="icon-box rounded-5 position-absolute top-0 end-1 mt-4">📊</div> -->
+             <div class="stat-content">
+               <div class="d-flex flex-row align-items-center justify-content-between mb-2">
+      <div class="icon-box rounded-5 position-absolute top-0 end-1 mt-1">🛒</div>
+        </div>
+        <div class="push_downward" >
+        <!-- Total Opportunities -->
+        <div class="d-flex flex-row align-items-center justify-content-between mb-2">
+       
+            <h6 class="text-dark mb-0 custom-dd" t-on-click="() => goToSalesPage('purchase')">Total Purchases</h6>
+            <div class="value-oval bg-white rounded-pill text-center px-3 py-1 shadow-sm">
+                <p class="fw-bold fs-6 mb-0"><t t-esc="stats.totalPurchases"/></p>
+            </div>
+        </div>
+
+        <!-- Total Lost -->
+        <div class="d-flex flex-row align-items-center justify-content-between mb-2">
+            <h6 class="text-dark mb-0 custom-dd" t-on-click="() => goToSalesPage('order')">Total RFQs</h6>
+            <div class="value-oval bg-white rounded-pill text-center px-3 py-1 shadow-sm">
+                <p class="fw-bold fs-6 mb-0"><t t-esc="stats.totalRFQs"/></p>
+            </div>
+        </div>
+
+        <!-- Total Won -->
+        <div class="d-flex flex-row align-items-center justify-content-between mb-2">
+            <h6 class="text-dark mb-0 custom-dd" t-on-click="() => goToSalesPage('revenue')">Total Spent</h6>
+            <div class="value-oval bg-white rounded-pill text-center px-3 py-1 shadow-sm">
+                <p class="fw-bold fs-6 mb-0"><t t-esc="stats.totalSpent"/></p>
+            </div>
+        </div>
+ </div>
+                     <!-- <div class="icon-container">
+                        <span class="icon" t-on-click="editCard">✏️</span>
+                        <span class="icon" t-on-click="toggleExportOptions('jobsCard')">🔄</span>
+                        <span class="icon" t-on-click="exportCard('jobsCard')">📤</span>
+                        <span class="icon" t-on-click="deleteCard('jobsCard')">🗑️</span>
+                    </div> -->
+                    <!-- <div class="export-options" t-if="state.showExportOptions === 'jobsCard'">
+                        <button t-on-click="exportPDF('jobsCard')">Export PDF</button>
+                        <button t-on-click="exportExcel('jobsCard')">Export Excel</button>
+                    </div> -->
+    </div>
+                </div>
+            </div>
+            
+            <!-- 📈 Graphs Section -->
+            <div class="d-flex flex-column flex-md-row gap-3 overflow-x-auto px-2 ">
+                <div class="chart-container flex-fill border rounded-4 p-3 bg-white shadow rounded-5 position-relative"  style="width: 50%; height: 300px;">
+                <!-- <div class="icon-container">
+                        <span class="icon" t-on-click="editChart">✏️</span>
+                        <span class="icon" t-on-click="toggleExportOptions">🔄</span>
+                        <span class="icon" t-on-click="exportChart">📤</span>
+                        <span class="icon" t-on-click="deleteChart">🗑️</span>
+                    </div> -->
+                    <!-- <div class="export-options" t-if="state.showExportOptions">
+                        <button t-on-click="exportPDF">Export PDF</button>
+                        <button t-on-click="exportExcel">Export Excel</button>
+                    </div> -->
+                    <canvas t-ref="canvas"></canvas>
+                </div>
+                <div class="chart-container flex-fill border rounded-4 p-3 bg-white shadow rounded-5 position-relative" style="width: 50%; height: 300px;">
+                 <!-- <div class="icon-container">
+                        <span class="icon" t-on-click="editChart">✏️</span>
+                        <span class="icon" t-on-click="toggleExportOptions">🔄</span>
+                        <span class="icon" t-on-click="exportChart">📤</span>
+                        <span class="icon" t-on-click="deleteChart">🗑️</span>
+                    </div> -->
+                    <!-- <div class="export-options" t-if="state.showExportOptions">
+                        <button t-on-click="exportPDF">Export PDF</button>
+                        <button t-on-click="exportExcel">Export Excel</button>
+                    </div> -->
+                    <canvas t-ref="canvastwo"></canvas>
+                </div>
+            </div>
+            <div class="d-flex flex-column flex-md-row gap-3 overflow-x-auto px-2 mt-3">
+                <div class="chart-container flex-fill border rounded-4 p-3 bg-white shadow rounded-5 position-relative" style="width: 50%; height: 300px;">
+                 <!-- <div class="icon-container">
+                        <span class="icon" t-on-click="editChart">✏️</span>
+                        <span class="icon" t-on-click="toggleExportOptions">🔄</span>
+                        <span class="icon" t-on-click="exportChart">📤</span>
+                        <span class="icon" t-on-click="deleteChart">🗑️</span>
+                    </div> -->
+                    <!-- <div class="export-options" t-if="state.showExportOptions">
+                        <button t-on-click="exportPDF">Export PDF</button>
+                        <button t-on-click="exportExcel">Export Excel</button>
+                    </div> -->
+                    <canvas t-ref="canvasDoughnut"></canvas>
+                </div>
+                <div class="chart-container flex-fill border rounded-4 p-3 bg-white shadow rounded-5 position-relative" style="width: 50%; height: 300px;">
+                 <!-- <div class="icon-container">
+                        <span class="icon" t-on-click="editChart">✏️</span>
+                        <span class="icon" t-on-click="toggleExportOptions">🔄</span>
+                        <span class="icon" t-on-click="exportChart">📤</span>
+                        <span class="icon" t-on-click="deleteChart">🗑️</span>
+                    </div> -->
+                    <!-- <div class="export-options" t-if="state.showExportOptions">
+                        <button t-on-click="exportPDF">Export PDF</button>
+                        <button t-on-click="exportExcel">Export Excel</button>
+                    </div> -->
+                    <canvas t-ref="canvasLeave"></canvas>
+                </div>
+            </div>
+
+
+            <div class="d-flex flex-row justify-content-between flex-wrap mt-4">
+            
+           <div class="table-container mt-4 rounded-4 p-3 bg-white shadow position-relative">
+                    <!-- <div class="icon-container">
+                        <span class="icon" t-on-click="editTable">✏️</span>
+                        <span class="icon" t-on-click="toggleExportOptions">🔄</span>
+                        <span class="icon" t-on-click="exportTable">📤</span>
+                        <span class="icon" t-on-click="deleteTable">🗑️</span>
+                    </div> -->
+                    <!-- <div class="export-options" t-if="state.showExportOptions">
+                        <button t-on-click="exportPDF">Export PDF</button>
+                        <button t-on-click="exportExcel">Export Excel</button>
+                    </div> -->
+    <!--model_nameactured Products Table -->
+    <h4 class="mb-3">🏗️ Top Manufactured Products</h4>
+    <table class="table table-bordered table-striped rounded-4">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Total Produced (Qty)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Check if there are top manufactured products -->
+            <t t-if="stats.topManufacturedProducts">
+                <t t-foreach="stats.topManufacturedProducts" t-as="product" t-key="product.product">
+                    <tr>
+                        <td class="border border-gray-800 px-4 py-2 text-left"><t t-esc="product.product"/></td>
+                        <td class="border border-gray-300 px-4 py-2 text-right"><t t-esc="product.total_produced"/></td>
+                    </tr>
+                </t>
+            </t>
+            <!-- If no data, display a message -->
+            <t t-else="">
+                <tr>
+                    <td colspan="2" class="text-center">No data available</td>
+                </tr>
+            </t>
+        </tbody>
+    </table>
+    <h4 class="mb-3">📜 Top Quotations</h4>
+    <table class="table table-bordered table-striped rounded-4">
+        <thead>
+            <tr>
+                <th>Quotation</th>
+                <th>Revenue ($)</th>
+            </tr>
+        </thead>
+        <tbody>
+        <t t-log="'here wego',stats"/>
+        <t t-if="stats.topQuotations">
+            <t  t-foreach="stats.topQuotations" t-as="quotation" t-key="quotation.quotation">
+                <tr>
+                    <td class="border border-gray-800 px-4 py-2 text-left"><t t-esc="quotation.quotation"/></td>
+                    <td class="border border-gray-300 px-4 py-2 text-right" ><t t-esc="quotation.revenue"/></td>
+                </tr>
+            </t>
+            </t>
+        </tbody>
+    </table>
+    <h4 class="mb-3">📦 Top Products</h4>
+    <table class="table table-bordered table-striped rounded-4">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Sales Amount ($)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Check if there are top products -->
+            <t t-if="stats.topProducts">
+                <t t-foreach="stats.topProducts" t-as="product" t-key="product.product">
+                    <tr>
+                        <td class="border border-gray-800 px-4 py-2 text-left"><t t-esc="product.product"/></td>
+                        <td class="border border-gray-300 px-4 py-2 text-right"><t t-esc="product.sales_amount"/></td>
+                    </tr>
+                </t>
+            </t>
+            <!-- If no data, display a message -->
+            <t t-else="">
+                <tr>
+                    <td colspan="2" class="text-center">No data available</td>
+                </tr>
+            </t>
+        </tbody>
+    </table>
+</div>
+<div class="table-container mt-4 rounded-4 p-3 bg-white shadow position-relative">
+                    <!-- <div class="icon-container">
+                        <span class="icon" t-on-click="editTable">✏️</span>
+                        <span class="icon" t-on-click="toggleExportOptions">🔄</span>
+                        <span class="icon" t-on-click="exportTable">📤</span>
+                        <span class="icon" t-on-click="deleteTable">🗑️</span>
+                    </div> -->
+                    <!-- <div class="export-options" t-if="state.showExportOptions">
+                        <button t-on-click="exportPDF">Export PDF</button>
+                        <button t-on-click="exportExcel">Export Excel</button>
+                    </div> -->
+    <!-- Top Customers Table -->
+    <h4 class="mb-3">👥 Top Customers</h4>
+    <table class="table table-bordered table-striped rounded-4">
+        <thead>
+            <tr>
+                <th>Customer</th>
+                <th>Total Sales ($)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Check if there are top customers -->
+            <t t-if="stats.topCustomers">
+                <t t-foreach="stats.topCustomers" t-as="customer" t-key="customer.customer">
+                    <tr>
+                        <td class="border border-gray-800 px-4 py-2 text-left"><t t-esc="customer.customer"/></td>
+                        <td class="border border-gray-300 px-4 py-2 text-right"><t t-esc="customer.total_sales"/></td>
+                    </tr>
+                </t>
+            </t>
+            <!-- If no data, display a message -->
+            <t t-else="">
+                <tr>
+                    <td colspan="2" class="text-center">No data available</td>
+                </tr>
+            </t>
+        </tbody>
+    </table>
+    <h4 class="mb-3">🏭 Top Work Centers</h4>
+    <table class="table table-bordered table-striped rounded-4">
+        <thead>
+            <tr>
+                <th>Work Center</th>
+                <th>Total Hours</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Check if there are top work centers -->
+            <t t-if="stats.topWorkcenters">
+                <t t-foreach="stats.topWorkcenters" t-as="workcenter" t-key="workcenter.workcenter">
+                    <tr>
+                        <td class="border border-gray-800 px-4 py-2 text-left"><t t-esc="workcenter.workcenter"/></td>
+                        <td class="border border-gray-300 px-4 py-2 text-right"><t t-esc="workcenter.total_hours"/></td>
+                    </tr>
+                </t>
+            </t>
+            <!-- If no data, display a message -->
+            <t t-else="">
+                <tr>
+                    <td colspan="2" class="text-center">No data available</td>
+                </tr>
+            </t>
+        </tbody>
+    </table>
+    <h4 class="mb-3">📄 Top RFQs</h4>
+    <table class="table table-bordered table-striped rounded-4">
+        <thead>
+            <tr>
+                <th>RFQ</th>
+                <th>Amount ($)</th>
+            </tr>
+        </thead>
+        <tbody>
+<t t-if="stats.topRFQs">
+    <!-- <t t-foreach="stats.topRFQs" t-as="rfq" t-key="rfq.rfq">
+        <tr>
+            <td><t t-esc="rfq.rfq"/></td>
+            <td><t t-esc="rfq.revenue"/></td>
+        </tr>
+    </t> -->
+
+    <t t-foreach="stats.topRFQs" t-as="rfq" t-key="rfq.rfq + '-' + rfq.revenue">
+    <tr>
+        <td><t t-esc="rfq.rfq"/></td>
+        <td><t t-esc="rfq.revenue"/></td>
+    </tr>
+</t>
+</t>
+
+        </tbody>
+    </table>
+</div>
+
+<div class="table-container mt-4 rounded-4 p-3 bg-white shadow position-relative">
+                    <!-- <div class="icon-container">
+                        <span class="icon" t-on-click="editTable">✏️</span>
+                        <span class="icon" t-on-click="toggleExportOptions">🔄</span>
+                        <span class="icon" t-on-click="exportTable">📤</span>
+                        <span class="icon" t-on-click="deleteTable">🗑️</span>
+                    </div> -->
+                    <!-- <div class="export-options" t-if="state.showExportOptions">
+                        <button t-on-click="exportPDF">Export PDF</button>
+                        <button t-on-click="exportExcel">Export Excel</button>
+                    </div> -->
+    <!-- Top Vendors Table -->
+    <h4 class="mb-3">🏢 Top Vendors</h4>
+    <table class="table table-bordered table-striped rounded-4">
+        <thead>
+            <tr>
+                <th>Vendor</th>
+                <th>Total Sales ($)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Check if there are top vendors -->
+            <t t-if="stats.topVendorsnew">
+                <!-- <t t-foreach="stats.topVendorsnew" t-as="vendor" t-key="vendor.vendor">
+                    <tr>
+                        <td class="border border-gray-800 px-4 py-2 text-left"><t t-esc="vendor.vendor"/></td>
+                        <td class="border border-gray-300 px-4 py-2 text-right"><t t-esc="vendor.total_sales"/></td>
+                    </tr>
+                </t> -->
+                <t t-foreach="stats.topVendorsnew" t-as="vendor" t-key="vendor.vendor + '-' + vendor.total_sales">
+    <tr>
+        <td class="border border-gray-800 px-4 py-2 text-left"><t t-esc="vendor.vendor"/></td>
+        <td class="border border-gray-300 px-4 py-2 text-right"><t t-esc="vendor.total_sales"/></td>
+    </tr>
+</t>
+            </t>
+            <!-- If no data, display a message -->
+            <t t-else="">
+                <tr>
+                    <td colspan="2" class="text-center">No data available</td>
+                </tr>
+            </t>
+        </tbody>
+    </table>
+    <h4 class="mb-3">📄 Top Invoices</h4>
+    <table class="table table-bordered table-striped rounded-4">
+        <thead>
+            <tr>
+             <th>Invoice</th>
+                <th>Amount ($)</th>
+            </tr>
+        </thead>
+        <tbody>
+     <t t-if="stats.topInvoices">
+      <t t-foreach="stats.topInvoices" t-as="invoice" t-key="invoice.invoice + '-' + invoice.revenue">
+    <tr>
+        <td><t t-esc="invoice.invoice"/></td>
+        <td><t t-esc="invoice.revenue"/></td>
+    </tr>
+</t>
+        </t>
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+</div>
+<div>
+
+
+
+
+
+</div>
+
+
+
+            
+
+<!-- <div class="table-container mt-4">
+  
+    <h4 class="mb-3">📜 Top Quotations</h4>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Quotation</th>
+                <th>Revenue ($)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <t t-foreach="stats.topQuotations" t-as="quotation" t-key="quotation.quotation">
+                <tr>
+                    <td><t t-esc="quotation.quotation"/></td>
+                    <td><t t-esc="quotation.revenue"/></td>
+                </tr>
+            </t>
+        </tbody>
+    </table>
+</div> -->
+
+<!-- <div class="table-container mt-4">
+
+    <h4 class="mb-3">📦 Top Products</h4>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Total Sales ($)</th>
+            </tr>
+        </thead>
+<tbody>
+    <t t-if="stats.topProducts">
+        <t t-foreach="stats.topProducts.labels" t-as="product" t-foreach-index="index" t-key="index">
+            <tr>
+                <td><t t-esc="product"/></td>
+                <td>$<t t-esc="stats.topProducts.data[index]"/></td>
+            </tr>
+        </t>
+    </t>
+    <t t-else>
+        <tr>
+            <td colspan="2">Loading...</td>
+        </tr>
+    </t>
+</tbody>
+
+
+
+    </table>
+</div> -->
+
+<!-- <div class="table-container mt-4">
+   
+    <h4 class="mb-3">🏆 Top Customers</h4>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Customer</th>
+                <th>Total Sales ($)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <t t-foreach="stats.topCustomers.labels" t-as="customer" t-foreach-index="index" t-key="index">
+                <tr>
+                    <td><t t-esc="customer"/></td>
+                    <td><t t-esc="stats.topCustomers.data[index]"/></td>
+                </tr>
+            </t>
+        </tbody>
+    </table>
+</div> -->
+
+
+
+
+
+
+        </div>
+
+        <!-- 📋 Top Quotations Table -->
+            <!-- <div class="table-responsive mt-4">
+                <table class="table table-bordered table-striped">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Quotation</th>
+                            <th>Customer</th>
+                            <th>Total Amount</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="topQuotations.value" t-as="quotation" t-key="quotation.id">
+
+
+                            <tr>
+                                <td><t t-esc="quotation.name"/></td>
+                                <td><t t-esc="quotation.partner_id[1]"/></td>
+                                <td><t t-esc="quotation.amount_total"/></td>
+                                <td><t t-esc="quotation.date_order"/></td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div> -->
+        <!-- </div> -->
+
+        <style>
+
+        /* 📊 Stat Cards */
+
+/* 📊 Stat Cards */
+.stat-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 180px; /* Adjust height as needed */
+    padding: 15px;
+    position: relative;
+    transition: box-shadow 0.3s ease, background-color 0.3s ease;
+     border-radius: 15px; /* More rounded corners */
+}
+
+.stat-card:hover {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+background-color: #d3d3d3; /* Darker background on hover */
+}
+
+.icon-container {
+    position: absolute;
+    top: 6px;
+    right: 1px;
+    display: flex;
+    gap: 5px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.stat-card:hover .icon-container,
+.chart-container:hover .icon-container,
+.table-container:hover .icon-container {
+    opacity: 1;
+}
+
+.icon {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    padding: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.icon:hover {
+    background: rgba(255, 255, 255, 1);
+}
+
+.export-options {
+    position: absolute;
+    top: 30px;
+    right: 10px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+        
+
+.custom-dd {
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.custom-dd:hover {
+    color: green;
+}
+.blue { background: #daeaf6; color: black;} 
+.red { background: #ffe2e5; color: black; } 
+.yellow { background: #fff4de; color: black; } 
+.green { background: #dcfce7; color: black; } 
+.orange { background: #ffe5b4; color: black; } 
+.burgendi { background: #f3e8ff; color: black; } 
+
+.icon-box1 { 
+    width: 70px; 
+    height: 70px; 
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px; /* Square corners */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px; /* Larger icon */
+    font-weight: bold;
+    position: absolute;
+    bottom: 0;
+    right: 0; /* Ensure it's at the bottom-right corner */
+    padding: 0;
+    margin: 0;
+}
+
+/* Stat Content */
+.stat-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.stat-value {
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 60px;
+}
+
+.stat-label {
+    font-size: 16px;
+    color: #444;
+}
+
+/* 🔘 Oval Value Display */
+.value-oval {
+    width: 70px;
+    height: 22px;
+    background: #e0e0e0;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    bottom: 0; /* Ensure it touches the bottom */
+}
+
+/* Center the number inside the oval */
+.value-oval p {
+    padding-top: 2px; /* Adjust as needed */
+    margin: 0;
+}
+
+        
+            .table-responsive {
+                overflow-x: auto;
+            }
+
+            .table {
+                width: 100%;
+                margin-bottom: 1rem;
+                color: #212529;
+            }
+
+            .table-bordered {
+                border: 1px solid #dee2e6;
+            }
+
+            .table-striped tbody tr:nth-of-type(odd) {
+                background-color: rgba(0, 0, 0, 0.05);
+            }
+
+            .thead-dark th {
+                color: #fff;
+                background-color: #343a40;
+                border-color: #454d55;
+            }
+
+.blue { background: #daeaf6; color: black;} 
+.red { background: #ffe2e5; color: black; } 
+.yellow { background: #fff4de; color: black; } 
+.green { background: #dcfce7; color: black; } 
+.orange { background: #ffe5b4; color: black; } 
+
+
+.icon-box1 { 
+    width: 70px; 
+    height: 70px; 
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px; /* Square corners */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px; /* Larger icon */
+    font-weight: bold;
+    position: absolute;
+    bottom: 0;
+    right: 0; /* Ensure it's at the bottom-right corner */
+    padding: 0;
+    margin: 0;
+}
+
+
+.stat-value {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 60px;
+}
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stat-label {
+    font-size: 16px;
+    color: #444;
+}
+
+ 
+            .icon-box {
+                width: 35px;
+                height: 35px;
+                background: rgba(255, 255, 255, 0.8);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 20px;
+                font-weight: bold;
+            }
+            <!-- .stat-value {
+                font-size: 26px;
+                font-weight: bold;
+                margin-top: 10px;
+            } -->
+            .stat-label {
+                font-size: 16px;
+                color: #444;
+            }
+            /* 🟡 Big Yellow Card */
+            .big-card {
+                background: #f5f8fb;
+                padding: 20px;
+                border-radius: 6px;
+                margin: 20px;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+
+            /* 🏷️ Navbar Card (Smaller Height) */
+            .navbar-card {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px;
+            }
+            .filter-dropdown select,
+            .form-control {
+                width: 150px;
+                padding: 5px;
+            }
+            .btn {
+                padding: 5px 12px;
+                font-size: 14px;
+            }
+
+                        .icon {
+                background: rgba(255, 255, 255, 0.8);
+                border-radius: 50%;
+                padding: 5px;
+                font-size: 16px;
+                cursor: pointer;
+                transition: background 0.3s ease;
+            }
+
+            .icon:hover {
+                background: rgba(255, 255, 255, 1);
+            }
+
+
+            .blue { background: #daeaf6; color: black;} 
+            .red { background: #ffe2e5; color: black; } 
+            .yellow { background: #fff4de; color: black; } 
+            .green { background: #dcfce7; color: black; } 
+            .orange { background: #ddedea; color: black; } 
+            .burgendi{ background: #f3e8ff; color: black; }
+    
+            /* 📊 Graphs */
+            .chart-container {
+                flex-grow: 1;
+                min-width: 300px; 
+                display: flex;-
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+                overflow: hidden; /* Ensure content does not overflow */
+border-radius: 15px; /* Rounded corners for canvas cards */
+            }
+
+            .chart-container canvas {
+                width: 100%;
+                height: 100%;
+            }
+
+            .push_downward {
+            margin-top: 25px; 
+        }
+
+
+
+
+            /* 🎯 Percent Badge */
+            .percent-badge {
+                background: rgba(255, 255, 255, 0.9);
+                color: black;
+                padding: 4px 10px;
+                border-radius: 20px;
+                font-size: 12px;
+                font-weight: bold;
+            }
+
+            /* 📊 HR Icon */
+            .hr-icon {
+                font-size: 24px;
+                opacity: 0.8;
+                bottom: 0; /* Ensure it touches the bottom */
+            }
+
+            /* 📱 Mobile Responsive */
+            @media (max-width: 768px) {
+                .big-card {
+                    overflow-y: auto;
+                }
+                .navbar-card {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 8px;
+                }
+                .d-flex.flex-md-nowrap {
+                    flex-direction: column;
+                }
+                .chart-container {
+                    min-width: 100%;
+                    overflow-x: auto;
+                }
+                
+            }
+        </style>
+        <!-- <div class="chart-controls">
+            <span class="icon" t-on-click="exportCard">📤</span>
+            <span class="icon" t-on-click="editCard">✏️</span>
+        </div> -->
+        <!-- <t t-if="state.showExportOptions">
+            <div class="export-options">
+                <button t-on-click="exportExcel">Download Excel</button>
+                <button t-on-click="exportPDF">Download PDF</button>
+            </div>
+        </t> -->
+        <t t-if="state.showEditPopup">
+            <div class="edit-popup" t-att-style="'top:' + state.editPopupPosition.top + 'px; left:' + state.editPopupPosition.left + 'px;'">
+                <h3>Edit Chart</h3>
+                <label for="chartType">Chart Type:</label>
+                <select id="chartType">
+                    <option value="bar">Bar</option>
+                    <option value="line">Line</option>
+                    <option value="pie">Pie</option>
+                    <option value="doughnut">Doughnut</option>
+                    <option value="radar">Radar</option>
+                    <option value="scatter">Scatter</option>
+                    <!-- Add other chart types here -->
+                </select>
+                <label for="domain">Domain:</label>
+                <input type="text" id="domain" />
+                <label for="model">Model:</label>
+                <input type="text" id="model" />
+                <button t-on-click="saveEdit">Save</button>
+                <button t-on-click="closeEditPopup" class="cancel">Cancel</button>
+            </div>
+        </t>
+    </t>
+</templates>

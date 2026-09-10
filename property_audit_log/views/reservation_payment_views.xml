@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Hide Ethiopian Bank column; only Bank (searchable by name / account number) -->
+    <record id="property_reservation_payment_bank_search" model="ir.ui.view">
+        <field name="name">property.reservation.payment.bank.search</field>
+        <field name="model">property.reservation</field>
+        <field name="inherit_id" ref="bank_configuration_update.inherit_property_reservation_history_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='payment_line_ids']/tree/field[@name='bank_ethiopian']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='payment_line_ids']/tree/field[@name='bank_id']" position="attributes">
+                <attribute name="options">{'no_create': True, 'no_open': True}</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="property_reservation_payment_bank_search_base" model="ir.ui.view">
+        <field name="name">property.reservation.payment.bank.search.base</field>
+        <field name="model">property.reservation</field>
+        <field name="inherit_id" ref="ahadubit_property_reservation.property_reservation_history_view_form_id"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='payment_line_ids']/tree/field[@name='bank_id']" position="attributes">
+                <attribute name="options">{'no_create': True, 'no_open': True}</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

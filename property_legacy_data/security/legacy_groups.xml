@@ -1,0 +1,10 @@
+<odoo>
+    <data noupdate="1">
+        <!-- Group for Legacy Sales Entry -->
+        <record id="group_property_legacy_user" model="res.groups">
+            <field name="name">Legacy Sales User</field>
+            <field name="category_id" ref="base.module_category_hidden"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+    </data>
+</odoo>

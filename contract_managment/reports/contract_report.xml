@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+ <record id="action_report_contract" model="ir.actions.report">
+    <field name="name">Contract report</field>
+    <field name="model">property.sale</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">contract_managment.report_printed_contract_document</field>
+    <field name="report_file">contract_managment.report_printed_contract_document</field>
+    <field name="print_report_name">'test_doc'</field>
+    <field name="binding_model_id" ref="model_property_sale"/>
+    <field name="paperformat_id" ref="paperformat_contract_agreement"/>
+    <field name="binding_type">report</field>
+</record>
+
+    <template id="report_printed_contract_document">
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <div class="page">
+                    <style>
+                        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;500;700&amp;family=Roboto:wght@400;500;700&amp;display=swap');
+
+                        @page {
+                            size: A4 portrait;
+                            margin: 1.5cm;
+                        }
+
+                        .article-content {
+                            text-align: justify;
+                            line-height: 1.6;
+                            position: relative;
+                            z-index: 10;
+                            margin: 20px;
+                            font-family: 'Noto Sans Ethiopic', 'Roboto', Arial, sans-serif;
+                            font-size: 12pt;
+                        }
+                        
+                        .article-content h1 {
+                            text-align: center;
+                            text-decoration: underline;
+                        }
+
+                        .header-box {
+                            text-align: center;
+                            border-bottom: 2px solid #000;
+                            padding-bottom: 12px;
+                            margin-bottom: 35px;
+                            position: relative;
+                        }
+
+                        .company-et {
+                            font-size: 20pt;
+                            color: #66853f;
+                            font-weight: bold;
+                            display: block;
+                        }
+
+                        .company-en {
+                            font-size: 14pt;
+                            font-weight: bold;
+                            color: #66853f;
+                        }
+
+                        .footer {
+                            font-family: 'Times New Roman', serif;
+                            font-size: 10pt;
+                            color: #555;
+                            text-align: right;
+                            margin-top: 20px;
+                        }
+
+                        /* Stamp fixed bottom-right on every page */
+                        .stamp-fixed {
+                            position: fixed;
+                            bottom: 20px;
+                            right: 20px;
+                            width: 150px;
+                            opacity: 0.35;
+                            z-index: -1; /* keep behind text if needed */
+                        }
+                    </style>
+
+                    <!-- <div class="header-box">
+                        <span class="company-et">ቴምር ሆልዲንግ ካምፓኒ</span>
+                        <span class="company-en">TEMER HOLDING COMPANY</span>
+                    </div> -->
+
+                    <div class="article-content">
+                        <t t-if="data and data.get('full_content')">
+                            <div t-out="data['full_content']" t-options='{"widget": "html"}'/>
+                        </t>
+                        <t t-else="">
+                            <div style="text-align:center; padding: 120px 0; font-style: italic; color: #888;">
+                                [ Contract terms will appear here ]
+                            </div>
+                        </t>
+                    </div>
+
+                    <div class="footer o_standard_footer">
+                        <div class="text-right" style="border-top: 1px solid black;">
+                            <div class="text-muted">
+                                Page: <span class="page"/> / <span class="topage"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stamp repeated on every page -->
+                    <t t-if="data and data.get('stamp')">
+                        <img class="stamp-fixed" t-att-src="'data:image/png;base64,%s' % data.get('stamp')"/>
+                    </t>
+
+                </div>
+            </t>
+        </t>
+    </template>
+
+ 
+</odoo>

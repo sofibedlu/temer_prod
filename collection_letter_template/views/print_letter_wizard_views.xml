@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_print_letter_wizard_form_inherit_template" model="ir.ui.view">
+        <field name="name">property.print.letter.wizard.form.inherit.template</field>
+        <field name="model">property.print.letter.wizard</field>
+        <field name="inherit_id" ref="collection_management.view_print_letter_wizard_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='letter_type']" position="attributes">
+                <attribute name="widget"></attribute>
+                <attribute name="options">{}</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='letter_type']" position="after">
+                <field name="custom_template_id" 
+                       invisible="letter_type != 'custom'" 
+                       required="letter_type == 'custom'" 
+                       options="{'no_create': True}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_collection_outstanding_balance_tree" model="ir.ui.view">
+        <field name="name">collection.outstanding.balance.tree</field>
+        <field name="model">collection.installment</field>
+        <field name="arch" type="xml">
+            <tree string="Outstanding Progress Balances" default_order="due_date asc" create="0" delete="0">
+                <field name="collection_id"/>
+                <field name="name" string="Installment / Milestone Name"/>
+                <field name="partner_id" string="Customer"/>
+                
+                <field name="amount_total" sum="Total Expected" widget="monetary" optional="show"/>
+                <field name="amount_paid" sum="Total Paid" widget="monetary" optional="hide"/>
+                <field name="amount_residual" sum="Outstanding Remaining" widget="monetary" decoration-danger="amount_residual > 0"/>
+                
+                <field name="due_date" decoration-bf="1"/>
+                <field name="state" widget="badge" decoration-warning="state == 'partial'" decoration-info="state == 'unpaid'"/>
+                
+                <!-- Navigation Button -->
+                <button name="action_open_collection_order_outstanding" 
+                        type="object" 
+                        string="Open Order" 
+                        icon="fa-arrow-right" 
+                        class="btn-secondary"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_outstanding_balance_installments" model="ir.actions.act_window">
+        <field name="name">Outstanding Balances</field>
+        <field name="res_model">collection.installment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('is_outstanding_progress', '=', True)]</field>
+        <field name="view_id" ref="view_collection_outstanding_balance_tree"/>
+    </record>
+
+    <menuitem id="menu_outstanding_balance_installments"
+              name="Outstanding Balance"
+              parent="collection_management.menu_collection_root" 
+              action="action_outstanding_balance_installments"
+              groups="collection_management.group_collection_user"
+              sequence="12"/>
+</odoo>

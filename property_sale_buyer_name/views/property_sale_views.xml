@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_property_sale_form_inherit_buyer_name" model="ir.ui.view">
+        <field name="name">property.sale.form.inherit.buyer.name</field>
+        <field name="model">property.sale</field>
+        <field name="inherit_id" ref="advanced_property_management.property_sale_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="buyers_name" widget="html" readonly="1" options="{'scrolling': False}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- buyers_name to the property sale tree view -->
+    <record id="view_property_sale_tree_inherit_buyer_name" model="ir.ui.view">
+        <field name="name">property.sale.tree.inherit.buyer.name</field>
+        <field name="model">property.sale</field>
+        <field name="inherit_id" ref="advanced_property_management.property_sale_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="buyers_name" string="Buyers"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_collection_order_form_inherit_buyer_name" model="ir.ui.view">
+        <field name="name">collection.order.form.inherit.buyer.name</field>
+        <field name="model">collection.order</field>
+        <field name="inherit_id" ref="collection_management.view_collection_order_form"/> 
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="buyers_name" widget="html" readonly="1" options="{'scrolling': False}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

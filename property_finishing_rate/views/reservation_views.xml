@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Override base reservation warning — works on server (no temer_structure) -->
+    <record id="property_reservation_form_commercial_advance_base" model="ir.ui.view">
+        <field name="name">property.reservation.form.commercial.advance.base</field>
+        <field name="model">property.reservation</field>
+        <field name="inherit_id" ref="ahadubit_property_reservation.property_reservation_history_view_form_id"/>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('alert-danger')]" position="replace">
+                <field name="is_commercial_regular" invisible="1"/>
+                <field name="commercial_advance_amount" invisible="1"/>
+
+                <div class="alert alert-danger" role="alert"
+                     invisible="is_sufficient == True or is_commercial_regular == True">
+                    <span>Insufficient balance! Remaining Amount: <field name="payment_diff"/></span>
+                </div>
+
+                <div class="alert alert-danger" role="alert"
+                     invisible="is_sufficient == True or is_commercial_regular == False">
+                    <span>Commercial Property — 50% of Commercial Amount must be paid before reserving. Required: <field name="commercial_advance_amount" readonly="1"/></span>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

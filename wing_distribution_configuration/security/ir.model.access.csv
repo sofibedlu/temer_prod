@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_wing_distribution_type,wing.distribution.type,model_wing_distribution_type,wing_distribution_configuration.group_wing_distribution_user,1,1,1,0
+access_wing_distribution_line,wing.distribution.line,model_wing_distribution_line,wing_distribution_configuration.group_wing_distribution_user,1,1,1,1
+access_wing_distribution_team_state,wing.distribution.team.state,model_wing_distribution_team_state,wing_distribution_configuration.group_wing_distribution_user,1,1,1,0
+access_wing_existing_customer_sms,wing.existing.customer.sms,model_wing_existing_customer_sms,base.group_user,1,1,1,1
+

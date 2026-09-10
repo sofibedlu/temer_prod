@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Report Action -->
+    <record id="action_report_weekly_support" model="ir.actions.report">
+        <field name="name">IT Infrastructure Support Weekly Report</field>
+        <field name="model">support.weekly.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">property_support_management.report_weekly_support_template</field>
+        <field name="report_file">property_support_management.report_weekly_support_template</field>
+        <field name="print_report_name">'Support_Weekly_Report_%s_%s' % (object.start_date, object.end_date)</field>
+        <field name="binding_model_id" eval="False"/>
+    </record>
+
+    <!-- QWeb Template -->
+    <template id="report_weekly_support_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page" style="font-family: 'Times New Roman', serif; font-size: 12pt;">
+
+                        <!-- ===== TITLE ===== -->
+                        <div style="text-align: center; margin-top: 20px; margin-bottom: 28px;">
+                            <h2 style="color: #2F5597; font-weight: normal; font-size: 24pt; margin: 0;">
+                                IT Infrastructure Support Weekly Report
+                            </h2>
+                        </div>
+
+                        <!-- ===== HEADER INFO ===== -->
+                        <div style="margin-bottom: 16px;">
+                            <p style="margin: 4px 0;">
+                                <strong>Reporting Period:</strong>
+                                [<span t-esc="o.start_date.strftime('%b %d, %Y')"/> – <span t-esc="o.end_date.strftime('%b %d, %Y')"/>]
+                            </p>
+                            <p style="margin: 4px 0;">
+                                <strong>Assignee:</strong>
+                                <span t-esc="o.assignee_id.name" style="color: #548235;"/>
+                            </p>
+                            <t t-if="o.department">
+                                <p style="margin: 4px 0;">
+                                    <strong>Department:</strong>
+                                    <span t-esc="o.department" style="color: #548235;"/>
+                                </p>
+                            </t>
+                        </div>
+
+                        <hr style="border-top: 2px solid #9e9e9e; margin-bottom: 20px;"/>
+
+                        <!-- ===== SECTIONS LOOP ===== -->
+                        <t t-foreach="o.section_ids" t-as="section">
+
+                            <!-- User-written section content -->
+                            <div style="margin-top: 18px;">
+                                <h3 style="color: #2F5597; font-size: 16pt; font-weight: normal; margin-bottom: 6px;">
+                                    <t t-esc="section.title"/>
+                                </h3>
+
+                                <t t-set="num_counter" t-value="0"/>
+                                <t t-foreach="section.line_ids" t-as="line">
+                                    <!-- PARAGRAPH -->
+                                    <t t-if="line.line_type == 'paragraph'">
+                                        <t t-foreach="(line.text or '').splitlines()" t-as="para_line">
+                                            <t t-if="para_line.strip()">
+                                                <p style="margin: 3px 0 3px 24px; line-height: 1.6;"><t t-esc="para_line.strip()"/></p>
+                                            </t>
+                                        </t>
+                                    </t>
+                                    <!-- BULLET: each line in the text block becomes a bullet -->
+                                    <t t-if="line.line_type == 'bullet'">
+                                        <t t-foreach="(line.text or '').splitlines()" t-as="bline">
+                                            <t t-if="bline.strip()">
+                                                <p style="margin: 2px 0 2px 36px; line-height: 1.5;">&#x2022; <t t-esc="bline.strip()"/></p>
+                                            </t>
+                                        </t>
+                                    </t>
+                                    <!-- NUMBERED: each text line increments the shared section counter -->
+                                    <t t-if="line.line_type == 'numbered'">
+                                        <t t-foreach="(line.text or '').splitlines()" t-as="nline">
+                                            <t t-if="nline.strip()">
+                                                <t t-set="num_counter" t-value="num_counter + 1"/>
+                                                <p style="margin: 2px 0 2px 36px; line-height: 1.5;"><t t-esc="num_counter"/>. <t t-esc="nline.strip()"/></p>
+                                            </t>
+                                        </t>
+                                    </t>
+                                </t>
+                            </div>
+
+                            <!-- ===== AUTO: Support Operations table after FIRST section ===== -->
+                            <t t-if="section_index == 0">
+                                <div style="margin-top: 22px;">
+                                    <h3 style="color: #2F5597; font-size: 16pt; font-weight: normal; margin-bottom: 8px;">2. Support Operations</h3>
+
+                                    <t t-set="ops" t-value="o.get_support_operations()"/>
+                                    <t t-if="ops">
+                                        <table style="width: 100%; border-collapse: collapse; font-size: 10pt; text-align: center;">
+                                            <thead>
+                                                <tr style="background-color: #e8e8e8;">
+                                                    <th rowspan="2" style="border: 1px solid black; padding: 5px; vertical-align: middle; width: 14%;">Site / office Location</th>
+                                                    <th colspan="5" style="border: 1px solid black; padding: 5px;">Supported Tasks</th>
+                                                    <th rowspan="2" style="border: 1px solid black; padding: 5px; vertical-align: middle; width: 8%;">Dates</th>
+                                                    <th rowspan="2" style="border: 1px solid black; padding: 5px; vertical-align: middle; width: 10%;">Time Taken</th>
+                                                </tr>
+                                                <tr style="background-color: #e8e8e8;">
+                                                    <th style="border: 1px solid black; padding: 4px; width: 12%;">Department</th>
+                                                    <th style="border: 1px solid black; padding: 4px; width: 12%;">Category</th>
+                                                    <th style="border: 1px solid black; padding: 4px; width: 24%;">Remark</th>
+                                                    <th style="border: 1px solid black; padding: 4px; width: 8%;">Task</th>
+                                                    <th style="border: 1px solid black; padding: 4px; width: 12%;">Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <t t-foreach="ops" t-as="op">
+                                                    <tr>
+                                                        <td style="border: 1px solid black; padding: 4px; font-weight: bold; text-align: left;"><t t-esc="op['site']"/></td>
+                                                        <td style="border: 1px solid black; padding: 4px;"><t t-esc="op['department']"/></td>
+                                                        <td style="border: 1px solid black; padding: 4px;"><t t-esc="op['category']"/></td>
+                                                        <td style="border: 1px solid black; padding: 4px; text-align: left;"><t t-esc="op['remark']"/></td>
+                                                        <td style="border: 1px solid black; padding: 4px;"><t t-esc="op['task_count']"/></td>
+                                                        <td style="border: 1px solid black; padding: 4px;">
+                                                            <t t-esc="op['status']"/>
+                                                            <t t-if="op.get('is_overdue')">
+                                                                <br/>
+                                                                <span style="color: red;">(Overdue)</span>
+                                                            </t>
+                                                        </td>
+                                                        <td style="border: 1px solid black; padding: 4px;"><t t-esc="op['date']"/></td>
+                                                        <td style="border: 1px solid black; padding: 4px;"><t t-esc="op['time_taken']"/></td>
+                                                    </tr>
+                                                </t>
+                                            </tbody>
+                                        </table>
+
+                                        <!-- ===== CATEGORY SUMMARY at the bottom of the operations table ===== -->
+                                        <t t-set="cat_summary" t-value="o.get_category_summary()"/>
+                                        <t t-if="cat_summary['rows']">
+                                            <table style="width: 40%; border-collapse: collapse; font-size: 10pt; margin-left: auto; margin-top: 0;">
+                                                <t t-foreach="cat_summary['rows']" t-as="crow">
+                                                    <tr>
+                                                        <td style="border: 1px solid black; padding: 4px; text-align: right; font-weight: bold; padding-right: 8px;"><t t-esc="crow['name']"/>:</td>
+                                                        <td style="border: 1px solid black; padding: 4px; text-align: center; width: 60px;"><t t-esc="crow['count']"/></td>
+                                                    </tr>
+                                                </t>
+                                                <tr style="background-color: #f0f0f0; font-weight: bold;">
+                                                    <td style="border: 1px solid black; padding: 4px; text-align: right; padding-right: 8px;">Total:</td>
+                                                    <td style="border: 1px solid black; padding: 4px; text-align: center;"><t t-esc="cat_summary['total']"/></td>
+                                                </tr>
+                                            </table>
+                                        </t>
+
+                                    </t>
+                                    <t t-else="">
+                                        <p style="color: #888; font-style: italic; margin-left: 20px;">No support tasks found for this reporting period.</p>
+                                    </t>
+                                </div>
+                            </t>
+
+                        </t>
+
+                        <!-- Edge case: No sections at all – still show operations table -->
+                        <t t-if="not o.section_ids">
+                            <div style="margin-top: 22px;">
+                                <h3 style="color: #2F5597; font-size: 16pt; font-weight: normal; margin-bottom: 8px;">2. Support Operations</h3>
+                                <t t-set="ops" t-value="o.get_support_operations()"/>
+                                <t t-if="ops">
+                                    <table style="width: 100%; border-collapse: collapse; font-size: 10pt; text-align: center;">
+                                        <thead>
+                                            <tr style="background-color: #e8e8e8;">
+                                                <th rowspan="2" style="border: 1px solid black; padding: 5px; vertical-align: middle; width: 18%;">Site / office Location</th>
+                                                <th colspan="4" style="border: 1px solid black; padding: 5px;">Supported Tasks</th>
+                                                <th rowspan="2" style="border: 1px solid black; padding: 5px; vertical-align: middle; width: 10%;">Dates</th>
+                                            </tr>
+                                            <tr style="background-color: #e8e8e8;">
+                                                <th style="border: 1px solid black; padding: 4px; width: 14%;">Department</th>
+                                                <th style="border: 1px solid black; padding: 4px; width: 32%;">Issue</th>
+                                                <th style="border: 1px solid black; padding: 4px; width: 8%;">Task</th>
+                                                <th style="border: 1px solid black; padding: 4px; width: 12%;">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="ops" t-as="op">
+                                                <tr>
+                                                    <td style="border: 1px solid black; padding: 4px; font-weight: bold; text-align: left;"><t t-esc="op['site']"/></td>
+                                                    <td style="border: 1px solid black; padding: 4px;"><t t-esc="op['department']"/></td>
+                                                    <td style="border: 1px solid black; padding: 4px; text-align: left;"><t t-esc="op['issue']"/></td>
+                                                    <td style="border: 1px solid black; padding: 4px;"><t t-esc="op['task_count']"/></td>
+                                                    <td style="border: 1px solid black; padding: 4px;"><t t-esc="op['status']"/></td>
+                                                    <td style="border: 1px solid black; padding: 4px;"><t t-esc="op['date']"/></td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+
+                                    <t t-set="cat_summary" t-value="o.get_category_summary()"/>
+                                    <t t-if="cat_summary['rows']">
+                                        <table style="width: 40%; border-collapse: collapse; font-size: 10pt; margin-left: auto; margin-top: 0;">
+                                            <t t-foreach="cat_summary['rows']" t-as="crow">
+                                                <tr>
+                                                    <td style="border: 1px solid black; padding: 4px; text-align: right; font-weight: bold; padding-right: 8px;"><t t-esc="crow['name']"/>:</td>
+                                                    <td style="border: 1px solid black; padding: 4px; text-align: center; width: 60px;"><t t-esc="crow['count']"/></td>
+                                                </tr>
+                                            </t>
+                                            <tr style="background-color: #f0f0f0; font-weight: bold;">
+                                                <td style="border: 1px solid black; padding: 4px; text-align: right; padding-right: 8px;">Total:</td>
+                                                <td style="border: 1px solid black; padding: 4px; text-align: center;"><t t-esc="cat_summary['total']"/></td>
+                                            </tr>
+                                        </table>
+                                    </t>
+                                </t>
+                                <t t-else="">
+                                    <p style="color: #888; font-style: italic; margin-left: 20px;">No support tasks found for this reporting period.</p>
+                                </t>
+                            </div>
+                        </t>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

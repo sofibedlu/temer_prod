@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="bulk_generate_message_wizard_view_form" model="ir.ui.view">
+        <field name="name">bulk.generate.message.wizard.form</field>
+        <field name="model">bulk.generate.message.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Generated">
+                <sheet>
+                    <group>
+                        <field name="bulk_id" invisible="1"/>
+                        <field name="message" nolabel="1" readonly="1" colspan="2"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_close" string="Close" type="object" class="btn-primary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

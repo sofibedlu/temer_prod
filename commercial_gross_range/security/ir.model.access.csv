@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_commercial_gross_range_user,commercial.gross.range user,model_commercial_gross_range,,1,1,1,1

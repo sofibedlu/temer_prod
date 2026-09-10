@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="manager_reports.StockCollectionSummaryClient" owl="1">
+        <div class="manager_reports_container">
+            <div class="report_header">
+                <h2 t-esc="t('Consolidate Report')"/>
+                <div class="filter_section">
+                    <div class="filter_row">
+                        <label class="filter_checkbox_label">
+                            <input type="checkbox" t-model="state.use_all_dates" t-on-change="onAllDatesChange"/>
+                            <span t-esc="t('All data (no date filter)')"/>
+                        </label>
+                        <label t-esc="t('Date From')"/>:
+                        <input type="date" t-model="state.date_from" t-on-change="onDateChange" class="date_input" t-att-disabled="state.use_all_dates"/>
+                        <label t-esc="t('Date To')"/>:
+                        <input type="date" t-model="state.date_to" t-on-change="onDateChange" class="date_input" t-att-disabled="state.use_all_dates"/>
+                        <button class="btn btn-primary" t-on-click="loadData" t-esc="t('Show')"/>
+                        <button class="btn btn-secondary" t-on-click="exportExcel" t-esc="t('Export Excel')"/>
+                        <button class="btn btn-secondary" t-on-click="exportPDF" t-esc="t('Export PDF')"/>
+                    </div>
+                </div>
+            </div>
+            
+            <t t-if="state.loading">
+                <div class="loading_message" t-esc="t('Loading data...')"/>
+            </t>
+            
+            <t t-if="!state.loading">
+                <div class="report_content mr_scroll_y">
+                    <!-- Date range indicator -->
+                    <div class="kpi_section" style="margin-bottom: 8px; font-size: 12px; color: #6b7280;">
+                        <span t-esc="'Data for ' + (state.use_all_dates ? 'all dates' : (state.date_from + ' to ' + state.date_to))"/>
+                    </div>
+                    <!-- Top KPI Cards -->
+                    <div class="kpi_section" style="margin-bottom: 16px;">
+                        <div class="kpi_card">
+                            <div class="kpi_label" t-esc="t('Total Average progress compared to plan')"/>
+                            <div class="kpi_value" t-esc="formatNumber(state.data.total_average_progress_compared_to_plan.toFixed(2))"/>%
+                        </div>
+                        <div class="kpi_card">
+                            <div class="kpi_label" t-esc="t('No. of sites ready for handover')"/>
+                            <div class="kpi_value" t-esc="formatNumber(state.data.sites_ready_for_handover)"/>
+                        </div>
+                        <div class="kpi_card">
+                            <div class="kpi_label" t-esc="t('Total Collection to date')"/>
+                            <div class="kpi_value" t-esc="formatAmount(state.data.total_collection)"/>
+                        </div>
+                        <div class="kpi_card">
+                            <div class="kpi_label" t-esc="t('Average collection per day')"/>
+                            <div class="kpi_value" t-esc="formatAmount(state.data.average_collection_per_day)"/>
+                        </div>
+                        <div class="kpi_card">
+                            <div class="kpi_label" t-esc="t('Average collection per site')"/>
+                            <div class="kpi_value" t-esc="formatAmount(state.data.average_collection_per_site)"/>
+                        </div>
+                        <div class="kpi_card">
+                            <div class="kpi_label" t-esc="t('Average achievement in %')"/>
+                            <div class="kpi_value" t-esc="formatNumber(state.data.average_achievement_percent.toFixed(2))"/>%
+                        </div>
+                    </div>
+                    
+                    <!-- Total Stock Available with Chart -->
+                    <div class="table_section">
+                        <h3 t-esc="t('Total Stock Available')"/>
+                        <div class="mr_table_graph_grid">
+                            <div class="mr_card">
+                                <div class="mr_table_scroll">
+                                    <table class="report_table">
+                                        <thead>
+                                            <tr>
+                                                <th t-esc="t('Type')"/>
+                                                <th t-esc="t('QTY')"/>
+                                                <th t-esc="t('Values')"/>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td t-esc="t('Residential')"/>
+                                                <td class="number_cell" t-esc="formatNumber(state.data.stock_available.residential.qty)"/>
+                                                <td class="number_cell" t-esc="formatCurrency(state.data.stock_available.residential.values)"/>
+                                            </tr>
+                                            <tr>
+                                                <td t-esc="t('Commercial')"/>
+                                                <td class="number_cell" t-esc="formatNumber(state.data.stock_available.commercial.qty)"/>
+                                                <td class="number_cell" t-esc="formatCurrency(state.data.stock_available.commercial.values)"/>
+                                            </tr>
+                                            <tr>
+                                                <td t-esc="t('Mixed use')"/>
+                                                <td class="number_cell" t-esc="formatNumber(state.data.stock_available.mixed_use?.qty || 0)"/>
+                                                <td class="number_cell" t-esc="formatCurrency(state.data.stock_available.mixed_use?.values || 0)"/>
+                                            </tr>
+                                            <tr class="total_row">
+                                                <td><strong t-esc="t('Total')"/></td>
+                                                <td class="total_cell"><t t-esc="formatNumber(state.data.stock_available.total.qty)"/></td>
+                                                <td class="total_cell"><t t-esc="formatCurrency(state.data.stock_available.total.values)"/></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="mr_card mr_graph_side">
+                                <div class="mr_graph_mini">
+                                    <div class="mr_graph_mini_title" t-esc="t('Stock Available Distribution')"/>
+                                    <canvas t-ref="stockAvailableChart"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Total Stock Sold with Chart -->
+                    <div class="table_section">
+                        <h3 t-esc="t('Total Stock Sold')"/>
+                        <div class="mr_table_graph_grid">
+                            <div class="mr_card">
+                                <div class="mr_table_scroll">
+                                    <table class="report_table">
+                                        <thead>
+                                            <tr>
+                                                <th t-esc="t('Type')"/>
+                                                <th t-esc="t('QTY')"/>
+                                                <th t-esc="t('Values')"/>
+                                                <th t-esc="t('Achievement in %')"/>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td t-esc="t('Residential')"/>
+                                                <td class="number_cell" t-esc="formatNumber(state.data.stock_sold.residential.qty)"/>
+                                                <td class="number_cell" t-esc="formatCurrency(state.data.stock_sold.residential.values)"/>
+                                                <td class="progress_cell">
+                                                    <div class="progress_bar_container">
+                                                        <div class="progress_bar" t-att-style="'width: ' + Math.min(100, Math.max(0, state.data.stock_sold.residential.achievement_percent || 0)) + '%'"/>
+                                                        <span class="progress_text" t-esc="formatNumber(state.data.stock_sold.residential.achievement_percent.toFixed(2)) + '%'"/>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td t-esc="t('Commercial')"/>
+                                                <td class="number_cell" t-esc="formatNumber(state.data.stock_sold.commercial.qty)"/>
+                                                <td class="number_cell" t-esc="formatCurrency(state.data.stock_sold.commercial.values)"/>
+                                                <td class="progress_cell">
+                                                    <div class="progress_bar_container">
+                                                        <div class="progress_bar" t-att-style="'width: ' + Math.min(100, Math.max(0, state.data.stock_sold.commercial.achievement_percent || 0)) + '%'"/>
+                                                        <span class="progress_text" t-esc="formatNumber((state.data.stock_sold.commercial.achievement_percent || 0).toFixed(2)) + '%'"/>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td t-esc="t('Mixed use')"/>
+                                                <td class="number_cell" t-esc="formatNumber(state.data.stock_sold.mixed_use?.qty || 0)"/>
+                                                <td class="number_cell" t-esc="formatCurrency(state.data.stock_sold.mixed_use?.values || 0)"/>
+                                                <td class="progress_cell">
+                                                    <div class="progress_bar_container">
+                                                        <div class="progress_bar" t-att-style="'width: ' + Math.min(100, Math.max(0, state.data.stock_sold.mixed_use?.achievement_percent || 0)) + '%'"/>
+                                                        <span class="progress_text" t-esc="formatNumber((state.data.stock_sold.mixed_use?.achievement_percent || 0).toFixed(2)) + '%'"/>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="total_row">
+                                                <td><strong t-esc="t('Total')"/></td>
+                                                <td class="total_cell"><t t-esc="formatNumber(state.data.stock_sold.total.qty)"/></td>
+                                                <td class="total_cell"><t t-esc="formatCurrency(state.data.stock_sold.total.values)"/></td>
+                                                <td class="progress_cell">
+                                                    <div class="progress_bar_container">
+                                                        <div class="progress_bar" t-att-style="'width: ' + Math.min(100, Math.max(0, state.data.stock_sold.total.achievement_percent || 0)) + '%'"/>
+                                                        <span class="progress_text" t-esc="formatNumber(state.data.stock_sold.total.achievement_percent.toFixed(2)) + '%'"/>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="mr_card mr_graph_side">
+                                <div class="mr_graph_mini">
+                                    <div class="mr_graph_mini_title" t-esc="t('Available vs Sold (QTY)')"/>
+                                    <canvas t-ref="stockSoldChart"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    <!-- Stock Sold Over Time (QTY) -->
+                    <div class="table_section">
+                        <h3 t-esc="t('Stock Sold Over Time (units)')"/>
+                        <div class="mr_card">
+                            <div class="mr_graph_mini timeline_chart" style="height: 350px; min-height: 350px;">
+                                <canvas t-ref="stockSoldTimelineChart"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>
+

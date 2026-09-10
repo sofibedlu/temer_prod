@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Action: Show Mine - only reservations assigned to current user -->
+    <record id="action_property_assigned_sales_mine" model="ir.actions.act_window">
+        <field name="name">Assigned Sales</field>
+        <field name="res_model">property.reservation</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="domain">[('assigned_user_id', '=', uid)]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Reservations assigned to you for contract processing will appear here.
+            </p>
+        </field>
+    </record>
+
+    <!-- Action: Show All - all assigned reservations -->
+    <record id="action_property_assigned_sales_all" model="ir.actions.act_window">
+        <field name="name">Assigned Sales</field>
+        <field name="res_model">property.reservation</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="domain">[('assigned_user_id', '!=', False)]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                All assigned reservations for contract processing will appear here.
+            </p>
+        </field>
+    </record>
+
+    <!-- Root-level main menu for Show Mine -->
+    <menuitem id="menu_property_assigned_sales_mine"
+              name="Assigned Sales"
+              action="action_property_assigned_sales_mine"
+              sequence="60"
+              groups="temer_reservation_contact_team.group_assigned_sales_show_mine"/>
+
+    <!-- Root-level main menu for Show All -->
+    <menuitem id="menu_property_assigned_sales_all"
+              name="Assigned Sales"
+              action="action_property_assigned_sales_all"
+              sequence="60"
+              groups="temer_reservation_contact_team.group_assigned_sales_show_all"/>
+
+    <!-- Add Reassign button for Show All users -->
+    <record id="view_property_reservation_form_inherit_reassign" model="ir.ui.view">
+        <field name="name">property.reservation.form.reassign.inherit</field>
+        <field name="model">property.reservation</field>
+        <field name="inherit_id" ref="ahadubit_property_reservation.property_reservation_history_view_form_id"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/button[@name='print_change_history']" position="before">
+                <button name="action_open_reassign_wizard"
+                        string="Re-Assign"
+                        type="object"
+                        class="btn-secondary"
+                        invisible="status not in ['sales_confirmed', 'pending_sales', 'sold'] or not assigned_user_id"
+                        groups="temer_reservation_contact_team.group_assigned_sales_show_all"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Add View Sale button for assigned contract admin -->
+    <record id="view_property_reservation_form_inherit_assigned_view_sale" model="ir.ui.view">
+        <field name="name">property.reservation.form.assigned.view.sale.inherit</field>
+        <field name="model">property.reservation</field>
+        <field name="inherit_id" ref="ahadubit_property_reservation.property_reservation_history_view_form_id"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/button[@name='action_print_reservation_details']" position="before">
+                <button name="get_sales_from_reservation"
+                        string="View Sale"
+                        type="object"
+                        class="btn-primary"
+                        icon="fa-dollar"
+                        invisible="status not in ['pending_sales', 'sold']"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Add Sold button for assigned contract admin (Show Mine: only own) -->
+    <record id="view_property_reservation_form_inherit_assigned_sold" model="ir.ui.view">
+        <field name="name">property.reservation.form.assigned.sold.inherit</field>
+        <field name="model">property.reservation</field>
+        <field name="inherit_id" ref="ahadubit_property_reservation.property_reservation_history_view_form_id"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/button[@name='action_confirm_sales']" position="after">
+                <button name="action_assigned_sold"
+                        string="Sold"
+                        type="object"
+                        class="btn-primary"
+                        invisible="status != 'sales_confirmed' or assigned_user_id != uid"
+                        groups="temer_reservation_contact_team.group_assigned_sales_show_mine"/>
+                <!-- Show All users: Sold button visible for any assigned reservation -->
+                <button name="action_assigned_sold"
+                        string="Sold"
+                        type="object"
+                        class="btn-primary"
+                        invisible="status != 'sales_confirmed'"
+                        groups="temer_reservation_contact_team.group_assigned_sales_show_all"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Confirm button on property.sale: visible for Show All group and managers -->
+    <record id="view_property_sale_form_inherit_hide_confirm" model="ir.ui.view">
+        <field name="name">property.sale.form.hide.confirm.inherit</field>
+        <field name="model">property.sale</field>
+        <field name="inherit_id" ref="advanced_property_management.property_sale_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/button[@name='action_confirm']" position="attributes">
+                <attribute name="groups">advanced_property_management.group_property_manager,temer_reservation_contact_team.group_assigned_sales_show_all</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Add Payment button on property.sale: visible for Show All, Show Mine groups and managers -->
+    <record id="view_property_sale_form_inherit_hide_add_payment" model="ir.ui.view">
+        <field name="name">property.sale.form.hide.addpayment.inherit</field>
+        <field name="model">property.sale</field>
+        <field name="inherit_id" ref="ahadubit_property_reservation.property_sale_view_form_inherit_id"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/button[@name='add_payment_list']" position="attributes">
+                <attribute name="groups">advanced_property_management.group_property_manager,temer_reservation_contact_team.group_assigned_sales_show_all,temer_reservation_contact_team.group_assigned_sales_show_mine</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_property_org_unit_tree" model="ir.ui.view">
+        <field name="name">property.org.unit.tree</field>
+        <field name="model">property.org.unit</field>
+        <field name="arch" type="xml">
+            <tree string="Organizational Units">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_property_org_unit_form" model="ir.ui.view">
+        <field name="name">property.org.unit.form</field>
+        <field name="model">property.org.unit</field>
+        <field name="arch" type="xml">
+            <form string="Organizational Unit">
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" invisible="active"/>
+                    <group>
+                        <field name="name"/>
+                        <field name="active" invisible="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_property_org_unit" model="ir.actions.act_window">
+        <field name="name">Organizational Units</field>
+        <field name="res_model">property.org.unit</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_property_org_unit"
+              name="Organizational Units"
+              parent="advanced_property_management.property_configuration_menu"
+              action="action_property_org_unit"
+              sequence="120"/>
+</odoo>

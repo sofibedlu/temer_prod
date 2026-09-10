@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Site Company Action -->
+    <record id="site_company_action" model="ir.actions.act_window">
+        <field name="name">Company</field>
+        <field name="res_model">site.company</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Company
+            </p>
+        </field>
+    </record>
+
+    <!-- Site Company Tree View (inline editable) -->
+    <record id="site_company_view_tree_id" model="ir.ui.view">
+        <field name="name">site.company.tree</field>
+        <field name="model">site.company</field>
+        <field name="arch" type="xml">
+            <tree editable="top">
+                <field name="name" string="Company Name" class="text-left"/>
+                <field name="abbreviation" string="Abbreviation"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Site Company Form View -->
+    <record id="site_company_view_form_id" model="ir.ui.view">
+        <field name="name">site.company.form</field>
+        <field name="model">site.company</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group string="Company">
+                        <group>
+                            <field name="name" string="Company Name" required="1"/>
+                        </group>
+                        <group>
+                            <field name="abbreviation" string="Abbreviation" required="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Company Menu -->
+    <menuitem id="site_company_menu"
+        name="Company"
+        parent="ahadubit_property_base.property_config_menu"
+        action="site_company_action"
+        sequence="92"/>
+</odoo>
+

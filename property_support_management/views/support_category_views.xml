@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Form View -->
+        <record id="view_support_category_form" model="ir.ui.view">
+            <field name="name">support.category.form</field>
+            <field name="model">support.category</field>
+            <field name="arch" type="xml">
+                <form string="Category">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="description"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Tree View -->
+        <record id="view_support_category_tree" model="ir.ui.view">
+            <field name="name">support.category.tree</field>
+            <field name="model">support.category</field>
+            <field name="arch" type="xml">
+                <tree string="Categories">
+                    <field name="name"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_support_category" model="ir.actions.act_window">
+            <field name="name">Category Configuration</field>
+            <field name="res_model">support.category</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create a new Category
+              </p>
+            </field>
+        </record>
+
+        <!-- Menu Item -->
+        <menuitem id="menu_support_category_config" name="Category Configuration" parent="menu_support_management_config_root" action="action_support_category" sequence="20"/>
+    </data>
+</odoo>

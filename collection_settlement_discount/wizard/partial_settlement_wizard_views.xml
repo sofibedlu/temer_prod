@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partial_settlement_wizard_form_inherit_discount" model="ir.ui.view">
+        <field name="name">partial.settlement.wizard.form.inherit.discount</field>
+        <field name="model">partial.settlement.wizard</field>
+        <field name="inherit_id" ref="collection_partial_settlement.view_partial_settlement_wizard_form"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="//field[@name='installment_ids']" position="after">
+                <group string="Discount Request">
+                    <group>
+                        <field name="apply_discount_request"/>
+                        
+                        <field name="discount_target_installment_id" 
+                            invisible="not apply_discount_request" 
+                            required="apply_discount_request"
+                            options="{'no_create': True, 'no_open': True}"/>
+                        
+                        <label for="discount_percentage" invisible="not apply_discount_request"/>
+                        <div class="o_row" invisible="not apply_discount_request">
+                            <field name="discount_percentage" required="apply_discount_request" class="oe_inline"/> %%
+                        </div>
+                        
+                        <field name="discount_amount" 
+                            invisible="not apply_discount_request" 
+                            required="apply_discount_request"/>
+                        
+                            
+                        <field name="discount_reason" 
+                            invisible="not apply_discount_request" 
+                            required="apply_discount_request"/>
+                        <field name="discount_attachment_ids" 
+                            widget="many2many_binary" 
+                            invisible="not apply_discount_request"/>
+                    </group>
+                    <group>
+                        <field name="needs_fallback_installments" invisible="1"/>
+                        <field name="agreed_settlement_amount" 
+                           invisible="not apply_discount_request"
+                           required="apply_discount_request"/>
+                        <field name="extra_discount_installment_ids" 
+                            widget="many2many_tags" 
+                            invisible="not apply_discount_request or not needs_fallback_installments" 
+                            required="needs_fallback_installments"
+                            options="{'no_create': True}"/>
+                    </group>
+                           
+                    
+                </group>
+            </xpath>
+
+            <xpath expr="//field[@name='custom_name']" position="attributes">
+                <attribute name="required">1</attribute>
+            </xpath>
+            
+        </field>
+    </record>
+
+    <record id="view_discount_request_tree_inherit_settlement" model="ir.ui.view">
+        <field name="name">discount.request.tree.inherit.settlement</field>
+        <field name="model">discount.request</field>
+        <field name="inherit_id" ref="collection_discount_request.view_discount_request_tree"/>
+        <field name="arch" type="xml">
+            <!-- Hide individual installment and remaining amount -->
+            <xpath expr="//field[@name='installment_id']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='remaining_amount']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            <!-- Add joint text view -->
+            <xpath expr="//field[@name='installment_id']" position="after">
+                <field name="target_installments_text"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_discount_request_form_inherit_settlement" model="ir.ui.view">
+        <field name="name">discount.request.form.inherit.settlement</field>
+        <field name="model">discount.request</field>
+        <field name="inherit_id" ref="collection_discount_request.view_discount_request_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='remaining_amount']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='installment_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='installment_id']" position="after">
+                <field name="target_installments_text" readonly="1"/>
+            </xpath>
+            
+            <xpath expr="//field[@name='reason']" position="after">
+                <!-- <field name="source_merged_installment_id" invisible="not source_merged_installment_id"/> -->
+                <field name="settlement_session_id" invisible="1"/>
+                <field name="has_pending_installments" invisible="1"/>
+            </xpath>
+
+            <xpath expr="//sheet" position="inside">
+                <notebook invisible="not has_pending_installments and not settlement_session_id">
+
+                    <!-- Possible Discount Allocation -->
+                    <page string="Possible Discount Allocation" invisible="state != 'pending' and state != 'draft'">
+                         <field name="preview_allocation_ids" readonly="1">
+                             <tree>
+                                 <field name="installment_id"/>
+                                 <field name="applied_discount" sum="Total Planned"/>
+                                 <field name="remaining_amount"/>
+                                 <field name="currency_id" column_invisible="1"/>
+                             </tree>
+                         </field>   
+                    </page>
+                    
+                    <!-- Pre-approval -->
+                    <page string="Installments to Fold" invisible="not has_pending_installments or settlement_session_id">
+                        <field name="pending_installment_ids" readonly="1">
+                            <!-- <tree decoration-danger="state == 'overdue'" decoration-success="state == 'paid'" decoration-warning="state == 'partial'"> -->
+                            <tree>
+                                <field name="name"/>
+                                <!-- <field name="due_date"/> -->
+                                <field name="amount_total" widget="monetary" sum="Total Expected"/>
+                                <field name="amount_paid" widget="monetary" sum="Total Paid"/>
+                                <field name="amount_residual" widget="monetary" sum="Total Remaining"/>
+                                <!-- <field name="state"/> -->
+                                <field name="currency_id" column_invisible="1"/>
+                            </tree>
+                        </field>
+                    </page>
+
+                    <!-- Discount Allocations -->
+                    <page string="Discount Allocations" invisible="not allocation_ids">
+                        <field name="allocation_ids">
+                            <tree>
+                                <field name="installment_id"/>
+                                <field name="amount" sum="Total"/>
+                                <field name="currency_id" column_invisible="1"/>
+                            </tree>
+                        </field>
+                    </page>
+
+                    <!-- Post-approval -->
+                    <page string="Folded Installments (Settled)" invisible="not settlement_session_id">
+                        <field name="folded_installment_history_ids" readonly="1">
+                            <!-- <tree decoration-danger="state == 'overdue'" decoration-success="state == 'paid'" decoration-warning="state == 'partial'"> -->
+                            <tree>
+                                <field name="name"/>
+                                <!-- <field name="due_date"/> -->
+                                <field name="amount_total" widget="monetary" sum="Total Expected"/>
+                                <field name="amount_paid" widget="monetary" sum="Total Paid"/>
+                                <field name="amount_residual" widget="monetary" sum="Total Remaining"/>
+                                <!-- <field name="state"/> -->
+                                <field name="currency_id" column_invisible="1"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+            </xpath>
+            
+        </field>
+    </record>
+
+    <!-- collection order update -->
+    <record id="view_collection_order_form_inherit_discount_allocations" model="ir.ui.view">
+        <field name="name">collection.order.form.inherit.discount.allocations</field>
+        <field name="model">collection.order</field>
+        <field name="inherit_id" ref="collection_management.view_collection_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Discount Allocations" invisible="not discount_allocation_ids">
+                    <field name="discount_allocation_ids">
+                        <tree>
+                            <field name="request_id"/>
+                            <field name="installment_id"/>
+                            <field name="amount" sum="Total Allocated"/>
+                            <field name="currency_id" column_invisible="1"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

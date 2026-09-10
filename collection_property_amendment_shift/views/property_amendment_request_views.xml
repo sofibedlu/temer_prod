@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_property_amendment_request_form_inherit_site_shift" model="ir.ui.view">
+        <field name="name">property.amendment.request.form.inherit.site.shift</field>
+        <field name="model">property.amendment.request</field>
+        <field name="inherit_id" ref="collection_property_amendment.view_property_amendment_request_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='site_id']" position="attributes">
+                <attribute name="invisible">0</attribute>
+            </xpath>
+            
+            <xpath expr="//field[@name='new_property_id']" position="before">
+                <field name="new_site_id" readonly="1" invisible="not is_site_shift"/>
+                <field name="is_site_shift" widget="boolean_toggle" readonly="1" invisible="not is_site_shift"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

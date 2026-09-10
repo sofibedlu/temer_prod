@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_collection_order_form_inherit_reminder" model="ir.ui.view">
+        <field name="name">collection.order.form.inherit.reminder</field>
+        <field name="model">collection.order</field>
+        <field name="inherit_id" ref="collection_management.view_collection_order_form"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="//field[@name='payment_schedule_type']" position="after">
+                <field name="requires_early_reminder" widget="boolean_toggle"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

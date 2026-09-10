@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Lead Source Report Action -->
+    <record id="action_source_lead_report" model="ir.actions.client">
+        <field name="name">Report</field>
+        <field name="tag">source_lead_report.report</field>
+    </record>
+
+    <!-- Parent Menu - Lead Source (User Access) -->
+    <menuitem id="menu_lead_source_report"
+              name="Lead Source"
+              groups="source_lead_report.group_lead_source_report_access"
+              sequence="100"/>
+
+    <!-- Lead Source Report Submenu -->
+    <menuitem id="menu_lead_source_report_main"
+              name="Lead Source"
+              parent="menu_lead_source_report"
+              action="action_source_lead_report"
+              groups="source_lead_report.group_lead_source_report_access"
+              sequence="10"/>
+</odoo>
+

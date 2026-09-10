@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="group_reservation_contact_team" model="res.groups">
+            <field name="name">Reservation Contact Team</field>
+            <field name="category_id" ref="ahadubit_property_base.property_res_groups_category"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="comment">Users in this group can access Assigned Sales features.</field>
+        </record>
+
+        <!-- Assigned Sales / Show Mine: user sees only their own assigned reservations -->
+        <record id="group_assigned_sales_show_mine" model="res.groups">
+            <field name="name">Assigned Sales / Show Mine</field>
+            <field name="category_id" ref="ahadubit_property_base.property_res_groups_category"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="comment">User can see only reservations assigned to themselves in Assigned Sales.</field>
+        </record>
+
+        <!-- Assigned Sales / Show All: user sees all assigned reservations + gets Confirm/Approve buttons -->
+        <record id="group_assigned_sales_show_all" model="res.groups">
+            <field name="name">Assigned Sales / Show All</field>
+            <field name="category_id" ref="ahadubit_property_base.property_res_groups_category"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="comment">User can see all assigned reservations and use Confirm/Approve buttons.</field>
+        </record>
+    </data>
+</odoo>

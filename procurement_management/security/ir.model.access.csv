@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_department_request_user,department.request.user,model_department_request,base.group_user,1,1,1,1
+access_department_request_line_user,department.request.line.user,model_department_request_line,base.group_user,1,1,1,1
+access_procurement_request_manager,procurement.request.manager,model_procurement_request,group_procurement_manager,1,1,1,1
+access_procurement_request_line_manager,procurement.request.line.manager,model_procurement_request_line,group_procurement_manager,1,1,1,1
+access_proforma_analysis_manager,proforma.analysis.manager,model_procurement_proforma_analysis,group_procurement_manager,1,1,1,1
+access_proforma_line_manager,proforma.line.manager,model_procurement_proforma_line,group_procurement_manager,1,1,1,1
+access_add_vendor_quotation_wizard,add.vendor.quotation.wizard,model_add_vendor_quotation_wizard,group_procurement_manager,1,1,1,1
+access_procurement_proforma_evaluation_manager,procurement.proforma.evaluation.manager,model_procurement_proforma_evaluation,group_procurement_manager,1,1,1,1
+access_procurement_proforma_evaluation_line_manager,procurement.proforma.evaluation.line.manager,model_procurement_proforma_evaluation_line,group_procurement_manager,1,1,1,1
+access_internal_request_user,internal.request.user,model_internal_request,base.group_user,1,1,1,1
+access_internal_request_line_user,internal.request.line.user,model_internal_request_line,base.group_user,1,1,1,1

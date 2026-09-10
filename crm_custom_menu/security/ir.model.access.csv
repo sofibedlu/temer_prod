@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_crm_callcenter,Crm_Callcenter,model_crm_callcenter,,1,1,1,1
+access_crm_callcenter_phone,Crm_Callcenter_Phone,model_crm_callcenter_phone,,1,1,1,1
+access_crm_affilater,Crm_Affilater,model_crm_affilater,,1,1,1,1
+access_crm_affilater_phone,Crm_Affilater_Phone,model_crm_affilater_phone,,1,1,1,1
+access_crm_reception,Crm_Reception,model_crm_reception,,1,1,1,1
+access_crm_reception_phone,Crm_Crm_Reception_Phone,model_crm_reception_phone,,1,1,1,1
+access_crm_website,Crm_Website,model_crm_website,,1,1,1,1
+access_crm_website_phone,Crm_Crm_Website_Phone,model_crm_website_phone,,1,1,1,1
+access_property_wing_config,Property_Wing_Config,model_property_wing_config,,1,1,1,1
+access_property_wing_config_salesperson_line,property.wing.config.salesperson.line,model_property_wing_config_salesperson_line,base.group_user,1,1,1,1
+access_property_wing_config_supervisor_line,property.wing.config.supervisor.line,model_property_wing_config_supervisor_line,base.group_user,1,1,1,1
+access_property_wing_config,property.wing.config,model_property_wing_config,base.group_user,1,1,1,1

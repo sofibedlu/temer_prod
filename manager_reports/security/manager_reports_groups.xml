@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Managerial Dashboard Category (sequence 10 so it appears near top in user form) -->
+    <record id="module_category_managerial_dashboard" model="ir.module.category">
+        <field name="name">Managerial Dashboard</field>
+        <field name="description">Managerial Dashboard Access Rights</field>
+        <field name="sequence">10</field>
+    </record>
+    
+    <!-- Managerial Dashboard Group - assign this role to give access to Managerial Dashboard menus -->
+    <record id="group_manager_reports" model="res.groups">
+        <field name="name">Managerial Dashboard</field>
+        <field name="category_id" ref="module_category_managerial_dashboard"/>
+        <field name="comment">Access to Managerial Dashboard (Stock, Sales, Collection, Consolidate reports)</field>
+    </record>
+
+    <!-- Weekly Reports privilege: Weekly Sales By Wing + Weekly Report only -->
+    <record id="group_weekly_reports" model="res.groups">
+        <field name="name">Weekly Reports</field>
+        <field name="category_id" ref="module_category_managerial_dashboard"/>
+        <field name="comment">Access to Weekly Sales Report By Wing and Weekly Report (individual privilege)</field>
+    </record>
+
+</odoo>
+

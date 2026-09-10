@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_contract_template_article_form" model="ir.ui.view">
+        <field name="name">contract.template.article.form</field>
+        <field name="model">contract.section.article</field>
+        <field name="arch" type="xml">
+            <form string="Contract Article">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="main_title" string="Article Title"/>
+                        <h1>
+                            <field name="main_title" placeholder="e.g. Article 1: Payment Terms" required="1"/>
+                        </h1>
+                        <field name="subtitle" placeholder="Short description..." class="text-muted"/>
+                    </div>
+
+                    <group name="main_config">
+                        <group>
+                            <field name="section_ids"
+                                   widget="many2many_tags"
+                                   options="{'no_create': true, 'no_create_edit': true}"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group>
+                            <field name="is_title_printed"/>
+                            <field name="is_dynamic_content" widget="boolean_toggle"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Article Body" name="content_body">
+                            <div class="alert alert-info" role="alert" invisible="not is_dynamic_content">
+                                <strong>Dynamic Mode Enabled:</strong> Use placeholders like ${buyer_full_name}.
+                            </div>
+                            <field name="content"
+                                   widget="html"
+                                   options="{'style-inline': true, 'resizable': true}"/>
+                        </page>
+                        <page string="Dynamic Logic (Python)" name="dynamic_logic" invisible="not is_dynamic_content">
+                            <group>
+                                <field name="dynamic_code"
+                                       widget="ace"
+                                       options="{'mode': 'python'}"
+                                       required="is_dynamic_content"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_contract_template_content_tree" model="ir.ui.view">
+        <field name="name">contract.template.content.tree</field>
+        <field name="model">contract.section.article</field>
+        <field name="arch" type="xml">
+            <tree string="Articles">
+                <field name="sequence" widget="handle"/>
+                <field name="main_title"/>
+                <field name="subtitle" optional="show"/>
+                <field name="is_dynamic_content" widget="boolean_toggle" optional="show"/>
+                <field name="is_title_printed" optional="show"/>
+                <field name="section_ids" widget="many2many_tags" optional="show"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_contract_article_search" model="ir.ui.view">
+    <field name="name">contract.section.article.search</field>
+    <field name="model">contract.section.article</field>
+    <field name="arch" type="xml">
+        <search string="Contract Articles">
+            <field name="main_title" string="Article Title"/>
+            <field name="subtitle"/>
+            
+            <field name="section_ids" string="Template" filter_domain="[('section_ids.name', 'ilike', self)]"/>
+
+            <separator/>
+            
+            <group expand="0" string="Group By">
+                <filter string="Template" name="group_by_section" context="{'group_by': 'section_ids'}"/>
+            </group>
+        </search>
+    </field>
+</record>
+
+    <record id="view_contract_section_form" model="ir.ui.view">
+        <field name="name">contract.section.form</field>
+        <field name="model">contract.section</field>
+        <field name="arch" type="xml">
+            <form string="Contract Template">
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. Standard Lease Agreement"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <!--  -->
+                            <field name="developer_id" options="{'no_create': true, 'no_open': true}"/>
+                        </group>
+                        <group>
+                            <field name="sequence" readonly="1"/>
+                            <field name="sub_prefix"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Contract Articles" name="sections">
+                            <field name="section_content_ids"
+                                   nolabel="1"
+                                   context="{
+                                       'tree_view_ref': 'view_contract_template_content_tree',
+                                       'form_view_ref': 'view_contract_template_article_form'
+                                   }">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="main_title"/>
+                                    <field name="subtitle" optional="show"/>
+                                    <field name="is_dynamic_content" string="Dynamic" widget="boolean_toggle"/>
+                                    <field name="is_title_printed" string="Print Title"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_contract_section_tree" model="ir.ui.view">
+        <field name="name">contract.section.tree</field>
+        <field name="model">contract.section</field>
+        <field name="arch" type="xml">
+            <tree string="Contract Templates">
+                <field name="name" decoration-bf="1"/>
+                <field name="developer_id"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_contract_sections" model="ir.actions.act_window">
+        <field name="name">Contract Templates</field>
+        <field name="res_model">contract.section</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_contract_articles" model="ir.actions.act_window">
+        <field name="name">Articles</field>
+        <field name="res_model">contract.section.article</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_contract_section_root"
+              name="Contract Management"
+              sequence="10"
+              parent="advanced_property_management.property_configuration_menu"/>
+
+    <menuitem id="menu_contract_section"
+              name="Templates"
+              parent="menu_contract_section_root"
+              action="action_contract_sections"
+              sequence="10"/>
+
+    <menuitem id="menu_contract_articles"
+              name="Articles"
+              parent="menu_contract_section_root"
+              action="action_contract_articles"
+              sequence="20"/>
+
+</odoo>

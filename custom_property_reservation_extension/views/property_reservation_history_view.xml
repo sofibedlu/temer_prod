@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="inherit_property_reservation_history_view_form" model="ir.ui.view">
+        <field name="name">property.reservation.history.form.inherit</field>
+        <field name="model">property.reservation</field>
+        <field name="inherit_id" ref="ahadubit_property_reservation.property_reservation_history_view_form_id"/>
+        <field name="arch" type="xml">
+            <!-- insert the field so invisible modifier can reference it -->
+            <xpath expr="//form" position="inside">
+                <field name="show_convert_to_regular" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='reservation_type_id']" position="after">
+                <field name="converted_regular" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='reservation_type_id']" position="replace">
+                <field name="reservation_type_id" readonly="converted_regular == True or status not in ['draft',False] " />
+                    
+            </xpath>
+            <!-- then override the header -->
+            <xpath expr="//header" position="inside">
+                <button name="action_convert_to_regular"
+                        type="object"
+                        string="Convert to Regular"
+                        class="btn-primary"
+                        invisible="not show_convert_to_regular"
+                />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="property_property_search_inherit_groupby_floor" model="ir.ui.view">
+        <field name="name">property.property.search.inherit.property_type_group</field>
+        <field name="model">property.property</field>
+        <field name="inherit_id" ref="contract_sections.view_property_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='group_site']" position="after">
+                <filter string="Floor" name="group_by_floor" context="{'group_by': 'floor_id'}"/>
+            </xpath>
+        </field>
+    </record>
+    
+</odoo>
+
+

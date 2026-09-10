@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ── Top-level app menu ─────────────────────────────────────── -->
+    <menuitem
+        id="menu_my_team_root"
+        name="MY Team"
+        sequence="50"
+        web_icon="my_team,static/description/icon.png"
+        groups="my_team.group_my_team_user"
+    />
+
+    <!-- ── Sub-menu: Refresh &amp; view ──────────────────────────── -->
+    <menuitem
+        id="menu_my_team_refresh"
+        name="Refresh My Team"
+        parent="menu_my_team_root"
+        action="action_my_team_refresh"
+        sequence="10"
+        groups="my_team.group_my_team_user"
+    />
+
+    <!-- ── Sub-menu: direct list (already loaded snapshot) ───────── -->
+    <menuitem
+        id="menu_my_team_list"
+        name="My Team Members"
+        parent="menu_my_team_root"
+        action="action_my_team_view"
+        sequence="20"
+        groups="my_team.group_my_team_user"
+    />
+
+</odoo>

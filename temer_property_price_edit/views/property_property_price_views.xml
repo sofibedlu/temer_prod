@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Ensure Sales Price is always editable on property form while in draft -->
+        <record id="property_property_view_form_inherit_price_edit"
+                model="ir.ui.view">
+            <field name="name">property.property.view.form.price.edit</field>
+            <field name="model">property.property</field>
+            <field name="inherit_id"
+                   ref="ahadubit_property_base.property_property_view_form_inherit"/>
+            <field name="arch" type="xml">
+                <!-- Make main unit_price field visible and editable in draft -->
+                <xpath expr="//field[@name='unit_price']" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                    <attribute name="invisible">0</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
+

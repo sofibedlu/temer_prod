@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_crm_phone,crm.phone,model_crm_phone,advanced_property_management.group_property_manager,1,1,1,1
+access_crm_phone,crm.phone,model_crm_phone,base.group_erp_manager,1,1,1,1
+access_crm_phone,crm.phone,model_crm_phone,ahadubit_property_base.reservation_user_group_id,1,1,1,1
+access_crm_phone,crm.phone,model_crm_phone,ahadubit_property_base.reservation_manager_group_id,1,1,1,1
+access_crm_phone_all,crm.phone,model_crm_phone,,1,0,0,0
+
+access_crm_phone,crm.phone,model_crm_phone,advanced_property_management.group_property_manager,1,1,1,1
+
+

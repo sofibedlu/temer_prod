@@ -1,0 +1,15 @@
+<odoo>
+    <record id="sh_user_audit_system_category" model="ir.module.category">
+        <field name="name">User Audit</field>
+        <field name="sequence">60</field>
+    </record>
+    <record id="sh_user_audit_user" model="res.groups">
+        <field name="name">User</field>
+        <field name="category_id" ref="sh_user_audit.sh_user_audit_system_category" />
+    </record>
+    <record id="sh_user_audit_manager_id" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="implied_ids" eval="[(4, ref('sh_user_audit_user'))]" />
+        <field name="category_id" ref="sh_user_audit.sh_user_audit_system_category" />
+    </record>
+</odoo>

@@ -1,0 +1,25 @@
+<odoo>
+    <record id="view_site_developer_tree" model="ir.ui.view">
+        <field name="name">site.developer.tree</field>
+        <field name="model">site.developer</field>
+        <field name="arch" type="xml">
+        <tree editable="bottom">
+            <field name="name" />
+            <field name="sequence" />
+        </tree>
+        </field>
+    </record>
+
+    <!-- create action for site.developer -->
+    <record id="action_developer" model="ir.actions.act_window">
+        <field name="name">Site Developer</field>
+        <field name="res_model">site.developer</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_site_developer_tree"/>
+    </record>
+
+      <menuitem id="menu_developer" name="Site Developers" parent="advanced_property_management.property_configuration_menu" 
+    action="action_developer" sequence="65" />
+
+
+</odoo>

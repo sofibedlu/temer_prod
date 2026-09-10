@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_support_additional_task_wizard_form" model="ir.ui.view">
+        <field name="name">support.additional.task.wizard.form</field>
+        <field name="model">support.additional.task.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Add Additional Task">
+                <group>
+                    <field name="support_id" invisible="1"/>
+                    <field name="location_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                    <field name="department_ids" widget="many2many_tags" options="{'no_create': True, 'no_open': True}"/>
+                    <field name="category_ids" widget="many2many_tags" options="{'no_create': True, 'no_open': True}"/>
+                    <field name="task_count"/>
+                    <field name="description" placeholder="What extra task did you perform?" required="1" style="height: 150px;"/>
+                </group>
+                <footer>
+                    <button name="action_confirm" string="Add Task" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_support_additional_task_wizard" model="ir.actions.act_window">
+        <field name="name">Additional Task</field>
+        <field name="res_model">support.additional.task.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

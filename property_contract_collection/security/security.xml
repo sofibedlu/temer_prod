@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="group_collection_amend_void_requests" model="res.groups">
+        <field name="name">Amend and Void Requests</field>
+        <field name="category_id" ref="collection_management.module_category_collection_management"/>
+    </record>
+</odoo>

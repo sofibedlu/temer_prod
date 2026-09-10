@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="group_property_sale_reset_action" model="res.groups">
+        <field name="name">Reset Sale to Request for Confirmation</field>
+        <field name="category_id" ref="temer_structure.property_mgmt_category"/>
+    </record>
+</odoo>

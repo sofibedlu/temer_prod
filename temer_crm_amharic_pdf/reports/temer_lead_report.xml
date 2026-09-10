@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Keep original PDF style (external_layout). Only add Amharic font for content so text is visible, not ??? or empty. -->
+    <template id="report_temer_lead_activities_amharic" inherit_id="temer_crm.report_temer_lead_activities" priority="99">
+        <xpath expr="//div[contains(concat(' ', normalize-space(@class), ' '), ' page ')]" position="before">
+            <t t-set="custom_css">
+                @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;500;600&amp;display=swap');
+                /* Only where Amharic can appear – layout unchanged */
+                .page .col-4 p span,
+                .page table td span {
+                    font-family: 'Noto Sans Ethiopic', sans-serif !important;
+                }
+            </t>
+            <style t-out="custom_css"/>
+        </xpath>
+    </template>
+</odoo>

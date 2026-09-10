@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_property_schedule_amendment_request_form_inherit_done" model="ir.ui.view">
+        <field name="name">property.schedule.amendment.request.form.inherit.done</field>
+        <field name="model">property.schedule.amendment.request</field>
+        <field name="inherit_id" ref="property_contract_collection.view_property_schedule_amendment_request_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_mark_done" 
+                        string="Mark as Done" 
+                        type="object" 
+                        class="btn-success" 
+                        invisible="state != 'approved' or not context.get('show_mark_done')"/>
+            </xpath>
+
+            <xpath expr="//field[@name='attachment_ids']" position="attributes">
+                <attribute name="readonly">state in ('approved', 'rejected', 'done')</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Update Tree View -->
+    <record id="view_property_schedule_amendment_request_tree_inherit_done" model="ir.ui.view">
+        <field name="name">property.schedule.amendment.request.tree.inherit.done</field>
+        <field name="model">property.schedule.amendment.request</field>
+        <field name="inherit_id" ref="property_contract_collection.view_property_schedule_amendment_request_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="decoration-primary">state == 'done'</attribute>
+            </xpath>
+            
+            <xpath expr="//field[@name='state']" position="attributes">
+                <attribute name="decoration-primary">state == 'done'</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

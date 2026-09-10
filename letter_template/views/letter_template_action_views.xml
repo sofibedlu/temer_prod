@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+        List view for letter.template — used when browsing templates
+        from the Collection Order action menu.
+        Shows name, letter_type_id, subject, header_footer_id.
+    -->
+    <record id="view_letter_template_list_from_collection" model="ir.ui.view">
+        <field name="name">letter.template.list.from.collection</field>
+        <field name="model">letter.template</field>
+        <field name="arch" type="xml">
+            <tree string="Letter Templates">
+                <field name="name"/>
+                <field name="letter_type_id"/>
+                <field name="subject"/>
+                <field name="header_footer_id"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--
+        Action bound to collection.order form — opens letter.template list
+        so the user can browse / select a template before printing.
+        Selecting a template opens its form view.
+    -->
+    <record id="action_letter_template_from_collection" model="ir.actions.act_window">
+        <field name="name">Letter Templates</field>
+        <field name="res_model">letter.template</field>
+        <field name="view_mode">tree,form</field>
+        <field name="binding_model_id" ref="collection_management.model_collection_order"/>
+        <field name="binding_view_types">form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No letter templates found.
+            </p>
+            <p>
+                Go to Configuration → Letter Templates to create one.
+            </p>
+        </field>
+    </record>
+
+</odoo>

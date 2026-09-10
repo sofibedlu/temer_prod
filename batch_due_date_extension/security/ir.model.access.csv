@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_batch_extension_wizard,Batch Ext Wizard,model_batch_extension_wizard,,1,1,1,1
+access_batch_extension_wizard_line,Batch Ext Wizard Line,model_batch_extension_wizard_line,,1,1,1,1
+access_batch_extension_request,Batch Ext Request,model_batch_extension_request,,1,1,1,0
+access_batch_extension_request_line,Batch Ext Request Line,model_batch_extension_request_line,,1,1,1,0

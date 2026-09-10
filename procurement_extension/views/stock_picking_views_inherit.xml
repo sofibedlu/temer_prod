@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_picking_form_inherit_wizard_security" model="ir.ui.view">
+        <field name="name">stock.picking.form.inherit.wizard.security</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="procurement_management.view_picking_form_inherit_technical_check"/>
+        <field name="arch" type="xml">
+            
+            <!-- Replaced the button to enforce security groups -->
+            <xpath expr="//button[@name='action_technical_approve']" position="replace">
+                
+                <button name="action_technical_approve" 
+                        string="Verify Technical Specs" 
+                        type="object" 
+                        class="btn-success" 
+                        invisible="not is_custom_procurement or technical_approved or state not in ['assigned', 'draft', 'confirmed']"
+                        groups="procurement_extension.group_menu_department_request,procurement_management.group_procurement_manager" />
+                        
+            </xpath>
+            
+        </field>
+    </record>
+</odoo>

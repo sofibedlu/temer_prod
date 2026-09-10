@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="receipt_dashboard.menu_receipt_dashboard_root" model="ir.ui.menu">
+        <field name="groups_id" eval="[(4, ref('group_receipt_dashboard_viewer'))]"/>
+    </record>
+    <record id="receipt_dashboard.menu_receipt_dashboard" model="ir.ui.menu">
+        <field name="groups_id" eval="[(4, ref('group_receipt_dashboard_viewer'))]"/>
+    </record>
+</odoo>

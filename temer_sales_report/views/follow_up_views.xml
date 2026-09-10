@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_temer_follow_up_tree" model="ir.ui.view">
+        <field name="name">temer.follow.up.tree</field>
+        <field name="model">temer.lead</field>
+        <field name="arch" type="xml">
+            <tree string="Follow Up" create="false" delete="false" edit="false">
+                <header>
+                    <button string="Export Excel" name="action_temer_export_follow_up" type="object" display="always"/>
+                </header>
+                <field name="report_wing_display" string="Wing Name"/>
+                <field name="report_supervisor_display" string="Sales Supervisor"/>
+                <field name="user_id" string="Sales Consultant"/>
+                <field name="report_fiscal_year" string="Fiscal Year"/>
+                <field name="report_period" string="Period"/>
+                <field name="report_date_display" string="Date"/>
+                <field name="source_ids" string="Lead Source"/>
+                <field name="name" string="Lead"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_temer_follow_up_search" model="ir.ui.view">
+        <field name="name">temer.follow.up.search</field>
+        <field name="model">temer.lead</field>
+        <field name="arch" type="xml">
+            <search string="Follow Up">
+                <field name="user_id" string="Sales Consultant"/>
+                <separator/>
+                <filter string="Fiscal Year" name="group_fiscal_year" context="{'group_by': 'create_date:year'}"/>
+                <filter string="Period" name="group_period" context="{'group_by': 'create_date:month'}"/>
+                <filter string="Sales Consultant" name="group_user" context="{'group_by': 'user_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_temer_follow_up" model="ir.actions.act_window">
+        <field name="name">Follow Up</field>
+        <field name="res_model">temer.lead</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_temer_follow_up_tree"/>
+        <field name="search_view_id" ref="view_temer_follow_up_search"/>
+        <field name="domain">[('state', '=', 'follow_up')]</field>
+        <field name="context">{}</field>
+    </record>
+
+</odoo>

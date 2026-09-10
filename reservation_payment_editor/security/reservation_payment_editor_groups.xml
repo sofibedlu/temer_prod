@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="group_payment_editor" model="res.groups">
+        <field name="name">Payment Editor</field>
+        <field name="category_id" ref="base.module_category_hidden"/>
+        <field name="implied_ids" eval="[(4, ref('ahadubit_property_reservation.finance_team_approval_group'))]"/>
+        <field name="comment">Users in  this group can edit reservation payment details (reference number, bank, document type, amount, transaction date, receipt file, payment status) via the Edit Payment button. Automatically includes Reservation Payments menu access.</field>
+    </record>
+</odoo>

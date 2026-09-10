@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         TREE VIEW
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <record id="view_letter_body_tree" model="ir.ui.view">
+        <field name="name">letter.body.tree</field>
+        <field name="model">letter.body</field>
+        <field name="arch" type="xml">
+            <tree string="Letters Body">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="subject"/>
+                <field name="is_dynamic" widget="boolean_toggle"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         FORM VIEW
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <record id="view_letter_body_form" model="ir.ui.view">
+        <field name="name">letter.body.form</field>
+        <field name="model">letter.body</field>
+        <field name="arch" type="xml">
+            <form string="Letter Body">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Body Name…"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="Configuration">
+                            <field name="subject"/>
+                            <field name="sequence"/>
+                            <field name="model" invisible="1"/>
+                            <field name="is_dynamic" widget="boolean_toggle"/>
+                            <field name="active" widget="boolean_toggle"/>
+                        </group>
+                        <group string="Notes">
+                            <field name="notes" nolabel="1" colspan="2"/>
+                        </group>
+                    </group>
+
+                    <separator string="Body Content"/>
+                    <field name="body_html"
+                           widget="html"
+                           options="{'dynamic_placeholder': true,
+                                     'dynamic_placeholder_model_reference_field': 'model'}"
+                           style="min-height:300px;"/>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         ACTION
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <record id="action_letter_body" model="ir.actions.act_window">
+        <field name="name">Letters Body</field>
+        <field name="res_model">letter.body</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first Letter Body
+            </p>
+            <p>
+                Define reusable body sections with dynamic placeholders
+                (${partner_name}, ${due_date}, etc.) that can be composed
+                into full Letter Templates.
+            </p>
+        </field>
+    </record>
+
+</odoo>

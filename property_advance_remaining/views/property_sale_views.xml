@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_property_sale_form_inherit_advance" model="ir.ui.view">
+        <field name="name">property.sale.form.inherit.advance</field>
+        <field name="model">property.sale</field>
+        <field name="inherit_id" ref="advanced_property_management.property_sale_view_form"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="//field[@name='payment_installment_line_ids']/tree/field[@name='state']" position="before">
+                <field name="is_advance_remaining" optional="show"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

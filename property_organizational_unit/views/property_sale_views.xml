@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_property_sale_form_inherit_org_unit" model="ir.ui.view">
+        <field name="name">property.sale.form.inherit.org.unit</field>
+        <field name="model">property.sale</field>
+        <field name="inherit_id" ref="advanced_property_management.property_sale_view_form"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="org_unit_id" 
+                       options="{'no_create': True}" 
+                       readonly="state not in ['draft', 'request_for_confirm']"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

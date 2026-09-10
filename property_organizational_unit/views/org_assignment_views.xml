@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- TREE -->
+    <record id="view_property_org_assignment_tree" model="ir.ui.view">
+        <field name="name">property.org.assignment.tree</field>
+        <field name="model">property.org.assignment</field>
+        <field name="arch" type="xml">
+            <tree string="Unit Assignments" editable="bottom">
+                <field name="user_id" options="{'no_create': True}"/>
+                <field name="org_unit_ids" widget="many2many_tags" options="{'no_create': True}" placeholder="Select Branches..."/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- FORM -->
+    <record id="view_property_org_assignment_form" model="ir.ui.view">
+        <field name="name">property.org.assignment.form</field>
+        <field name="model">property.org.assignment</field>
+        <field name="arch" type="xml">
+            <form string="Unit Assignment">
+                <sheet>
+                    <group>
+                        <field name="user_id" options="{'no_create': True}"/>
+                        <field name="org_unit_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_property_org_assignment" model="ir.actions.act_window">
+        <field name="name">Unit Assignments</field>
+        <field name="res_model">property.org.assignment</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_property_org_assignment"
+              name="Unit Assignments"
+              parent="advanced_property_management.property_configuration_menu"
+              action="action_property_org_assignment"
+              sequence="125"/>
+</odoo>

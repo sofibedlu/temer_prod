@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Define views FIRST so action can ref them -->
+    <!-- Inherit temer.lead form: add Type &amp; Customer at top, allow create (save like Temer CRM) -->
+    <record id="view_temer_lead_form_special_sales" model="ir.ui.view">
+        <field name="name">temer.lead.form.special.sales</field>
+        <field name="model">temer.lead</field>
+        <field name="inherit_id" ref="temer_crm.view_temer_lead_form"/>
+        <field name="priority" eval="20"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="attributes">
+                <attribute name="create">true</attribute>
+            </xpath>
+            <!-- Type &amp; Customer: add under sales person. Company/Freelance/Employee are separate from customer_name. Create only in lead, remembers previous. -->
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="from_special_sales" invisible="1"/>
+                <field name="lead_type_code" invisible="1"/>
+                <field name="lead_type_id" string="Type" options="{'no_create': False}" placeholder="Search or create type..." invisible="not from_special_sales"/>
+                <field name="company_id" invisible="1"/>
+                <field name="company_name" invisible="1"/>
+                <field name="company_display" string="Company" widget="search_or_type_autocomplete" options="{'res_model': 'crm.special.sales.company', 'id_field': 'company_id', 'name_field': 'company_name'}" placeholder="Search or type new (created on save)..." invisible="not from_special_sales or lead_type_code != 'company'"/>
+                <field name="freelance_id" invisible="1"/>
+                <field name="freelance_name" invisible="1"/>
+                <field name="freelance_display" string="Freelance" widget="search_or_type_autocomplete" options="{'res_model': 'crm.special.sales.freelance', 'id_field': 'freelance_id', 'name_field': 'freelance_name'}" placeholder="Search or type new (created on save)..." invisible="not from_special_sales or lead_type_code != 'freelance'"/>
+                <field name="employee_ref_id" string="Employee" options="{'no_create': True}" placeholder="Search employee..." invisible="not from_special_sales or lead_type_code != 'employee'" required="from_special_sales and lead_type_code == 'employee'"/>
+            </xpath>
+            <!-- customer_name: separate from Company/Freelance/Employee - stays as temer lead, editable -->
+        </field>
+    </record>
+
+    <!-- Tree: add lead_type for Special Sales list -->
+    <record id="view_temer_lead_tree_special_sales" model="ir.ui.view">
+        <field name="name">temer.lead.tree.special.sales</field>
+        <field name="model">temer.lead</field>
+        <field name="inherit_id" ref="temer_crm.view_temer_lead_tree_my"/>
+        <field name="priority" eval="20"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="lead_type_id" optional="show"/>
+                <field name="company_id" optional="show"/>
+                <field name="freelance_id" optional="show"/>
+                <field name="employee_ref_id" optional="show" string="Employee"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Action: opens temer.lead (Special Sales only). Kanban + tree + form like My Leads -->
+    <record id="action_crm_special_sales" model="ir.actions.act_window">
+        <field name="name">Special Sales</field>
+        <field name="res_model">temer.lead</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="view_id" ref="temer_crm.view_temer_lead_kanban"/>
+        <field name="domain">[('from_special_sales', '=', True)]</field>
+        <field name="context">{
+            'default_from_special_sales': True
+        }</field>
+        <field name="search_view_id" ref="temer_crm.view_temer_lead_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first Special Sales lead!
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu under TEMER CRM -->
+    <menuitem id="menu_crm_special_sales"
+              name="Special Sales"
+              parent="temer_crm.menu_temer_leads_root"
+              sequence="22"
+              action="action_crm_special_sales"
+              groups="crm_special_sales.group_special_sales"/>
+
+    <!-- Lead Types: model to create/edit types (Company, Freelance, Employee, or custom) -->
+    <record id="view_temer_lead_type_tree" model="ir.ui.view">
+        <field name="name">temer.lead.type.tree</field>
+        <field name="model">temer.lead.type</field>
+        <field name="arch" type="xml">
+            <tree string="Lead Types" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_temer_lead_type_form" model="ir.ui.view">
+        <field name="name">temer.lead.type.form</field>
+        <field name="model">temer.lead.type</field>
+        <field name="arch" type="xml">
+            <form string="Lead Type">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code" placeholder="e.g. employee, company (auto from name if empty)"/>
+                        </group>
+                        <group>
+                            <field name="sequence"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_temer_lead_type" model="ir.actions.act_window">
+        <field name="name">Lead Types</field>
+        <field name="res_model">temer.lead.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new type (e.g. Company, Freelance, Employee).
+            </p>
+            <p>
+                Types with code <strong>employee</strong> use Contact; <strong>company</strong> and <strong>freelance</strong> create in lead only (no separate menu).
+            </p>
+        </field>
+    </record>
+    <menuitem id="menu_temer_lead_type"
+              name="Lead Types"
+              parent="temer_crm.menu_temer_leads_root"
+              sequence="25"
+              action="action_temer_lead_type"
+              groups="crm_special_sales.group_lead_type"/>
+
+    <!-- Company and Freelance models exist but no menu - create only when saving lead, remembers previous companies/freelances -->
+
+    <!-- Stub views: so old action/menu pointing to crm.special.sales does not crash; redirect to real Special Sales -->
+    <record id="view_crm_special_sales_stub_form" model="ir.ui.view">
+        <field name="name">crm.special.sales.stub.form</field>
+        <field name="model">crm.special.sales</field>
+        <field name="arch" type="xml">
+            <form string="Special Sales (legacy)">
+                <sheet>
+                    <div class="alert alert-info" role="alert">
+                        <p><strong>Use TEMER CRM → Special Sales</strong> for creating and managing Special Sales leads.</p>
+                        <p>This screen is only shown because an old menu link is still open.</p>
+                    </div>
+                    <group>
+                        <button name="action_open_temer_special_sales" string="Open Special Sales (Temer Leads)" type="object" class="btn-primary"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!-- Tree (table) view for crm.special.sales stub -->
+    <record id="view_crm_special_sales_stub_tree" model="ir.ui.view">
+        <field name="name">crm.special.sales.stub.tree</field>
+        <field name="model">crm.special.sales</field>
+        <field name="arch" type="xml">
+            <tree string="Special Sales (legacy)" create="false" delete="false">
+                <field name="id" column_invisible="1"/>
+                <field name="name" string="Name"/>
+                <field name="create_date" string="Created on"/>
+                <button name="action_open_temer_special_sales" string="Open Special Sales" type="object" icon="fa-external-link" class="btn-link"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Kanban view for crm.special.sales stub -->
+    <record id="view_crm_special_sales_stub_kanban" model="ir.ui.view">
+        <field name="name">crm.special.sales.stub.kanban</field>
+        <field name="model">crm.special.sales</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="name" class="o_kanban_small_column">
+                <field name="id"/>
+                <field name="name"/>
+                <field name="create_date"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click">
+                            <div class="o_kanban_record_top">
+                                <div class="o_kanban_record_headings">
+                                    <strong class="o_kanban_record_title"><field name="name"/></strong>
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_bottom">
+                                <div class="oe_kanban_bottom_left">
+                                    <field name="create_date" widget="date"/>
+                                </div>
+                                <div class="oe_kanban_bottom_right">
+                                    <button name="action_open_temer_special_sales" type="object" class="btn btn-sm btn-link">
+                                        <i class="fa fa-external-link"/> Open Special Sales
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="procurement_management.menu_procurement_root" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [
+                ref('procurement_management.group_procurement_manager'),
+                ref('procurement_extension.group_menu_internal_request'),
+                ref('procurement_extension.group_menu_department_request'),
+                ref('procurement_extension.group_menu_purchase_department'),
+            ])]"/>
+        </record>
+
+        <record id="procurement_management.menu_internal_req_list" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('procurement_extension.group_menu_internal_request')])]"/>
+        </record>
+
+        <record id="procurement_management.menu_department_requests" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('procurement_extension.group_menu_department_request')])]"/>
+        </record>
+
+        <record id="procurement_management.menu_purchase_department" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('procurement_extension.group_menu_purchase_department')])]"/>
+        </record>
+
+        <!-- <record id="procurement_management.menu_approved_vendor_bills" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('procurement_extension.group_menu_approved_vendor_bills')])]"/>
+        </record> -->
+    </data>
+</odoo>

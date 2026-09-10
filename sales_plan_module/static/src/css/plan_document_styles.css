@@ -1,0 +1,176 @@
+.plan-document-container {
+    padding: 20px;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+.report-header {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.report-title {
+    margin: 0 0 20px 0;
+    color: #2c3e50;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.filter-section {
+    margin-top: 15px;
+}
+
+.filters-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.filter-group label {
+    font-weight: 500;
+    color: #495057;
+    white-space: nowrap;
+}
+
+.date-input,
+.criteria-select,
+.search-input {
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.date-input:disabled,
+.criteria-select:disabled {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+}
+
+.criteria-select {
+    min-width: 150px;
+}
+
+.search-input {
+    min-width: 250px;
+}
+
+.btn-show {
+    padding: 8px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.btn-show:hover {
+    background-color: #0056b3;
+}
+
+.report-table-container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 20px;
+}
+
+.report-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.report-table thead {
+    background-color: #f8f9fa;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.report-table th {
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #495057;
+    border-bottom: 2px solid #dee2e6;
+    white-space: nowrap;
+}
+
+.report-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #dee2e6;
+    color: #212529;
+}
+
+.report-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.report-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.badge-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.badge-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.loading-spinner {
+    text-align: center;
+    padding: 40px;
+    color: #6c757d;
+    font-size: 16px;
+}
+
+/* Responsive design */
+@media screen and (max-width: 768px) {
+    .filters-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .filter-group {
+        width: 100%;
+    }
+    
+    .search-input,
+    .criteria-select {
+        width: 100%;
+    }
+    
+    .report-table {
+        font-size: 12px;
+    }
+    
+    .report-table th,
+    .report-table td {
+        padding: 6px 8px;
+    }
+}
+

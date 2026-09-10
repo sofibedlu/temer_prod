@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="team_activity_report.TeamActivityReport" owl="1">
+        <div class="team_activity_report_container">
+            <div class="report_header">
+                <h1>Detailed Sales Report</h1>
+                <t t-if="state.header_info.wing or state.header_info.wing_manager or state.header_info.sales_manager">
+                    <div class="header_info">
+                        <t t-if="state.header_info.wing">
+                            <strong>Wing:</strong> <span t-esc="state.header_info.wing"/>
+                        </t>
+                        <t t-if="state.header_info.wing_manager">
+                            | <strong>Wing Manager:</strong> <span t-esc="state.header_info.wing_manager"/>
+                        </t>
+                        <t t-if="state.header_info.sales_manager">
+                            | <strong>Sales Manager:</strong> <span t-esc="state.header_info.sales_manager"/>
+                        </t>
+                    </div>
+                </t>
+                <div class="filters">
+                    <div class="filter_group">
+                        <label>From Date:</label>
+                        <input type="date" t-att-value="state.date_from" t-on-change="onDateFromChange"/>
+                    </div>
+                    <div class="filter_group">
+                        <label>To Date:</label>
+                        <input type="date" t-att-value="state.date_to" t-on-change="onDateToChange"/>
+                    </div>
+                    <t t-if="state.is_admin">
+                        <div class="filter_group">
+                            <label>Wing:</label>
+                            <select t-att-value="state.admin_wing_id" t-on-change="onAdminWingChange">
+                                <option value="">All Wings</option>
+                                <t t-foreach="state.admin_wings" t-as="wing" t-key="wing.id">
+                                    <option t-att-value="wing.id" t-esc="wing.name"/>
+                                </t>
+                            </select>
+                        </div>
+                    </t>
+                    <div class="filter_group">
+                        <label>Search:</label>
+                        <input type="text" t-model="state.search_text" placeholder="Search table..." class="search-input" t-on-input="onSearchChange"/>
+                    </div>
+                    <div class="filter_group filter_group_btn">
+                        <button class="btn btn-success show_report_btn" t-on-click="onShowReport">
+                            Show Report
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="report_content">
+                <t t-if="state.loading">
+                    <div class="loading">
+                        <div class="tar_spinner"></div>
+                        <p>Loading report data...</p>
+                    </div>
+                </t>
+                <t t-elif="!state.show_report">
+                    <div class="loading">Select filters and click "Show Report" to load data.</div>
+                </t>
+                <t t-else="">
+                    <div class="date_range_info" t-if="state.date_from or state.date_to">
+                        <div class="date_range_left">
+                            <strong>From:</strong> <span t-esc="state.date_from || 'All'"/> 
+                            <strong>To:</strong> <span t-esc="state.date_to || 'All'"/>
+                            <t t-if="getTotalUserCount() > 0">
+                                <span class="user_count">| Users: <strong t-esc="getTotalUserCount()"/></span>
+                            </t>
+                        </div>
+                        <div class="date_range_right">
+                            <button class="btn btn-primary" t-on-click="exportExcel">Export Excel</button>
+                            <button class="btn btn-primary" t-on-click="exportPDF">Export PDF</button>
+                        </div>
+                    </div>
+                    
+                    <div class="table_wrapper">
+                        <div class="table_container">
+                            <table class="team_activity_table">
+                            <thead>
+                                <tr>
+                                    <th>Supervisor</th>
+                                    <th>Salesperson</th>
+                                    <th>Prospect</th>
+                                    <t t-if="getFollowUpColumns().length > 0">
+                                        <th t-att-colspan="getFollowUpColumns().length + 1">Follow Up</th>
+                                    </t>
+                                    <t t-if="getFollowUpColumns().length === 0">
+                                        <th>Follow Up</th>
+                                    </t>
+                                    <th>Reservation</th>
+                                    <th>Sold</th>
+                                </tr>
+                                <tr t-if="getFollowUpColumns().length > 0">
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <t t-foreach="getFollowUpColumns()" t-as="column" t-key="column">
+                                        <th t-esc="column"/>
+                                    </t>
+                                    <th>Total</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-if="state.filtered_data.length === 0">
+                                    <tr>
+                                        <td t-att-colspan="5 + getFollowUpColumns().length" class="no_data">No data available</td>
+                                    </tr>
+                                </t>
+                                <t t-foreach="state.filtered_data" t-as="group" t-key="group_index">
+                                    <!-- Salesperson rows -->
+                                    <t t-foreach="group.salespersons" t-as="salesperson" t-key="salesperson_index">
+                                        <tr>
+                                            <td t-esc="group.supervisor"/>
+                                            <td t-esc="salesperson.salesperson"/>
+                                            <td class="number_cell" t-esc="salesperson.prospect"/>
+                                            <t t-if="getFollowUpColumns().length > 0">
+                                                <t t-foreach="getFollowUpColumns()" t-as="column" t-key="column">
+                                                    <td class="number_cell" t-esc="getFollowUpValue(salesperson, column)"/>
+                                                </t>
+                                                <td class="number_cell total_cell" t-esc="getFollowUpTotal(salesperson)"/>
+                                            </t>
+                                            <t t-if="getFollowUpColumns().length === 0">
+                                                <td class="number_cell">0</td>
+                                            </t>
+                                            <td class="number_cell" t-esc="salesperson.reservation"/>
+                                            <td class="number_cell" t-esc="salesperson.sold"/>
+                                        </tr>
+                                    </t>
+                                </t>
+                            </tbody>
+                            <tfoot class="mobile_total_row">
+                                <tr class="total_row">
+                                    <td><strong>Total</strong></td>
+                                    <td></td>
+                                    <td class="number_cell total_cell" t-esc="getTotalProspect()"/>
+                                    <t t-if="getFollowUpColumns().length > 0">
+                                        <t t-foreach="getFollowUpColumns()" t-as="column" t-key="column">
+                                            <td class="number_cell total_cell" t-esc="getTotalFollowUp(column)"/>
+                                        </t>
+                                        <td class="number_cell total_cell" t-esc="getTotalFollowUpTotal()"/>
+                                    </t>
+                                    <t t-if="getFollowUpColumns().length === 0">
+                                        <td class="number_cell total_cell" t-esc="getTotalFollowUpTotal()"/>
+                                    </t>
+                                    <td class="number_cell total_cell" t-esc="getTotalReservation()"/>
+                                    <td class="number_cell total_cell" t-esc="getTotalSold()"/>
+                                </tr>
+                            </tfoot>
+                            </table>
+                        </div>
+                        <!-- Total Row - Fixed at bottom -->
+                        <div class="total_row_container" t-if="state.filtered_data.length > 0">
+                            <table class="team_activity_table total_table">
+                                <thead>
+                                    <tr>
+                                        <th>Supervisor</th>
+                                        <th>Salesperson</th>
+                                        <th>Prospect</th>
+                                        <t t-if="getFollowUpColumns().length > 0">
+                                            <th t-att-colspan="getFollowUpColumns().length + 1">Follow Up</th>
+                                        </t>
+                                        <t t-if="getFollowUpColumns().length === 0">
+                                            <th>Follow Up</th>
+                                        </t>
+                                        <th>Reservation</th>
+                                        <th>Sold</th>
+                                    </tr>
+                                    <tr t-if="getFollowUpColumns().length > 0">
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <t t-foreach="getFollowUpColumns()" t-as="column" t-key="column">
+                                            <th t-esc="column"/>
+                                        </t>
+                                        <th>Total</th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="total_row">
+                                        <td><strong>Total</strong></td>
+                                        <td></td>
+                                        <td class="number_cell total_cell" t-esc="getTotalProspect()"/>
+                                        <t t-if="getFollowUpColumns().length > 0">
+                                            <t t-foreach="getFollowUpColumns()" t-as="column" t-key="column">
+                                                <td class="number_cell total_cell" t-esc="getTotalFollowUp(column)"/>
+                                            </t>
+                                            <td class="number_cell total_cell" t-esc="getTotalFollowUpTotal()"/>
+                                        </t>
+                                        <t t-if="getFollowUpColumns().length === 0">
+                                            <td class="number_cell total_cell" t-esc="getTotalFollowUpTotal()"/>
+                                        </t>
+                                        <td class="number_cell total_cell" t-esc="getTotalReservation()"/>
+                                        <td class="number_cell total_cell" t-esc="getTotalSold()"/>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </t>
+            </div>
+        </div>
+    </t>
+</templates>
+

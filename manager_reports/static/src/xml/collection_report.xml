@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="manager_reports.CollectionReportClient" owl="1">
+        <div class="manager_reports_container">
+            <div class="report_header">
+                <h2>Collection Report</h2>
+                <div class="filter_section">
+                    <div class="filter_row">
+                        <label class="filter_checkbox_label">
+                            <input type="checkbox" t-model="state.use_all_dates" t-on-change="onAllDatesChange"/>
+                            <span t-esc="t('All data (no date filter)')"/>
+                        </label>
+                        <label>Date From:</label>
+                        <input type="date" t-model="state.date_from" t-on-change="onDateChange" class="date_input" t-att-disabled="state.use_all_dates"/>
+                        <label>Date To:</label>
+                        <input type="date" t-model="state.date_to" t-on-change="onDateChange" class="date_input" t-att-disabled="state.use_all_dates"/>
+                        <button class="btn btn-primary" t-on-click="loadData">Show</button>
+                        <button class="btn btn-secondary" t-on-click="exportExcel">Export Excel</button>
+                        <button class="btn btn-secondary" t-on-click="exportPDF">Export PDF</button>
+                    </div>
+                </div>
+            </div>
+            
+            <t t-if="state.loading">
+                <div class="loading_message">Loading data...</div>
+            </t>
+            
+            <t t-if="!state.loading">
+                <div class="report_content mr_scroll_y">
+                    <!-- KPI Cards Section - Compact -->
+                    <div class="kpi_section" style="margin-bottom: 16px;">
+                        <div class="kpi_card">
+                            <div class="kpi_label">Total No. of clients</div>
+                            <div class="kpi_value" t-esc="formatNumber(state.data.total_clients)"/>
+                        </div>
+                        <div class="kpi_card">
+                            <div class="kpi_label">No. of sites</div>
+                            <div class="kpi_value" t-esc="formatNumber(state.data.total_sites)"/>
+                        </div>
+                        <div class="kpi_card">
+                            <div class="kpi_label">Total Receivable Amount</div>
+                            <div class="kpi_value" t-esc="formatCurrency(state.data.total_receivable)"/>
+                        </div>
+                        <div class="kpi_card">
+                            <div class="kpi_label">Stock under collection (units)</div>
+                            <div class="kpi_value" t-esc="formatNumber(state.data.qty)"/>
+                        </div>
+                        <div class="kpi_card">
+                            <div class="kpi_label">Properties returned</div>
+                            <div class="kpi_value" t-esc="formatNumber(state.data.properties_returned)"/>
+                        </div>
+                    </div>
+                    
+                    <!-- Stock Under Collection with Chart -->
+                    <div class="table_section">
+                        <h3>Total no. of stock under collection</h3>
+                        <div class="mr_table_graph_grid">
+                            <div class="mr_card">
+                                <div class="mr_table_scroll">
+                                    <table class="report_table">
+                                        <thead>
+                                            <tr>
+                                                <th>Type</th>
+                                                <th>QTY</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Residences</td>
+                                                <td class="number_cell" t-esc="formatNumber(state.data.stock_under_collection.residences)"/>
+                                            </tr>
+                                            <tr>
+                                                <td>Shops</td>
+                                                <td class="number_cell" t-esc="formatNumber(state.data.stock_under_collection.shops)"/>
+                                            </tr>
+                                            <tr>
+                                                <td>Mixed use</td>
+                                                <td class="number_cell" t-esc="formatNumber(state.data.stock_under_collection.mixed_use)"/>
+                                            </tr>
+                                            <tr class="total_row">
+                                                <td><strong>Total</strong></td>
+                                                <td class="total_cell"><t t-esc="formatNumber((state.data.stock_under_collection.residences || 0) + (state.data.stock_under_collection.shops || 0) + (state.data.stock_under_collection.mixed_use || 0))"/></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="mr_card mr_graph_side">
+                                <div class="mr_graph_mini">
+                                    <div class="mr_graph_mini_title">Stock Under Collection Distribution</div>
+                                    <canvas t-ref="stockDistributionChart"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Collection Performance & Discount -->
+                    <div class="table_section">
+                        <h3>Collection Performance &amp; Discount</h3>
+                        <div class="mr_table_graph_grid">
+                            <div class="mr_card">
+                                <div class="mr_table_scroll">
+                                    <table class="report_table">
+                                        <thead>
+                                            <tr>
+                                                <th>Performance</th>
+                                                <th>Plan</th>
+                                                <th>Actual</th>
+                                                <th>Achievement %</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Collected amount</td>
+                                                <td class="number_cell" t-esc="formatCurrency(state.data.collection_performance.collected_amount.plan)"/>
+                                                <td class="number_cell" t-esc="formatCurrency(state.data.collection_performance.collected_amount.actual)"/>
+                                                <td>
+                                                    <div class="mr_progress">
+                                                        <div class="mr_progress_bar" t-att-style="'width:' + Math.min(state.data.collection_performance.collected_amount.achievement, 100) + '%'"/>
+                                                        <span class="mr_progress_label"><t t-esc="formatNumber(Math.min(state.data.collection_performance.collected_amount.achievement, 100))"/>%</span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Collected from no. of clients</td>
+                                                <td class="number_cell" t-esc="formatNumber(state.data.collection_performance.collected_from_clients.plan)"/>
+                                                <td class="number_cell" t-esc="formatNumber(state.data.collection_performance.collected_from_clients.actual)"/>
+                                                <td>
+                                                    <div class="mr_progress">
+                                                        <div class="mr_progress_bar" t-att-style="'width:' + Math.min(state.data.collection_performance.collected_from_clients.achievement, 100) + '%'"/>
+                                                        <span class="mr_progress_label"><t t-esc="formatNumber(Math.min(state.data.collection_performance.collected_from_clients.achievement, 100))"/>%</span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Collection discount</td>
+                                                <td class="number_cell">—</td>
+                                                <td class="number_cell" t-esc="formatCurrency(state.data.discount_given.amount)"/>
+                                                <td class="progress_cell" style="position: relative; padding: 8px; min-width: 120px;">
+                                                    <div class="mr_progress" style="width: 100%; max-width: 100%;">
+                                                        <div class="mr_progress_bar" t-att-style="'width:' + Math.min(state.data.discount_given.percentage || 0, 100) + '%'"/>
+                                                        <span class="mr_progress_label"><t t-esc="formatNumber((state.data.discount_given.percentage || 0).toFixed(2))"/>%</span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="mr_card mr_graph_side">
+                                <div class="mr_graph_side_grid">
+                                    <div class="mr_graph_mini">
+                                        <div class="mr_graph_mini_title">Plan vs Actual (Amount)</div>
+                                        <canvas t-ref="collectionAmountChart"/>
+                                    </div>
+                                    <div class="mr_graph_mini">
+                                        <div class="mr_graph_mini_title">Plan vs Actual (Clients)</div>
+                                        <canvas t-ref="collectionClientsChart"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Activity Timeline Chart -->
+                    <div class="table_section">
+                        <h3>Activity Timeline</h3>
+                        <div class="mr_card">
+                            <div class="mr_graph_mini timeline_chart" style="height: 500px; min-height: 500px;">
+                                <canvas t-ref="activityTimeseriesChart"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>

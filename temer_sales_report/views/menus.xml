@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Root menu -->
+    <menuitem id="menu_temer_sales_report_root" name="Reports" sequence="95" groups="temer_sales_report.group_temer_sales_report_user"/>
+
+    <!-- 1. Sales Deal Closed -->
+    <menuitem id="menu_temer_sales_deal_closed" name="Sales Deal Closed" parent="menu_temer_sales_report_root" action="action_temer_sales_deal_closed" sequence="1"/>
+
+    <!-- 2. Lead Generated -->
+    <menuitem id="menu_temer_lead_generated" name="Lead Generated" parent="menu_temer_sales_report_root" action="action_temer_lead_generated" sequence="2"/>
+
+    <!-- 3. Follow Up -->
+    <menuitem id="menu_temer_follow_up" name="Follow Up" parent="menu_temer_sales_report_root" action="action_temer_follow_up" sequence="3"/>
+
+    <!-- 4. Office Visit -->
+    <menuitem id="menu_temer_office_visit" name="Office Visit" parent="menu_temer_sales_report_root" action="action_temer_office_visit" sequence="4"/>
+
+    <!-- 5. Site Visit -->
+    <menuitem id="menu_temer_site_visit" name="Site Visit" parent="menu_temer_sales_report_root" action="action_temer_site_visit" sequence="5"/>
+
+    <!-- 6. Reservation Report -->
+    <menuitem id="menu_temer_reservation_history" name="Reservation Report" parent="menu_temer_sales_report_root" action="action_temer_reservation_history" sequence="6"/>
+
+</odoo>

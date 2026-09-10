@@ -1,0 +1,86 @@
+<odoo>
+    <record id="property_sale_view_search" model="ir.ui.view">
+        <field name="name">property.sale.view.search</field>
+        <field name="model">property.sale</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" string="Property Name" />
+                <filter name="filter_draft" string="Draft" domain="[('state', '=', 'draft')]" />
+                <filter name="filter_confirm" string="Confirmed"
+                    domain="[('state', '=', 'confirm')]" />
+                <group expand="0" string="Group By">
+                    <filter name="group_by_site" string="Site" context="{'group_by': 'site_id'}" />
+                    <filter name="group_by_date" string="Date"
+                        context="{'group_by': 'create_date:month'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="inherit_property_sale_tree_view" model="ir.ui.view">
+        <field name="name">property.sale.tree.no_create</field>
+        <field name="model">property.sale</field>
+        <field name="inherit_id" ref="advanced_property_management.property_sale_view_tree" />
+        <field name="arch" type="xml">
+            <tree position="attributes">
+                <attribute name="create">false</attribute>
+            </tree>
+        </field>
+    </record>
+    <record id="inherit_property_sale_form_view" model="ir.ui.view">
+        <field name="name">property.sale.form.no_create</field>
+        <field name="model">property.sale</field>
+        <field name="inherit_id" ref="advanced_property_management.property_sale_view_form" />
+        <field name="arch" type="xml">
+            <form position="attributes">
+                <attribute name="create">false</attribute>
+            </form>
+            <xpath expr="//header" position="inside">
+                <field name='is_verified' invisible="1" />
+                <button name="request_for_confirmation_action"
+                        string="Request for Confirmation"
+                        type="object"
+                        class="btn-primary"
+                        invisible="state not in ['draft'] or is_verified != True"
+                        confirm="Are you sure you want request confirmation?" />
+
+                <button name="action_cancel_sale"
+                        string="Cancel"
+                        type="object"
+                        invisible="state in ['cancel','confirm']"/>
+            </xpath>
+
+             <xpath expr="//button[@name='action_confirm']" position="attributes">
+                <attribute name="invisible">state not in  ['request_for_confirm']</attribute>
+            </xpath>
+
+
+
+        </field>
+    </record>
+<record id="property_sale_view_form_inherit_id" model="ir.ui.view">
+    <field name="name">property.sale.view.form.inherit</field>
+    <field name="model">property.sale</field>
+    <field name="inherit_id" ref="advanced_property_management.property_sale_view_form" />
+    <field name="arch" type="xml">
+        <xpath expr="//sheet/group[last()]" position="after">
+            <notebook>
+                <page string="Invoice">
+                    <field name="payment_installment_line_ids" readonly="1">
+                        <tree editable="bottom">
+                            <field name='payment_term_id' />
+                            <field name='expected'/>
+                            <field name='expected_amount' />
+                            <field name='discount'/>
+                            <field name='paid_amount' />
+                            <field name='remaining' />
+                            <field name='state' />
+                        </tree>
+                    </field>
+                </page>
+            </notebook>
+        </xpath>
+    </field>
+</record>
+
+
+</odoo>

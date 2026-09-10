@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Group for Reactivate Button -->
+        <record id="group_collection_reactivate_order" model="res.groups">
+            <field name="name">Reactivate Collection Order</field>
+            <field name="category_id" ref="collection_management.module_category_collection_management"/>
+        </record>
+
+        <!-- Group for Deny Progress Button -->
+        <record id="group_collection_progress_denier" model="res.groups">
+            <field name="name">Construction Progress Denier</field>
+            <field name="category_id" ref="collection_management.module_category_collection_management"/>
+        </record>
+    </data>
+</odoo>

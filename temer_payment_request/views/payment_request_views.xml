@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_payment_request_form" model="ir.ui.view">
+        <field name="name">payment.request.form</field>
+        <field name="model">payment.request</field>
+        <field name="arch" type="xml">
+            <form string="Payment Request">
+                <header>
+                    <button name="action_check" string="Check" type="object"
+                            class="oe_highlight" invisible="state != 'draft' or not id"
+                            groups="temer_payment_request.group_payment_request_checker"/>
+                    <button name="action_reset_to_draft" string="Reset to Draft" type="object"
+                            invisible="state != 'checked'"
+                            groups="temer_payment_request.group_payment_request_checker"/>
+                    <button name="action_approve" string="Approve" type="object"
+                            class="oe_highlight" invisible="state != 'checked'"
+                            groups="temer_payment_request.group_payment_request_approver"/>
+                    <button name="action_void" string="Void" type="object"
+                            invisible="state not in ('checked', 'approved')"
+                            groups="temer_payment_request.group_payment_request_manager"
+                            confirm="Are you sure you want to void this Payment Request? This action cannot be undone."/>
+                    <field name="state" widget="statusbar" 
+                           statusbar_visible="draft,checked,approved,done,canceled,void"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="pr_number" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="pay_to" widget="radio" 
+                                   options="{'horizontal': true}" 
+                                   readonly="state not in ('draft', 'checked')"/>
+                            
+                            <field name="partner_id" 
+                                   string="Payee Name"
+                                   options="{'no_create_edit': False, 'no_quick_create': False}"
+                                   context="{'default_supplier_rank': 1, 'res_partner_search_mode': 'supplier'}"
+                                   domain="[('supplier_rank', '>', 0)]"
+                                   readonly="state not in ('draft', 'checked')"
+                                   invisible="pay_to == 'customer'"/>
+                            
+                            <field name="partner_id" 
+                                   string="Payee Name"
+                                   options="{'no_create_edit': False, 'no_quick_create': False}"
+                                   context="{'default_customer_rank': 1, 'res_partner_search_mode': 'customer'}"
+                                   domain="[('customer_rank', '>', 0)]"
+                                   readonly="state not in ('draft', 'checked')"
+                                   invisible="pay_to == 'vendor'"/>
+                            
+                            <field name="amount" widget="monetary" 
+                                   options="{'currency_field': 'currency_id'}" 
+                                   readonly="state not in ('draft', 'checked')"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="created_by" readonly="1"/>
+                            <field name="checked_by" readonly="1"/>
+                            <field name="approved_by" readonly="1"/>
+                            <field name="voided_by" readonly="1" invisible="state != 'void'"/>
+                            <field name="voided_date" readonly="1" invisible="state != 'void'"/>
+                            <field name="payment_order_id" readonly="1" 
+                                   invisible="not payment_order_id"
+                                   options="{'no_open': False}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Reason">
+                            <field name="reason" 
+                                   placeholder="Enter detailed reason for payment..." 
+                                   readonly="state not in ('draft', 'checked')"/>
+                        </page>
+                        <page string="Void Reason" invisible="state != 'void'">
+                            <field name="void_reason" readonly="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_payment_request_tree" model="ir.ui.view">
+        <field name="name">payment.request.tree</field>
+        <field name="model">payment.request</field>
+        <field name="arch" type="xml">
+            <tree string="Payment Requests" 
+                  decoration-muted="state == 'done'" 
+                  decoration-info="state == 'draft'" 
+                  decoration-warning="state == 'checked'" 
+                  decoration-success="state == 'approved'"
+                  decoration-danger="state == 'canceled'"
+                  decoration-primary="state == 'void'">
+                <field name="pr_number"/>
+                <field name="pay_to"/>
+                <field name="partner_id"/>
+                <field name="amount"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="state"/>
+                <field name="created_by"/>
+                <field name="checked_by"/>
+                <field name="approved_by"/>
+                <field name="payment_order_id" optional="show"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_payment_request_kanban" model="ir.ui.view">
+        <field name="name">payment.request.kanban</field>
+        <field name="model">payment.request</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile">
+                <field name="pr_number"/>
+                <field name="pay_to"/>
+                <field name="partner_id"/>
+                <field name="amount"/>
+                <field name="currency_id"/>
+                <field name="state"/>
+                <field name="reason"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                            <div class="o_kanban_detail">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <span><t t-esc="record.pr_number.value"/></span>
+                                        </strong>
+                                    </div>
+                                    <div class="o_kanban_record_body">
+                                        <span class="oe_kanban_list_many2many">
+                                            <field name="state" widget="label_selection" 
+                                                   options="{'classes': {
+                                                       'draft': 'default',
+                                                       'checked': 'warning',
+                                                       'approved': 'success',
+                                                       'done': 'muted',
+                                                       'canceled': 'danger',
+                                                       'void': 'primary'
+                                                   }}"/>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <div>
+                                        <strong>Pay To:</strong> <t t-esc="record.pay_to.value"/><br/>
+                                        <strong>Payee:</strong> <t t-esc="record.partner_id.value"/><br/>
+                                        <strong>Amount:</strong> 
+                                        <field name="amount" widget="monetary" 
+                                               options="{'currency_field': 'currency_id'}"/><br/>
+                                        <strong>Reason:</strong> 
+                                        <t t-esc="record.reason.value" 
+                                           style="white-space: pre-wrap; word-wrap: break-word;"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_payment_request_search" model="ir.ui.view">
+        <field name="name">payment.request.search</field>
+        <field name="model">payment.request</field>
+        <field name="arch" type="xml">
+            <search string="Payment Requests">
+                <field name="pr_number"/>
+                <field name="partner_id"/>
+                <field name="pay_to"/>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Checked" name="checked" domain="[('state', '=', 'checked')]"/>
+                <filter string="Approved" name="approved" domain="[('state', '=', 'approved')]"/>
+                <filter string="Done" name="done" domain="[('state', '=', 'done')]"/>
+                <filter string="Canceled" name="canceled" domain="[('state', '=', 'canceled')]"/>
+                <filter string="Void" name="void" domain="[('state', '=', 'void')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_by_state" 
+                            domain="[]" context="{'group_by': 'state'}"/>
+                    <filter string="Pay To" name="group_by_pay_to" 
+                            domain="[]" context="{'group_by': 'pay_to'}"/>
+                    <filter string="Created By" name="group_by_created_by" 
+                            domain="[]" context="{'group_by': 'created_by'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_payment_request" model="ir.actions.act_window">
+        <field name="name">Payment Requests</field>
+        <field name="res_model">payment.request</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="search_view_id" ref="view_payment_request_search"/>
+        <field name="groups_id" eval="[(4, ref('temer_payment_request.group_payment_request_creator')), (4, ref('temer_payment_request.group_payment_request_checker')), (4, ref('temer_payment_request.group_payment_request_approver')), (4, ref('temer_payment_request.group_payment_order_confirmer')), (4, ref('temer_payment_request.group_account_payment_handler')), (4, ref('temer_payment_request.group_payment_viewer')), (4, ref('temer_payment_request.group_payment_request_manager'))]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first payment request!
+            </p>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_collection_early_settlement_wizard_form" model="ir.ui.view">
+        <field name="name">collection.early.settlement.wizard.form</field>
+        <field name="model">collection.early.settlement.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Early Settlement Offer">
+                <sheet>
+                    <group>
+                        <group string="Analysis">
+                            <field name="total_remaining"/>
+                            <field name="overdue_amount" decoration-danger="1"/>
+                            <field name="eligible_amount" decoration-success="1"/>
+                        </group>
+                        <group string="Offer">
+                            <field name="discount_percentage"/>
+                            <field name="discount_amount" decoration-success="1" style="font-weight:bold;"/>
+                            <div class="alert alert-info" role="alert" colspan="2">
+                                Discount is applied ONLY to the Eligible Amount. Overdue amounts must be paid in full.
+                            </div>
+                        </group>
+                    </group>
+                    <group string="Final Result">
+                        <field name="final_payoff_amount" style="font-size: 1.5em; font-weight: bold;"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_confirm_settlement" string="Confirm Settlement" type="object" class="btn-primary" confirm="This will cancel future installments and create a single settlement installment. Are you sure?"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_collection_early_settlement_wizard" model="ir.actions.act_window">
+        <field name="name">Early Settlement</field>
+        <field name="res_model">collection.early.settlement.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

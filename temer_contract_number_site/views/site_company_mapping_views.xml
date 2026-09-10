@@ -1,0 +1,54 @@
+<odoo>
+    <record id="view_site_company_mapping_tree" model="ir.ui.view">
+        <field name="name">site.company.mapping.tree</field>
+        <field name="model">site.company.mapping</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="company_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_site_company_mapping_form" model="ir.ui.view">
+        <field name="name">site.company.mapping.form</field>
+        <field name="model">site.company.mapping</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="company_id"/>
+                    </group>
+                    <notebook>
+                        <page string="Sites">
+                            <field name="line_ids">
+                                <tree editable="bottom">
+                                    <field name="location_id"/>
+                                    <field name="site_id"/>
+                                    <field name="site_abbreviation"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_site_company_mapping" model="ir.actions.act_window">
+        <field name="name">Company Site Mapping</field>
+        <field name="res_model">site.company.mapping</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_site_company_mapping"
+              name="Company Site/Location Configuration"
+              action="action_site_company_mapping"
+              sequence="30"
+              parent="advanced_property_management.property_configuration_menu"/>
+
+    <menuitem id="menu_site_company_mapping_locations"
+              name="Company Site mapping"
+              parent="temer_contract_number_site.menu_site_company_mapping"
+              action="action_site_company_mapping"
+              sequence="10"/>
+</odoo>

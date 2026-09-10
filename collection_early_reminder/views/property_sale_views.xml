@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_property_sale_form_inherit_reminder" model="ir.ui.view">
+        <field name="name">property.sale.form.inherit.reminder</field>
+        <field name="model">property.sale</field>
+        <field name="inherit_id" ref="advanced_property_management.property_sale_view_form"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="//field[@name='payment_schedule_type']" position="after">
+                <field name="requires_early_reminder" widget="boolean_toggle"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

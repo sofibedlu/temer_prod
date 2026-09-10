@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_employee_asset_user,employee.asset.user,model_employee_asset,base.group_user,1,1,1,1
+access_employee_asset_officer,employee.asset.officer,model_employee_asset,hr.group_hr_user,1,1,1,1
+access_employee_child_user,employee.child.user,model_employee_child,base.group_user,1,1,1,1
+access_employee_child_officer,employee.child.officer,model_employee_child,hr.group_hr_user,1,1,1,1

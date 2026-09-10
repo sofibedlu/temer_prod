@@ -1,0 +1,49 @@
+<odoo>
+    <data noupdate="1">
+        <record id="property_floor_1" model="property.floor">
+            <field name="name">1</field>
+        </record>
+        <record id="property_floor_2" model="property.floor">
+            <field name="name">2</field>
+        </record>
+        <record id="property_floor_3" model="property.floor">
+            <field name="name">3</field>
+        </record>
+        <record id="property_floor_4" model="property.floor">
+            <field name="name">4</field>
+        </record>
+        <record id="property_floor_5" model="property.floor">
+            <field name="name">5</field>
+        </record>
+        <record id="property_floor_6" model="property.floor">
+            <field name="name">6</field>
+        </record>
+        <record id="property_floor_7" model="property.floor">
+            <field name="name">7</field>
+        </record>
+        <record id="property_floor_8" model="property.floor">
+            <field name="name">8</field>
+        </record>
+        <record id="property_floor_9" model="property.floor">
+            <field name="name">9</field>
+        </record>
+        <record id="property_floor_10" model="property.floor">
+            <field name="name">10</field>
+        </record>
+        <record id="property_floor_11" model="property.floor">
+            <field name="name">11</field>
+        </record>
+        <record id="property_floor_12" model="property.floor">
+            <field name="name">12</field>
+        </record>
+        <record id="property_floor_13" model="property.floor">
+            <field name="name">13</field>
+        </record>
+        <record id="property_floor_14" model="property.floor">
+            <field name="name">14</field>
+        </record>
+        <record id="property_floor_15" model="property.floor">
+            <field name="name">15</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_server_contract_archive_details" model="ir.actions.server">
+        <field name="name">Contract  Details</field>
+        <field name="model_id" ref="model_property_sale"/>
+        <field name="binding_model_id" ref="model_property_sale"/>
+        <field name="binding_view_types">list,form</field>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    action = records.action_view_contract_details()
+        </field>
+    </record>
+</odoo>

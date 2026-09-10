@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Security rule to restrict lead creation to specific group -->
+        <record id="crm_lead_restriction_create_rule" model="ir.rule">
+            <field name="name">CRM Lead: Restrict Creation to Lead Creators</field>
+            <field name="model_id" ref="model_crm_lead"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('crm_lead_restriction.group_lead_creator'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- Removed invalid rule modifications referencing non-existent xmlids (crm.ir_rule_crm_lead_*). -->
+        <!-- If you need to adjust existing CRM rules, reference actual IDs in crm/security/crm_security.xml: -->
+        <!--   crm_rule_personal_lead, crm_lead_company_rule, crm_rule_all_lead -->
+    </data>
+</odoo>
+
+
+
+
+
+
+
+
+

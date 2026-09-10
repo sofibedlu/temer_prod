@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         TREE VIEW
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <record id="view_letter_template_tree" model="ir.ui.view">
+        <field name="name">letter.template.tree</field>
+        <field name="model">letter.template</field>
+        <field name="arch" type="xml">
+            <tree string="Letter Templates">
+                <field name="name"/>
+                <field name="letter_type_id"/>
+                <field name="site_id"/>
+                <field name="director_id"/>
+                <field name="subject"/>
+                <field name="header_footer_id"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         FORM VIEW
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <record id="view_letter_template_form" model="ir.ui.view">
+        <field name="name">letter.template.form</field>
+        <field name="model">letter.template</field>
+        <field name="arch" type="xml">
+            <form string="Letter Template">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Template Name…"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="General">
+                            <field name="letter_type_id" options="{'no_create': True}"/>
+                            <field name="site_id" options="{'no_create': True}"/>
+                            <field name="director_id" options="{'no_create': True}"/>
+                            <field name="subject"/>
+                            <field name="active" widget="boolean_toggle"/>
+                        </group>
+                        <group string="Layout">
+                            <field name="header_footer_id"
+                                   options="{'no_create': True}"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <!-- ── Letter Bodies tab ──────────────────────── -->
+                        <page name="bodies" string="Letter Bodies">
+                            <!--
+                                Many2many field rendered as an embedded list.
+                                The handle widget on 'sequence' lets users
+                                drag-reorder bodies within the template.
+                            -->
+                            <field name="body_ids"
+                                   options="{'no_create': True, 'no_open': False}">
+                                <tree>
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="subject"/>
+                                    <field name="is_dynamic" widget="boolean_toggle"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                        <!-- ── Notes tab ──────────────────────────────── -->
+                        <page name="notes" string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         ACTION
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <record id="action_letter_template" model="ir.actions.act_window">
+        <field name="name">Letter Templates</field>
+        <field name="res_model">letter.template</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first Letter Template
+            </p>
+            <p>
+                Combine a Header/Footer with one or more Body sections to build
+                a complete, dynamic letter template.
+            </p>
+        </field>
+    </record>
+
+    <!-- Hide old menus from legacy modules -->
+    <menuitem id="collection_management.menu_collection_letterhead" active="False"/>
+    <menuitem id="collection_letter_template.menu_collection_letter_template" active="False"/>
+
+</odoo>

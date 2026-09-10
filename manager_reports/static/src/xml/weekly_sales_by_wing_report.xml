@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="manager_reports.WeeklySalesByWingReportClient" owl="1">
+        <div class="manager_reports_container">
+            <div class="report_header">
+                <h2 t-esc="reportTitle()"/>
+                <div class="filter_section">
+                    <div class="filter_row">
+                        <label>Period:</label>
+                        <select t-model="state.period_type" t-on-change="onPeriodChange" class="period_select" style="width: 110px;">
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly">Monthly</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                        <t t-if="state.period_type === 'weekly'">
+                            <label>Week of:</label>
+                            <input type="date" t-model="state.week_of" t-on-change="onCriteriaChange" class="date_input"/>
+                        </t>
+                        <t t-if="state.period_type === 'monthly'">
+                            <label>Month:</label>
+                            <select t-model="state.month" t-on-change="onCriteriaChange" style="width: 80px;">
+                                <t t-foreach="monthOptions" t-as="opt" t-key="opt.value">
+                                    <option t-att-value="opt.value" t-esc="opt.label"/>
+                                </t>
+                            </select>
+                            <label>Year:</label>
+                            <select t-model="state.year" t-on-change="onCriteriaChange" style="width: 75px;">
+                                <t t-foreach="yearOptions" t-as="yr" t-key="yr">
+                                    <option t-att-value="yr" t-esc="yr"/>
+                                </t>
+                            </select>
+                        </t>
+                        <t t-if="state.period_type === 'custom'">
+                            <label>Date From:</label>
+                            <input type="date" t-model="state.date_from" t-on-change="onCriteriaChange" class="date_input"/>
+                            <label>Date To:</label>
+                            <input type="date" t-model="state.date_to" t-on-change="onCriteriaChange" class="date_input"/>
+                        </t>
+                        <button class="btn btn-primary" t-on-click="loadData">Show</button>
+                        <button class="btn btn-secondary" t-on-click="exportExcel">Export Excel</button>
+                        <button class="btn btn-secondary" t-on-click="exportPDF">Export PDF</button>
+                    </div>
+                </div>
+            </div>
+
+            <t t-if="state.loading">
+                <div class="loading_message">Loading data...</div>
+            </t>
+
+            <t t-if="!state.loading">
+                <div class="report_content mr_scroll_y">
+                    <!-- Main table: by Site × Wing -->
+                    <div class="table_section" style="margin-bottom: 20px;">
+                        <div class="mr_card">
+                            <div class="mr_table_scroll">
+                                <table class="report_table weekly_sales_main_table">
+                                    <thead>
+                                        <tr>
+                                            <th>SITE</th>
+                                            <th style="text-align:right" t-esc="openingLabel()"/>
+                                            <t t-foreach="state.wings" t-as="wing" t-key="wing.id">
+                                                <th style="text-align:center" colspan="2" t-esc="wing.name"/>
+                                            </t>
+                                            <th style="text-align:right" t-esc="reservationLabel()"/>
+                                            <th style="text-align:right">Total Deals Closed</th>
+                                            <th style="text-align:right" t-esc="availableLabel()"/>
+                                        </tr>
+                                        <tr class="subheader">
+                                            <th/>
+                                            <th/>
+                                            <t t-foreach="state.wings" t-as="wing" t-key="'sub-' + wing.id">
+                                                <th style="text-align:right">SOLD</th>
+                                                <th style="text-align:right">RESERVED</th>
+                                            </t>
+                                            <th/>
+                                            <th/>
+                                            <th/>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="state.sites" t-as="site" t-key="site.site_id">
+                                            <tr>
+                                                <td t-esc="site.site_name"/>
+                                                <td class="number_cell" t-esc="formatNumber(site.opening_stock)"/>
+                                                <t t-foreach="state.wings" t-as="wing" t-key="'cell-' + site.site_id + '-' + wing.id">
+                                                    <td class="number_cell" t-esc="formatNumber(site.wings &amp;&amp; site.wings[wing.id] ? site.wings[wing.id].sold : 0)"/>
+                                                    <td class="number_cell" t-esc="formatNumber(site.wings &amp;&amp; site.wings[wing.id] ? site.wings[wing.id].reserved : 0)"/>
+                                                </t>
+                                                <td class="number_cell" t-esc="formatNumber(site.total_reservation)"/>
+                                                <td class="number_cell" t-esc="formatNumber(site.total_deals_closed)"/>
+                                                <td class="number_cell" t-esc="formatNumber(site.available_stock)"/>
+                                            </tr>
+                                        </t>
+                                        <t t-if="state.sites.length > 0">
+                                            <tr class="total_row">
+                                                <td><strong>TOTAL</strong></td>
+                                                <td class="number_cell" t-esc="formatNumber(sitesTotals.opening_stock)"/>
+                                                <t t-foreach="state.wings" t-as="wing" t-key="'tot-' + wing.id">
+                                                    <td class="number_cell" t-esc="formatNumber(sitesTotals.byWing[wing.id] ? sitesTotals.byWing[wing.id].sold : 0)"/>
+                                                    <td class="number_cell" t-esc="formatNumber(sitesTotals.byWing[wing.id] ? sitesTotals.byWing[wing.id].reserved : 0)"/>
+                                                </t>
+                                                <td class="number_cell" t-esc="formatNumber(sitesTotals.total_reservation)"/>
+                                                <td class="number_cell" t-esc="formatNumber(sitesTotals.total_deals_closed)"/>
+                                                <td class="number_cell" t-esc="formatNumber(sitesTotals.available_stock)"/>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mr_table_graph_grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+                        <!-- SUMMERY by Wing -->
+                        <div class="mr_card">
+                            <div class="boxtitle" style="font-weight: 700; margin-bottom: 8px;">SUMMERY</div>
+                            <table class="report_table">
+                                <thead>
+                                    <tr>
+                                        <th>WING</th>
+                                        <th style="text-align:right">SOLD</th>
+                                        <th style="text-align:right">TOTAL</th>
+                                        <th style="text-align:right">PAID</th>
+                                        <th style="text-align:right">RESERVED</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="state.summary_by_wing" t-as="row" t-key="row.wing_name">
+                                        <tr>
+                                            <td t-esc="row.wing_name"/>
+                                            <td class="number_cell" t-esc="formatNumber(row.sold)"/>
+                                            <td class="number_cell" t-esc="formatCurrency(row.total)"/>
+                                            <td class="number_cell" t-esc="formatCurrency(row.paid)"/>
+                                            <td class="number_cell" t-esc="formatNumber(row.reserved)"/>
+                                        </tr>
+                                    </t>
+                                    <t t-if="state.summary_by_wing.length > 0">
+                                        <tr class="total_row">
+                                            <td><strong>Total</strong></td>
+                                            <td class="number_cell" t-esc="formatNumber(summaryTotals.sold)"/>
+                                            <td class="number_cell" t-esc="formatCurrency(summaryTotals.total)"/>
+                                            <td class="number_cell" t-esc="formatCurrency(summaryTotals.paid)"/>
+                                            <td class="number_cell" t-esc="formatNumber(summaryTotals.reserved)"/>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Bar chart: SOLD vs RESERVED by Wing -->
+                        <div class="mr_card">
+                            <div class="mr_graph_mini" style="min-height: 280px;">
+                                <div class="mr_graph_mini_title">SOLD vs RESERVED by Wing</div>
+                                <canvas t-ref="soldReservedChart" style="height: 260px;"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Opening Stock (Type, QTY, Estimated Value) -->
+                    <div class="mr_card" style="max-width: 400px;">
+                        <div class="boxtitle" style="font-weight: 700; margin-bottom: 8px;">Opening Stock</div>
+                        <table class="report_table">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th style="text-align:right">QTY</th>
+                                    <th style="text-align:right">Estimated Value(Birr)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Residence</td>
+                                    <td class="number_cell" t-esc="formatNumber(state.opening_stock.residence.qty)"/>
+                                    <td class="number_cell" t-esc="formatCurrency(state.opening_stock.residence.value)"/>
+                                </tr>
+                                <tr>
+                                    <td>Shops</td>
+                                    <td class="number_cell" t-esc="formatNumber(state.opening_stock.shops.qty)"/>
+                                    <td class="number_cell" t-esc="formatCurrency(state.opening_stock.shops.value)"/>
+                                </tr>
+                                <tr class="total_row">
+                                    <td><strong>Total</strong></td>
+                                    <td class="number_cell" t-esc="formatNumber(state.opening_stock.total.qty)"/>
+                                    <td class="number_cell" t-esc="formatCurrency(state.opening_stock.total.value)"/>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>

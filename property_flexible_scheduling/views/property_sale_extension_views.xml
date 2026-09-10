@@ -1,0 +1,43 @@
+<odoo>
+    <record id="view_property_sale_form_flexible_schedule" model="ir.ui.view">
+        <field name="name">property.sale.form.flexible.schedule</field>
+        <field name="model">property.sale</field>
+        <field name="inherit_id" ref="advanced_property_management.property_sale_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='property_id']" position="after">
+                <field name="payment_schedule_type" widget="radio" options="{'horizontal': true}" 
+                       readonly="state in ['void', 'done', 'cancel'] or (state in ['approve', 'audited'] and not is_schedule_unlocked)"/>
+            </xpath>
+
+            <xpath expr="//field[@name='property_payment_term']" position="attributes">
+                <attribute name="readonly">state in ['void', 'done', 'cancel', 'approve', 'audited']</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='payment_installment_line_ids']" position="before">
+                <button name="action_open_schedule_generator" 
+                        string="Generate Custom Schedule" 
+                        type="object" 
+                        class="btn-secondary" 
+                        icon="fa-list-ol"
+                        invisible="state not in ['draft', 'request_for_confirm', 'confirm'] or payment_schedule_type != 'time'"/>
+            </xpath>
+
+            <xpath expr="//field[@name='payment_installment_line_ids']/tree/field[@name='expected_amount']" position="attributes">
+                <attribute name="readonly">0</attribute>
+                <attribute name="force_save">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='payment_installment_line_ids']/tree/field[@name='expected']" position="attributes">
+                <attribute name="readonly">0</attribute>
+                <attribute name="force_save">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='payment_installment_line_ids']/tree/field[@name='expected_amount']" position="after">
+                <field name="due_date"
+                       column_invisible="parent.payment_schedule_type != 'time'"
+                       required="parent.payment_schedule_type == 'time' and state != 'paid'"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

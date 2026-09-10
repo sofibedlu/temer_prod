@@ -1,0 +1,435 @@
+<odoo>
+    <!-- Extend Reception form: use crm_custom_menu existing UI; hide Send SMS to Existing button (SMS is Wing-only, auto-sent); Customer Phones tab -->
+    <record id="view_crm_reception_form_wing_distribution" model="ir.ui.view">
+        <field name="name">crm.reception.form.wing.distribution</field>
+        <field name="model">crm.reception</field>
+        <field name="inherit_id" ref="crm_custom_menu.view_crm_reception_form"/>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='customer_name']" position="after">
+                <field name="source_id" string="🎯 Source"/>
+            </xpath>
+            <xpath expr="//sheet" position="inside">
+                <field name="phone_number_message" invisible="not phone_number_message"
+                       class="bg-warning p-2 rounded" readonly="1"/>
+                <field name="existing_salesperson_id" readonly="1"
+                       invisible="not existing_salesperson_id" string="Original Salesperson"/>
+                <field name="existing_temer_lead_id" invisible="1"/>
+                <field name="wing_duplicate_popup_pending" invisible="1"/>
+            </xpath>
+            <xpath expr="//button[@name='action_send_sms_to_existing_customer']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='assigned_salesperson_id']" position="before">
+                <field name="assigned_salesperson_name" string="Assigned Sales Person" readonly="1"/>
+                <field name="assigned_salesperson_phone" string="Assigned Sales Person Phone" readonly="1"/>
+                <field name="assigned_supervisor_name" string="Assigned Salesperson Supervisor" readonly="1"/>
+            </xpath>
+            <xpath expr="//field[@name='new_phone']" position="after">
+                <button name="action_add_phone_and_save" type="object" string="Save" class="oe_highlight oe_inline" icon="fa-save" invisible="state_crm == 'draft'"/>
+            </xpath>
+            <xpath expr="//field[@name='assigned_salesperson_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='full_phone'][@invisible='1']" position="before">
+                <notebook>
+                    <page string="Customer Phones">
+                        <field name="full_phone" nolabel="1" mode="tree" class="o_customer_phones_no_add" context="{'default_reception_record_id': active_id}">
+                            <tree string="Phone Numbers" create="false" delete="false" editable="false">
+                                <field name="country_id" string="Country"/>
+                                <field name="name" string="Phone Number"/>
+                                <field name="create_date" string="Datetime"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Extend Reception tree: remove Phone no column, show Phones (all) and assigned phone -->
+    <record id="view_crm_reception_tree_wing_distribution" model="ir.ui.view">
+        <field name="name">crm.reception.tree.wing.distribution</field>
+        <field name="model">crm.reception</field>
+        <field name="inherit_id" ref="crm_custom_menu.view_crm_reception_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='new_phone']" position="replace">
+                <field name="full_phone" string="Phones" widget="many2many_tags" optional="show"/>
+                <field name="source_id" string="Source" widget="badge" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='assigned_salesperson_id']" position="after">
+                <field name="assigned_salesperson_phone" string="Assigned Phone" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Website CRM: hide Send SMS to Existing button; Customer Phones tab -->
+    <record id="view_crm_website_form_wing_distribution" model="ir.ui.view">
+        <field name="name">crm.website.form.wing.distribution</field>
+        <field name="model">crm.website</field>
+        <field name="inherit_id" ref="crm_custom_menu.view_crm_website_form"/>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <field name="phone_number_message" invisible="not phone_number_message"
+                       class="bg-warning p-2 rounded" readonly="1"/>
+                <field name="existing_salesperson_id" readonly="1"
+                       invisible="not existing_salesperson_id" string="Original Salesperson"/>
+                <field name="existing_temer_lead_id" invisible="1"/>
+                <field name="wing_duplicate_popup_pending" invisible="1"/>
+            </xpath>
+            <xpath expr="//button[@name='action_send_sms_to_existing_customer']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='assigned_salesperson_id']" position="before">
+                <field name="assigned_salesperson_name" string="Assigned Sales Person" readonly="1"/>
+                <field name="assigned_salesperson_phone" string="Assigned Sales Person Phone" readonly="1"/>
+                <field name="assigned_supervisor_name" string="Assigned Salesperson Supervisor" readonly="1"/>
+            </xpath>
+            <xpath expr="//field[@name='new_phone']" position="after">
+                <button name="action_add_phone_and_save" type="object" string="Save" class="oe_highlight oe_inline" icon="fa-save" invisible="state_crm == 'draft'"/>
+            </xpath>
+            <xpath expr="//field[@name='assigned_salesperson_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='full_phone'][@invisible='1']" position="before">
+                <notebook>
+                    <page string="Customer Phones">
+                        <field name="full_phone" nolabel="1" mode="tree" class="o_customer_phones_no_add" context="{'default_website_record_id': active_id}">
+                            <tree string="Phone Numbers" create="false" delete="false" editable="false">
+                                <field name="country_id" string="Country"/>
+                                <field name="name" string="Phone Number"/>
+                                <field name="create_date" string="Datetime"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Website CRM: remove Phone no column, show Phones (all) and assigned person/phone on tree -->
+    <record id="view_crm_website_tree_wing_distribution" model="ir.ui.view">
+        <field name="name">crm.website.tree.wing.distribution</field>
+        <field name="model">crm.website</field>
+        <field name="inherit_id" ref="crm_custom_menu.view_crm_website_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='new_phone']" position="replace">
+                <field name="full_phone" string="Phones" widget="many2many_tags" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='assigned_salesperson_id']" position="after">
+                <field name="assigned_salesperson_name" string="Assigned Person Name" optional="show"/>
+                <field name="assigned_salesperson_phone" string="Assigned Phone" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Call Center: extend crm_custom_menu_customer_phone tab - add Datetime column, hide Add a line -->
+    <record id="view_crm_callcenter_form_wing_hide_add_line" model="ir.ui.view">
+        <field name="name">crm.callcenter.form.wing.extend.customer.phone</field>
+        <field name="model">crm.callcenter</field>
+        <field name="inherit_id" ref="crm_custom_menu_customer_phone.view_crm_callcenter_form_customer_phone"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page/field[@name='full_phone']" position="attributes">
+                <attribute name="class">o_customer_phones_no_add</attribute>
+            </xpath>
+            <xpath expr="//page/field[@name='full_phone']/tree/field[@name='name']" position="after">
+                <field name="create_date" string="Datetime"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Call Center (6033): hide Send SMS to Existing button -->
+    <record id="view_crm_callcenter_form_wing_distribution" model="ir.ui.view">
+        <field name="name">crm.callcenter.form.wing.distribution</field>
+        <field name="model">crm.callcenter</field>
+        <field name="inherit_id" ref="crm_custom_menu.view_crm_callcenter_form"/>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_send_sms_to_existing_customer']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='assigned_salesperson_id']" position="before">
+                <field name="assigned_salesperson_name" string="Assigned Sales Person" readonly="1"/>
+                <field name="assigned_salesperson_phone" string="Assigned Sales Person Phone" readonly="1"/>
+                <field name="assigned_supervisor_name" string="Assigned Salesperson Supervisor" readonly="1"/>
+            </xpath>
+            <xpath expr="//field[@name='new_phone']" position="after">
+                <button name="action_add_phone_and_save" type="object" string="Save" class="oe_highlight oe_inline" icon="fa-save" invisible="state_crm == 'draft'"/>
+            </xpath>
+            <xpath expr="//field[@name='assigned_salesperson_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//sheet" position="inside">
+                <field name="country_id" invisible="1"/>
+                <field name="phone_number_message" invisible="not phone_number_message"
+                       class="bg-warning p-2 rounded" readonly="1"/>
+                <field name="existing_salesperson_id" readonly="1"
+                       invisible="not existing_salesperson_id" string="Original Salesperson"/>
+                <field name="existing_temer_lead_id" invisible="1"/>
+                <field name="wing_duplicate_popup_pending" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Call Center (6033): remove Phone no column, show Phones (all) and assigned person/phone on tree -->
+    <record id="view_crm_callcenter_tree_wing_distribution" model="ir.ui.view">
+        <field name="name">crm.callcenter.tree.wing.distribution</field>
+        <field name="model">crm.callcenter</field>
+        <field name="inherit_id" ref="crm_custom_menu.view_crm_callcenter_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='new_phone']" position="replace">
+                <field name="full_phone" string="Phones" widget="many2many_tags" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='assigned_salesperson_id']" position="after">
+                <field name="assigned_salesperson_name" string="Assigned Person Name" optional="show"/>
+                <field name="assigned_salesperson_phone" string="Assigned Phone" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Affiliate (Referral): remove Phone no column, show Phones (all) on tree -->
+    <record id="view_crm_affilater_tree_wing_distribution_phones" model="ir.ui.view">
+        <field name="name">crm.affilater.tree.wing.distribution.phones</field>
+        <field name="model">crm.affilater</field>
+        <field name="inherit_id" ref="crm_custom_menu.view_crm_affilater_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='phone_no']" position="replace">
+                <field name="full_phone" string="Phones" widget="many2many_tags" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Affiliate (Referral): hide Send SMS to Existing button; labels only after source_id (no assigned_salesperson_id in base form). Customer Phones tab -->
+    <record id="view_crm_affilater_form_wing_distribution" model="ir.ui.view">
+        <field name="name">crm.affilater.form.wing.distribution</field>
+        <field name="model">crm.affilater</field>
+        <field name="inherit_id" ref="crm_custom_menu.view_crm_affilater_form"/>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <field name="phone_number_message" invisible="not phone_number_message"
+                       class="bg-warning p-2 rounded" readonly="1"/>
+                <field name="existing_salesperson_id" readonly="1"
+                       invisible="not existing_salesperson_id" string="Original Salesperson"/>
+                <field name="existing_temer_lead_id" invisible="1"/>
+                <field name="wing_duplicate_popup_pending" invisible="1"/>
+            </xpath>
+            <xpath expr="//button[@name='action_send_sms_to_existing_customer']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='source_id']" position="after">
+                <field name="assigned_salesperson_name" string="Assigned Sales Person" readonly="1" optional="show"/>
+                <field name="assigned_salesperson_phone" string="Assigned Sales Person Phone" readonly="1" optional="show"/>
+                <field name="assigned_supervisor_name" string="Assigned Salesperson Supervisor" readonly="1" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='phone_no']" position="after">
+                <button name="action_add_phone_and_save" type="object" string="Save" class="oe_highlight oe_inline" icon="fa-save" invisible="state_crm == 'draft'"/>
+            </xpath>
+            <xpath expr="//field[@name='full_phone'][@invisible='1']" position="before">
+                <notebook>
+                    <page string="Customer Phones">
+                        <field name="full_phone" nolabel="1" mode="tree" class="o_customer_phones_no_add">
+                            <tree string="Phone Numbers" create="false" delete="false" editable="false">
+                                <field name="name" string="Phone Number"/>
+                                <field name="create_date" string="Datetime"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Affiliate (Referral): show assigned person name and phone on tree (after source_id if present) -->
+    <record id="view_crm_affilater_tree_wing_distribution" model="ir.ui.view">
+        <field name="name">crm.affilater.tree.wing.distribution</field>
+        <field name="model">crm.affilater</field>
+        <field name="inherit_id" ref="crm_custom_menu.view_crm_affilater_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='source_id']" position="after">
+                <field name="assigned_salesperson_name" string="Assigned Sales Person" optional="show"/>
+                <field name="assigned_salesperson_phone" string="Assigned Phone" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_wing_distribution_line_tree" model="ir.ui.view">
+        <field name="name">wing.distribution.line.tree</field>
+        <field name="model">wing.distribution.line</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom" create="1" delete="1" multi_edit="1">
+                <field name="user_id" domain="[('id', 'in', user_domain_ids)]"/>
+                <field name="user_domain_ids" column_invisible="1"/>
+                <field name="wing_id" readonly="1"/>
+                <field name="distribution_type_ids" widget="many2many_tags" domain="[('id', 'not in', type_ids_already_used_by_user)]"/>
+                <field name="type_ids_already_used_by_user" column_invisible="1"/>
+                <field name="status"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_wing_distribution_line_form" model="ir.ui.view">
+        <field name="name">wing.distribution.line.form</field>
+        <field name="model">wing.distribution.line</field>
+        <field name="arch" type="xml">
+            <form string="Wing Distribution">
+                <sheet>
+                    <group>
+                        <field name="user_id" domain="[('id', 'in', user_domain_ids)]"/>
+                        <field name="wing_id" readonly="1"/>
+                        <field name="distribution_type_ids" widget="many2many_tags" domain="[('id', 'not in', type_ids_already_used_by_user)]"/>
+                        <field name="type_ids_already_used_by_user" invisible="1"/>
+                        <field name="status"/>
+                        <field name="active"/>
+                    </group>
+                    <field name="user_domain_ids" invisible="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_wing_distribution_line_search" model="ir.ui.view">
+        <field name="name">wing.distribution.line.search</field>
+        <field name="model">wing.distribution.line</field>
+        <field name="arch" type="xml">
+            <search string="Wing Distribution">
+                <field name="user_id"/>
+                <field name="wing_id"/>
+                <field name="distribution_type_ids"/>
+                <field name="status"/>
+                <filter name="active" string="Active" domain="[('active', '=', True)]"/>
+                <filter name="inactive" string="Inactive" domain="[('active', '=', False)]"/>
+                <filter name="served" string="Served" domain="[('status', '=', 'served')]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_wing" string="Wing" context="{'group_by': 'wing_id'}"/>
+                    <filter name="group_by_type" string="Distribution Type" context="{'group_by': 'distribution_type_ids'}"/>
+                    <filter name="group_by_status" string="Status" context="{'group_by': 'status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_wing_distribution_line" model="ir.actions.act_window">
+        <field name="name">Wing Distribution</field>
+        <field name="res_model">wing.distribution.line</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_wing_distribution_line_tree"/>
+        <field name="context">{'active_test': False, 'search_default_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add distribution users to control reception assignment. Use Action → Archive / Unarchive to activate or deactivate lines.
+            </p>
+        </field>
+    </record>
+
+    <!-- Round model: no menu for wing distribution users (config/admin only). Views/action kept for system use. -->
+    <record id="view_wing_distribution_round_tree" model="ir.ui.view">
+        <field name="name">wing.distribution.round.tree</field>
+        <field name="model">wing.distribution.round</field>
+        <field name="arch" type="xml">
+            <tree string="Rounds" create="0" delete="0">
+                <field name="name"/>
+                <field name="distribution_type_id"/>
+                <field name="status"/>
+                <field name="date_started"/>
+                <field name="date_served"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_wing_distribution_round" model="ir.actions.act_window">
+        <field name="name">Distribution Rounds</field>
+        <field name="res_model">wing.distribution.round</field>
+        <field name="view_mode">tree</field>
+        <field name="help" type="html">
+            <p>Round 1 started when first assignment runs; when all in round are served, round finishes and Round 2 starts. (Config only – not shown to wing distribution users.)</p>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_wing_distribution_root"
+        name="Wing Distribution"
+        sequence="15"
+        groups="wing_distribution_configuration.group_wing_distribution_user"
+    />
+
+    <menuitem
+        id="menu_wing_distribution_line"
+        name="Wing Distribution"
+        parent="wing_distribution_configuration.menu_wing_distribution_root"
+        action="action_wing_distribution_line"
+        sequence="10"
+        groups="wing_distribution_configuration.group_wing_distribution_user"
+    />
+    <record id="view_crm_reception_search_wing_distribution" model="ir.ui.view">
+        <field name="name">crm.reception.search.wing.distribution</field>
+        <field name="model">crm.reception</field>
+        <field name="inherit_id" ref="crm_custom_menu.view_crm_reception_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_by_state" context="{'group_by': 'state_crm'}"/>
+                    <filter string="Salesperson" name="group_by_user_id" context="{'group_by': 'assigned_salesperson_id'}"/>
+                    <filter string="Source" name="group_by_source_ids" context="{'group_by': 'source_id'}"/>
+                    <filter string="Country" name="group_by_country_id" context="{'group_by': 'country_id'}"/>
+                    <filter string="Creator" name="group_by_create_uid" context="{'group_by': 'create_uid'}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_crm_website_search_wing_distribution" model="ir.ui.view">
+        <field name="name">crm.website.search.wing.distribution</field>
+        <field name="model">crm.website</field>
+        <field name="inherit_id" ref="crm_custom_menu.view_crm_website_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_by_state" context="{'group_by': 'state_crm'}"/>
+                    <filter string="Salesperson" name="group_by_user_id" context="{'group_by': 'assigned_salesperson_id'}"/>
+                    <filter string="Source" name="group_by_source_ids" context="{'group_by': 'source_id'}"/>
+                    <filter string="Country" name="group_by_country_id" context="{'group_by': 'country_id'}"/>
+                    <filter string="Creator" name="group_by_create_uid" context="{'group_by': 'create_uid'}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_crm_callcenter_search_wing_distribution" model="ir.ui.view">
+        <field name="name">crm.callcenter.search.wing.distribution</field>
+        <field name="model">crm.callcenter</field>
+        <field name="inherit_id" ref="crm_custom_menu.view_crm_callcenter_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_by_state" context="{'group_by': 'state_crm'}"/>
+                    <filter string="Salesperson" name="group_by_user_id" context="{'group_by': 'assigned_salesperson_id'}"/>
+                    <filter string="Source" name="group_by_source_ids" context="{'group_by': 'source_id'}"/>
+                    <filter string="Country" name="group_by_country_id" context="{'group_by': 'country_id'}"/>
+                    <filter string="Creator" name="group_by_create_uid" context="{'group_by': 'create_uid'}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_crm_affilater_search_wing_distribution" model="ir.ui.view">
+        <field name="name">crm.affilater.search.wing.distribution</field>
+        <field name="model">crm.affilater</field>
+        <field name="inherit_id" ref="crm_custom_menu.view_crm_affilater_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_by_state" context="{'group_by': 'state_crm'}"/>
+                    <filter string="Salesperson" name="group_by_user_id" context="{'group_by': 'assigned_salesperson_id'}"/>
+                    <filter string="Source" name="group_by_source_ids" context="{'group_by': 'source_id'}"/>
+                    <filter string="Country" name="group_by_country_id" context="{'group_by': 'country_id'}"/>
+                    <filter string="Creator" name="group_by_create_uid" context="{'group_by': 'create_uid'}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+

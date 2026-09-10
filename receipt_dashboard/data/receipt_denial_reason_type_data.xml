@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="reason_type_invalid_document" model="receipt.denial.reason.type">
+        <field name="name">Invalid Document</field>
+        <field name="active">True</field>
+        <field name="description">Payment receipt document is invalid or unclear</field>
+    </record>
+    
+    <record id="reason_type_insufficient_amount" model="receipt.denial.reason.type">
+        <field name="name">Insufficient Amount</field>
+        <field name="active">True</field>
+        <field name="description">Payment amount is insufficient for reservation</field>
+    </record>
+    
+    <record id="reason_type_wrong_reference" model="receipt.denial.reason.type">
+        <field name="name">Wrong Reference Number</field>
+        <field name="active">True</field>
+        <field name="description">Reference number does not match or is incorrect</field>
+    </record>
+    
+    <record id="reason_type_other" model="receipt.denial.reason.type">
+        <field name="name">Other</field>
+        <field name="active">True</field>
+        <field name="description">Other reasons not listed above</field>
+    </record>
+</odoo>
+

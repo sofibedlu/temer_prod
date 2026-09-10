@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Extension Action -->
+    <record id="property_reservation_extend_action" model="ir.actions.act_window">
+        <field name="name">Reservation Extensions</field>
+        <field name="res_model">property.reservation.extend.history</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new reservation extension request
+            </p>
+        </field>
+    </record>
+
+    <!-- Extension Tree View -->
+    <record id="property_reservation_extend_view_tree" model="ir.ui.view">
+        <field name="name">property.reservation.extend.history.tree</field>
+        <field name="model">property.reservation.extend.history</field>
+        <field name="arch" type="xml">
+            <tree decoration-info="status=='pending'" 
+                  decoration-success="status=='approved'" 
+                  decoration-danger="status=='rejected'" create="False">
+                <field name="reservation_id"/>
+                <field name="old_end_date"/>
+                <field name="extension_date"/>
+                <field name="remark"/>
+                <field name="request_letter_file" widget="binary_preview"/>
+                <field name="status" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Extension Form View -->
+    <record id="property_reservation_extend_view_form" model="ir.ui.view">
+        <field name="name">property.reservation.extend.history.form</field>
+        <field name="model">property.reservation.extend.history</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="approve_extension" 
+                            string="Approve"
+                            type="object" 
+                            class="btn-primary"
+                            invisible="status not in ['pending']"/>
+
+                    <button name="reject_extension" 
+                            string="Reject"
+                            type="object"
+                            invisible="status not in ['pending']"/>
+
+                    <field name="status" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group string="Reservation Extension">
+                        <group>
+                            <field name="reservation_id" invisible="1"/>
+                            <field name="reservation_id1" readonly="1"/>
+                            <field name="request_letter_file" widget="binary_preview"/>
+                        </group>
+                        <group>
+                            <field name="old_end_date"/>
+                            <field name="extension_date"/>
+                            <field name="remark"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <menuitem id="menu_property_reservation_extension_menu_id"
+                  name="Reservation Extension"
+                  parent="reservation_property_menu"
+                  action="property_reservation_extend_action"
+                  sequence="5" />
+</odoo>

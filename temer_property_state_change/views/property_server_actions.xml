@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.actions.server" id="ahadubit_property_base.action_make_available">
+        <field name="name">Make Available</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="advanced_property_management.model_property_property"/>
+        <field name="binding_model_id" ref="advanced_property_management.model_property_property"/>
+        <field name="state">code</field>
+        <field name="code">
+action = None
+records_to_change = records.filtered(lambda record: record.state != "available")
+if records_to_change:
+    action = records_to_change.action_available()
+if action:
+    action
+        </field>
+    </record>
+
+    <record model="ir.actions.server" id="ahadubit_property_base.action_make_draft">
+        <field name="name">Make Draft</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="advanced_property_management.model_property_property"/>
+        <field name="binding_model_id" ref="advanced_property_management.model_property_property"/>
+        <field name="state">code</field>
+        <field name="code">
+action = None
+records_to_change = records.filtered(lambda record: record.state != "draft")
+if records_to_change:
+    action = records_to_change.action_draft()
+if action:
+    action
+        </field>
+        <field name="groups_id" eval="[(4, ref('advanced_property_management.group_property_manager'))]"/>
+    </record>
+</odoo>

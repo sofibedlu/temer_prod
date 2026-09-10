@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Void Request Wizard Extension -->
+    <record id="view_void_contract_wizard_form_inherit_attachment" model="ir.ui.view">
+        <field name="name">void.contract.wizard.form.inherit.attachment</field>
+        <field name="model">void.contract.wizard</field>
+        <field name="inherit_id" ref="property_contract_extension.view_void_contract_wizard_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group" position="inside">
+                <field name="attachment_ids" widget="many2many_binary" string="Attach Files"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Amendment Request Wizard Extension -->
+    <record id="view_amendment_request_wizard_form_inherit_attachment" model="ir.ui.view">
+        <field name="name">amendment.request.wizard.form.inherit.attachment</field>
+        <field name="model">amendment.request.wizard</field>
+        <field name="inherit_id" ref="property_contract_collection.view_amendment_request_wizard_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group" position="inside">
+                <field name="attachment_ids" widget="many2many_binary" string="Attach Files"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_void_contract_reject_wizard_form_inherit" model="ir.ui.view">
+        <field name="name">void.contract.reject.wizard.form.inherit</field>
+        <field name="model">void.request.reject.wizard</field>
+        <field name="inherit_id" ref="property_contract_extension.view_void_request_reject_wizard_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='reason']" position="attributes">
+                <attribute name="required">1</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

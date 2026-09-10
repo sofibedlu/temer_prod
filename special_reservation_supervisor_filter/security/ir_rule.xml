@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- No ir.rule needed — filtering is done via _search override in Python -->
+</odoo>

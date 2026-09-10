@@ -1,0 +1,706 @@
+/* Sales Plan Report Styles - Same as Collection Reports */
+
+@media print {
+    .collection-report-container {
+        padding: 0;
+        background: white;
+    }
+    
+    .report-header .filter-section,
+    .export-buttons,
+    .btn-show,
+    .filter-group,
+    button {
+        display: none !important;
+    }
+    
+    .report-title {
+        margin-bottom: 10px;
+    }
+    
+    .report-table-container {
+        max-height: none !important;
+        overflow: visible !important;
+    }
+    
+    .report-table {
+        page-break-inside: avoid;
+    }
+}
+
+.collection-report-container {
+    padding: 20px;
+    background: #f8f9fa;
+    min-height: 100vh;
+}
+
+.report-header {
+    background: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.report-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+}
+
+.filter-section {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.filters-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.date-filters {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.select-input {
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 15px;
+    background: white;
+    min-width: 200px;
+}
+
+.select-input:focus {
+    outline: none;
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+.date-filters label {
+    font-weight: 600;
+    color: #333;
+    font-size: 15px;
+}
+
+.filter-group label {
+    font-weight: 600;
+    color: #333;
+    font-size: 15px;
+}
+
+.date-input {
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 15px;
+    background: white;
+}
+
+.date-input:focus {
+    outline: none;
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+.btn-show {
+    padding: 10px 24px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s;
+}
+
+.btn-show:hover {
+    background: #0056b3;
+}
+
+.export-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-left: auto;
+}
+
+.btn-export {
+    padding: 10px 18px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: white;
+    color: #495057;
+}
+
+.btn-export:hover {
+    background: #f8f9fa;
+    border-color: #adb5bd;
+}
+
+.btn-export-excel {
+    color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-export-excel:hover {
+    background: #28a745;
+    color: white;
+}
+
+.btn-export-pdf {
+    color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-export-pdf:hover {
+    background: #dc3545;
+    color: white;
+}
+
+.report-table-container {
+    background: white;
+    border-radius: 6px;
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: calc(100vh - 300px);
+    border: 1px solid #dee2e6;
+    position: relative;
+}
+
+.report-table-grid {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.report-table-grid .report-table-container {
+    flex: 1 1 0;
+}
+
+.report-table-grid .opening-stock-container {
+    flex: 0 0 320px;
+    max-width: 320px;
+}
+
+@media screen and (max-width: 1200px) {
+    .report-table-grid {
+        flex-direction: column;
+    }
+
+    .report-table-grid .opening-stock-container {
+        max-width: none;
+        flex: 1 1 auto;
+    }
+}
+
+.report-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 14px;
+}
+
+.report-table thead {
+    background: #e9ecef;
+}
+
+.report-table th {
+    padding: 16px 14px;
+    text-align: center;
+    font-weight: 700;
+    color: #212529;
+    border-bottom: 2px solid #adb5bd;
+    border-right: 1px solid #dee2e6;
+    white-space: nowrap;
+    font-size: 14px;
+    background: #e9ecef;
+}
+
+.report-table th:last-child {
+    border-right: none;
+}
+
+.report-table td {
+    padding: 14px 12px;
+    text-align: center;
+    border-bottom: 1px solid #e9ecef;
+    border-right: 1px solid #e9ecef;
+    color: #212529;
+    background: white;
+    font-size: 14px;
+}
+
+.report-table td:last-child {
+    border-right: none;
+}
+
+.report-table tbody tr:nth-child(even) td {
+    background: #f8f9fa;
+}
+
+.report-table tbody tr:hover td {
+    background: #e9ecef;
+}
+
+.report-table .total-row {
+    background: #e9ecef;
+    font-weight: 600;
+    border-top: 2px solid #adb5bd;
+}
+
+.report-table .total-row td {
+    border-bottom: none;
+    color: #212529;
+    background: #e9ecef;
+    padding: 16px 12px;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    font-size: 16px;
+    color: #6c757d;
+}
+
+.loading-spinner::after {
+    content: "";
+    width: 30px;
+    height: 30px;
+    margin-left: 10px;
+    border: 3px solid #e9ecef;
+    border-top: 3px solid #007bff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Searchable Input Styles */
+.filter-group {
+    position: relative;
+}
+
+.searchable-input {
+    width: 100%;
+    min-width: 200px;
+    padding-right: 25px;
+}
+
+.searchable-input[readonly] {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+}
+
+.searchable-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ced4da;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: -1px;
+}
+
+.dropdown-item {
+    padding: 10px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #e9ecef;
+    transition: background 0.2s;
+}
+
+.dropdown-item:hover {
+    background: #f8f9fa;
+}
+
+.dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.clear-btn {
+    background: none !important;
+    border: none !important;
+    color: #dc3545 !important;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 0 5px;
+    line-height: 1;
+}
+
+.clear-btn:hover {
+    color: #c82333 !important;
+}
+
+.selected-value {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: #e9ecef;
+    border-radius: 4px;
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+.clear-selection {
+    cursor: pointer;
+    color: #dc3545;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 1;
+    margin-left: auto;
+}
+
+.clear-selection:hover {
+    color: #c82333;
+}
+
+/* Progress Bar Styles - Modern Rounded UI */
+.collection-report-container .progress-bar-container {
+    width: 100%;
+    height: 28px; /* Medium size */
+    background: #f3f4f6; /* Light light gray background */
+    border-radius: 14px; /* Fully rounded - modern look */
+    overflow: hidden; /* Hidden for bar, but text outside is visible */
+    position: relative;
+    min-width: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    border: 1px solid #e5e7eb;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+    padding-left: 50px; /* Space for percent text on the left (outside) */
+    padding-right: 8px;
+}
+
+/* Conversion progress bar */
+.collection-report-container .progress-bar-container.conversion-progress {
+    background: #f3f4f6; /* Light light gray background */
+    border: 1px solid #e5e7eb;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+.collection-report-container .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #d1d5db 0%, #9ca3af 100%); /* Light gray gradient */
+    border-radius: 14px; /* Fully rounded to match container */
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* Conversion progress bar fill - Same light gray gradient */
+.collection-report-container .progress-bar-container.conversion-progress .progress-bar {
+    background: linear-gradient(90deg, #d1d5db 0%, #9ca3af 100%); /* Light gray gradient */
+}
+
+/* Text outside the bar (before the bar) */
+.collection-report-container .progress-text-outside {
+    font-size: 12px;
+    font-weight: 600;
+    color: #374151 !important; /* Dark gray text - visible outside bar */
+    white-space: nowrap;
+    position: absolute;
+    left: 8px; /* Position on left corner, outside the bar */
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    pointer-events: none;
+    line-height: 28px;
+    letter-spacing: 0.3px;
+    background: transparent;
+    min-width: 40px;
+}
+
+/* Text inside the bar - Hidden (removed white text) */
+.collection-report-container .progress-text {
+    display: none; /* Hide the white text inside the bar */
+}
+
+/* Percent text is always on the right end, so no need for conditional white text */
+
+/* White text always visible - dark background ensures visibility even at 0% */
+
+/* Show percentage even when progress bar is 0% - display text on gray background */
+.collection-report-container .progress-bar-container .progress-text {
+    /* Always show percentage text */
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Text is always dark gray on light background - no special case needed */
+
+/* Text color on colored progress bar (when percentage is high enough) - white text on green/blue */
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 25%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 26%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 27%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 28%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 29%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 30%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 31%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 32%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 33%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 34%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 35%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 36%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 37%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 38%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 39%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 40%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 41%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 42%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 43%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 44%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 45%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 46%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 47%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 48%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 49%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 50%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 51%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 52%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 53%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 54%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 55%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 56%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 57%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 58%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 59%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 60%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 61%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 62%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 63%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 64%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 65%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 66%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 67%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 68%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 69%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 70%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 71%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 72%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 73%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 74%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 75%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 76%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 77%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 78%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 79%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 80%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 81%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 82%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 83%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 84%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 85%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 86%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 87%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 88%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 89%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 90%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 91%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 92%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 93%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 94%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 95%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 96%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 97%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 98%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 99%"]) .progress-text,
+.collection-report-container .progress-bar-container:has(.progress-bar[style*="width: 100%"]) .progress-text {
+    color: white; /* White text on colored progress bar */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+.collection-report-container .progress-bar[style*="width: 27%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 28%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 29%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 30%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 31%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 32%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 33%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 34%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 35%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 36%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 37%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 38%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 39%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 40%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 41%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 42%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 43%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 44%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 45%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 46%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 47%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 48%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 49%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 50%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 51%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 52%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 53%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 54%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 55%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 56%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 57%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 58%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 59%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 60%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 61%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 62%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 63%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 64%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 65%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 66%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 67%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 68%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 69%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 70%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 71%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 72%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 73%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 74%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 75%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 76%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 77%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 78%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 79%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 80%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 81%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 82%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 83%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 84%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 85%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 86%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 87%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 88%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 89%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 90%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 91%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 92%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 93%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 94%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 95%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 96%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 97%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 98%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 99%"] ~ .progress-text,
+.collection-report-container .progress-bar[style*="width: 100%"] ~ .progress-text {
+    color: white; /* White text on colored progress bar */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.collection-report-container .progress-text-small {
+    /* No background - just show text over the green bar */
+}
+
+/* For low percentages, show dark text on white overlay */
+.collection-report-container .progress-bar[style*="width: 0%"] .progress-text,
+.collection-report-container .progress-bar[style*="width: 1%"] .progress-text,
+.collection-report-container .progress-bar[style*="width: 2%"] .progress-text,
+.collection-report-container .progress-bar[style*="width: 3%"] .progress-text,
+.collection-report-container .progress-bar[style*="width: 4%"] .progress-text,
+.collection-report-container .progress-bar[style*="width: 5%"] .progress-text,
+.collection-report-container .progress-bar[style*="width: 6%"] .progress-text,
+.collection-report-container .progress-bar[style*="width: 7%"] .progress-text,
+.collection-report-container .progress-bar[style*="width: 8%"] .progress-text,
+.collection-report-container .progress-bar[style*="width: 9%"] .progress-text,
+.collection-report-container .progress-bar[style*="width: 10%"] .progress-text,
+.collection-report-container .progress-bar[style*="width: 11%"] .progress-text,
+.collection-report-container .progress-bar[style*="width: 12%"] .progress-text,
+.collection-report-container .progress-bar[style*="width: 13%"] .progress-text,
+.collection-report-container .progress-bar[style*="width: 14%"] .progress-text,
+.collection-report-container .progress-bar[style*="width: 15%"] .progress-text,
+.collection-report-container .progress-bar[style*="width: 16%"] .progress-text,
+.collection-report-container .progress-bar[style*="width: 17%"] .progress-text,
+.collection-report-container .progress-bar[style*="width: 18%"] .progress-text,
+.collection-report-container .progress-bar[style*="width: 19%"] .progress-text,
+.collection-report-container .progress-bar[style*="width: 20%"] .progress-text,
+.collection-report-container .progress-bar[style*="width: 21%"] .progress-text,
+.collection-report-container .progress-bar[style*="width: 22%"] .progress-text,
+.collection-report-container .progress-bar[style*="width: 23%"] .progress-text,
+.collection-report-container .progress-bar[style*="width: 24%"] .progress-text,
+.collection-report-container .progress-bar[style*="width: 25%"] .progress-text {
+    color: #212529;
+    font-weight: 800;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 1), -1px -1px 2px rgba(255, 255, 255, 1);
+    left: 50%;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .filter-section {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .export-buttons {
+        width: 100%;
+        justify-content: flex-end;
+    }
+    
+    .report-table {
+        font-size: 13px;
+    }
+    
+    .report-table th {
+        font-size: 13px;
+        padding: 12px 10px;
+    }
+    
+    .report-table td {
+        font-size: 13px;
+        padding: 12px 10px;
+    }
+    
+    .collection-report-container .progress-bar-container {
+        height: 32px;
+        min-width: 100px;
+    }
+    
+    .collection-report-container .progress-text {
+        font-size: 12px;
+        line-height: 32px;
+    }
+}

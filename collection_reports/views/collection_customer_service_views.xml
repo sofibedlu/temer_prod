@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_collection_customer_service_tree" model="ir.ui.view">
+        <field name="name">collection.customer.service.tree</field>
+        <field name="model">collection.customer.service</field>
+        <field name="arch" type="xml">
+            <tree string="Customer Service">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="partner_id"/>
+                <field name="collection_id"/>
+                <field name="total_customers"/>
+                <field name="satisfaction_level"/>
+                <field name="remark"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_collection_customer_service_form" model="ir.ui.view">
+        <field name="name">collection.customer.service.form</field>
+        <field name="model">collection.customer.service</field>
+        <field name="arch" type="xml">
+            <form string="Customer Service">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="date"/>
+                            <field name="partner_id" options="{'no_create': True}"/>
+                            <field name="collection_id" options="{'no_create': True}" domain="[('partner_id', '=', partner_id)]"/>
+                        </group>
+                        <group>
+                            <field name="total_customers"/>
+                            <field name="satisfaction_level" widget="radio" options="{'horizontal': true}"/>
+                            <field name="user_id" readonly="1"/>
+                            <field name="create_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="remark" placeholder="Enter any additional remarks or comments..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_collection_customer_service_search" model="ir.ui.view">
+        <field name="name">collection.customer.service.search</field>
+        <field name="model">collection.customer.service</field>
+        <field name="arch" type="xml">
+            <search string="Customer Service">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="collection_id"/>
+                <field name="satisfaction_level"/>
+                <field name="date"/>
+                <filter string="Very Satisfied" name="very_satisfied" domain="[('satisfaction_level', '=', 'very_satisfied')]"/>
+                <filter string="Satisfied" name="satisfied" domain="[('satisfaction_level', '=', 'satisfied')]"/>
+                <filter string="Neutral" name="neutral" domain="[('satisfaction_level', '=', 'neutral')]"/>
+                <filter string="Dissatisfied" name="dissatisfied" domain="[('satisfaction_level', '=', 'dissatisfied')]"/>
+                <filter string="Very Dissatisfied" name="very_dissatisfied" domain="[('satisfaction_level', '=', 'very_dissatisfied')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Date" name="group_by_date" context="{'group_by': 'date'}"/>
+                    <filter string="Satisfaction Level" name="group_by_satisfaction" context="{'group_by': 'satisfaction_level'}"/>
+                    <filter string="Customer" name="group_by_customer" context="{'group_by': 'partner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_collection_customer_service" model="ir.actions.act_window">
+        <field name="name">Customer Service</field>
+        <field name="res_model">collection.customer.service</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_collection_customer_service_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new customer service feedback
+            </p>
+            <p>
+                Record customer service interactions and satisfaction levels for collection department.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_collection_customer_service"
+              name="Customer Service"
+              parent="collection_reports.menu_collection_reports"
+              action="action_collection_customer_service"
+              groups="collection_reports.group_collection_customer_service_model"
+              sequence="90"/>
+
+    <record id="action_customer_service_report_2" model="ir.actions.client">
+        <field name="name">Customer Service Report</field>
+        <field name="tag">collection_reports.customer_service</field>
+    </record>
+
+    <menuitem id="menu_customer_service_report_2"
+              name="Customer Service Report"
+              parent="collection_reports.menu_collection_reports"
+              action="action_customer_service_report_2"
+              groups="collection_reports.group_collection_customer_service_report"
+              sequence="100"/>
+</odoo>

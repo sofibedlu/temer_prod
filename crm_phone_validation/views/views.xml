@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Form view modification to add phone validation -->
+        <record id="view_crm_lead_form_phone_validation" model="ir.ui.view">
+            <field name="name">crm.lead.form.phone.validation</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+            <field name="arch" type="xml">
+                <field name="phone_no" position="after">
+                    <div class="o_phone_validation_msg alert"
+                         style="padding: 5px; margin-top: 5px; display: none;">
+                        <i class="fa fa-warning me-2"/>
+                        <span class="o_phone_validation_text"></span>
+                    </div>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

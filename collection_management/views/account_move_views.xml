@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_move_form_inherit_collection" model="ir.ui.view">
+        <field name="name">account.move.form.inherit.collection</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='ref']" position="after">
+                <field name="is_collection_invoice" invisible="1"/>
+                <!-- Visible only for collection invoices, Required in UI -->
+                <field name="fs_number" 
+                       invisible="not is_collection_invoice" 
+                       required="is_collection_invoice"
+                       placeholder="Required for Confirmation"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

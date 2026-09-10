@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_crm_wing_member_tree" model="ir.ui.view">
+        <field name="name">crm.wing.member.tree</field>
+        <field name="model">crm.wing.member</field>
+        <field name="arch" type="xml">
+            <tree string="Distribution Configuration" editable="bottom" import="1">
+                <field name="user_id" required="1"/>
+                <field name="team_id" required="1" readonly="1" force_save="1"/>
+                <field name="type" required="1"/>
+                <field name="sequence" readonly="1"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_crm_wing_member_search" model="ir.ui.view">
+        <field name="name">crm.wing.member.search</field>
+        <field name="model">crm.wing.member</field>
+        <field name="arch" type="xml">
+            <search string="Distribution Configuration">
+                <field name="user_id" string="Salesperson"/>
+                <field name="team_id" string="Team"/>
+                <field name="type" string="Channel"/>
+                <separator/>
+                <filter name="active" string="Active" domain="[('active', '=', True)]"/>
+                <filter name="inactive" string="Inactive"
+                    domain="[('active', '=', False)]"
+                    context="{'active_test': False}"/>
+                <separator/>
+                <filter name="walkin" string="Walk-in" domain="[('type', '=', 'walkin')]"/>
+                <filter name="call_center" string="Call Center" domain="[('type', '=', 'call_center')]"/>
+                <filter name="website" string="Website" domain="[('type', '=', 'website')]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_team" string="Team" context="{'group_by': 'team_id'}"/>
+                    <filter name="group_type" string="Channel Type" context="{'group_by': 'type'}"/>
+                    <filter name="group_user" string="Salesperson" context="{'group_by': 'user_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_crm_wing_member_form" model="ir.ui.view">
+        <field name="name">crm.wing.member.form</field>
+        <field name="model">crm.wing.member</field>
+        <field name="arch" type="xml">
+            <form string="Distribution Configuration">
+                <sheet>
+                    <group>
+                        <field name="user_id" required="1"/>
+                        <field name="team_id" required="1" readonly="1" force_save="1"/>
+                        <field name="type" required="1"/>
+                        <field name="sequence" readonly="1"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_crm_wing_member" model="ir.actions.act_window">
+        <field name="name">Distribution Configuration</field>
+        <field name="res_model">crm.wing.member</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_active': 1}</field>
+    </record>
+
+    <record id="menu_distribution_configuration" model="ir.ui.menu">
+        <field name="name">Distribution Configuration</field>
+        <field name="parent_id" ref="menu_lead_distribution_group"/>
+        <field name="action" ref="action_crm_wing_member"/>
+        <field name="sequence">20</field>
+    </record>
+
+</odoo>

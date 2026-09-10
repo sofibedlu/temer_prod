@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Action for Contract Team: Approved Amendment Requests -->
+    <record id="action_contract_team_amendment_requests_approved" model="ir.actions.act_window">
+        <field name="name">Approved Amendment Requests</field>
+        <field name="res_model">property.schedule.amendment.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', 'in', ['approved', 'done'])]</field>
+        <field name="context">{'show_mark_done': True}</field>
+    </record>
+
+    <!-- Action for Contract Team: Checked Void Requests -->
+    <record id="action_contract_team_void_requests_checked" model="ir.actions.act_window">
+        <field name="name">Checked Void Requests</field>
+        <field name="res_model">property.contract.void.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', 'in', ['checked', 'approved'])]</field>
+    </record>
+
+    <!-- Root Menu -->
+    <menuitem id="menu_contract_team_adjustments_root"
+              name="Contract Adjustments"
+              sequence="55"
+              groups="property_void_request_custom.group_contract_team_adjustments"/>
+
+    <!-- Amendment Requests (Approved) -->
+    <menuitem id="menu_contract_team_approved_amendments"
+              name="Approved Amendments"
+              parent="menu_contract_team_adjustments_root"
+              action="action_contract_team_amendment_requests_approved"
+              sequence="10"
+              groups="property_void_request_custom.group_contract_team_adjustments"/>
+
+    <!-- Void Requests (Checked)  -->
+    <menuitem id="menu_contract_team_checked_voids"
+              name="Checked Void Requests"
+              parent="menu_contract_team_adjustments_root"
+              action="action_contract_team_void_requests_checked"
+              sequence="20"
+              groups="property_void_request_custom.group_property_void_request_approver"/>
+</odoo>

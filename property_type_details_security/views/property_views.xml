@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Fields added by property_type_details -->
+    <record id="inherit_property_form_sales_protection_type_details" model="ir.ui.view">
+        <field name="name">property.property.form.inherit.sales.protection.type.details</field>
+        <field name="model">property.property</field>
+        <field name="inherit_id" ref="property_type_details.inherit_property_form_property_type_details"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='property_type_bedroom']" position="before">
+                <field name="is_sales_person_only" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='property_type_bedroom']" position="attributes">
+                <attribute name="readonly">is_sales_person_only</attribute>
+            </xpath>
+            <xpath expr="//field[@name='property_type_bathroom']" position="attributes">
+                <attribute name="readonly">is_sales_person_only</attribute>
+            </xpath>
+            <xpath expr="//field[@name='property_type_has_maid_room']" position="attributes">
+                <attribute name="readonly">is_sales_person_only</attribute>
+            </xpath>
+            <xpath expr="//field[@name='property_type_no_kitchen']" position="attributes">
+                <attribute name="readonly">is_sales_person_only</attribute>
+            </xpath>
+            <xpath expr="//field[@name='property_type_gross_area']" position="attributes">
+                <attribute name="readonly">is_sales_person_only</attribute>
+            </xpath>
+            <xpath expr="//field[@name='property_type_net_area']" position="attributes">
+                <attribute name="readonly">is_sales_person_only</attribute>
+            </xpath>
+            <xpath expr="//field[@name='property_type_floor_plan']" position="attributes">
+                <attribute name="readonly">is_sales_person_only</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Fields on the base property form -->
+    <record id="inherit_property_form_sales_protection_base_form" model="ir.ui.view">
+        <field name="name">property.property.form.inherit.sales.protection.base.form</field>
+        <field name="model">property.property</field>
+        <field name="inherit_id" ref="advanced_property_management.property_property_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='unit_price']" position="attributes">
+                <attribute name="readonly">is_sales_person_only</attribute>
+            </xpath>
+            <xpath expr="//field[@name='usage']" position="attributes">
+                <attribute name="readonly">is_sales_person_only</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Fields added by ahadubit_property_base -->
+    <record id="inherit_property_form_sales_protection_property_base" model="ir.ui.view">
+        <field name="name">property.property.form.inherit.sales.protection.property.base</field>
+        <field name="model">property.property</field>
+        <field name="inherit_id" ref="ahadubit_property_base.property_property_view_form_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='gross_area']" position="attributes">
+                <attribute name="readonly">is_sales_person_only</attribute>
+            </xpath>
+            <xpath expr="//field[@name='net_area']" position="attributes">
+                <attribute name="readonly">is_sales_person_only</attribute>
+            </xpath>
+            <xpath expr="//field[@name='finishing']" position="attributes">
+                <attribute name="readonly">is_sales_person_only</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Fields added by advanced_property_unit_naming -->
+    <record id="inherit_property_form_sales_protection_unit_naming" model="ir.ui.view">
+        <field name="name">property.property.form.inherit.sales.protection.unit.naming</field>
+        <field name="model">property.property</field>
+        <field name="inherit_id" ref="advanced_property_unit_naming.property_property_view_form_ref"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='unit_number']" position="attributes">
+                <attribute name="readonly">is_sales_person_only</attribute>
+            </xpath>
+            <xpath expr="//field[@name='commercial_location']" position="attributes">
+                <attribute name="readonly">is_sales_person_only</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Fields added by temer_property_price_m2_edit -->
+    <record id="inherit_property_form_sales_protection_price_m2" model="ir.ui.view">
+        <field name="name">property.property.form.inherit.sales.protection.price.m2</field>
+        <field name="model">property.property</field>
+        <field name="inherit_id" ref="temer_property_price_m2_edit.property_property_view_form_inherit_price_m2_edit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='override_price_m2']" position="attributes">
+                <attribute name="readonly">is_sales_person_only</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Fields added by property_finishing_rate -->
+    <record id="inherit_property_form_sales_protection_finishing_rate" model="ir.ui.view">
+        <field name="name">property.property.form.inherit.sales.protection.finishing.rate</field>
+        <field name="model">property.property</field>
+        <field name="inherit_id" ref="property_finishing_rate.property_property_view_form_finishing_rate"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='rate_per_m2']" position="attributes">
+                <attribute name="readonly">is_sales_person_only</attribute>
+            </xpath>
+            <xpath expr="//field[@name='commercial_amount']" position="attributes">
+                <attribute name="readonly">is_sales_person_only</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Fields added by property_commercial_rate -->
+    <record id="inherit_property_form_sales_protection_commercial_rate" model="ir.ui.view">
+        <field name="name">property.property.form.inherit.sales.protection.commercial.rate</field>
+        <field name="model">property.property</field>
+        <field name="inherit_id" ref="property_commercial_rate.property_property_view_form_commercial_rate"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='commercial_rate_range_id']" position="attributes">
+                <attribute name="readonly">is_sales_person_only</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Fields added by commercial_gross_range -->
+    <record id="inherit_property_form_sales_protection_commercial_gross" model="ir.ui.view">
+        <field name="name">property.property.form.inherit.sales.protection.commercial.gross</field>
+        <field name="model">property.property</field>
+        <field name="inherit_id" ref="commercial_gross_range.property_property_view_form_commercial_gross_range"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='commercial_gross_range_id']" position="attributes">
+                <attribute name="readonly">is_sales_person_only</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

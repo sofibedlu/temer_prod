@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_manual_read_wizard_form" model="ir.ui.view">
+        <field name="name">manual.read.wizard.form</field>
+        <field name="model">manual.read.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Read Logs from Machine">
+                <group>
+                    <field name="machine_id"/>
+                    <field name="hr_period_id"/>
+                    <field name="override"/>
+                </group>
+                <p class="text-muted" invisible="not override">
+                    Warning: Overriding will delete all existing unlocked logs for this machine in the selected period and download fresh ones.
+                </p>
+                <footer>
+                    <button name="action_read_manual" string="Read from Machine" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_manual_read_wizard" model="ir.actions.act_window">
+        <field name="name">Manual Read from Machine</field>
+        <field name="res_model">manual.read.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

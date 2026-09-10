@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherit property reservation form view to add "Convert to Special" button -->
+    <record id="inherit_property_reservation_history_view_form_convert_special" model="ir.ui.view">
+        <field name="name">property.reservation.history.form.inherit.convert.special</field>
+        <field name="model">property.reservation</field>
+        <field name="inherit_id" ref="ahadubit_property_reservation.property_reservation_history_view_form_id"/>
+        <field name="arch" type="xml">
+            <!-- Add invisible fields for button visibility control -->
+            <xpath expr="//form" position="inside">
+                <field name="show_convert_to_special" invisible="1"/>
+                <field name="converted_special" invisible="1"/>
+                <field name="converted_regular" invisible="1"/>
+            </xpath>
+            
+            <!-- Make reservation_type_id readonly if converted to special -->
+            <xpath expr="//field[@name='reservation_type_id']" position="attributes">
+                <attribute name="readonly">(converted_special == True) or (reservation_type_id and reservation_type_id.reservation_type == 'special')</attribute>
+            </xpath>
+            
+            <!-- Add "Convert to Special" button in header -->
+            <xpath expr="//header" position="inside">
+                <button name="action_convert_to_special"
+                        type="object"
+                        string="Convert to Special"
+                        class="btn-secondary"
+                        invisible="not show_convert_to_special"
+                        help="Convert this reservation to a special reservation that requires approval workflow"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>
+

@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_collection_sms_template,Collection SMS Template,model_collection_sms_template,,1,1,1,1
+access_collection_sms_log,Collection SMS Log,model_collection_sms_log,,1,1,1,1
+access_sms_reminder_wizard,SMS Reminder Wizard,model_collection_sms_reminder_wizard,,1,1,1,1
+access_sms_reminder_wizard_line,SMS Reminder Wizard Line,model_collection_sms_reminder_wizard_line,,1,1,1,1

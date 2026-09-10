@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Add Managerial Dashboard selection inside Access Rights tab -->
+    <record id="view_users_form_inherit_managerial_dashboard" model="ir.ui.view">
+        <field name="name">res.users.form.inherit.managerial.dashboard</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='access_rights']" position="inside">
+                <group string="Managerial Dashboard">
+                    <field name="managerial_dashboard_access" string="Managerial Dashboard Access"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

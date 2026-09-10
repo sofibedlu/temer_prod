@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Hide the Old Bill Approval -->
+    <!-- <record id="view_move_form_inherit_hide_approval" model="ir.ui.view">
+        <field name="name">account.move.form.inherit.hide.approval</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="procurement_management.view_move_form_inherit_payment_approval"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_approve_for_payment']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='payment_approval_state']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='approved_by_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record> -->
+
+    <!-- Add Integration to Purchase Order -->
+    <record id="view_purchase_order_form_inherit_payment_request" model="ir.ui.view">
+        <field name="name">purchase.order.form.inherit.payment.request</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="//header" position="inside">
+                <button name="action_create_payment_request" 
+                        type="object" 
+                        string="Create Payment Request" 
+                        class="btn-primary" 
+                        invisible="state not in ('purchase', 'done')" 
+                        groups="temer_payment_request.group_payment_request_creator"/>
+            </xpath>
+            
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_payment_requests" 
+                        type="object" 
+                        class="oe_stat_button" 
+                        icon="fa-money" 
+                        invisible="payment_request_count == 0">
+                    <field name="payment_request_count" widget="statinfo" string="Payment Reqs"/>
+                </button>
+            </xpath>
+            
+        </field>
+    </record>
+
+    <!-- Show PO on Payment Request -->
+    <record id="view_payment_request_form_inherit_po" model="ir.ui.view">
+        <field name="name">payment.request.form.inherit.po</field>
+        <field name="model">payment.request</field>
+        <field name="inherit_id" ref="temer_payment_request.view_payment_request_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='payment_order_id']" position="after">
+                <field name="purchase_id" invisible="not purchase_id"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Wizard View -->
+    <record id="view_purchase_payment_request_wizard_form" model="ir.ui.view">
+        <field name="name">purchase.payment.request.wizard.form</field>
+        <field name="model">purchase.payment.request.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Create Payment Request">
+                <group>
+                    <field name="purchase_id"/>
+                    
+                    <label for="amount"/>
+                    <div class="o_row">
+                        <field name="amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        <span class="oe_inline fw-bold mx-2"> = </span>
+                        <field name="percentage" class="oe_inline"/>
+                        <span class="oe_inline"> %</span>
+                    </div>
+                    
+                    <field name="currency_id" invisible="1"/>
+                    <field name="reason"/>
+                </group>
+                <footer>
+                    <button name="action_confirm_request" string="Submit Request" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

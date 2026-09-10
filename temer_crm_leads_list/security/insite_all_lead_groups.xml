@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Access group for Insite all lead menu (list-only view, no phone, no create/delete) -->
+        <record id="group_insite_all_lead_user" model="res.groups">
+            <field name="name">Insite All Lead / User</field>
+            <field name="category_id" ref="base.module_category_sales_crm"/>
+            <field name="comment">Access to Insite all lead: tree-only leads view without phone numbers. Filter, group by, and export only.</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_partial_void_wizard,Partial Void Wizard,model_partial_void_wizard,,1,1,1,1
+access_partial_void_wizard_line,Partial Void Wizard Line,model_partial_void_wizard_line,,1,1,1,1
+access_partial_void_request,Partial Void Request,model_partial_void_request,,1,1,1,0
+access_partial_void_request_line,Partial Void Request Line,model_partial_void_request_line,,1,1,1,0
+access_pvoid_rej_wiz,Partial Reject Void Wizard,model_partial_void_reject_wizard,,1,1,1,1

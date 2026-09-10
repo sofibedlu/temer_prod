@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="group_early_settlement_approver" model="res.groups">
+            <field name="name">Early Settlement Approver</field>
+            <field name="category_id" ref="collection_management.module_category_collection_management"/>
+            <field name="comment">Allows users to access the Early Settlement Requests menu and approve/reject requests.</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Supervisor Sales Report Action -->
+    <record id="action_supervisor_sales_report" model="ir.actions.client">
+        <field name="name">Summarized Sales Report</field>
+        <field name="tag">supervisor_sales_report.report</field>
+    </record>
+
+    <!-- Parent Menu - Sales Report -->
+    <menuitem id="menu_supervisor_sales_report"
+              name="Sales Report"
+              groups="temer_structure.access_property_sales_supervisor_group,temer_structure.access_property_sales_team_manager_group"
+              sequence="10"/>
+
+    <!-- Summarized Report Menu -->
+    <menuitem id="menu_supervisor_sales_report_summarized"
+              name="Summarized Report"
+              parent="supervisor_sales_report.menu_supervisor_sales_report"
+              action="action_supervisor_sales_report"
+              groups="temer_structure.access_property_sales_supervisor_group,temer_structure.access_property_sales_team_manager_group"
+              sequence="10"/>
+
+</odoo>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+
+
+
+       <record id="action_chart_js_crm_new_manufacturing_full_workflowwe" model="ir.actions.client">
+        <field name="name">Chart js Sample</field>
+        <field name="tag">my_sales_summary</field>
+        <field name="target"></field>
+    </record>
+
+     
+
+
+
+
+<!-- <menuitem id="menu_chart_js_sample_crm_new_general_123" name="Charts Dashboard" sequence="10"/> -->
+
+<!-- <menuitem id="menu_chart_js_sample_crm_new_general_123212121" parent="crm.crm_menu_root"
+              name="Dashboard"  sequence="-10" /> -->
+
+<menuitem id="menu_chart_js_sample_crm_new1233" parent="crm.crm_menu_root" action="action_chart_js_crm_new_manufacturing_full_workflowwe"
+              name="My Dashboard"  sequence="-10" />
+
+
+
+</odoo>

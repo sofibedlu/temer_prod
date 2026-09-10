@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+     <record id="property_sale_view_tree_inherit" model="ir.ui.view">
+        <field name="name">property.sale.inherit</field>
+        <field name="model">property.sale</field>
+        <field name="inherit_id" ref="advanced_property_management.property_sale_view_tree" />
+        <field name="arch" type="xml">
+             <field name="name" position="after">
+                <field name="contract_number"/>  
+            </field>
+               
+        </field>
+    </record>
+    <!-- Finally, add the button to the inherited view -->
+    <record id="property_sale_view_form_contract_inherit2" model="ir.ui.view">
+        <field name="name">property.sale.inherit</field>
+        <field name="model">property.sale</field>
+        <field name="inherit_id" ref="advanced_property_management.property_sale_view_form" />
+        <field name="arch" type="xml">
+            <div class="oe_button_box" position="inside">
+                <button name="action_view_contract" 
+                        type="object" 
+                        class="oe_stat_button" 
+                        icon="fa-file-text"  >
+                    <span class="o_stat_text">Contract</span>
+                </button>
+            </div>
+            <field name="state" position="after">
+                <field name="contract_id" invisible="1"/>  <!-- Invisible field for reference -->
+            </field>
+              <field name="order_date" position="after">
+                <field name="template_id"/> 
+                <field name="contract_number"/> 
+            </field>
+            
+            <xpath expr="//button[@name='action_confirm']" position="before">
+               
+                <button 
+                name="action_print_contract" 
+                string="Print Contract" 
+                type="object"
+                class="oe_highlight"
+                invisible="not contract_id or state !='confirm'" />
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_collection_order_form_discount_inherit" model="ir.ui.view">
+        <field name="name">collection.order.form.discount.inherit</field>
+        <field name="model">collection.order</field>
+        <field name="inherit_id" ref="collection_management.view_collection_order_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button name="action_view_discount_requests" 
+                        type="object" 
+                        class="oe_stat_button" 
+                        icon="fa-percent"
+                        invisible="discount_request_count == 0">
+                    <field name="discount_request_count" widget="statinfo" string="Discount Requests"/>
+                </button>
+            </div>
+
+            <header position="inside">
+                <button name="action_open_discount_request_wizard" 
+                        string="Request Discount" 
+                        type="object" 
+                        invisible="state != 'active' or has_pending_discount_request"
+                        groups="collection_discount_request.group_collection_discount_requester"/>
+            </header>
+
+            <xpath expr="//header/button[@name='action_open_discount_request_wizard']" position="before">
+                <field name="has_pending_discount_request" invisible="1"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

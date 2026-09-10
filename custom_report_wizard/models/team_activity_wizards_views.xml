@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_team_activity_wizard_form" model="ir.ui.view">
+        <field name="name">team.activity.wizard.form</field>
+        <field name="model">team.activity.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Team Activity Report">
+                <group>
+                 <field name="date_filter_2"/>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                     <field name="report_by"/>
+                     <field name="wing_id"/>
+
+                </group>
+
+                <footer>
+                    <button name="action_print"
+                            string="Print PDF"
+                            type="object"
+                            class="btn-primary"/>
+                    <button string="Cancel"
+                            class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="action_team_activity_wizard" model="ir.actions.act_window">
+        <field name="name">Team Activity Report</field>
+        <field name="res_model">team.activity.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_team_activity_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+
+
+</odoo>

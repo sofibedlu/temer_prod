@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="seq_discount_request" model="ir.sequence">
+            <field name="name">Discount Request</field>
+            <field name="code">discount.request</field>
+            <field name="prefix">DR/%(year)s/</field>
+            <field name="padding">5</field>
+        </record>
+    </data>
+</odoo>

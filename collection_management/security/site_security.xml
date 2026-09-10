@@ -1,0 +1,36 @@
+<odoo>
+    <data noupdate="0">     
+        <!-- Users can only see collection orders for their allowed sites -->
+        <record id="rule_collection_order_site_access" model="ir.rule">
+            <field name="name">Collection Order: Site Access</field>
+            <field name="model_id" ref="model_collection_order"/>
+            <field name="domain_force">[('site_id', 'in', user.collection_site_ids.ids)]</field>
+            <field name="groups" eval="[(4, ref('collection_management.group_collection_user'))]"/> 
+        </record>
+
+        <!-- Users can only see collection installments for their allowed sites -->
+        <record id="rule_collection_installment_site_access" model="ir.rule">
+            <field name="name">Collection Installment: Site Access</field>
+            <field name="model_id" ref="model_collection_installment"/>
+            <field name="domain_force">[('collection_id.site_id', 'in', user.collection_site_ids.ids)]</field>
+            <field name="groups" eval="[(4, ref('collection_management.group_collection_user'))]"/>
+        </record>
+
+        <!-- Allow Managers to see everything -->
+        <record id="rule_collection_order_manager_all" model="ir.rule">
+            <field name="name">Collection Order: Manager All Access</field>
+            <field name="model_id" ref="model_collection_order"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('collection_management.group_collection_manager'))]"/>
+        </record>
+
+        <!-- Allow Managers to see all installments -->
+        <record id="rule_collection_installment_manager_all" model="ir.rule">
+            <field name="name">Collection Installment: Manager All Access</field>
+            <field name="model_id" ref="model_collection_installment"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('collection_management.group_collection_manager'))]"/>
+        </record>
+
+    </data>
+</odoo>

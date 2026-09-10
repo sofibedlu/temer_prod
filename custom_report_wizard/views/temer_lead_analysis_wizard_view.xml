@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_temer_lead_analysis_wizard_form" model="ir.ui.view">
+        <field name="name">temer.lead.analysis.wizard.form</field>
+        <field name="model">temer.lead.analysis.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Temer Lead Analysis Report">
+                <group>
+                    <field name="date_filter"/>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                    <field name="report_by"/>
+                    <field name="wing_id"/>
+                    <field name="include_crm_leads" string="Include OLD CRM Leads"/>
+                </group>
+
+                <footer>
+                    <button name="action_print"
+                            string="Print PDF"
+                            type="object"
+                            class="btn-primary"/>
+                    <button name="action_preview"
+                            string="Preview PDF (New Tab)"
+                            type="object"
+                            class="btn-secondary"/>
+                    <button string="Cancel"
+                            class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_temer_lead_analysis_wizard" model="ir.actions.act_window">
+        <field name="name">Temer Lead Analysis Report</field>
+        <field name="res_model">temer.lead.analysis.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_temer_lead_analysis_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

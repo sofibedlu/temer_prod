@@ -1,0 +1,19 @@
+<odoo>
+    <record id="bank_conf_cpo" model="bank.configuration">
+        <field name="bank">CPO Bank</field>
+        <field name="account_number">CPO-001</field>
+        <field name="bank_type">cpo</field>
+    </record>
+
+    <record id="bank_conf_cheque" model="bank.configuration">
+        <field name="bank">Cheque Bank</field>
+        <field name="account_number">CHEQUE-001</field>
+        <field name="bank_type">cheque</field>
+    </record>
+
+    <record id="bank_conf_international" model="bank.configuration">
+        <field name="bank">International Bank</field>
+        <field name="account_number">INT-001</field>
+        <field name="bank_type">international</field>
+    </record>
+</odoo>

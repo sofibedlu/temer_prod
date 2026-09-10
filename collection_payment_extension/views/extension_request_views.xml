@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_collection_extension_request_form" model="ir.ui.view">
+        <field name="name">collection.payment.extension.request.form</field>
+        <field name="model">collection.payment.extension.request</field>
+        <field name="arch" type="xml">
+            <form string="Extension Request" create="false" delete="false">
+                <header>
+                    <button name="action_submit" string="Submit" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_approve" string="Approve" type="object" class="btn-success" invisible="state != 'pending'" groups="collection_payment_extension.group_collection_extension_approver"/>
+                    <button name="action_reject" string="Reject" type="object" class="btn-danger" invisible="state != 'pending'" groups="collection_payment_extension.group_collection_extension_approver"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,pending,approved,rejected"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="collection_id"/>
+                            <field name="installment_id"/>
+                        </group>
+                        <group>
+                            <field name="current_date"/>
+                            <field name="new_date"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="reason"/>
+                    </group>
+                    <group>
+                        <field name="rejection_reason" invisible="state != 'rejected'"/>
+                    </group>
+                    <group>
+                        <field name="attachment_ids" widget="many2many_binary" readonly="state in ['approved', 'rejected']"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_collection_extension_request_tree" model="ir.ui.view">
+        <field name="name">collection.payment.extension.request.tree</field>
+        <field name="model">collection.payment.extension.request</field>
+        <field name="arch" type="xml">
+            <tree string="Extension Requests" decoration-success="state == 'approved'" decoration-warning="state == 'pending'" decoration-danger="state == 'rejected'" create="false" delete="false">
+                <field name="name"/>
+                <field name="collection_id"/>
+                <field name="installment_id"/>
+                <field name="current_date"/>
+                <field name="new_date"/>
+                <field name="state" widget="badge" decoration-success="state == 'approved'" decoration-warning="state == 'pending'" decoration-danger="state == 'rejected'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_collection_extension_requests" model="ir.actions.act_window">
+        <field name="name">Extension Requests</field>
+        <field name="res_model">collection.payment.extension.request</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menu for Extension Requests -->
+    <menuitem id="menu_extension_request_root" 
+              name="Extension Requests"
+              sequence="60"
+              groups="collection_payment_extension.group_collection_extension_approver,collection_management.group_collection_due_date_editor"/>
+    
+    <menuitem id="menu_extension_request_action" 
+              name="Payment Extension Requests" 
+              parent="menu_extension_request_root" 
+              action="action_collection_extension_requests" 
+              sequence="10"
+              groups="collection_payment_extension.group_collection_extension_approver,collection_management.group_collection_due_date_editor"/>
+</odoo>

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="crm_dashboard.annual">
+        <!-- Dummy Data Setup -->
+        <t t-set="productList" t-value="[{'id': 1, 'name': 'Product A'}, {'id': 2, 'name': 'Product B'}]"/>
+        <t t-set="selectedProductId" t-value="{'value': 1}"/>
+        <t t-set="dateFilters" t-value="{'startDate': '2025-01-01', 'endDate': '2025-12-31'}"/>
+        <t t-set="stats" t-value="{
+            'selectedProductStats': {'name': 'Product A', 'planned': 500, 'produced': 450},
+            'totalPlanned': 1200,
+            'totalProduced': 1050
+        }"/>
+        <!-- Percent Achieved Calculation: Safe for QWeb! -->
+        <t t-set="percentAchieved" t-value="stats.totalPlanned &gt; 0 and ((stats.totalProduced * 100) // stats.totalPlanned) or 0"/>
+        <div class="container my-5">
+            <div class="card shadow-lg rounded-4 p-4"
+                style="background: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
+                border-radius:2rem; overflow-y:auto; max-height:85vh;">
+                <div class="card-header mb-4 py-4"
+                    style="background: linear-gradient(90deg,#43e97b 0%,#38f9d7 100%); border-radius:1rem;">
+                    <h2 class="fw-bold text-center" style="color:#222;">Annual Production Dashboard</h2>
+                </div>
+                <div class="o_control_panel mb-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <div class="btn-group" role="group">
+                                <button class="btn btn-primary fw-bold shadow-sm me-2"
+                                    t-on-click="goToProductionPlans"
+                                    style="background:linear-gradient(90deg,#f7971e,#ffd200);color:#111;">
+                                    View Production Plans
+                                </button>
+                                <button class="btn btn-info fw-bold shadow-sm"
+                                    t-on-click="goToManufacturingOrders"
+                                    style="background:linear-gradient(90deg,#a1c4fd,#c2e9fb);color:#1b2733;">
+                                    View Manufacturing Orders
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <span class="input-group-text bg-gradient"
+                                    style="background: linear-gradient(90deg,#ffecd2 0%,#fcb69f 100%);font-weight:600;">
+                                    Product
+                                </span>
+                                <select class="form-select" t-on-change="onProductChange" style="background:#fffbe7;">
+                                    <option value="">All Products</option>
+                                    <t t-foreach="productList" t-as="product" t-key="product.id">
+                                        <option t-att-value="product.id" t-att-selected="selectedProductId.value === product.id">
+                                            <t t-esc="product.name"/>
+                                        </option>
+                                    </t>
+                                </select>
+                                <span class="input-group-text bg-gradient"
+                                    style="background: linear-gradient(90deg,#cfd9df 0%,#e2ebf0 100%);font-weight:600;">
+                                    From
+                                </span>
+                                <input type="date" class="form-control" t-model="dateFilters.startDate" style="background:#e0f7fa;"/>
+                                <span class="input-group-text bg-gradient"
+                                    style="background: linear-gradient(90deg,#ffecd2 0%,#fcb69f 100%);font-weight:600;">
+                                    To
+                                </span>
+                                <input type="date" class="form-control" t-model="dateFilters.endDate" style="background:#e0f7fa;"/>
+                                <button class="btn btn-success fw-bold"
+                                    t-on-click="applyDateFilter"
+                                    style="background:linear-gradient(90deg,#43e97b,#38f9d7);">
+                                    Apply
+                                </button>
+                                <button class="btn btn-secondary fw-bold"
+                                    t-on-click="resetDateFilter"
+                                    style="background:linear-gradient(90deg,#fa709a 0%,#fee140 100%);color:#222;">
+                                    Reset
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="o_dashboard_container">
+                    <t t-if="stats.selectedProductStats">
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <div class="card shadow border-0"
+                                    style="background: linear-gradient(120deg,#fddb92,#d1fdff 100%); border-radius:1.5rem;">
+                                    <div class="card-header"
+                                        style="background:linear-gradient(90deg,#fceabb,#f8b500 100%); border-radius:1rem 1rem 0 0;">
+                                        <h5 class="card-title fw-bold text-center" style="color:#8a4fff;">
+                                            Selected Product: <t t-esc="stats.selectedProductStats.name"/>
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row text-center">
+                                            <div class="col-md-6">
+                                                <div class="card shadow border-0 mb-2"
+                                                    style="background: linear-gradient(90deg,#fccb90 0%,#d57eea 100%);border-radius:1rem;">
+                                                    <div class="card-body">
+                                                        <h5 class="fw-bold" style="color:#662d8c;">Planned</h5>
+                                                        <h2 class="fw-bolder" style="color:#222;"><t t-esc="stats.selectedProductStats.planned"/></h2>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="card shadow border-0 mb-2"
+                                                    style="background: linear-gradient(90deg,#ff9a9e 0%,#fecfef 100%);border-radius:1rem;">
+                                                    <div class="card-body">
+                                                        <h5 class="fw-bold" style="color:#b31217;">Produced</h5>
+                                                        <h2 class="fw-bolder" style="color:#222;"><t t-esc="stats.selectedProductStats.produced"/></h2>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <div class="card shadow border-0 mb-3"
+                                style="background:linear-gradient(120deg,#c2e9fb 0%,#a1c4fd 100%);border-radius:1.5rem;">
+                                <div class="card-header"
+                                    style="background:linear-gradient(90deg,#fceabb,#f8b500 100%); border-radius:1rem 1rem 0 0;">
+                                    <h5 class="card-title fw-bold text-center" style="color:#1e3c72;">Total Planned</h5>
+                                </div>
+                                <div class="card-body text-center">
+                                    <h2 class="fw-bolder" style="color:#7b4397;"><t t-esc="stats.totalPlanned"/></h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card shadow border-0 mb-3"
+                                style="background:linear-gradient(120deg,#fcb69f 0%,#ffecd2 100%);border-radius:1.5rem;">
+                                <div class="card-header"
+                                    style="background:linear-gradient(90deg,#a1c4fd,#c2e9fb 100%); border-radius:1rem 1rem 0 0;">
+                                    <h5 class="card-title fw-bold text-center" style="color:#283e51;">Total Produced</h5>
+                                </div>
+                                <div class="card-body text-center">
+                                    <h2 class="fw-bolder" style="color:#f7971e;"><t t-esc="stats.totalProduced"/></h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card shadow border-0 mb-3"
+                                style="background:linear-gradient(120deg,#c2e9fb 0%,#43e97b 100%);border-radius:1.5rem;">
+                                <div class="card-header"
+                                    style="background:linear-gradient(90deg,#fa709a,#fee140 100%); border-radius:1rem 1rem 0 0;">
+                                    <h5 class="card-title fw-bold text-center" style="color:#ab2ffb;">% Achieved</h5>
+                                </div>
+                                <div class="card-body text-center">
+                                    <h2 class="fw-bolder" style="color:#0c5460;">
+                                        <t t-esc="percentAchieved"/>%
+                                    </h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card shadow border-0 mb-3"
+                                style="background:linear-gradient(120deg,#e0c3fc 0%,#8ec5fc 100%);border-radius:1.5rem;">
+                                <div class="card-header"
+                                    style="background:linear-gradient(90deg,#43e97b,#38f9d7 100%); border-radius:1rem 1rem 0 0;">
+                                    <h5 class="card-title fw-bold text-center" style="color:#245c31;">Planned vs Produced</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container" style="position: relative; height:300px;">
+                                        <canvas t-ref="barChart"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card shadow border-0 mb-3"
+                                style="background:linear-gradient(120deg,#fddb92 0%,#d1fdff 100%);border-radius:1.5rem;">
+                                <div class="card-header"
+                                    style="background:linear-gradient(90deg,#fa709a,#fee140 100%); border-radius:1rem 1rem 0 0;">
+                                    <h5 class="card-title fw-bold text-center" style="color:#ad1deb;">Production Distribution</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container" style="position: relative; height:300px;">
+                                        <canvas t-ref="pieChart"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <div class="card shadow border-0 mb-3"
+                                style="background:linear-gradient(120deg,#43e97b 0%,#38f9d7 100%);border-radius:1.5rem;">
+                                <div class="card-header"
+                                    style="background:linear-gradient(90deg,#8fd3f4,#a1c4fd 100%); border-radius:1rem 1rem 0 0;">
+                                    <h5 class="card-title fw-bold text-center" style="color:#122c34;">Monthly Production Trend</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container" style="position: relative; height:300px;">
+                                        <canvas t-ref="lineChart"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card shadow border-0 mb-3"
+                                style="background:linear-gradient(120deg,#f7971e 0%,#ffd200 100%);border-radius:1.5rem;">
+                                <div class="card-header"
+                                    style="background:linear-gradient(90deg,#fa709a,#fee140 100%); border-radius:1rem 1rem 0 0;">
+                                    <h5 class="card-title fw-bold text-center" style="color:#ab2ffb;">Product Comparison</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-container" style="position: relative; height:300px;">
+                                        <canvas t-ref="productChart"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- o_dashboard_container -->
+            </div><!-- card -->
+        </div><!-- container -->
+    </t>
+</templates>

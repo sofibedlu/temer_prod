@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_milestone_update_wizard_form" model="ir.ui.view">
+        <field name="name">property.milestone.update.wizard.form</field>
+        <field name="model">property.milestone.update.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Update Installment Due Date">
+                <sheet>
+                    <group>
+                        <field name="site_id"/>
+                        <field name="payment_structure_id" invisible="1"/>
+                        <field name="payment_term_line_id" readonly="not site_id"
+                               options="{'no_create': True, 'no_open': True}"
+                               domain="[('payment_term_id', '=', payment_structure_id)]"/>
+                        <field name="new_due_date"/>
+                    </group>
+                    <p class="text-muted">
+                        This will update the Due Date for all <b>Active</b> and <b>Unpaid</b> installments 
+                        linked to this Payment Term Line on the selected Site.
+                    </p>
+                </sheet>
+                <footer>
+                    <button name="action_confirm" string="Update All Contracts" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_milestone_update_wizard" model="ir.actions.act_window">
+        <field name="name">Update Installment Date</field>
+        <field name="res_model">property.milestone.update.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Parent Menu for Batch Operations -->
+    <menuitem id="menu_batch_operations" 
+              name="Batch Operations" 
+              parent="menu_collection_root" 
+              sequence="30"/>
+
+    <!-- Menu Item -->
+    <menuitem id="menu_milestone_update_wizard" 
+              name="Update Installment Date" 
+              parent="menu_batch_operations" 
+              action="action_milestone_update_wizard" 
+              sequence="10"/>
+</odoo>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="property_name_update_wizard_form" model="ir.ui.view">
+        <field name="name">property.name.update.wizard.form</field>
+        <field name="model">property.name.update.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Update Name &amp; Reference">
+                <sheet>
+                    <group string="Current Values" col="2">
+                        <field name="current_name" readonly="1"/>
+                        <field name="current_reference" readonly="1"/>
+                    </group>
+                    <group string="New Values" col="2">
+                        <field name="new_name"/>
+                        <field name="new_reference"/>
+                    </group>
+                    <field name="property_id" invisible="1"/>
+                </sheet>
+                <footer>
+                    <button name="action_confirm"
+                            string="Save"
+                            type="object"
+                            class="btn-primary"/>
+                    <button string="Cancel"
+                            class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

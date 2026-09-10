@@ -1,0 +1,657 @@
+<templates xml:space="preserve">
+    <t t-name="crm_dashboard.chartjs_sample_crm" owl="1">
+        <div class="big-card p-4 rounded-4 mt-4">
+            
+            <!-- 🏷️ Navbar Card with Date Filters -->
+            <div class="navbar-card d-flex flex-wrap flex-md-row flex-column justify-content-between align-items-center p-2 mb-3 shadow rounded-4 bg-white">
+                <div class="d-flex flex-column flex-md-row gap-2 w-100">
+                    <!-- <input type="text" class="form-control" placeholder="Search..." t-on-input="onSearchQueryChange"/> -->
+                    <div class="d-flex gap-2">
+                        <input type="date" class="form-control" t-model="dateFilters.startDate"/>
+                        <span class="align-self-center">to</span>
+                        <input type="date" class="form-control" t-model="dateFilters.endDate"/>
+                        <button class="btn btn-primary" t-on-click="applyDateFilter">Apply</button>
+                        <button class="btn btn-secondary" t-on-click="resetDateFilter">Reset</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 📊 Statistic Cards -->
+            <div class="d-flex flex-wrap flex-md-nowrap gap-3 mb-4">
+
+                  <div class="stat-card reservation-card text-start p-3 rounded-5 shadow position-relative">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h6 class="text-dark">Sales Lead</h6>
+                    </div>
+
+                           <div class="value-oval position-absolute bottom-0 start-0 ms-2 mb-2">
+                        <p class="fw-bold fs-6"><t t-esc="stats.totalOtherLeads"/></p>
+                    </div>
+                    <span class="crm-icon position-absolute bottom-0 end-0 me-2 mb-2">📋</span>
+                </div>
+                <div class="stat-card call-center-card text-start p-3 rounded-5 shadow position-relative" t-on-click="() => goToCRMPage('callcenter')">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h6 class="text-dark">Call Center Leads</h6>
+                    </div>
+                    <div class="value-oval position-absolute bottom-0 start-0 ms-2 mb-2">
+                        <p class="fw-bold fs-6"><t t-esc="stats.totalCallCenterLeads"/></p>
+                    </div>
+                    <span class="crm-icon position-absolute bottom-0 end-0 me-2 mb-2">📞</span>
+                </div>
+                
+                <div class="stat-card reception-card text-start p-3 rounded-5 shadow position-relative" t-on-click="() => goToCRMPage('reception')">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h6 class="text-dark">Reception Leads</h6>
+                    </div>
+                    <div class="value-oval position-absolute bottom-0 start-0 ms-2 mb-2">
+                        <p class="fw-bold fs-6"><t t-esc="stats.totalReceptionLeads"/></p>
+                    </div>
+                    <span class="crm-icon position-absolute bottom-0 end-0 me-2 mb-2">🏢</span>
+                </div>
+
+                
+                <div class="stat-card website-card text-start p-3 rounded-5 shadow position-relative" t-on-click="goToWebsiteLeadsPage">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h6 class="text-dark">Website Leads</h6>
+                    </div>
+                    <div class="value-oval position-absolute bottom-0 start-0 ms-2 mb-2">
+                        <p class="fw-bold fs-6"><t t-esc="stats.totalWebsiteLeads"/></p>
+                    </div>
+                    <span class="crm-icon position-absolute bottom-0 end-0 me-2 mb-2">🌐</span>
+                </div>
+                
+                
+
+
+            </div>
+
+            <!-- 📊 Three Cards Row (Activity, Other Leads, Total Leads) -->
+            <div class="d-flex flex-wrap flex-md-nowrap gap-3 mb-4">
+                <!-- Activity Card -->
+                <div class="stat-card activity-card text-start p-3 rounded-5 shadow position-relative" t-on-click="goToActivitiesPage">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h6 class="text-dark">Activities</h6>
+                    </div>
+                    
+                    <div class="activity-grid">
+                        <div class="activity-row d-flex flex-wrap gap-3 mb-3">
+                         <div class="activity-row d-flex flex-wrap gap-3">
+                            <div class="activity-item d-flex align-items-center gap-2">
+                                <span class="activity-icon">✅</span>
+                                <div>
+                                    <small class="text-muted">SITE VISIT</small>
+                                    <p class="mb-0 fw-bold"><t t-esc="stats.activityCounts.site_visit"/></p>
+                                </div>
+                            </div>
+                    
+                        </div>
+                            <div class="activity-item d-flex align-items-center gap-2">
+                                <span class="activity-icon">📅</span>
+                                <div>
+                                    <small class="text-muted">OFFICE VISIT</small>
+                                    <p class="mb-0 fw-bold"><t t-esc="stats.activityCounts.office_visit"/></p>
+                                </div>
+                            </div>
+                            <div class="activity-item d-flex align-items-center gap-2">
+                                <span class="activity-icon">✉️</span>
+                                <div>
+                                    <small class="text-muted">Email</small>
+                                    <p class="mb-0 fw-bold"><t t-esc="stats.activityCounts.email"/></p>
+                                </div>
+                            </div>
+                            <div class="activity-item d-flex align-items-center gap-2">
+                                <span class="activity-icon">📞</span>
+                                <div>
+                                    <small class="text-muted">Call</small>
+                                    <p class="mb-0 fw-bold"><t t-esc="stats.activityCounts.call"/></p>
+                                </div>
+                            </div>
+                        
+                        </div>
+                        
+                       
+                    </div>
+                </div>
+                
+                <!-- Other Leads Card -->
+                <div class="d-flex flex-column gap-3">
+                    <div class="stat-card other-leads-card text-start p-3 rounded-5 shadow position-relative" t-on-click="goToReservationPage">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h6 class="text-dark">Total Reservations</h6>
+                        </div>
+                        <div class="value-oval position-absolute bottom-0 start-0 ms-2 mb-2">
+                            <p class="fw-bold fs-6"><t t-esc="stats.totalReservations"/></p>
+                        </div>
+                        <span class="crm-icon position-absolute bottom-0 end-0 me-2 mb-2">📅</span>
+                    </div>
+                    <!-- Sold Properties Card -->
+                    <div class="stat-card sold-properties-card text-start p-3 rounded-5 shadow position-relative" t-on-click="goToSoldPropertiesPage">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h6 class="text-dark">Sold Properties</h6>
+                        </div>
+                        <div class="value-oval position-absolute bottom-0 start-0 ms-2 mb-2">
+                            <p class="fw-bold fs-6"><t t-esc="stats.totalSoldPropertiesSecondary"/></p>
+                            <!-- <p class="fw-bold fs-6">Click Here</p> -->
+                        </div>
+                        <span class="crm-icon position-absolute bottom-0 end-0 me-2 mb-2">💰</span>
+                    </div>
+                </div>
+                
+    
+                <!-- Total Leads Card -->
+                <div class="stat-card total-leads-card text-center p-3 rounded-5 shadow position-relative d-flex flex-column justify-content-center">
+                    <h2 class="welcome-text mb-4">Temer Properties</h2>
+                    <div class="total-leads-content">
+                        <h6 class="text-dark mb-3">Total Leads</h6>
+                        <div class="value-display mb-3">
+                            <p class="fw-bold fs-4 mb-0"><t t-esc="stats.totalAllLeads"/></p>
+                        </div>
+                    </div>
+                    <span class="crm-icon position-absolute bottom-0 end-0 me-3 mb-3">📊</span>
+                </div>
+            </div>
+
+
+
+
+<div class="charts-container d-flex flex-column flex-md-row gap-3 mb-4">
+    <div class="chart-card border rounded-4 p-3 bg-white shadow">
+        <h6 class="text-center">Sales Leads by stage</h6>
+        <div class="chart-wrapper">
+            <canvas t-ref="otherLeadStageBar" class="chart-canvas"></canvas>
+        </div>
+    </div>
+    <div class="chart-card border rounded-4 p-3 bg-white shadow">
+        <h6 class="text-center">Sales Leads by stage</h6>
+        <div class="chart-wrapper">
+            <canvas t-ref="otherLeadStagePie" class="chart-canvas"></canvas>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+            
+
+
+            <!-- 📈 Call Center Charts Section -->
+            
+            <div class="charts-container d-flex flex-column flex-md-row gap-3 mb-4">
+                <div class="chart-card border rounded-4 p-3 bg-white shadow">
+                    <h6 class="text-center">Call Center Leads by Stage</h6>
+                    <div class="chart-wrapper">
+                        <canvas t-ref="barChart" class="chart-canvas"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card border rounded-4 p-3 bg-white shadow">
+                    <h6 class="text-center">Call Center Stage Distribution</h6>
+                    <div class="chart-wrapper">
+                        <canvas t-ref="pieChart" class="chart-canvas"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 🏢 Reception Charts Section -->
+            <div t-if="!stats.isSupervisor" class="charts-container d-flex flex-column flex-md-row gap-3 mb-4">
+                <div class="chart-card border rounded-4 p-3 bg-white shadow">
+                    <h6 class="text-center">Reception Leads by Stage</h6>
+                    <div class="chart-wrapper">
+                        <canvas t-ref="receptionBarChart" class="chart-canvas"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card border rounded-4 p-3 bg-white shadow">
+                    <h6 class="text-center">Reception Stage Distribution</h6>
+                    <div class="chart-wrapper">
+                        <canvas t-ref="receptionPieChart" class="chart-canvas"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 🌐 Website Charts Section -->
+            <div class="charts-container d-flex flex-column flex-md-row gap-3 mb-4">
+                <div class="chart-card border rounded-4 p-3 bg-white shadow">
+                    <h6 class="text-center">Website Leads by Stage</h6>
+                    <div class="chart-wrapper">
+                        <canvas t-ref="websiteChart" class="chart-canvas"></canvas>
+                    </div>
+                </div>
+
+                    <div class="chart-card border rounded-4 p-3 bg-white shadow">
+                    <h6 class="text-center">Website Leads by Stage</h6>
+                    <div class="chart-wrapper">
+                        <canvas t-ref="websiteChartPie" class="chart-canvas"></canvas>
+                    </div>
+                </div>
+            
+              
+            </div>
+
+
+
+
+
+
+
+
+  <div class="charts-container d-flex flex-column flex-md-row gap-3 mb-4">
+        
+     
+
+         <div class="chart-card border rounded-4 p-3 bg-white shadow">
+                    <h6 class="text-center">All Leads by Stage</h6>
+                    <div class="chart-wrapper">
+                        <canvas t-ref="stageChart" class="chart-canvas"></canvas>
+                    </div>
+                </div>
+                   <div class="chart-card border rounded-4 p-3 bg-white shadow">
+                    <h6 class="text-center">All Leads by Stage</h6>
+                    <div class="chart-wrapper">
+                        <canvas t-ref="stageChartPie" class="chart-canvas"></canvas>
+                    </div>
+                </div>
+
+
+
+  
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <!-- 🏢 Wing and Supervisor Charts Section -->
+            <div t-if="!stats.isSupervisor" class="charts-container d-flex flex-column flex-md-row gap-3 mb-4">
+                <div class="chart-card border rounded-4 p-3 bg-white shadow">
+                    <h6 class="text-center">Leads by Wing</h6>
+                    <div class="chart-wrapper">
+                        <canvas t-ref="wingChart" class="chart-canvas"></canvas>
+                    </div>
+                </div>
+                   <div class="chart-card border rounded-4 p-3 bg-white shadow">
+                    <h6 class="text-center">Leads by Wing</h6>
+                    <div class="chart-wrapper">
+                        <canvas t-ref="wingChartPie" class="chart-canvas"></canvas>
+                    </div>
+                </div>
+         
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     <div t-if="!stats.isSupervisor" class="charts-container d-flex flex-column flex-md-row gap-3 mb-4">
+           
+                <div class="chart-card border rounded-4 p-3 bg-white shadow">
+                    <h6 class="text-center">Leads by Supervisor</h6>
+                    <div class="chart-wrapper">
+                        <canvas t-ref="supervisorChart" class="chart-canvas"></canvas>
+                    </div>
+                </div>
+                      <div class="chart-card border rounded-4 p-3 bg-white shadow">
+                    <h6 class="text-center">Leads by Supervisor</h6>
+                    <div class="chart-wrapper">
+                        <canvas t-ref="supervisorChartPie" class="chart-canvas"></canvas>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- 📊 All Leads Charts Section -->
+            <div class="charts-container d-flex flex-column flex-md-row gap-3 mb-4">
+                <div class="chart-card border rounded-4 p-3 bg-white shadow">
+                    <h6 class="text-center">Leads by Source</h6>
+                    <div class="chart-wrapper">
+                        <canvas t-ref="sourceBarChart" class="chart-canvas"></canvas>
+                    </div>
+                </div>
+                     <div class="chart-card border rounded-4 p-3 bg-white shadow">
+                    <h6 class="text-center">Leads by Source</h6>
+                    <div class="chart-wrapper">
+                        <canvas t-ref="sourceChart" class="chart-canvas"></canvas>
+                    </div>
+                </div>
+     
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+            <!-- 📊 Reservation Charts Section -->
+            <!-- <div class="charts-container d-flex flex-column flex-md-row gap-3 mb-4">
+                <div class="chart-card border rounded-4 p-3 bg-white shadow">
+                    <h6 class="text-center">Reservations by Status</h6>
+                    <div class="chart-wrapper">
+                        <canvas t-ref="reservationStatusChart" class="chart-canvas"></canvas>
+                    </div>
+                </div>
+            </div> -->
+
+
+
+
+
+
+            <div class="charts-container d-flex flex-column flex-md-row gap-3 mb-4">
+                <div class="chart-card border rounded-4 p-3 bg-white shadow">
+                    <h6 class="text-center">Reservations by Status</h6>
+                    <div class="chart-wrapper">
+                        <canvas t-ref="reservationBarChart" class="chart-canvas"></canvas>
+                    </div>
+                </div>
+                     <div class="chart-card border rounded-4 p-3 bg-white shadow">
+                    <h6 class="text-center">Reservations by Status</h6>
+                    <div class="chart-wrapper">
+                        <canvas t-ref="reservationStatusChart" class="chart-canvas"></canvas>
+                    </div>
+                </div>
+     
+            </div>
+
+
+
+
+
+
+    <!-- 🌐 Website Charts Section -->
+            <div class="charts-container d-flex flex-column flex-md-row gap-3 mb-4">
+        <div class="chart-card border rounded-4 p-3 bg-white shadow">
+                    <h6 class="text-center">Activity Types</h6>
+                    <div class="chart-wrapper">
+                        <canvas t-ref="activityTypeChartBar" class="chart-canvas"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card border rounded-4 p-3 bg-white shadow">
+                    <h6 class="text-center">Activity Types</h6>
+                    <div class="chart-wrapper">
+                        <canvas t-ref="activityTypeChart" class="chart-canvas"></canvas>
+                    </div>
+                </div>
+                      
+            </div>
+
+
+
+
+            
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+
+        <style>
+            .big-card {
+                background: #f5f8fb;
+                padding: 20px;
+                border-radius: 6px;
+                margin: 20px;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+
+            .navbar-card {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px;
+            }
+            .form-control {
+                padding: 5px;
+            }
+
+            /* Stat Card */
+            .stat-card {
+                width: 250px;
+                border-radius: 6px;
+                position: relative;
+                height: auto;
+                color: black;
+                flex-grow: 1;
+                transition: transform 0.2s;
+            }
+            .stat-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
+            }
+            .call-center-card {
+                background: #dcfce7;
+                height: 120px;
+            }
+            .reception-card {
+                background: #fee2e2;
+                height: 120px;
+            }
+            .website-card {
+                background: #dbeafe;
+                height: 120px;
+            }
+            .reservation-card {
+                background: #e0f2fe;
+                height: 120px;
+            }
+            .activity-card {
+                background: #f3e8ff;
+                height: auto;
+            }
+
+              .sold-properties-card {
+        background: #d1fae5;
+        height: 120px;
+    }
+            .other-leads-card {
+                background: #ffedd5;
+                height: 120px;
+            }
+            .total-leads-card {
+                background: #ecfccb;
+                height: 300px;
+            }
+            .total-leads-card .welcome-text {
+                color: #2d3748;
+                font-size: 1.8rem;
+                text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            }
+            .total-leads-card .total-leads-content {
+                background: rgba(255,255,255,0.3);
+                padding: 1rem;
+                border-radius: 1rem;
+                backdrop-filter: blur(5px);
+            }
+            .total-leads-card .value-display {
+                background: rgba(255,255,255,0.5);
+                border-radius: 0.5rem;
+                padding: 0.5rem 1rem;
+                display: inline-block;
+            }
+
+            .activity-grid {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .activity-row {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                width: 100%;
+            }
+
+            .activity-item {
+                background: rgba(255, 255, 255, 0.7);
+                padding: 10px 15px;
+                border-radius: 8px;
+                flex: 1;
+                min-width: calc(33.33% - 10px);
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .activity-row:last-child .activity-item {
+                min-width: calc(50% - 10px);
+            }
+
+            .value-oval {
+                width: 70px;
+                height: 40px;
+                background: rgba(255, 255, 255, 0.7);
+                border-radius: 50px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                bottom: 0;
+            }
+
+            .crm-icon {
+                font-size: 24px;
+                opacity: 0.8;
+                bottom: 0;
+            }
+
+            .activity-icon {
+                font-size: 20px;
+            }
+
+            /* Charts Layout */
+            .charts-container {
+                width: 100%;
+            }
+            .chart-card {
+                flex: 1;
+                min-height: 400px;
+                min-width: 400px;
+                display: flex;
+                flex-direction: column;
+            }
+            .chart-card h6 {
+                margin-bottom: 10px;
+                color: #4b5563;
+                text-align: center;
+            }
+            .chart-wrapper {
+                flex: 1;
+                position: relative;
+                width: 100%;
+                height: 100%;
+            }
+            .chart-canvas {
+                position: absolute;
+                width: 100% !important;
+                height: 100% !important;
+            }
+
+            @media (max-width: 768px) {
+                .big-card {
+                    overflow-y: auto;
+                    padding: 10px;
+                    margin: 10px;
+                }
+                .navbar-card {
+                    flex-direction: column;
+                }
+                .charts-container {
+                    flex-direction: column;
+                }
+                .stat-card {
+                    width: 100%;
+                }
+                .chart-card {
+                    min-height: 300px;
+                    min-width: 100%;
+                }
+                .activity-item {
+                    min-width: 100%;
+                }
+            }
+        </style>
+    </t>
+</templates>

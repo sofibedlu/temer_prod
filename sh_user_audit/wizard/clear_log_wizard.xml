@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="sh_clear_log_wizard_form" model="ir.ui.view">
+        <field name="name">sh.clear.log.wizard.form</field>
+        <field name="model">sh.clear.log</field>
+        <field name="arch" type="xml">
+            <form string="Clear Log Wizard">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="all_log" />
+                            <field name="to_date" invisible="all_log" />
+                        </group>
+                        <group invisible="all_log">
+                            <span class="o_form_label o_td_label">
+                                <b>Type</b>
+                            </span>
+                            <div class="o_address_format">
+                                <field name="wizard_read" invisible="all_log" />
+                                <span>Read</span>
+                                <br />
+                                <field name="wizard_write" invisible="all_log" />
+                                <span>Write</span>
+                                <br />
+                                <field name="wizard_create" invisible="all_log" />
+                                <span>Create</span>
+                                <br />
+                                <field name="wizard_delete" invisible="all_log" />
+                                <span>Delete</span>
+                            </div>
+                        </group>
+                    </group>
+                    <group></group>
+                    <group name="Objects" string="Objects" invisible="all_log"></group>
+                    <field name="configuration_ids" invisible="all_log" />
+                    <footer>
+                        <button class="btn btn-primary" name="clear_log" string="Clear Log" type="object" />
+                        <button name="cancle" string="Cancel" type="object" />
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="sh_clear_log_wizard_action" model="ir.actions.act_window">
+        <field name="name">Clear Log</field>
+        <field name="res_model">sh.clear.log</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    <menuitem action="sh_clear_log_wizard_action" id="sh_clear_log_detail_menu" parent="sh_user_audit" sequence="2" groups="sh_user_audit.sh_user_audit_manager_id" />
+</odoo>

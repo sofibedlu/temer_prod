@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="property_property_view_form_update_btn" model="ir.ui.view">
+        <field name="name">property.property.form.update.btn</field>
+        <field name="model">property.property</field>
+        <field name="inherit_id" ref="advanced_property_management.property_property_view_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Remove required constraint from payment_structure_id -->
+            <xpath expr="//field[@name='payment_structure_id']" position="attributes">
+                <attribute name="required">0</attribute>
+            </xpath>
+
+            <!-- Make finishing editable in all states -->
+            <xpath expr="//field[@name='finishing']" position="attributes">
+                <attribute name="readonly">0</attribute>
+            </xpath>
+
+            <!-- Header buttons — each restricted to its own group -->
+            <xpath expr="//header" position="inside">
+                <button name="action_generate_name"
+                        string="Update Name"
+                        type="object"
+                        class="btn-secondary"
+                        groups="property_name_update_button.group_update_property_name"/>
+                <button name="action_generate_reference"
+                        string="Update Reference"
+                        type="object"
+                        class="btn-secondary"
+                        groups="property_name_update_button.group_update_property_reference"/>
+            </xpath>
+
+            <xpath expr="//field[@name='name']" position="after">
+
+                <!-- Hidden control fields -->
+                <field name="show_name_panel" invisible="1"/>
+                <field name="show_reference_panel" invisible="1"/>
+                <field name="current_name_display" invisible="1"/>
+                <field name="current_ref_display" invisible="1"/>
+
+                <!-- NAME panel — only visible after "Update Name" clicked -->
+                <div class="o_row mt-2 mb-1"
+                     style="border:1px solid #ced4da;border-radius:6px;background:#f8f9fa;padding:14px 16px;align-items:center;gap:16px;"
+                     invisible="not show_name_panel">
+                    <div style="flex:1;min-width:0;">
+                        <div style="font-size:10px;font-weight:700;color:#888;margin-bottom:4px;text-transform:uppercase;">Current</div>
+                        <field name="current_name_display" readonly="1" nolabel="1"
+                               style="color:#dc3545;font-weight:600;font-size:15px;"/>
+                    </div>
+                    <div style="font-size:22px;color:#aaa;flex-shrink:0;">→</div>
+                    <div style="flex:2;min-width:0;">
+                        <div style="font-size:10px;font-weight:700;color:#888;margin-bottom:4px;text-transform:uppercase;">New (editable)</div>
+                        <field name="pending_name" nolabel="1" force_save="1"
+                               style="width:100%;border:2px solid #198754;border-radius:4px;padding:6px 10px;color:#198754;font-weight:600;font-size:15px;background:#fff;"/>
+                    </div>
+                    <div style="flex-shrink:0;display:flex;gap:6px;">
+                        <button name="action_save_name"
+                                string="✔ Save"
+                                type="object"
+                                class="btn-primary btn-sm"
+                                groups="property_name_update_button.group_update_property_name"/>
+                        <button name="action_cancel_name"
+                                string="✕"
+                                type="object"
+                                class="btn-secondary btn-sm"
+                                title="Cancel — do not update"
+                                groups="property_name_update_button.group_update_property_name"/>
+                    </div>
+                </div>
+
+                <!-- REFERENCE panel — only visible after "Update Reference" clicked -->
+                <div class="o_row mt-1 mb-2"
+                     style="border:1px solid #ced4da;border-radius:6px;background:#f8f9fa;padding:14px 16px;align-items:center;gap:16px;"
+                     invisible="not show_reference_panel">
+                    <div style="flex:1;min-width:0;">
+                        <div style="font-size:10px;font-weight:700;color:#888;margin-bottom:4px;text-transform:uppercase;">Current</div>
+                        <field name="current_ref_display" readonly="1" nolabel="1"
+                               style="color:#dc3545;font-weight:600;font-size:15px;"/>
+                    </div>
+                    <div style="font-size:22px;color:#aaa;flex-shrink:0;">→</div>
+                    <div style="flex:2;min-width:0;">
+                        <div style="font-size:10px;font-weight:700;color:#888;margin-bottom:4px;text-transform:uppercase;">New (editable)</div>
+                        <field name="pending_reference" nolabel="1" force_save="1"
+                               style="width:100%;border:2px solid #198754;border-radius:4px;padding:6px 10px;color:#198754;font-weight:600;font-size:15px;background:#fff;"/>
+                    </div>
+                    <div style="flex-shrink:0;display:flex;gap:6px;">
+                        <button name="action_save_reference"
+                                string="✔ Save"
+                                type="object"
+                                class="btn-primary btn-sm"
+                                groups="property_name_update_button.group_update_property_reference"/>
+                        <button name="action_cancel_reference"
+                                string="✕"
+                                type="object"
+                                class="btn-secondary btn-sm"
+                                title="Cancel — do not update"
+                                groups="property_name_update_button.group_update_property_reference"/>
+                    </div>
+                </div>
+
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

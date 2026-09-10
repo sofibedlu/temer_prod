@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_receipt_approval_record_tree" model="ir.ui.view">
+        <field name="name">receipt.approval.record.tree</field>
+        <field name="model">receipt.approval.record</field>
+        <field name="arch" type="xml">
+            <tree string="Receipt Dashboard" decoration-muted="state == 'draft'" decoration-success="state == 'approved'" decoration-danger="state == 'denied'" create="0" delete="0" multi_edit="1">
+                <header>
+                    <button name="action_bulk_approve" string="Approve" type="object" class="oe_highlight approve-btn" disabled="1"/>
+                    <button name="action_bulk_deny" string="Deny" type="object" class="deny-btn" disabled="1"/>
+                </header>
+                <field name="customer_name" string="Customer"/>
+                <field name="site_id" string="Site"/>
+                <field name="property_id" string="Property"/>
+                <field name="amount" string="Amount"/>
+                <field name="reference_number" string="Reference No"/>
+                <field name="reservation_status" string="Reservation Status" widget="badge"
+                    decoration-success="reservation_status == 'sold'"
+                    decoration-info="reservation_status in ('reserved', 'sales_confirmed')"
+                    decoration-warning="reservation_status in ('pending_approval', 'pending_sales')"/>
+                <field name="state" string="Receipt Status" widget="badge" decoration-muted="state == 'draft'" decoration-success="state == 'approved'" decoration-danger="state == 'denied'"/>
+                <field name="payment_receipt" widget="binary_preview" string="Receipt" filename="payment_receipt_filename"/>
+                <field name="create_date" string="Created On"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id="view_receipt_approval_record_form" model="ir.ui.view">
+        <field name="name">receipt.approval.record.form</field>
+        <field name="model">receipt.approval.record</field>
+        <field name="arch" type="xml">
+            <form string="Receipt Approval Record">
+                <header>
+                    <button name="action_approve" string="Approve" type="object" class="oe_highlight btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_deny" string="Deny" type="object" invisible="state != 'draft'"/>
+                    <button name="action_open_reservation" string="View Reservation" type="object"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,approved,denied"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_receipt" type="object" class="oe_stat_button" icon="fa-file-text-o" invisible="not receipt_id">
+                            <field name="receipt_id" widget="statinfo" string="Receipt"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="customer_name" string="Customer"/>
+                            <field name="lead_customer_id" string="Lead Customer"/>
+                            <field name="site_id" string="Site"/>
+                            <field name="property_id" string="Property"/>
+                        </group>
+                        <group>
+                            <field name="amount" string="Amount"/>
+                            <field name="reference_number" string="Reference Number"/>
+                            <field name="bank_id" string="Bank"/>
+                            <field name="document_type_id" string="Document Type"/>
+                            <field name="transaction_date" string="Transaction Date"/>
+                        </group>
+                    </group>
+                    <group string="Attachments">
+                        <group string="Payment Receipt">
+                            <field name="payment_receipt_filename" invisible="1"/>
+                            <field name="payment_receipt" widget="binary_preview" filename="payment_receipt_filename" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Approval Information">
+                            <group>
+                                <group>
+                                    <field name="approved_by" string="Approved By" readonly="1"/>
+                                    <field name="approved_date" string="Approved Date" readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="denied_by" string="Denied By" readonly="1"/>
+                                    <field name="denied_date" string="Denied Date" readonly="1"/>
+                                    <field name="denial_reason_id" invisible="1"/>
+                                    <field name="denial_reason_description" string="Denial Reason" readonly="1" placeholder="No denial reason provided"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Related Records">
+                            <group>
+                                <field name="reservation_id" string="Reservation"/>
+                                <field name="payment_line_id" string="Payment Line"/>
+                                <field name="receipt_id" string="Receipt"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_ids" widget="mail_thread" options="{'post_refresh': 'recipients'}"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    
+    <record id="view_receipt_approval_record_search" model="ir.ui.view">
+        <field name="name">receipt.approval.record.search</field>
+        <field name="model">receipt.approval.record</field>
+        <field name="arch" type="xml">
+            <search string="Receipt Dashboard">
+                <field name="customer_name" string="Customer"/>
+                <field name="property_id" string="Property"/>
+                <field name="site_id" string="Site"/>
+                <field name="reference_number" string="Reference Number"/>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Approved" name="approved" domain="[('state', '=', 'approved')]"/>
+                <filter string="Denied" name="denied" domain="[('state', '=', 'denied')]"/>
+                <separator/>
+                <filter string="Reserved" name="res_reserved" domain="[('reservation_status', '=', 'reserved')]"/>
+                <filter string="Sold" name="res_sold" domain="[('reservation_status', '=', 'sold')]"/>
+                <separator/>
+                <filter string="Today" name="today" domain="[('create_date', '>=', datetime.datetime.now().replace(hour=0, minute=0, second=0))]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Receipt Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Reservation Status" name="group_reservation_status" context="{'group_by': 'reservation_status'}"/>
+                    <filter string="Customer" name="group_customer" context="{'group_by': 'customer_id'}"/>
+                    <filter string="Site" name="group_site" context="{'group_by': 'site_id'}"/>
+                    <filter string="Property" name="group_property" context="{'group_by': 'property_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
+    <record id="action_receipt_approval_record" model="ir.actions.act_window">
+        <field name="name">Receipt Dashboard</field>
+        <field name="res_model">receipt.approval.record</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('reservation_status', 'not in', ['canceled', 'expired'])]</field>
+        <field name="context">{'search_default_draft': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No receipt records found
+            </p>
+            <p>
+                Receipt approval records will appear here when reservations are submitted for approval.
+            </p>
+        </field>
+    </record>
+</odoo>
+

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_payment_request_root"
+              name="Payment Requests"
+              parent="account.menu_finance"
+              groups="temer_payment_request.group_payment_request_creator,temer_payment_request.group_payment_request_checker,temer_payment_request.group_payment_request_approver,temer_payment_request.group_payment_order_confirmer,temer_payment_request.group_account_payment_handler,temer_payment_request.group_payment_viewer,temer_payment_request.group_payment_request_manager"
+              sequence="50"/>
+
+    <menuitem id="menu_payment_request"
+              name="Payment Requests"
+              parent="menu_payment_request_root"
+              action="action_payment_request"
+              groups="temer_payment_request.group_payment_request_creator,temer_payment_request.group_payment_request_checker,temer_payment_request.group_payment_request_approver,temer_payment_request.group_payment_order_confirmer,temer_payment_request.group_account_payment_handler,temer_payment_request.group_payment_viewer,temer_payment_request.group_payment_request_manager"
+              sequence="10"/>
+
+    <menuitem id="menu_payment_order"
+              name="Payment Orders"
+              parent="menu_payment_request_root"
+              action="action_payment_order"
+              groups="temer_payment_request.group_payment_request_creator,temer_payment_request.group_payment_request_checker,temer_payment_request.group_payment_request_approver,temer_payment_request.group_payment_order_confirmer,temer_payment_request.group_account_payment_handler,temer_payment_request.group_payment_viewer,temer_payment_request.group_payment_request_manager"
+              sequence="20"/>
+</odoo>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="lead_type_company" model="temer.lead.type">
+            <field name="name">Company</field>
+            <field name="code">company</field>
+            <field name="sequence">10</field>
+        </record>
+        <record id="lead_type_freelance" model="temer.lead.type">
+            <field name="name">Freelance</field>
+            <field name="code">freelance</field>
+            <field name="sequence">20</field>
+        </record>
+        <record id="lead_type_employee" model="temer.lead.type">
+            <field name="name">Employee</field>
+            <field name="code">employee</field>
+            <field name="sequence">30</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,80 @@
+<odoo>
+    <record id="view_temer_commission_payment_tree" model="ir.ui.view">
+        <field name="name">temer.commission.payment.tree</field>
+        <field name="model">temer.commission.payment</field>
+        <field name="arch" type="xml">
+            <tree create="0" edit="0" delete="0" decoration-success="status == 'paid'">
+                <field name="sheet_id"/>
+                <field name="partner_id"/>
+                <field name="amount"/>
+                <!--<field name="approval_state"/>-->
+                <field name="payment_id"/>
+                <field name="payment_state"/>
+                <field name="status" widget="badge" decoration-success="status == 'paid'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_temer_commission_payment_form" model="ir.ui.view">
+        <field name="name">temer.commission.payment.form</field>
+        <field name="model">temer.commission.payment</field>
+        <field name="arch" type="xml">
+            <form create="0" edit="0">
+                <header>
+                    <field name="approval_state"
+                           widget="statusbar"
+                           statusbar_visible="draft,prepared,approved,cancelled"
+                           string="Approval"/>
+
+                    <button name="action_prepare_payment"
+                            type="object"
+                            string="Prepare Payment"
+                            class="btn-primary"
+                            invisible="approval_state != 'draft'"/>
+                    
+                    <button name="action_check_payment"
+                            type="object"
+                            string="Check"
+                            class="btn-secondary"
+                            invisible="approval_state != 'prepared'"/>
+
+                    <button name="action_approve_prepared_payment"
+                            type="object"
+                            string="Approve"
+                            class="btn-primary"
+                            invisible="approval_state != 'checked'"/>
+                </header>
+
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="sheet_id" readonly="1"/>
+                            <field name="sheet_line_id" readonly="1"/>
+                            <field name="partner_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="amount"/>
+                            <field name="payment_date"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group>
+                            <field name="payment_id" readonly="1"/>
+                            <field name="payment_state" readonly="1"/>
+                            <field name="status" readonly="1" widget="badge" decoration-success="status == 'paid'"/>
+                        </group>
+                        <group>
+                            <field name="note"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+</odoo>

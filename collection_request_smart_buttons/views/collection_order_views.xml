@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_collection_order_form_request_smart_buttons" model="ir.ui.view">
+        <field name="name">collection.order.form.request.smart.buttons</field>
+        <field name="model">collection.order</field>
+        <field name="inherit_id" ref="collection_management.view_collection_order_form"/>
+        <field name="priority">100</field>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']/button[@name='action_view_extension_requests']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//div[@name='button_box']/button[@name='action_view_discount_requests']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_discount_requests"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-percent">
+                    <field name="discount_request_count" widget="statinfo" string="Discounts"/>
+                </button>
+
+                <button name="action_view_extension_requests"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-calendar">
+                    <field name="extension_request_count" widget="statinfo" string="Extensions"/>
+                </button>
+
+                <button name="action_view_schedule_amendment_requests"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-pencil-square-o">
+                    <field name="schedule_amendment_request_count" widget="statinfo" string="Amendments"/>
+                </button>
+
+                <button name="action_view_void_requests"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-ban">
+                    <field name="void_request_count" widget="statinfo" string="Void Requests"/>
+                </button>
+
+                <button name="action_view_refund_requests"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-money">
+                    <field name="refund_request_count" widget="statinfo" string="Refunds"/>
+                </button>
+            </xpath>
+
+            <xpath expr="//header/button[@name='action_open_discount_request_wizard']" position="attributes">
+                <attribute name="class">btn-warning</attribute>
+            </xpath>
+
+            <xpath expr="//header/button[@name='action_open_void_wizard']" position="after">
+                <button name="action_open_refund_request_wizard"
+                        string="Request Refund"
+                        type="object"
+                        class="btn-warning"
+                        invisible="state != 'void'"
+                        groups="property_contract_collection.group_collection_amend_void_requests"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

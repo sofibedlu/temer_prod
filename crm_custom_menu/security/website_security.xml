@@ -1,0 +1,36 @@
+<odoo>
+    <data noupdate="1">
+        <!-- Define a New Category -->
+        <record id="module_category_website_crm" model="ir.module.category">
+            <field name="name">Website CRM</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <!-- Define the Website Group -->
+        <record id="group_Crmwebsite" model="res.groups">
+            <field name="name">Website CRM</field>
+            <field name="category_id" ref="crm_custom_menu.module_category_website_crm"/>
+            <field name="comment">This group is for Website Crm users.</field>
+        </record>
+
+        <!-- Optional: Assign Access Rights to the website Group -->
+        <record id="crm_website_access" model="ir.model.access">
+            <field name="name">crm.website.access</field>
+            <field name="model_id" ref="model_crm_website"/>
+            <field name="group_id" ref="crm_custom_menu.group_Crmwebsite"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <!-- record rule-->
+        <record id="crm_website_user_rule" model="ir.rule">
+            <field name="name">Website Records: Only Creator Can See</field>
+            <field name="model_id" ref="model_crm_website"/>
+            <field name="domain_force">[('create_uid', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+       
+    </data>
+</odoo>

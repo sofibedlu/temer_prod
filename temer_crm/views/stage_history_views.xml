@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Stage History Tree View -->
+        <record id="view_temer_lead_stage_history_tree" model="ir.ui.view">
+            <field name="name">temer.lead.stage.history.tree</field>
+            <field name="model">temer.lead.stage.history</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="lead_id"/>
+                    <field name="from_stage"/>
+                    <field name="to_stage"/>
+                    <field name="transition_date"/>
+                    <field name="user_id"/>
+                    <field name="salesperson_id"/>
+                    <field name="source_id"/>
+                    <field name="year"/>
+                    <field name="month"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Stage History Pivot View -->
+  <record id="view_temer_lead_stage_history_pivot" model="ir.ui.view">
+    <field name="name">temer.lead.stage.history.pivot</field>
+    <field name="model">temer.lead.stage.history</field>
+    <field name="arch" type="xml">
+        <pivot>
+            <field name="to_stage" type="col"/>
+            <field name="year" type="row"/>
+            <field name="month" type="row"/>
+            <field name="salesperson_id" type="row"/>
+            <field name="source_id" type="row"/>
+            <field name="count_field" type="measure" string="Count"/>
+        </pivot>
+    </field>
+</record>
+
+<!-- Stage History Graph View -->
+<record id="view_temer_lead_stage_history_graph" model="ir.ui.view">
+    <field name="name">temer.lead.stage.history.graph</field>
+    <field name="model">temer.lead.stage.history</field>
+    <field name="arch" type="xml">
+        <graph type="bar">
+            <field name="to_stage" type="row"/>
+            <field name="salesperson_id" type="row"/>
+            <field name="count_field" type="measure"/>
+        </graph>
+    </field>
+</record>
+
+        <!-- Stage History Search View -->
+        <record id="view_temer_lead_stage_history_search" model="ir.ui.view">
+            <field name="name">temer.lead.stage.history.search</field>
+            <field name="model">temer.lead.stage.history</field>
+            <field name="arch" type="xml">
+                <search>
+                    <filter name="salesperson" string="Salesperson" domain="[]" context="{'group_by': 'salesperson_id'}"/>
+                    <filter name="source" string="Source" domain="[]" context="{'group_by': 'source_id'}"/>
+                    <filter name="stage" string="Stage" domain="[]" context="{'group_by': 'to_stage'}"/>
+
+                    <group expand="0" string="Group By">
+                        <filter name="group_by_salesperson" string="Salesperson" context="{'group_by': 'salesperson_id'}"/>
+                        <filter name="group_by_source" string="Source" context="{'group_by': 'source_id'}"/>
+                        <filter name="group_by_stage" string="Stage" context="{'group_by': 'to_stage'}"/>
+                        <filter name="group_by_year" string="Year" context="{'group_by': 'year'}"/>
+                        <filter name="group_by_month" string="Month" context="{'group_by': 'month'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action for Stage History -->
+        <record id="action_temer_lead_stage_history" model="ir.actions.act_window">
+            <field name="name">Stage History</field>
+            <field name="res_model">temer.lead.stage.history</field>
+            <field name="view_mode">pivot,tree,graph</field>
+            <field name="search_view_id" ref="view_temer_lead_stage_history_search"/>
+            <field name="context">{
+                'search_default_group_by_to_stage': 1,
+                'search_default_group_by_year': 1,
+                'search_default_group_by_salesperson_id': 1
+            }</field>
+        </record>
+
+        <!-- Menu Item for Stage History -->
+        <menuitem id="menu_temer_lead_stage_history"
+                  name="Stage Analytics"
+                  parent="menu_temer_leads_root"
+                  action="action_temer_lead_stage_history"
+                  sequence="10"
+                  groups="temer_crm.group_temer_lead_manager"/>
+    </data>
+</odoo>

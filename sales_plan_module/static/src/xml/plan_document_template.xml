@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="sales_plan_module.PlanDocumentClient" owl="1">
+        <div class="plan-document-container">
+            <div class="report-header">
+                <h1 class="report-title">Plan Document</h1>
+                <div class="wing_name_display" t-if="state.role_display or state.selected_wing_name">
+                    <h3>
+                        <span t-if="state.role_display">Role: <span t-esc="state.role_display"/></span>
+                        <span t-if="state.role_display and state.selected_wing_name"> | </span>
+                        <span t-if="state.selected_wing_name">Wing: <span t-esc="state.selected_wing_name"/></span>
+                    </h3>
+                </div>
+                <div class="filter-section">
+                    <div class="filters-row">
+                        <div class="filter-group">
+                            <label>
+                                <input type="checkbox" t-model="state.show_all_dates" t-on-change="onShowAllDatesChange"/>
+                                Show All
+                            </label>
+                        </div>
+                        <div class="filter-group">
+                            <label>From:</label>
+                            <input type="date" t-model="state.date_from" class="date-input" t-att-disabled="state.show_all_dates" t-on-change="loadData"/>
+                        </div>
+                        <div class="filter-group">
+                            <label>To:</label>
+                            <input type="date" t-model="state.date_to" class="date-input" t-att-disabled="state.show_all_dates" t-on-change="loadData"/>
+                        </div>
+                        <div class="filter-group">
+                            <label>Criteria:</label>
+                            <select t-model="state.range_type" class="criteria-select" t-on-change="onRangeChange">
+                                <option value="custom">Custom</option>
+                                <option value="weekly">Weekly (Next 7 Days)</option>
+                                <option value="monthly">Monthly (Next 30 Days)</option>
+                                <option value="quarterly">Quarterly (Next 90 Days)</option>
+                                <option value="yearly">Yearly (Next 365 Days)</option>
+                            </select>
+                        </div>
+                        <div class="filter-group" t-if="state.wings.length">
+                            <label>Wing:</label>
+                            <select t-model="state.selected_wing_id" class="criteria-select" t-on-change="loadData">
+                                <option value="">All Wings</option>
+                                <t t-foreach="state.wings" t-as="wing" t-key="wing.id">
+                                    <option t-att-value="wing.id"><t t-esc="wing.name"/></option>
+                                </t>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Search:</label>
+                            <input type="text" t-model="state.search_text" class="search-input" placeholder="Search by plan name, supervisor, wing..." t-on-input="onSearchChange"/>
+                        </div>
+                        <button class="btn-show" t-on-click="loadData">
+                            Show
+                        </button>
+                        <button class="btn-show" t-on-click="onExportExcel">
+                            Export Excel
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="report-table-container" t-if="!state.loading" style="overflow-x: auto; overflow-y: auto; max-height: calc(100vh - 300px);">
+                <table class="report-table" style="min-width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>S.NO</th>
+                            <th>Plan Name</th>
+                            <th>Plan Type</th>
+                            <th>From Date</th>
+                            <th>To Date</th>
+                            <th>Planned By</th>
+                            <th>Wing</th>
+                            <th>Created By</th>
+                            <th>Status</th>
+                            <th>Prospects</th>
+                            <th>Follow-ups</th>
+                            <th>Site Visits</th>
+                            <th>Office Visits</th>
+                            <th>Total Visits</th>
+                            <th>Unit Reservations</th>
+                            <th>Deals Closed (QTY)</th>
+                            <th>Cash Collected (Birr)</th>
+                            <th>Total Deal Value (Birr)</th>
+                            <th>Conversion (sales/leads)</th>
+                            <th>IAR (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-if="state.filtered_data.length === 0">
+                            <td colspan="21" style="text-align:center;padding:20px;">No data available</td>
+                        </tr>
+                        <tr t-foreach="state.filtered_data" t-as="row" t-key="row.id">
+                            <td><t t-esc="row_index + 1"/></td>
+                            <td style="text-align:left;padding-left:10px;"><t t-esc="row.name or ''"/></td>
+                            <td><t t-esc="row.plan_type or ''"/></td>
+                            <td><t t-esc="formatDate(row.start_date)"/></td>
+                            <td><t t-esc="formatDate(row.end_date)"/></td>
+                            <td><t t-esc="row.supervisor_name or ''"/></td>
+                            <td><t t-esc="row.wing_name or ''"/></td>
+                            <td><t t-esc="row.created_by or ''"/></td>
+                            <td>
+                                <span t-attf-class="badge badge-#{row.state === 'Draft' ? 'secondary' : 'success'}">
+                                    <t t-esc="row.state or ''"/>
+                                </span>
+                            </td>
+                            <td><t t-esc="row.prospect_plan or 0"/></td>
+                            <td><t t-esc="row.followup_plan or 0"/></td>
+                            <td><t t-esc="row.site_visit_plan or 0"/></td>
+                            <td><t t-esc="row.office_visit_plan or 0"/></td>
+                            <td><t t-esc="row.total_visit_plan or 0"/></td>
+                            <td><t t-esc="row.unit_reservation_plan or 0"/></td>
+                            <td><t t-esc="row.deals_closed_plan or 0"/></td>
+                            <td><t t-esc="row.cash_collected_plan or 0"/></td>
+                            <td><t t-esc="row.total_deal_value_plan or 0"/></td>
+                            <td><t t-esc="row.conversion_plan or 0"/></td>
+                            <td><t t-esc="row.iar_plan or 0"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="loading-spinner" t-if="state.loading">
+                Loading plan document data...
+            </div>
+        </div>
+    </t>
+</templates>
+

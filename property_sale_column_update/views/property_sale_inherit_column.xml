@@ -1,0 +1,13 @@
+<odoo>
+    <record id="property_sale_view_tree_inherit_salesperson" model="ir.ui.view">
+        <field name="name">property.sale.tree.inherit.salesperson</field>
+        <field name="model">property.sale</field>
+        <field name="inherit_id" ref="advanced_property_management.property_sale_view_tree"/>
+        <field name="arch" type="xml">
+            <!-- Add the field after property_id, or wherever you want -->
+            <xpath expr="//field[@name='property_id']" position="after">
+                <field name="sales_person"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

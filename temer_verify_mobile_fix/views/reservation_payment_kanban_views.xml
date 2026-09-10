@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Add is_verifed toggle to the payment lines kanban view (shown on mobile/iPhone) -->
+        <record id="view_reservation_payment_verify_kanban_mobile" model="ir.ui.view">
+            <field name="name">property.reservation.payment.verify.kanban.mobile</field>
+            <field name="model">property.reservation</field>
+            <field name="inherit_id" ref="temer_structure.property_reservation_history_view_form_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='payment_line_ids']/kanban//button[@name='add_confirm']/.." position="after">
+                    <div groups="ahadubit_property_reservation.finance_team_approval_group,temer_structure.access_property_sales_supervisor_group,temer_structure.access_property_sales_team_manager_group">
+                        Verified: <field name="is_verifed" widget="boolean_toggle"/>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

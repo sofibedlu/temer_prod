@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Wizard Form View -->
+    <record id="view_support_weekly_report_wizard_form" model="ir.ui.view">
+        <field name="name">support.weekly.report.wizard.form</field>
+        <field name="model">support.weekly.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Weekly Support Report">
+                <group>
+                    <group>
+                        <field name="start_date"/>
+                        <field name="end_date"/>
+                    </group>
+                    <group>
+                        <field name="is_manager" invisible="1"/>
+                        <field name="assignee_id" options="{'no_create': True}" invisible="not is_manager"/>
+                        <field name="department"/>
+                    </group>
+                </group>
+
+                <separator string="Report Sections"/>
+                <p class="text-muted">
+                    Add sections in order (e.g. "1. Executive Summary", "3. Key Achievements").
+                    The <strong>Support Operations table</strong> is auto-inserted after the 1st section.
+                    Each section can have multiple Description lines: Paragraph, • Bullet, or Numbered.
+                </p>
+
+                <field name="section_ids" nolabel="1">
+                    <tree string="Sections">
+                        <field name="sequence" widget="handle"/>
+                        <field name="title" string="Section Title"/>
+                    </tree>
+                    <form string="Edit Section">
+                        <field name="title" placeholder="e.g. 1. Executive Summary"/>
+                        <separator string="Description Lines"/>
+                        <p class="text-muted">
+                            Add one entry per line. For bullets/numbered, you may paste multiple sentences
+                            separated by newlines — each line will become a separate bullet item.
+                        </p>
+                        <field name="line_ids" nolabel="1">
+                            <tree editable="bottom">
+                                <field name="sequence" widget="handle"/>
+                                <field name="line_type" string="Type"/>
+                                <field name="text" string="Description" widget="text"/>
+                            </tree>
+                        </field>
+                    </form>
+                </field>
+
+                <footer>
+                    <button name="action_generate_report" string="Generate PDF" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Wizard Action -->
+    <record id="action_support_weekly_report_wizard" model="ir.actions.act_window">
+        <field name="name">Weekly Support Report</field>
+        <field name="res_model">support.weekly.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Menu accessible to both managers AND support users -->
+    <menuitem id="menu_support_reports_root"
+              name="IT Reports"
+              parent="menu_support_management_root"
+              sequence="30"
+              groups="property_support_management.group_support_manager,property_support_management.group_support_user"/>
+    <menuitem id="menu_support_reports_weekly"
+              name="Weekly Support Report"
+              parent="menu_support_reports_root"
+              action="action_support_weekly_report_wizard"
+              sequence="10"
+              groups="property_support_management.group_support_manager,property_support_management.group_support_user"/>
+</odoo>

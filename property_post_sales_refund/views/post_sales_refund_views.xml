@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_post_sales_refund_tree" model="ir.ui.view">
+        <field name="name">post.sales.refund.request.tree</field>
+        <field name="model">post.sales.refund.request</field>
+        <field name="arch" type="xml">
+            <tree string="Refund Requests" 
+                  decoration-info="state == 'draft'" 
+                  decoration-warning="state == 'after_sales_checked'" 
+                  decoration-primary="state == 'collection_checked'" 
+                  decoration-success="state in ('finance_approved', 'refunded')" 
+                  decoration-bf="state == 'refunded'"
+                  decoration-danger="state == 'rejected'">
+                <field name="name"/>
+                <field name="contract_number"/>
+                <field name="partner_id"/>
+                <field name="collected_amount"/>
+                <field name="refund_amount"/>
+                <field name="state" 
+                       widget="badge" 
+                       decoration-info="state == 'draft'" 
+                       decoration-warning="state == 'after_sales_checked'" 
+                       decoration-primary="state == 'collection_checked'" 
+                       decoration-success="state in ('finance_approved', 'refunded')" 
+                       decoration-danger="state == 'rejected'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_post_sales_refund_form" model="ir.ui.view">
+        <field name="name">post.sales.refund.request.form</field>
+        <field name="model">post.sales.refund.request</field>
+        <field name="arch" type="xml">
+            <form string="Refund Request">
+                <header>
+                    <button name="action_collection_check" 
+                            string="Collection Head" 
+                            type="object" 
+                            class="oe_highlight" 
+                            invisible="state != 'after_sales_checked'" 
+                            groups="property_post_sales_refund.group_refund_collection_manager"/>
+                    
+                    <button name="action_after_sales_check" 
+                            string="After Sales Check" 
+                            type="object" 
+                            class="oe_highlight" 
+                            invisible="state != 'draft'" 
+                            groups="property_post_sales_refund.group_refund_after_sales_director"/>
+                    
+                    <button name="action_finance_approve" 
+                            string="Finance Approve" 
+                            type="object" 
+                            class="oe_highlight" 
+                            invisible="state != 'collection_checked'" 
+                            groups="property_post_sales_refund.group_refund_finance_approver"/>
+                    
+                    <button name="action_mark_refunded" 
+                            string="Mark as Refunded" 
+                            type="object" 
+                            class="btn-success" 
+                            invisible="state != 'finance_approved'" 
+                            groups="property_post_sales_refund.group_refund_finance_approver"/>
+                    
+                    <button name="action_reject" 
+                            string="Reject" 
+                            type="object" 
+                            class="btn-danger" 
+                            invisible="state in ('refunded', 'rejected')"
+                            groups="property_post_sales_refund.group_refund_collection_manager,property_post_sales_refund.group_refund_after_sales_director,property_post_sales_refund.group_refund_finance_approver"/>
+                    
+                    <field name="state" widget="statusbar" statusbar_visible="draft,after_sales_checked,collection_checked,finance_approved,refunded"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Client &amp; Contract Information">
+                            <field name="contract_number" 
+                                   placeholder="e.g. CON/2026/001" 
+                                   readonly="state != 'draft'"/>
+                            
+                            <field name="void_request_id" 
+                                   readonly="1" 
+                                   force_save="1"/>
+                            
+                            <field name="partner_id"/>
+                            <field name="buyer_name" widget="html"/>
+                            <field name="property_id"/>
+                        </group>
+                        <group string="Refund Financials">
+                            <field name="currency_id" invisible="1"/>
+                            <field name="collected_amount"/>
+                            <field name="penalty_percent" readonly="state not in ['draft', 'after_sales_checked']"/>
+                            <field name="penalty_amount" readonly="state not in ['draft', 'after_sales_checked']"/>
+                            <field name="refund_amount" decoration-bf="1" decoration-success="1"/>
+                            <field name="pay_date" readonly="state in ['finance_approved', 'refunded', 'rejected']"/>
+                            <field name="credit_note_id" invisible="not credit_note_id"/>
+                        </group>
+                    </group>
+                    <group string="Attachments">
+                        <field name="attachment_ids" 
+                               widget="many2many_binary" 
+                               
+                               readonly="state in ('collection_checked', 'finance_approved', 'refunded', 'rejected')"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_post_sales_refund_search" model="ir.ui.view">
+        <field name="name">post.sales.refund.request.search</field>
+        <field name="model">post.sales.refund.request</field>
+        <field name="arch" type="xml">
+            <search string="Search Refund Requests">
+                <field name="name" string="Refund Reference" filter_domain="[('name', 'ilike', self)]"/>
+                <field name="contract_number" string="Contract Number" filter_domain="[('contract_number', 'ilike', self)]"/>
+                <field name="property_id" string="Property"/>
+                <field name="void_request_id" string="Void Request"/>
+
+                <separator/>
+                
+                <filter string="Draft" name="filter_draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Collection Checked" name="filter_collection_checked" domain="[('state', '=', 'collection_checked')]"/>
+                <filter string="After Sales Checked" name="filter_after_sales_checked" domain="[('state', '=', 'after_sales_checked')]"/>
+                <filter string="Finance Approved" name="filter_finance_approved" domain="[('state', '=', 'finance_approved')]"/>
+                <filter string="Refunded" name="filter_refunded" domain="[('state', '=', 'refunded')]"/>
+                <filter string="Rejected" name="filter_rejected" domain="[('state', '=', 'rejected')]"/>
+                
+                <separator/>
+                
+                <filter string="Expected Refund Date" name="filter_pay_date" date="pay_date"/>
+
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                    <filter string="Expected Refund Month" name="group_by_pay_date" context="{'group_by': 'pay_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_post_sales_refund" model="ir.actions.act_window">
+        <field name="name">Post Sales Refund Requests</field>
+        <field name="res_model">post.sales.refund.request</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

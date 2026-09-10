@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherit form to add full Property Type Details (replaces optional site_property_type_id) -->
+    <record id="property_bulk_registration_view_form_details" model="ir.ui.view">
+        <field name="name">property.bulk.registration.form.details</field>
+        <field name="model">property.bulk.registration</field>
+        <field name="inherit_id" ref="property_bulk_registration.property_bulk_registration_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@string='Property Type Details']" position="replace">
+                <group string="Property Type Details">
+                    <group>
+                        <field name="property_type_bedroom"/>
+                        <field name="property_type_bathroom"/>
+                        <field name="property_type_has_maid_room"/>
+                    </group>
+                    <group>
+                        <field name="property_type_gross_area"/>
+                        <field name="property_type_net_area"/>
+                        <field name="property_type_floor_plan" filename="property_type_floor_plan_filename"/>
+                    </group>
+                    <group>
+                        <field name="finishing"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="property_site_view_form_bulk" model="ir.ui.view">
+        <field name="name">property.site.form.bulk</field>
+        <field name="model">property.site</field>
+        <field name="inherit_id" ref="ahadubit_property_base.property_site_view_form_id"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='floor_structure']" position="after">
+                <field name="number_of_floors"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

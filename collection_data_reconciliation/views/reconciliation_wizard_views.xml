@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View -->
+    <record id="view_collection_recon_wizard_form" model="ir.ui.view">
+        <field name="name">collection.recon.wizard.form</field>
+        <field name="model">collection.recon.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Reconcile Installment Data">
+                
+                <div class="alert alert-danger" role="alert" invisible="not has_length_mismatch">
+                    <i class="fa fa-warning"/> <b>Warning:</b> The Property Sale and Collection Order have a different total number of lines! 
+                    Only the matching sequences shown below will be processed.
+                </div>
+
+                <group>
+                    <group string="Configuration">
+                        <field name="collection_id"/>
+                        <field name="sale_id"/>
+                        <field name="has_length_mismatch" invisible="1"/>
+                        <field name="sync_direction" widget="radio"/>
+                    </group>
+                    <group string="Data to Synchronize">
+                        <field name="update_hardcoded_names"/>
+                        <field name="update_expected_amounts"/>
+                        <field name="update_paid_amounts"/>
+                    </group>
+                </group>
+
+                <notebook>
+                    <page string="Terms &amp; Descriptions Preview">
+                        <field name="preview_line_ids" readonly="1">
+                            <tree decoration-danger="is_mismatch == True" decoration-muted="is_mismatch == False">
+                                <field name="sequence_idx"/>
+                                
+                                <field name="sale_term_db_id" optional="show"/>
+                                <field name="sale_term_id"/>
+                                
+                                <field name="coll_term_db_id" optional="show"/>
+                                <field name="coll_term_id"/>
+                                
+                                <field name="hardcoded_name" optional="show"/>
+                                <field name="is_mismatch" widget="boolean" optional="show"/>
+                            </tree>
+                        </field>
+                    </page>
+                    
+                    <page string="Amounts Preview">
+                        <field name="preview_line_ids" readonly="1">
+                            <tree decoration-danger="is_expected_mismatch == True or is_paid_mismatch == True">
+                                <field name="sequence_idx"/>
+                                
+                                <field name="sale_expected" sum="Sale Expected"/>
+                                <field name="coll_expected" sum="Coll Expected"/>
+                                <field name="is_expected_mismatch" widget="boolean" optional="show"/>
+
+                                <field name="sale_paid" sum="Sale Paid"/>
+                                <field name="coll_paid" sum="Coll Paid"/>
+                                <field name="is_paid_mismatch" widget="boolean" optional="show"/>
+
+                                <field name="sale_remaining" sum="Sale Rem"/>
+                                <field name="coll_remaining" sum="Coll Rem"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+
+                <footer>
+                    <button string="Confirm &amp; Reconcile" name="action_confirm" type="object" class="btn-primary" icon="fa-wrench"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_collection_recon_wizard" model="ir.actions.act_window">
+        <field name="name">Data Reconciliation</field>
+        <field name="res_model">collection.recon.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

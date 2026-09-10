@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="manager_reports.StockInventoryReportClient" owl="1">
+        <div class="manager_reports_container">
+            <div class="report_header report_header_compact">
+                <div class="report_header_row">
+                    <h2 class="report_header_title">Stock/Inventory Report</h2>
+                    <div class="filter_row">
+                        <label class="filter_checkbox_label">
+                            <input type="checkbox" t-model="state.use_all_dates" t-on-change="onAllDatesChange"/>
+                            <span t-esc="t('All data (no date filter)')"/>
+                        </label>
+                        <label>Date From:</label>
+                        <input type="date" t-model="state.date_from" t-on-change="onDateChange" class="date_input" t-att-disabled="state.use_all_dates"/>
+                        <label>Date To:</label>
+                        <input type="date" t-model="state.date_to" t-on-change="onDateChange" class="date_input" t-att-disabled="state.use_all_dates"/>
+                        <button class="btn btn-primary" t-on-click="loadData">Show</button>
+                        <button class="btn btn-secondary" t-on-click="exportExcel">Export Excel</button>
+                        <button class="btn btn-secondary" t-on-click="exportPDF">Export PDF</button>
+                    </div>
+                </div>
+            </div>
+            
+            <t t-if="state.loading">
+                <div class="loading_message">Loading data...</div>
+            </t>
+            
+            <t t-if="!state.loading">
+                <div class="report_content mr_scroll_y">
+                    <!-- Summary + Stock Available -->
+                    <div class="mr_grid">
+                        <div class="mr_left">
+                            <div class="kpi_section">
+                                <div class="kpi_card">
+                                    <div class="kpi_label">No. of sites handed over</div>
+                                    <div class="kpi_value" t-esc="formatNumber(state.data.sites_handed_over)"/>
+                                </div>
+                                <div class="kpi_card">
+                                    <div class="kpi_label">No. of available properties</div>
+                                    <div class="kpi_value" t-esc="formatNumber(state.data.available_properties)"/>
+                                </div>
+                                <div class="kpi_card">
+                                    <div class="kpi_label">No. of available sites</div>
+                                    <div class="kpi_value" t-esc="formatNumber(state.data.available_sites)"/>
+                                </div>
+                                <div class="kpi_card kpi_card_iar">
+                                    <div class="kpi_label">Inventory Absorption Ratio</div>
+                                    <div class="kpi_value">
+                                        <t t-esc="formatNumber(state.data.total_sales_units)"/> /
+                                        <t t-esc="formatNumber(state.data.total_available_stock)"/> =
+                                        <t t-esc="formatNumber(state.data.inventory_absorption_ratio)"/>%
+                                    </div>
+                                </div>
+                                <div class="kpi_card kpi_card_reservation">
+                                    <div class="kpi_label">Currently Reserved</div>
+                                    <div class="kpi_value" t-esc="formatNumber(state.data.reservations)"/>
+                                </div>
+                                <div class="kpi_card kpi_card_reservation">
+                                    <div class="kpi_label">Signed Contracts</div>
+                                    <div class="kpi_value" t-esc="formatNumber(state.data.signed_contracts)"/>
+                                </div>
+                                <div class="kpi_card kpi_card_reservation">
+                                    <div class="kpi_label">Cancelled</div>
+                                    <div class="kpi_value" t-esc="formatNumber(state.data.cancelled_reservations)"/>
+                                </div>
+                                <div class="kpi_card kpi_card_reservation">
+                                    <div class="kpi_label">Expired</div>
+                                    <div class="kpi_value" t-esc="formatNumber(state.data.expired_reservations)"/>
+                                </div>
+                            </div>
+
+                            <div class="table_section">
+                                <div class="mr_table_graph_grid">
+                                    <div class="mr_card">
+                                        <h3>Stock Available</h3>
+                                        <div class="mr_table_scroll">
+                                            <table class="report_table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Type</th>
+                                                    <th>QTY</th>
+                                                    <th>Estimated Value (Birr)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Residence</td>
+                                                    <td t-esc="formatNumber(state.data.stock_available.residence.qty)"/>
+                                                    <td t-esc="formatCurrency(state.data.stock_available.residence.estimated_value)"/>
+                                                </tr>
+                                                <tr>
+                                                    <td>Shops</td>
+                                                    <td t-esc="formatNumber(state.data.stock_available.shops.qty)"/>
+                                                    <td t-esc="formatCurrency(state.data.stock_available.shops.estimated_value)"/>
+                                                </tr>
+                                                <tr>
+                                                    <td>Mixed</td>
+                                                    <td t-esc="formatNumber(state.data.stock_available.mixed.qty)"/>
+                                                    <td t-esc="formatCurrency(state.data.stock_available.mixed.estimated_value)"/>
+                                                </tr>
+                                                <tr class="total_row">
+                                                    <td><strong>Total</strong></td>
+                                                    <td class="total_cell"><t t-esc="formatNumber(state.data.stock_available.total.qty)"/></td>
+                                                    <td class="total_cell"><t t-esc="formatCurrency(state.data.stock_available.total.estimated_value)"/></td>
+                                                </tr>
+                                            </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="mr_card mr_graph_side">
+                                        <div class="mr_graph_mini">
+                                            <div class="mr_graph_mini_title">Stock Distribution</div>
+                                            <canvas t-ref="stockPieChart"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sales Table (Residence/Shops + Wings + TOTAL) -->
+                    <div class="table_section">
+                        <h3>Sales</h3>
+                        <div class="mr_table_graph_grid">
+                            <div class="mr_card">
+                                <div class="mr_table_scroll">
+                                    <table class="report_table sales_table">
+                                    <thead>
+                                        <tr>
+                                            <th>Type</th>
+                                            <th>Unit sold</th>
+                                            <th>TOTAL PRICE</th>
+                                            <th colspan="2">Advanced Paid</th>
+                                        </tr>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th>Values</th>
+                                            <th>%</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="state.data.sales_table" t-as="row" t-key="row.type">
+                                            <tr t-att-class="row.type === 'TOTAL' ? 'total_row' : ''">
+                                                <td t-esc="row.type"/>
+                                                <td t-esc="formatNumber(row.unit_sold)"/>
+                                                <td t-esc="formatCurrency(row.total_price)"/>
+                                                <td t-esc="formatCurrency(row.advanced_paid.value)"/>
+                                                <td>
+                                                    <div class="mr_progress">
+                                                        <div class="mr_progress_bar" t-att-style="'width:' + (row.advanced_paid.percentage || 0) + '%'" />
+                                                        <span class="mr_progress_label"><t t-esc="formatNumber(row.advanced_paid.percentage)"/>%</span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="mr_card mr_graph_side">
+                                <div class="mr_graph_side_grid">
+                                    <div class="mr_graph_mini">
+                                        <div class="mr_graph_mini_title">Sales by Type (Unit Sold)</div>
+                                        <canvas t-ref="typeMiniChart"/>
+                                    </div>
+                                    <div class="mr_graph_mini">
+                                        <div class="mr_graph_mini_title">Sales Distribution by Wing (Unit Sold)</div>
+                                        <canvas t-ref="wingMiniChart"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Wing Metrics: Reservations, Cancelled, Expired per Wing -->
+                    <div class="table_section">
+                        <h3>Per Wing: Reservations, Cancelled, Expired</h3>
+                        <div class="mr_table_graph_grid">
+                            <div class="mr_card">
+                                <div class="mr_table_scroll">
+                                    <table class="report_table">
+                                    <thead>
+                                        <tr>
+                                            <th>Wing</th>
+                                            <th>Reservations</th>
+                                            <th>Cancelled</th>
+                                            <th>Expired</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="state.data.wing_metrics_table || []" t-as="row" t-key="row.wing_id">
+                                            <tr>
+                                                <td t-esc="row.wing_name"/>
+                                                <td t-esc="formatNumber(row.reservations)"/>
+                                                <td t-esc="formatNumber(row.cancelled)"/>
+                                                <td t-esc="formatNumber(row.expired)"/>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="mr_card mr_graph_side">
+                                <div class="mr_graph_mini">
+                                    <div class="mr_graph_mini_title">Per Wing: Reservations / Cancelled / Expired</div>
+                                    <canvas t-ref="wingMetricsChart"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts -->
+                    <div class="table_section">
+                        <h3>Graphs</h3>
+                        <div class="mr_graphs">
+                            <div class="mr_graph_row">
+                                <div class="mr_graph_card">
+                                    <div class="mr_graph_title">Advanced Paid (Type)</div>
+                                    <canvas t-ref="advancedChart"/>
+                                </div>
+                                <div class="mr_graph_card">
+                                    <div class="mr_graph_title">Advanced Paid (Wing)</div>
+                                    <canvas t-ref="wingAdvancedChart"/>
+                                </div>
+                            </div>
+                            <div class="mr_graph_row">
+                                <div class="mr_graph_card">
+                                    <div class="mr_graph_title">Currently Reserved / Cancelled / Expired</div>
+                                    <canvas t-ref="reservationActivityChart"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>
+

@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_property_legacy_schedule_generator_user,property.legacy.schedule.generator.user,model_property_legacy_schedule_generator,base.group_user,1,1,1,1
+access_property_legacy_schedule_generator_manager,property.legacy.schedule.generator.manager,model_property_legacy_schedule_generator,base.group_user,1,1,1,1

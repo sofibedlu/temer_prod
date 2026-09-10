@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_special_approval_wizard_manager_payment" model="ir.ui.view">
+        <field name="name">special.approval.wizard.manager.payment</field>
+        <field name="model">special.approval.wizard</field>
+        <field name="inherit_id" ref="special_reservation_payment.view_special_approval_wizard_payment_inherit"/>
+        <field name="priority">30</field>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='show_committed_payment_lines']" position="after">
+                <field name="can_manage_payment_lines" invisible="1"/>
+            </xpath>
+
+            <xpath expr="//field[@name='payment_line_ids'][@widget='section_and_note_one2many']" position="attributes">
+                <attribute name="create">can_manage_payment_lines</attribute>
+                <attribute name="edit">can_manage_payment_lines</attribute>
+            </xpath>
+
+            <!-- Allow supervisors/managers to add payment lines during approval steps -->
+            <xpath expr="//field[@name='payment_line_ids']/tree" position="inside">
+                <control>
+                    <create name="add_payment_line_approval" string="Add a Line"/>
+                </control>
+            </xpath>
+
+            <xpath expr="//field[@name='payment_line_ids']/tree/field[@name='bank_id']" position="attributes">
+                <attribute name="readonly">not parent.can_manage_payment_lines</attribute>
+            </xpath>
+            <xpath expr="//field[@name='payment_line_ids']/tree/field[@name='document_type_id']" position="attributes">
+                <attribute name="readonly">not parent.can_manage_payment_lines</attribute>
+            </xpath>
+            <xpath expr="//field[@name='payment_line_ids']/tree/field[@name='ref_number']" position="attributes">
+                <attribute name="readonly">not parent.can_manage_payment_lines</attribute>
+            </xpath>
+            <xpath expr="//field[@name='payment_line_ids']/tree/field[@name='transaction_date']" position="attributes">
+                <attribute name="readonly">not parent.can_manage_payment_lines</attribute>
+            </xpath>
+            <xpath expr="//field[@name='payment_line_ids']/tree/field[@name='amount']" position="attributes">
+                <attribute name="readonly">not parent.can_manage_payment_lines</attribute>
+            </xpath>
+            <xpath expr="//field[@name='payment_line_ids']/tree/field[@name='payment_receipt']" position="attributes">
+                <attribute name="readonly">not parent.can_manage_payment_lines</attribute>
+            </xpath>
+
+            <!-- Grant verify access to call-center and sales hierarchy managers -->
+            <xpath expr="//field[@name='payment_line_ids']/tree/field[@name='is_verifed']" position="attributes">
+                <attribute name="groups">ahadubit_property_reservation.finance_team_approval_group,special_reservation.group_supervisor,special_reservation.group_manager,special_reservation.group_ceo,temer_structure.access_property_sales_supervisor_group,temer_structure.access_property_sales_team_manager_group,temer_structure.access_property_wing_manager_group</attribute>
+            </xpath>
+            <xpath expr="//field[@name='payment_line_ids']/kanban//field[@name='is_verifed']" position="attributes">
+                <attribute name="groups">ahadubit_property_reservation.finance_team_approval_group,special_reservation.group_supervisor,special_reservation.group_manager,special_reservation.group_ceo,temer_structure.access_property_sales_supervisor_group,temer_structure.access_property_sales_team_manager_group,temer_structure.access_property_wing_manager_group</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- Same verify groups on the reservation Payment tab for special reservations -->
+    <record id="view_reservation_special_payment_verify_sales_managers" model="ir.ui.view">
+        <field name="name">property.reservation.special.payment.verify.sales.managers</field>
+        <field name="model">property.reservation</field>
+        <field name="inherit_id" ref="special_reservation_payment.view_reservation_payment_verify_supervisor"/>
+        <field name="priority">40</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='is_verifed']" position="attributes">
+                <attribute name="groups">ahadubit_property_reservation.finance_team_approval_group,special_reservation.group_supervisor,special_reservation.group_manager,special_reservation.group_ceo,temer_structure.access_property_sales_supervisor_group,temer_structure.access_property_sales_team_manager_group,temer_structure.access_property_wing_manager_group</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

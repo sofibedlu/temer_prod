@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_installment_bulk_letter_wizard_user,installment.bulk.letter.wizard user,model_installment_bulk_letter_wizard,collection_management.group_collection_user,1,1,1,1
+access_installment_bulk_letter_wizard_mgr,installment.bulk.letter.wizard manager,model_installment_bulk_letter_wizard,collection_management.group_collection_manager,1,1,1,1
+access_installment_bulk_letter_line_user,installment.bulk.letter.line user,model_installment_bulk_letter_line,collection_management.group_collection_user,1,1,1,1
+access_installment_bulk_letter_line_mgr,installment.bulk.letter.line manager,model_installment_bulk_letter_line,collection_management.group_collection_manager,1,1,1,1

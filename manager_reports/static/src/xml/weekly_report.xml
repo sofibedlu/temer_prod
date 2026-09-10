@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="manager_reports.WeeklyReportClient" owl="1">
+        <div class="manager_reports_container">
+            <div class="report_header">
+                <h2>WEEKLY REPORT</h2>
+                <div class="filter_section">
+                    <div class="filter_row">
+                        <label>Period:</label>
+                        <select t-model="state.period_type" t-on-change="onPeriodChange" class="period_select" style="width: 110px;">
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly">Monthly</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                        <t t-if="state.period_type === 'weekly'">
+                            <label>Week of:</label>
+                            <input type="date" t-model="state.week_of" t-on-change="onCriteriaChange" class="date_input"/>
+                        </t>
+                        <t t-if="state.period_type === 'monthly'">
+                            <label>Month:</label>
+                            <select t-model="state.month" t-on-change="onCriteriaChange" style="width: 80px;">
+                                <t t-foreach="monthOptions" t-as="opt" t-key="opt.value">
+                                    <option t-att-value="opt.value" t-esc="opt.label"/>
+                                </t>
+                            </select>
+                            <label>Year:</label>
+                            <select t-model="state.year" t-on-change="onCriteriaChange" style="width: 75px;">
+                                <t t-foreach="yearOptions" t-as="yr" t-key="yr">
+                                    <option t-att-value="yr" t-esc="yr"/>
+                                </t>
+                            </select>
+                        </t>
+                        <t t-if="state.period_type === 'custom'">
+                            <label>Date From:</label>
+                            <input type="date" t-model="state.date_from" t-on-change="onCriteriaChange" class="date_input"/>
+                            <label>Date To:</label>
+                            <input type="date" t-model="state.date_to" t-on-change="onCriteriaChange" class="date_input"/>
+                        </t>
+                        <label>Team:</label>
+                        <select t-model="state.wing_id" t-on-change="onCriteriaChange" class="wing_select" style="width: 140px;">
+                            <option value="all">All</option>
+                            <t t-foreach="state.wings" t-as="wing" t-key="wing.id">
+                                <option t-att-value="wing.id" t-esc="wing.name"/>
+                            </t>
+                        </select>
+                        <button class="btn btn-primary" t-on-click="loadData">Show</button>
+                    </div>
+                </div>
+            </div>
+
+            <t t-if="state.loading">
+                <div class="loading_message">Loading data...</div>
+            </t>
+
+            <t t-if="!state.loading">
+                <div class="report_content mr_scroll_y">
+                    <div class="mr_table_graph_grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                        <div class="mr_card" style="grid-column: 1 / -1;">
+                            <div class="mr_table_scroll">
+                                <table class="report_table">
+                                    <thead>
+                                        <tr>
+                                            <th>NO.</th>
+                                            <th>NAME</th>
+                                            <th>SITE</th>
+                                            <th>AGGREMENT NO.</th>
+                                            <th>TYPE</th>
+                                            <th>TEAM</th>
+                                            <th>DATE</th>
+                                            <th style="text-align:right">TOTAL PRICE</th>
+                                            <th style="text-align:right">PAID IN AMAUNT</th>
+                                            <th style="text-align:right">PAID IN %</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="state.transactions" t-as="row" t-key="row.no">
+                                            <tr>
+                                                <td t-esc="row.no"/>
+                                                <td t-esc="row.name"/>
+                                                <td t-esc="row.site"/>
+                                                <td t-esc="row.agreement_no"/>
+                                                <td t-esc="row.type"/>
+                                                <td t-esc="row.team"/>
+                                                <td t-esc="row.date"/>
+                                                <td class="number_cell" t-esc="formatCurrency(row.total_price)"/>
+                                                <td class="number_cell" t-esc="formatCurrency(row.paid_amount)"/>
+                                                <td class="number_cell" t-esc="formatCurrency(row.paid_pct)"/>
+                                            </tr>
+                                        </t>
+                                        <t t-if="state.transactions.length > 0">
+                                            <tr class="total_row">
+                                                <td colspan="7"><strong>TOTAL</strong></td>
+                                                <td class="number_cell" t-esc="formatCurrency(state.grand_total_price)"/>
+                                                <td class="number_cell" t-esc="formatCurrency(state.grand_total_paid)"/>
+                                                <td class="number_cell"/>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="mr_card">
+                            <div class="boxtitle" style="font-weight: 700; margin-bottom: 8px;">TOTAL SOLD UNIT</div>
+                            <table class="report_table">
+                                <thead>
+                                    <tr><th>WING</th><th style="text-align:right">Units</th></tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="state.total_sold_unit" t-as="row" t-key="row.team_name">
+                                        <tr>
+                                            <td t-esc="row.team_name"/>
+                                            <td class="number_cell" t-esc="formatNumber(row.units)"/>
+                                        </tr>
+                                    </t>
+                                    <t t-if="state.total_sold_unit.length > 0">
+                                        <tr class="total_row">
+                                            <td><strong>Total</strong></td>
+                                            <td class="number_cell" t-esc="formatNumber(state.total_units)"/>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="mr_card">
+                            <div class="mr_graph_mini" style="min-height: 260px;">
+                                <canvas t-ref="soldUnitsChart" style="height: 240px;"/>
+                            </div>
+                        </div>
+
+                        <div class="mr_card">
+                            <div class="boxtitle" style="font-weight: 700; margin-bottom: 8px;">IN BIRR(TOTAL &amp; PAID)</div>
+                            <table class="report_table">
+                                <thead>
+                                    <tr>
+                                        <th>WING</th>
+                                        <th style="text-align:right">TOTAL PRICE</th>
+                                        <th style="text-align:right">PAID AMAUNT</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="state.birr_by_team" t-as="row" t-key="row.team_name">
+                                        <tr>
+                                            <td t-esc="row.team_name"/>
+                                            <td class="number_cell" t-esc="formatCurrency(row.total_price)"/>
+                                            <td class="number_cell" t-esc="formatCurrency(row.paid_amount)"/>
+                                        </tr>
+                                    </t>
+                                    <t t-if="state.birr_by_team.length > 0">
+                                        <tr class="total_row">
+                                            <td><strong>TOTAL</strong></td>
+                                            <td class="number_cell" t-esc="formatCurrency(state.grand_total_price)"/>
+                                            <td class="number_cell" t-esc="formatCurrency(state.grand_total_paid)"/>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="mr_card" style="grid-column: 1 / -1;">
+                            <div class="mr_graph_mini" style="min-height: 280px;">
+                                <canvas t-ref="birrChart" style="height: 260px;"/>
+                            </div>
+                        </div>
+
+                        <!-- Timeline at the end -->
+                        <div class="mr_card" style="grid-column: 1 / -1;">
+                            <div class="mr_graph_mini" style="min-height: 300px;">
+                                <div class="mr_graph_mini_title">Timeline: Sales &amp; Amount by Date</div>
+                                <canvas t-ref="timelineChart" style="height: 280px;"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>

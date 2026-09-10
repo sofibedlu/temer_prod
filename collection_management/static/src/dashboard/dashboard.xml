@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="collection_management.Dashboard" owl="1">
+        <div class="o_collection_dashboard p-4">
+            
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="text-muted">Collection Overview</h2>
+                <span class="text-muted small"><i class="fa fa-clock-o me-1"/> Real-time Data</span>
+            </div>
+
+            <!-- KPI Cards -->
+            <div class="row mb-4">
+                <!-- Portfolio -->
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="card kpi-card bg-gradient-primary">
+                        <div class="card-body">
+                            <div class="kpi-title">Portfolio Value</div>
+                            <div class="kpi-value"><t t-esc="formatCurrency(state.kpi.portfolio)"/></div>
+                            <i class="fa fa-building kpi-icon"/>
+                        </div>
+                    </div>
+                </div>
+                <!-- Collected -->
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="card kpi-card bg-gradient-success">
+                        <div class="card-body">
+                            <div class="kpi-title">Total Collected</div>
+                            <div class="kpi-value"><t t-esc="formatCurrency(state.kpi.collected)"/></div>
+                            <i class="fa fa-money kpi-icon"/>
+                        </div>
+                    </div>
+                </div>
+                <!-- Overdue -->
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="card kpi-card bg-gradient-danger-dark">
+                        <div class="card-body">
+                            <div class="kpi-title">Total Overdue</div>
+                            <div class="kpi-value"><t t-esc="formatCurrency(state.kpi.overdue)"/></div>
+                            <i class="fa fa-exclamation-triangle kpi-icon"/>
+                        </div>
+                    </div>
+                </div>
+                <!-- Rate -->
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="card kpi-card bg-gradient-info">
+                        <div class="card-body">
+                            <div class="kpi-title">Collection Rate</div>
+                            <div class="kpi-value"><t t-esc="state.kpi.rate"/>%</div>
+                            <i class="fa fa-pie-chart kpi-icon"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="row mb-4">
+                <div class="col-lg-8 col-md-12">
+                    <div class="card content-card h-100">
+                        <div class="card-header">
+                            <i class="fa fa-line-chart me-2 text-primary"/>Cash Flow Forecast (6 Months)
+                        </div>
+                        <div class="card-body">
+                            <canvas t-ref="chartCanvas" height="100"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-12">
+                    <div class="card content-card h-100">
+                        <div class="card-header">
+                            <i class="fa fa-map-marker me-2 text-danger"/>Overdue by Site
+                        </div>
+                        <div class="card-body d-flex align-items-center justify-content-center">
+                            <canvas t-ref="pieCanvas" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lists Section -->
+            <div class="row">
+                <!-- Top Overdue -->
+                <div class="col-lg-6 col-md-12">
+                    <div class="card content-card">
+                        <div class="card-header border-0">
+                            <i class="fa fa-list-ol me-2 text-danger"/>Top 10 Overdue Payments
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table dashboard-table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Contract</th>
+                                            <th>Due Date</th>
+                                            <th class="text-end">Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr t-foreach="state.lists.top_overdue" t-as="line" t-key="line.id" t-on-click="() => this.openInstallment(line.id)" style="cursor:pointer">
+                                            <td>
+                                                <span class="fw-bold text-dark"><t t-esc="line.contract_name"/></span>
+                                                <div class="small text-muted"><t t-esc="line.name"/></div>
+                                            </td>
+                                            <td><span class="badge bg-light text-dark border"><t t-esc="line.due_date"/></span></td>
+                                            <td class="text-end amount-negative"><t t-esc="formatCurrency(line.amount_residual)"/></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upcoming -->
+                <div class="col-lg-6 col-md-12">
+                    <div class="card content-card">
+                        <div class="card-header border-0">
+                            <i class="fa fa-calendar-check-o me-2 text-success"/>Upcoming This Week
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table dashboard-table mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Contract</th>
+                                            <th>Due Date</th>
+                                            <th class="text-end">Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr t-foreach="state.lists.upcoming" t-as="line" t-key="line.id" t-on-click="() => this.openInstallment(line.id)" style="cursor:pointer">
+                                            <td>
+                                                <span class="fw-bold text-dark"><t t-esc="line.contract_name"/></span>
+                                                <div class="small text-muted"><t t-esc="line.name"/></div>
+                                            </td>
+                                            <td><span class="badge bg-light text-dark border"><t t-esc="line.due_date"/></span></td>
+                                            <td class="text-end amount-positive"><t t-esc="formatCurrency(line.amount_residual)"/></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

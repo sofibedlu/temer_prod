@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend payment wizard form to ensure ALL fields show -->
+    <record id="view_payment_wizard_handler_form" model="ir.ui.view">
+        <field name="name">property.payment.register.wizard.form.extend.new</field>
+        <field name="model">property.payment.register.wizard</field>
+        <field name="inherit_id" ref="collection_management.view_property_payment_register_wizard_form"/>
+        <field name="priority" eval="20"/>
+        <field name="arch" type="xml">
+            <!-- Replace the right group to ensure all fields are visible and in correct order -->
+            <xpath expr="//group[2]" position="replace">
+                <group>
+                    <field name="payment_date"/>
+                    <field name="journal_type" string="Payment Method"/>
+                    <field name="document_type_id"/>
+                    <field name="bank_id"/>
+                    <field name="reference_number"/>
+                    <field name="payment_receipt" widget="binary" string="Payment Receipt"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+

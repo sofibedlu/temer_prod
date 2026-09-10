@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_contract_section,contract.section,model_contract_section,base.group_user,1,1,1,1
+access_contract_section_article,contract.section.article,model_contract_section_article,base.group_user,1,1,1,1
+access_contract_archive,contract.archive,model_contract_archive,base.group_user,1,1,1,1
+access_contract_archive_line,contract.archive.line,model_contract_archive_line,base.group_user,1,1,1,1
+access_contract_preview_wizard,contract.preview.wizard,model_contract_preview_wizard,,1,1,1,1

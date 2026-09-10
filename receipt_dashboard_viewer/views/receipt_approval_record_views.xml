@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Remove standalone viewer tree: priority-5 primary views apply to ALL users -->
+    <delete model="ir.ui.view" id="view_receipt_approval_record_tree_viewer"/>
+
+    <record id="view_receipt_approval_record_tree_site_company" model="ir.ui.view">
+        <field name="name">receipt.approval.record.tree.site.company</field>
+        <field name="model">receipt.approval.record</field>
+        <field name="inherit_id" ref="receipt_dashboard.view_receipt_approval_record_tree"/>
+        <field name="arch" type="xml">
+            <field name="customer_name" position="after">
+                <field name="site_company_id" string="Site Company"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_receipt_approval_record_form_site_company" model="ir.ui.view">
+        <field name="name">receipt.approval.record.form.site.company</field>
+        <field name="model">receipt.approval.record</field>
+        <field name="inherit_id" ref="receipt_dashboard.view_receipt_approval_record_form"/>
+        <field name="arch" type="xml">
+            <field name="lead_customer_id" position="after">
+                <field name="site_company_id" string="Site Company"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- List Approve/Deny: Receipt Dashboard users only (hidden for Viewer role) -->
+    <record id="view_receipt_approval_record_tree_approval_groups" model="ir.ui.view">
+        <field name="name">receipt.approval.record.tree.approval.groups</field>
+        <field name="model">receipt.approval.record</field>
+        <field name="inherit_id" ref="receipt_dashboard.view_receipt_approval_record_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/button[@name='action_bulk_approve']" position="attributes">
+                <attribute name="groups">receipt_dashboard.group_receipt_dashboard_user</attribute>
+            </xpath>
+            <xpath expr="//header/button[@name='action_bulk_deny']" position="attributes">
+                <attribute name="groups">receipt_dashboard.group_receipt_dashboard_user</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Hide Approve / Deny on the form for Receipt Dashboard Viewer users -->
+    <record id="view_receipt_approval_record_form_viewer" model="ir.ui.view">
+        <field name="name">receipt.approval.record.form.viewer</field>
+        <field name="model">receipt.approval.record</field>
+        <field name="inherit_id" ref="receipt_dashboard.view_receipt_approval_record_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <field name="can_approve_receipt" invisible="1"/>
+            </xpath>
+            <xpath expr="//button[@name='action_approve']" position="attributes">
+                <attribute name="invisible">state != 'draft' or not can_approve_receipt</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_deny']" position="attributes">
+                <attribute name="invisible">state != 'draft' or not can_approve_receipt</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <delete model="ir.ui.view" id="view_receipt_approval_record_form_action_groups"/>
+    <delete model="ir.ui.view" id="view_receipt_approval_record_tree_action_groups"/>
+
+    <record id="view_receipt_approval_record_search_site_company" model="ir.ui.view">
+        <field name="name">receipt.approval.record.search.site.company</field>
+        <field name="model">receipt.approval.record</field>
+        <field name="inherit_id" ref="receipt_dashboard.view_receipt_approval_record_search"/>
+        <field name="arch" type="xml">
+            <field name="site_id" position="after">
+                <field name="site_company_id" string="Site Company"/>
+            </field>
+            <filter name="today" position="after">
+                <separator/>
+                <filter string="Has Site Company" name="has_site_company" domain="[('site_company_id', '!=', False)]"/>
+                <filter string="No Site Company" name="no_site_company" domain="[('site_company_id', '=', False)]"/>
+            </filter>
+            <filter name="group_site" position="before">
+                <filter string="Site Company" name="group_site_company" context="{'group_by': 'site_company_id'}"/>
+            </filter>
+        </field>
+    </record>
+</odoo>

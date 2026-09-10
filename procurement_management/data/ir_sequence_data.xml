@@ -1,0 +1,43 @@
+<odoo>
+    <data noupdate="0">
+        <record id="seq_internal_request" model="ir.sequence">
+            <field name="name">Internal Request</field>
+            <field name="code">internal.request</field>
+            <field name="prefix">IR/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="seq_department_request" model="ir.sequence">
+            <field name="name">Department Request</field>
+            <field name="code">department.request</field>
+            <field name="prefix">DR/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_procurement_request" model="ir.sequence">
+            <field name="name">Procurement Request</field>
+            <field name="code">procurement.request</field>
+            <field name="prefix">PR/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_proforma_analysis" model="ir.sequence">
+            <field name="name">Proforma Collection</field>
+            <field name="code">procurement.proforma</field>
+            <field name="prefix">PC/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_procurement_evaluation" model="ir.sequence">
+        <field name="name">Proforma Analysis</field>
+        <field name="code">procurement.evaluation</field>
+        <field name="prefix">PA/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    </data>
+</odoo>

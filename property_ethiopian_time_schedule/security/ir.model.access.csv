@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ethiopian_config,Ethiopian Config,model_property_ethiopian_calendar_config,,1,1,1,1
+access_ethiopian_month,Ethiopian Month,model_property_ethiopian_month,,1,1,1,1
+access_ethiopian_number,Ethiopian Number,model_property_ethiopian_number,,1,1,1,1

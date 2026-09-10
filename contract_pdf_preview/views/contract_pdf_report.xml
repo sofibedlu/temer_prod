@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Report action -->
+    <record id="action_contract_pdf_report" model="ir.actions.report">
+        <field name="name">Contract PDF</field>
+        <field name="model">contract.preview.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">contract_pdf_preview.contract_pdf_report</field>
+        <field name="report_file">contract_pdf_preview.contract_pdf_report</field>
+        <field name="print_report_name">'Contract_' + (object.sale_id.name or '')</field>
+        <field name="paperformat_id" ref="contract_managment.paperformat_contract_agreement"/>
+    </record>
+
+    <!-- QWeb template — identical styling to contract_managment report -->
+    <template id="contract_pdf_report">
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <div class="page">
+                    <style>
+                        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;500;700&amp;family=Roboto:wght@400;500;700&amp;display=swap');
+
+                        @page {
+                            size: A4 portrait;
+                            margin: 1.5cm;
+                        }
+
+                        .article-content {
+                            text-align: justify;
+                            line-height: 1.6;
+                            font-family: 'Noto Sans Ethiopic', 'Roboto', Arial, sans-serif;
+                            font-size: 12pt;
+                            margin: 20px;
+                        }
+                        .article-content h1 { text-align: center; text-decoration: underline; }
+                        .article-content h2 { text-align: center; }
+
+                        .header-box {
+                            text-align: center;
+                            border-bottom: 2px solid #000;
+                            padding-bottom: 12px;
+                            margin-bottom: 35px;
+                        }
+                        .company-et {
+                            font-size: 20pt;
+                            color: #66853f;
+                            font-weight: bold;
+                            display: block;
+                        }
+                        .company-en {
+                            font-size: 14pt;
+                            font-weight: bold;
+                            color: #66853f;
+                        }
+
+                        table { border-collapse: collapse; width: 100%; margin: 15px 0; font-size: 17px; font-family: 'Nyala','Abyssinica SIL',sans-serif; }
+                        td, th { border: 1px solid black; padding: 8px; }
+                    </style>
+
+                    <!-- <div class="header-box">
+                        <span class="company-et">ቴምር ሆልዲንግ ካምፓኒ</span>
+                        <span class="company-en">TEMER HOLDING COMPANY</span>
+                    </div> -->
+
+                    <div class="article-content">
+                        <t t-if="content">
+                            <div t-out="content" t-options='{"widget": "html"}'/>
+                        </t>
+                    </div>
+
+                    <div class="footer o_standard_footer">
+                        <div class="text-right" style="border-top: 1px solid black;">
+                            <div class="text-muted">
+                                Page: <span class="page"/> / <span class="topage"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

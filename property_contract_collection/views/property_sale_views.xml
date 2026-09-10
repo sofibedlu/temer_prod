@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_property_sale_form_contract_collection" model="ir.ui.view">
+        <field name="name">property.sale.form.contract.collection</field>
+        <field name="model">property.sale</field>
+        <field name="inherit_id" ref="ahadubit_property_base.property_sale_view_form_inherit_id"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='payment_installment_line_ids']/tree/field[@name='payment_term_id']" position="before">
+                <field name="sequence" widget="handle"/>
+            </xpath>
+            <xpath expr="//field[@name='payment_installment_line_ids']/tree/field[@name='expected']" position="attributes">
+                <attribute name="sum">Total Percentage</attribute>
+            </xpath>
+            <xpath expr="//field[@name='payment_installment_line_ids']/tree/field[@name='expected_amount']" position="attributes">
+                <attribute name="sum">Total Amount</attribute>
+            </xpath>
+            <xpath expr="//field[@name='payment_installment_line_ids']/tree/field[@name='paid_amount']" position="attributes">
+                <attribute name="sum">Total Paid</attribute>
+            </xpath>
+            <xpath expr="//field[@name='payment_installment_line_ids']/tree/field[@name='remaining']" position="attributes">
+                <attribute name="sum">Total Remaining</attribute>
+            </xpath>
+            <xpath expr="//field[@name='payment_installment_line_ids']" position="before">
+                <field name="is_total_amount_mismatched" invisible="1"/>
+                <div class="alert alert-danger" role="alert" style="margin-bottom: 10px;" 
+                     invisible="not is_total_amount_mismatched">
+                    <field name="amount_mismatch_warning" readonly="1"/>
+                </div>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- Hide Void Request Button and Amend Schedule Button from Property Sale Form -->
+    <!-- <record id="view_property_sale_form_hide_void" model="ir.ui.view">
+        <field name="name">property.sale.form.hide.void</field>
+        <field name="model">property.sale</field>
+        <field name="inherit_id" ref="property_contract_extension.view_property_sale_form_inherit_void"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_open_void_wizard']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_open_amendment_wizard']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record> -->
+</odoo>

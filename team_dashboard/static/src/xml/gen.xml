@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+<t t-name="team_dashboard.TeamTajDashboardTemplate">
+    <div class="o_team_taj_dashboard" style="padding: 16px;">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Filters</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="form-label">Start Date</label>
+                        <input type="date" class="form-control" t-model="state.filters.date_from" t-on-change="onDateChange"/>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">End Date</label>
+                        <input type="date" class="form-control" t-model="state.filters.date_to" t-on-change="onDateChange"/>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Supervisor</label>
+                        <select class="form-control" t-on-change="setSupervisorFilter">
+                            <option value="0">All Supervisors</option>
+                            <t t-foreach="state.allSupervisors" t-as="supervisor" t-key="supervisor.id">
+                                <option t-att-value="supervisor.id" t-att-selected="supervisor.id === state.filters.supervisor_id">
+                                    <t t-esc="supervisor.name"/>
+                                </option>
+                            </t>
+                        </select>
+                    </div>
+                    <!-- <div class="col-md-3 d-flex align-items-end">
+                        <button class="btn btn-primary me-2" t-on-click="loadDashboardData">
+                            <i class="fa fa-filter me-1"/> Apply
+                        </button>
+                    </div> -->
+                </div>
+                <t t-if="state.allSupervisors.length === 0">
+                    <div class="alert alert-warning mt-3">
+                        No supervisors available for the selected date range.
+                    </div>
+                </t>
+                <t t-if="state.errorMessage">
+                    <div class="alert alert-danger mt-3">
+                        <t t-esc="state.errorMessage"/>
+                    </div>
+                </t>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-2 mb-3 mb-md-0">
+                <div class="card text-white bg-purple h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Leads Generated</h5>
+                        <p class="card-text display-6 mb-0">
+                            <t t-esc="state.totals.leads_count"/>
+                        </p>
+                        <t t-if="state.filters.supervisor_id">
+                            <small class="text-white-50">
+                                <t t-esc="state.originalTotals.leads_count ? (state.totals.leads_count / state.originalTotals.leads_count * 100).toFixed(1) : 0"/>% of total
+                            </small>
+                        </t>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 mb-3 mb-md-0">
+                <div class="card text-white bg-info h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Prospects</h5>
+                        <p class="card-text display-6 mb-0">
+                            <t t-esc="state.totals.prospects"/>
+                        </p>
+                        <t t-if="state.filters.supervisor_id">
+                            <small class="text-white-50">
+                                <t t-esc="state.originalTotals.prospects ? (state.totals.prospects / state.originalTotals.prospects * 100).toFixed(1) : 0"/>% of total
+                            </small>
+                        </t>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 mb-3 mb-md-0">
+                <div class="card text-white bg-warning h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Follow Ups</h5>
+                        <p class="card-text display-6 mb-0">
+                            <t t-esc="state.totals.follow_ups"/>
+                        </p>
+                        <t t-if="state.filters.supervisor_id">
+                            <small class="text-white-50">
+                                <t t-esc="state.originalTotals.follow_ups ? (state.totals.follow_ups / state.originalTotals.follow_ups * 100).toFixed(1) : 0"/>% of total
+                            </small>
+                        </t>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 mb-3 mb-md-0">
+                <div class="card text-white bg-primary h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Reservations</h5>
+                        <p class="card-text display-6 mb-0">
+                            <t t-esc="state.totals.reservations"/>
+                        </p>
+                        <t t-if="state.filters.supervisor_id">
+                            <small class="text-white-50">
+                                <t t-esc="state.originalTotals.reservations ? (state.totals.reservations / state.originalTotals.reservations * 100).toFixed(1) : 0"/>% of total
+                            </small>
+                        </t>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 mb-3 mb-md-0">
+                <div class="card text-white bg-danger h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Expired</h5>
+                        <p class="card-text display-6 mb-0">
+                            <t t-esc="state.totals.expired"/>
+                        </p>
+                        <t t-if="state.filters.supervisor_id">
+                            <small class="text-white-50">
+                                <t t-esc="state.originalTotals.expired ? (state.totals.expired / state.originalTotals.expired * 100).toFixed(1) : 0"/>% of total
+                            </small>
+                        </t>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card text-white bg-success h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Sold</h5>
+                        <p class="card-text display-6 mb-0">
+                            <t t-esc="state.totals.sold_reservations"/>
+                        </p>
+                        <t t-if="state.filters.supervisor_id">
+                            <small class="text-white-50">
+                                <t t-esc="state.originalTotals.sold_reservations ? (state.totals.sold_reservations / state.originalTotals.sold_reservations * 100).toFixed(1) : 0"/>% of total
+                            </small>
+                        </t>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Supervisor Performance Summary -->
+            <t t-if="state.filters.supervisor_id">
+                <div class="col-12 mt-3">
+                    <div class="card bg-light">
+                        <div class="card-body p-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">
+                                    <i class="fa fa-user-tie me-2 text-primary"/>
+                                    Supervisor Performance Summary
+                                </h5>
+                                <div class="badge bg-primary">
+                                    <t t-esc="state.allSupervisors.find(s => s.id === state.filters.supervisor_id)?.name || 'Selected Supervisor'"/>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-md-2">
+                                    <div class="text-center">
+                                        <div class="text-muted small">Leads Generated</div>
+                                        <div class="h4 text-purple">
+                                            <t t-esc="state.totals.leads_count"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="text-center">
+                                        <div class="text-muted small">Expiration to Lead Rate</div>
+                                        <div class="h4 text-danger">
+                                            <t t-esc="state.totals.leads_count ? (state.totals.expired / state.totals.leads_count * 100).toFixed(3) : 0"/>%
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="text-center">
+                                        <div class="text-muted small">Sold to Lead Rate</div>
+                                        <div class="h4 text-success">
+                                            <t t-esc="state.totals.leads_count ? (state.totals.sold_reservations / state.totals.leads_count * 100).toFixed(3) : 0"/>%
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="text-center">
+                                        <div class="text-muted small">Lead to Follow-up Rate</div>
+                                        <div class="h4 text-info">
+                                            <t t-esc="state.totals.leads_count ? (state.totals.follow_ups / state.totals.leads_count * 100).toFixed(3) : 0"/>%
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="text-center">
+                                        <div class="text-muted small">Lead to Reservation Rate</div>
+                                        <div class="h4 text-primary">
+                                            <t t-esc="state.totals.leads_count ? (state.totals.reservations / state.totals.leads_count * 100).toFixed(3) : 0"/>%
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="text-center">
+                                        <div class="text-muted small">Team Size</div>
+                                        <div class="h4 text-primary">
+                                            <t t-esc="state.filteredData.length"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="progress h-100" style="height: 30px;">
+                                        <div class="progress-bar bg-success" role="progressbar" 
+                                             t-att-style="'width: ' + (state.totals.sold_reservations / (state.totals.sold_reservations + state.totals.expired) * 100 || 0) + '%'">
+                                            Sold <t t-esc="state.totals.sold_reservations"/>
+                                        </div>
+                                        <div class="progress-bar bg-danger" role="progressbar" 
+                                             t-att-style="'width: ' + (state.totals.expired / (state.totals.sold_reservations + state.totals.expired) * 100 || 0) + '%'">
+                                            Expired <t t-esc="state.totals.expired"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+
+            <!-- Total Performance Summary -->
+            <t t-if="!state.filters.supervisor_id">
+                <div class="col-12 mt-3">
+                    <div class="card bg-light">
+                        <div class="card-body p-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">
+                                    <i class="fa fa-users me-2 text-primary"/>
+                                    Total Performance Summary
+                                </h5>
+                                <div class="badge bg-primary">
+                                    All Supervisors
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-md-2">
+                                    <div class="text-center">
+                                        <div class="text-muted small">Leads Generated</div>
+                                        <div class="h4 text-purple">
+                                            <t t-esc="state.totals.leads_count"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="text-center">
+                                        <div class="text-muted small">Expiration to Lead Rate</div>
+                                        <div class="h4 text-danger">
+                                            <t t-esc="state.totals.leads_count ? (state.totals.expired / state.totals.leads_count * 100).toFixed(3) : 0"/>%
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="text-center">
+                                        <div class="text-muted small">Sold to Lead Rate</div>
+                                        <div class="h4 text-success">
+                                            <t t-esc="state.totals.leads_count ? (state.totals.sold_reservations / state.totals.leads_count * 100).toFixed(3) : 0"/>%
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="text-center">
+                                        <div class="text-muted small">Lead to Follow-up Rate</div>
+                                        <div class="h4 text-info">
+                                            <t t-esc="state.totals.leads_count ? (state.totals.follow_ups / state.totals.leads_count * 100).toFixed(3) : 0"/>%
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="text-center">
+                                        <div class="text-muted small">Lead to Reservation Rate</div>
+                                        <div class="h4 text-primary">
+                                            <t t-esc="state.totals.leads_count ? (state.totals.reservations / state.totals.leads_count * 100).toFixed(3) : 0"/>%
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="text-center">
+                                        <div class="text-muted small">Team Size</div>
+                                        <div class="h4 text-primary">
+                                            <t t-esc="state.filteredData.length"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="progress h-100" style="height: 30px;">
+                                        <div class="progress-bar bg-success" role="progressbar" 
+                                             t-att-style="'width: ' + (state.totals.sold_reservations / (state.totals.sold_reservations + state.totals.expired) * 100 || 0) + '%'">
+                                            Sold <t t-esc="state.totals.sold_reservations"/>
+                                        </div>
+                                        <div class="progress-bar bg-danger" role="progressbar" 
+                                             t-att-style="'width: ' + (state.totals.expired / (state.totals.sold_reservations + state.totals.expired) * 100 || 0) + '%'">
+                                            Expired <t t-esc="state.totals.expired"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-6 mb-4 mb-md-0">
+                <div class="card h-100">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between">
+                        <h5 class="mb-0">Lead Status Distribution</h5>
+                        <t t-if="state.filters.supervisor_id">
+                            <span class="badge bg-light text-dark">
+                                <i class="fa fa-user-tie me-1"/>
+                                <t t-esc="state.allSupervisors.find(s => s.id === state.filters.supervisor_id)?.name || 'No Supervisor'"/>
+                            </span>
+                        </t>
+                    </div>
+                    <div class="card-body">
+                        <canvas t-ref="chart" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4 mb-md-0">
+                <div class="card h-100">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Reservations Status</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas t-ref="pieChart" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Team Taj Performance Details</h5>
+                <div class="d-flex align-items-center">
+                    <t t-if="state.loading" class="spinner-border spinner-border-sm text-white"/>
+                    <t t-if="! state.loading" class="badge bg-light text-dark">
+                        <t t-esc="state.filteredData.length"/> records
+                    </t>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Sales Person</th>
+                                <th>Supervisor</th>
+                                <th class="text-end">Leads Generated</th>
+                                <th class="text-end">Prospects</th>
+                                <th class="text-end">Follow Ups</th>
+                                <th class="text-end">Reservations</th>
+                                <th class="text-end">Expired</th>
+                                <th class="text-end">Sold</th>
+                                <th class="text-end">SUM</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-if="state.loading">
+                                <tr>
+                                    <td colspan="9" class="text-center py-4">
+                                        <div class="spinner-border text-primary"/>
+                                        <div class="mt-2">Loading data...</div>
+                                    </td>
+                                </tr>
+                            </t>
+                            <t t-elif="state.filteredData.length === 0">
+                                <tr>
+                                    <td colspan="9" class="text-center py-4">
+                                        <div class="text-muted">No data available for the selected filters</div>
+                                    </td>
+                                </tr>
+                            </t>
+                            <t t-else="">
+                                <t t-set="supervisorGroups" t-value="getSupervisorGroups()"/>
+                                <t t-foreach="Object.entries(supervisorGroups)" t-as="group" t-key="group[0] + '_' + group_index">
+                                    <t t-foreach="group[1].rows" t-as="row" t-key="row.sales_person + '_' + row_index">
+                                        <tr>
+                                            <td>
+                                                <a href="#" t-on-click="(ev) => viewSalesPersonLeads(row.sales_person)">
+                                                    <t t-esc="row.sales_person"/>
+                                                </a>
+                                            </td>
+                                            <td><t t-esc="row.supervisor_name"/></td>
+                                            <td class="text-end">
+                                                <a href="#" t-on-click="(ev) => viewSalesPersonLeads(row.sales_person, 'Leads')">
+                                                    <t t-esc="row.leads_count"/>
+                                                </a>
+                                            </td>
+                                            <td class="text-end">
+                                                <a href="#" t-on-click="(ev) => viewSalesPersonLeads(row.sales_person, 'Prospect')">
+                                                    <t t-esc="row.prospect"/>
+                                                </a>
+                                            </td>
+                                            <td class="text-end">
+                                                <a href="#" t-on-click="(ev) => viewSalesPersonLeads(row.sales_person, 'Follow Up')">
+                                                    <t t-esc="row.follow_up"/>
+                                                </a>
+                                            </td>
+                                            <td class="text-end">
+                                                <a href="#" t-on-click="(ev) => viewSalesPersonLeads(row.sales_person, 'Reservation')">
+                                                    <t t-esc="row.reservation_count"/>
+                                                </a>
+                                            </td>
+                                            <td class="text-end">
+                                                <a href="#" t-on-click="(ev) => viewSalesPersonLeads(row.sales_person, 'Expired')">
+                                                    <t t-esc="row.expired"/>
+                                                </a>
+                                            </td>
+                                            <td class="text-end">
+                                                <a href="#" t-on-click="(ev) => viewSalesPersonLeads(row.sales_person, 'Sold Reservation')">
+                                                    <t t-esc="row.sold_reservation_count"/>
+                                                </a>
+                                            </td>
+                                            <td class="text-end fw-bold">
+                                                <a href="#" t-on-click="(ev) => viewSalesPersonLeads(row.sales_person, 'Won')">
+                                                    <t t-esc="row.row_sum"/>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <tr class="table-primary fw-bold">
+                                        <td colspan="2">
+                                            <i class="fa fa-users me-2"/>
+                                            <t t-esc="group[1].name"/> (Team Total)
+                                        </td>
+                                        <td class="text-end"><t t-esc="group[1].totals.leads_count"/></td>
+                                        <td class="text-end"><t t-esc="group[1].totals.prospect"/></td>
+                                        <td class="text-end"><t t-esc="group[1].totals.follow_up"/></td>
+                                        <td class="text-end"><t t-esc="group[1].totals.reservation_count"/></td>
+                                        <td class="text-end"><t t-esc="group[1].totals.expired"/></td>
+                                        <td class="text-end"><t t-esc="group[1].totals.sold_reservation_count"/></td>
+                                        <td class="text-end"><t t-esc="group[1].totals.row_sum"/></td>
+                                    </tr>
+                                </t>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .o_team_taj_dashboard {
+            max-height: calc(100vh - 32px);
+            overflow-y: auto;
+        }
+        .card {
+            border-radius: 0.5rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            border: none;
+        }
+        .card-header {
+            border-radius: 0.5rem 0.5rem 0 0 !important;
+            padding: 1rem 1.25rem;
+        }
+        .table th {
+            border-top: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+        tr:hover {
+            background-color: rgba(0, 0, 0, 0.02) !important;
+        }
+        .display-6 {
+            font-size: 1.75rem;
+            font-weight: 500;
+        }
+        .table-responsive {
+            min-height: 300px;
+        }
+        @media (max-width: 768px) {
+            .o_team_taj_dashboard {
+                padding: 0.5rem !important;
+            }
+            .card-body {
+                padding: 1rem !important;
+            }
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        a:hover {
+            color: var(--o-brand-primary);
+        }
+        .table-primary {
+            background-color: rgba(13, 110, 253, 0.1);
+        }
+        .badge {
+            font-size: 0.85em;
+            padding: 0.35em 0.65em;
+        }
+        .o_team_taj_dashboard_charts {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .o_team_taj_dashboard_chart_container {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+        }
+        .o_team_taj_dashboard_chart_container canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .bg-purple {
+            background-color: #6f42c1 !important;
+        }
+        .text-purple {
+            color: #6f42c1 !important;
+        }
+    </style>
+</t>
+</templates>

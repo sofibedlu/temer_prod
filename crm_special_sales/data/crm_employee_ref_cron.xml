@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ir_cron_sync_crm_employee_ref" model="ir.cron">
+        <field name="name">Sync CRM Employee References</field>
+        <field name="model_id" ref="crm_special_sales.model_crm_employee_ref"/>
+        <field name="state">code</field>
+        <field name="code">model.sync_from_hr()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+    </record>
+</odoo>

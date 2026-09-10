@@ -1,0 +1,53 @@
+<odoo>
+    <record id="view_wing_structure_list_tree" model="ir.ui.view">
+        <field name="name">wing.structure.list.tree</field>
+        <field name="model">wing.structure.list</field>
+        <field name="arch" type="xml">
+            <tree create="false" edit="false" delete="false">
+                <field name="sales_person"/>
+                <field name="supervisor_name"/>
+                <field name="sales_manager"/>
+                <field name="wing_manager_name"/>
+                <field name="wing_name"/>
+            </tree>
+        </field>
+    </record>
+    <!-- Search view for grouping/filtering -->
+    <record id="view_wing_structure_list_search" model="ir.ui.view">
+        <field name="name">wing.structure.list.search</field>
+        <field name="model">wing.structure.list</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="sales_person"  string="Sales Person"/>
+                <field name="supervisor_name" string="Supervisor"/>
+                <field name="sales_manager" string="Sales Manager"/>
+                <field name="wing_name" string="Wing Name"/>
+                <field name="wing_manager_name" string="Wing Manager"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_wing_name" string="Wing Name" context="{'group_by':'wing_name'}"/>
+                    <filter name="group_by_wing_manager_name" string="Wing Manager" context="{'group_by':'wing_manager_name'}"/>
+                    <filter name="group_by_supervisor_name" string="Supervisor" context="{'group_by':'supervisor_name'}"/>
+                    <filter name="group_by_sales_manager" string="Sales Manager" context="{'group_by':'sales_manager'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_wing_structure_list" model="ir.actions.act_window">
+        <field name="name">Sales Person Structure List</field>
+        <field name="res_model">wing.structure.list</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_wing_structure_list_tree"/>
+        <field name="help" type="html">
+            <p>
+                This List shows unique combinations of wing, manager, supervisor, and sales person.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_wing_structure_list"
+            name="Sales Person Structure"
+            sequence="10"
+            action="action_wing_structure_list"
+            parent="temer_structure.menu_property_sales_team_menu"/>
+
+</odoo>

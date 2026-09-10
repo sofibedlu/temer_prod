@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View -->
+    <record id="view_property_amendment_request_form" model="ir.ui.view">
+        <field name="name">property.amendment.request.form</field>
+        <field name="model">property.amendment.request</field>
+        <field name="arch" type="xml">
+            <form string="Property Amendment Request" create="0" delete="0">
+                <header>
+                    <button name="action_check" type="object" string="Check" class="btn-warning" invisible="state != 'submitted'"/>
+                    <button name="action_approve" type="object" string="Approve" class="btn-primary" invisible="state != 'checked'"/>
+                    <button name="action_reject" type="object" string="Reject" class="btn-danger" invisible="state not in ('submitted', 'checked')"/>
+                    
+                    <field name="show_mark_done" invisible="1"/>
+                    <button name="action_mark_done" type="object" string="Mark as Done" class="btn-success" invisible="state != 'approved' or not show_mark_done"/>
+                    
+                    <field name="state" widget="statusbar" statusbar_visible="submitted,checked,approved,done,rejected"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="site_id" invisible="1"/>
+                            <field name="collection_order_id"/>
+                            <field name="property_sale_id"/>
+                        </group>
+                        <group>
+                            <field name="old_property_id"/>
+                            <field name="new_property_id" readonly="1"/> 
+                        </group>
+                    </group>
+                    <group>
+                        <field name="attachment_ids" widget="many2many_binary" readonly="state in ['approved', 'done', 'rejected']"/>
+                    </group>
+                    <notebook>
+                        <page string="Reasons">
+                            <group>
+                                <field name="reason" readonly="1"/>
+                                <field name="rejection_reason" invisible="state != 'rejected'"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View -->
+    <record id="view_property_amendment_request_tree" model="ir.ui.view">
+        <field name="name">property.amendment.request.tree</field>
+        <field name="model">property.amendment.request</field>
+        <field name="arch" type="xml">
+            <tree string="Property Amendment Requests" create="0" delete="0"
+                  decoration-primary="state == 'done'" 
+                  decoration-success="state == 'approved'" 
+                  decoration-danger="state == 'rejected'" 
+                  decoration-warning="state == 'checked'" 
+                  decoration-info="state == 'submitted'">
+                <field name="name"/>
+                <field name="collection_order_id"/>
+                <field name="old_property_id"/>
+                <field name="new_property_id"/>
+                <field name="state" widget="badge" 
+                       decoration-primary="state == 'done'" 
+                       decoration-success="state == 'approved'" 
+                       decoration-danger="state == 'rejected'" 
+                       decoration-warning="state == 'checked'" 
+                       decoration-info="state == 'submitted'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Action & Menu -->
+    <record id="action_property_amendment_request" model="ir.actions.act_window">
+        <field name="name">Property Amendments</field>
+        <field name="res_model">property.amendment.request</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_property_amendment_requests" 
+              name="Property Amendments" 
+              action="action_property_amendment_request" 
+              sequence="50"
+              groups="property_contract_extension.group_property_void_request_menu"/>
+
+    <!-- Action & Menu: Contract Team Only -->
+    <record id="action_contract_team_property_amendments_approved" model="ir.actions.act_window">
+        <field name="name">Approved Property Amendments</field>
+        <field name="res_model">property.amendment.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', 'in', ['approved', 'done'])]</field>
+        <!-- Pass context to make Mark as Done visible -->
+        <field name="context">{'show_mark_done': True}</field>
+    </record>
+
+    <!-- Contract Team Menu -->
+    <menuitem id="menu_contract_team_approved_property_amendments"
+              name=" Approved Property Amendments"
+              parent="property_void_request_custom.menu_contract_team_adjustments_root"
+              action="action_contract_team_property_amendments_approved"
+              sequence="15"
+              groups="property_void_request_custom.group_contract_team_adjustments"/>
+
+    <record id="action_contract_team_property_amendments_checked" model="ir.actions.act_window">
+        <field name="name">Checked Property Amendments</field>
+        <field name="res_model">property.amendment.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', 'in', ['checked', 'approved', 'done'])]</field>
+    </record>
+
+    <!-- Checked Amendments Menu -->
+    <menuitem id="menu_contract_team_checked_property_amendments"
+              name="Checked Property Amendments"
+              parent="property_void_request_custom.menu_contract_team_adjustments_root"
+              action="action_contract_team_property_amendments_checked"
+              sequence="60"
+              groups="property_void_request_custom.group_property_void_request_approver"/>
+</odoo>

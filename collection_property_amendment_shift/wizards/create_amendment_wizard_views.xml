@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_property_amendment_create_wizard_inherit_site_shift" model="ir.ui.view">
+        <field name="name">property.amendment.create.wizard.inherit.site.shift</field>
+        <field name="model">property.amendment.create.wizard</field>
+        <field name="inherit_id" ref="collection_property_amendment.view_property_amendment_create_wizard"/>
+        <field name="arch" type="xml">
+            
+            <!-- Target a group that holds the collection_order_id to replace it -->
+            <xpath expr="//group[field[@name='collection_order_id']]" position="replace">
+                
+                <group>
+                    <!-- Current Data -->
+                    <group string="Current Assignment">
+                        <field name="collection_order_id" readonly="1"/>
+                        <field name="site_id" readonly="1" string="Current Site"/>
+                        <field name="old_property_id" readonly="1"/>
+                    </group>
+                    
+                    <!-- Target Data -->
+                    <group string="New Target Assignment">
+                        <field name="is_site_shift" widget="boolean_toggle"/>
+                        
+                        <field name="new_site_id" 
+                               options="{'no_create': True}" 
+                               invisible="not is_site_shift" 
+                               required="is_site_shift"/>
+                               
+                        <field name="new_property_id" 
+                               options="{'no_create': True}, {'no_open': True}"
+                               domain="[('site', '=', new_site_id if is_site_shift else site_id), ('state', '=', 'available')]"/>
+                    </group>
+                </group>
+
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

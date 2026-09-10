@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="collection_reports.CollectionPlanClient" owl="1">
+        <div class="collection-report-container">
+            <div class="report-header">
+                <h1 class="report-title">Plan for Collection</h1>
+                <div class="filter-section">
+                    <div class="filters-row">
+                        <div class="filter-group">
+                            <label>Period:</label>
+                            <select t-model="state.period_type" class="period-select" t-on-change="onPeriodTypeChange">
+                                <option value="daily">Daily</option>
+                                <option value="monthly">Monthly</option>
+                                <option value="yearly">Yearly</option>
+                                <option value="custom">Custom</option>
+                                <option value="all">All</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Date Range:</label>
+                            <span class="date-range-display"><t t-esc="state.date_period"/></span>
+                        </div>
+                        <div class="filter-group" t-if="state.period_type === 'custom'">
+                            <label>From:</label>
+                            <input type="date" t-model="state.date_from" class="date-input" t-on-change="onDateChange"/>
+                        </div>
+                        <div class="filter-group" t-if="state.period_type === 'custom'">
+                            <label>To:</label>
+                            <input type="date" t-model="state.date_to" class="date-input" t-on-change="onDateChange"/>
+                        </div>
+                        <div class="export-buttons" style="margin-left: auto;">
+                            <button class="btn-export btn-excel" t-on-click="exportExcel">
+                                Export to Excel
+                            </button>
+                            <button class="btn-export btn-pdf" t-on-click="exportPDF">
+                                Export to PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div t-if="state.loading" class="loading-message">
+                Loading data...
+            </div>
+            
+            <div t-if="!state.loading" class="plan-collection-content">
+                <!-- First Row: Client/Site Info and Stock -->
+                <div class="sections-row">
+                    <!-- Client and Site Information -->
+                    <div class="info-section">
+                        <div class="info-row">
+                            <label>Total No. of clients:</label>
+                            <span class="info-value"><t t-esc="formatNumber(state.total_clients)"/></span>
+                        </div>
+                        <div class="info-row">
+                            <label>No. of sites:</label>
+                            <span class="info-value"><t t-esc="formatNumber(state.no_of_sites)"/></span>
+                        </div>
+                    </div>
+                    
+                    <!-- Stock Under Collection -->
+                    <div class="stock-section">
+                        <div class="stock-header">
+                            <strong>Total no. of stock under collection</strong>
+                        </div>
+                        <div class="stock-content">
+                            <div class="stock-row">
+                                <label>Residences:</label>
+                                <span class="stock-value"><t t-esc="formatNumber(state.stock_residences)"/></span>
+                            </div>
+                            <div class="stock-row">
+                                <label>Shops:</label>
+                                <span class="stock-value"><t t-esc="formatNumber(state.stock_shops)"/></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Second Row: Receivables and Discount -->
+                <div class="sections-row">
+                    <!-- Receivables and Collection Performance -->
+                    <div class="receivables-section">
+                        <div class="info-row">
+                            <label>Total receivable Amount:</label>
+                            <span class="info-value"><t t-esc="formatCurrency(state.total_receivable)"/></span>
+                        </div>
+                        <div class="info-row">
+                            <label>Date:</label>
+                            <span class="info-value"><t t-esc="state.date_period"/></span>
+                        </div>
+                        
+                        <table class="performance-table">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Plan</th>
+                                    <th>Actual</th>
+                                    <th>Achievement %</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Collected amount</strong></td>
+                                    <td class="number"><t t-esc="formatCurrency(state.collected_amount_plan)"/></td>
+                                    <td class="number"><t t-esc="formatCurrency(state.collected_amount_actual)"/></td>
+                                    <td class="achievement_cell">
+                                        <div class="progress_bar_container">
+                                            <div class="progress_bar" t-att-style="'width: ' + Math.min(Math.max(state.collected_amount_achievement || 0, 0), 100) + '%'">
+                                                <span class="progress_text" t-esc="formatPercentage(state.collected_amount_achievement || 0)"/>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Collected from no. of clients</strong></td>
+                                    <td class="number"><t t-esc="formatNumber(state.collected_clients_plan)"/></td>
+                                    <td class="number"><t t-esc="formatNumber(state.collected_clients_actual)"/></td>
+                                    <td class="achievement_cell">
+                                        <div class="progress_bar_container">
+                                            <div class="progress_bar" t-att-style="'width: ' + Math.min(Math.max(state.collected_clients_achievement || 0, 0), 100) + '%'">
+                                                <span class="progress_text" t-esc="formatPercentage(state.collected_clients_achievement || 0)"/>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Discount Information -->
+                    <div class="discount-section">
+                        <div class="discount-header">
+                            <strong>Discount given</strong>
+                        </div>
+                        <div class="discount-content">
+                            <div class="discount-row">
+                                <label>Amount:</label>
+                                <span class="discount-value"><t t-esc="formatCurrency(state.discount_amount)"/></span>
+                            </div>
+                            <div class="discount-row">
+                                <label>Percentage:</label>
+                                <span class="discount-value"><t t-esc="formatPercentage(state.discount_percentage)"/></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>
+

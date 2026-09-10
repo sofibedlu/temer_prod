@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree view -->
+    <record id="property_bulk_registration_view_tree" model="ir.ui.view">
+        <field name="name">property.bulk.registration.tree</field>
+        <field name="model">property.bulk.registration</field>
+        <field name="arch" type="xml">
+            <tree decoration-muted="state == 'done'" create="true" delete="state == 'draft'">
+                <field name="name"/>
+                <field name="site_id"/>
+                <field name="block_id"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-warning="state == 'generated'" decoration-success="state == 'done'"/>
+                <field name="property_count"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form view -->
+    <record id="property_bulk_registration_view_form" model="ir.ui.view">
+        <field name="name">property.bulk.registration.form</field>
+        <field name="model">property.bulk.registration</field>
+        <field name="arch" type="xml">
+            <form string="Bulk Property Registration" edit="state == 'draft'">
+                <header>
+                    <button name="action_generate_lines" string="Generate Properties" type="object" class="btn-primary"
+                            invisible="state in ('done', 'generated')"
+                            data-hotkey="q"/>
+                    <button name="action_save_as_draft" string="Save as Draft" type="object" class="btn-secondary"
+                            invisible="state != 'generated' or not property_line_ids"/>
+                    <button name="action_save_as_available" string="Save as Available" type="object" class="btn-primary"
+                            invisible="state != 'generated' or not property_line_ids"/>
+                </header>
+                <sheet>
+                    <field name="state" invisible="1"/>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1" class="oe_inline"/></h1>
+                    </div>
+                    <group>
+                        <group string="Site">
+                            <field name="site_id" string="Site" options="{'no_create': True}" domain="[('state', '=', 'active')]" readonly="state in ('generated', 'done')"/>
+                            <field name="block_id" string="Block" readonly="state in ('generated', 'done')"/>
+                        </group>
+                        <group string="Type and Location">
+                            <field name="is_mixed_site" invisible="1"/>
+                            <field name="display_property_type" string="Type" readonly="1" invisible="state == 'draft'"/>
+                            <field name="property_type" string="Type" invisible="state in ('generated', 'done')" readonly="not is_mixed_site"/>
+                            <field name="commercial_location" invisible="(state == 'draft' and property_type != 'commercial') or (state in ('generated', 'done') and display_property_type != 'commercial')" required="property_type == 'commercial'" readonly="state in ('generated', 'done')"/>
+                        </group>
+                    </group>
+                    <group string="Site summary (read-only)" invisible="not site_id">
+                        <group>
+                            <field name="site_project_number" readonly="1"/>
+                            <field name="company_abbreviation" readonly="1"/>
+                            <field name="payment_structure_name" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="site_address_summary" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Floor Selection">
+                            <field name="site_floor_ids" invisible="1"/>
+                            <field name="floor_selection_mode" widget="radio" options="{'horizontal': true}" readonly="state in ('generated', 'done')"/>
+                            <field name="floor_from_id" string="Floor From" invisible="floor_selection_mode != 'range'" required="floor_selection_mode == 'range'" readonly="state in ('generated', 'done')"/>
+                            <field name="floor_to_id" string="Floor To" invisible="floor_selection_mode != 'range'" required="floor_selection_mode == 'range'" readonly="state in ('generated', 'done')"/>
+                            <field name="floor_ids" widget="many2many_tags" invisible="floor_selection_mode != 'multiple'" required="floor_selection_mode == 'multiple'" options="{'no_create': True}" readonly="state in ('generated', 'done')"/>
+                        </group>
+                        <group string="House Number (Bulk Range)">
+                            <field name="house_number_start" string="House Number Start?" placeholder="e.g. 01" readonly="state in ('generated', 'done')"/>
+                            <field name="units_per_floor" string="Units per Floor?" help="e.g. 4 = units 01,02,03,04 on floor 1; 05-08 on floor 2..." readonly="state in ('generated', 'done')"/>
+                        </group>
+                    </group>
+                    <group string="Property Type Details">
+                        <group>
+                            <field name="property_type_bedroom" string="Number of bed room?" readonly="state in ('generated', 'done')"/>
+                            <field name="property_type_bathroom" string="Number of bath room?" readonly="state in ('generated', 'done')"/>
+                            <field name="property_type_has_maid_room" string="Has maid room?" readonly="state in ('generated', 'done')"/>
+                        </group>
+                        <group>
+                            <field name="property_type_gross_area" string="Gross Area?" readonly="state in ('generated', 'done')"/>
+                            <field name="property_type_net_area" string="Net area?" readonly="state in ('generated', 'done')"/>
+                            <field name="property_type_floor_plan" string="Floor Plan?" filename="property_type_floor_plan_filename" readonly="state in ('generated', 'done')"/>
+                            <field name="finishing" string="Finishing" readonly="state in ('generated', 'done')"/>
+                        </group>
+                        <group>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="site_price_per_m2" invisible="1"/>
+                            <field name="price_per_m2" string="Price (m²)" readonly="state in ('generated', 'done')"/>
+                            <field name="estimated_sales_price" string="Estimated Price" readonly="state in ('generated', 'done')"/>
+                        </group>
+                    </group>
+                    <notebook invisible="state == 'draft' and not property_line_ids">
+                        <page string="Properties" name="properties">
+                            <div class="alert alert-info mb-3" role="alert" invisible="not property_line_ids">
+                                <p class="mb-0"><strong>Save as Draft</strong> or <strong>Save as Available</strong> to create individual property records.</p>
+                            </div>
+                            <field name="property_line_ids" nolabel="1" readonly="state == 'done'">
+                                <tree editable="bottom" create="false" delete="state != 'done'">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="line_name" string="Name"/>
+                                    <field name="line_reference" string="Reference"/>
+                                    <field name="property_type"/>
+                                    <field name="gross_area"/>
+                                    <field name="net_area"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <field name="price_per_m2" string="Price (m²)"/>
+                                    <field name="estimated_sales_price_override" string="Est. Price"/>
+                                    <field name="bedroom"/>
+                                    <field name="bathroom"/>
+                                    <field name="has_maid_room"/>
+                                    <field name="floor_id"/>
+                                    <field name="unit_number" string="House No"/>
+                                    <field name="finishing"/>
+                                    <field name="property_id" readonly="1"/>
+                                    <button name="action_edit_line" type="object" icon="fa-pencil" string="Edit" invisible="property_id"/>
+                                    <button name="action_open_property" type="object" icon="fa-external-link" string="Open" invisible="not property_id"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_temer_phone_tree" model="ir.ui.view">
+        <field name="name">temer.phone.tree</field>
+        <field name="model">temer.phone</field>
+        <field name="arch" type="xml">
+            <tree string="Phone Numbers">
+                <field name="phone"/>
+                <field name="country_id"/>
+                <field name="lead_id"/>
+                <field name="phone_datetime"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_temer_phone_search" model="ir.ui.view">
+        <field name="name">temer.phone.search</field>
+        <field name="model">temer.phone</field>
+        <field name="arch" type="xml">
+            <search string="Search Phone Numbers">
+                <!-- Field-based searches -->
+                <field name="phone" string="Phone Number" filter_domain="[('phone','ilike',self)]"/>
+                <field name="country_id" string="Country"/>
+                <field name="lead_id" string="Lead"/>
+                <field name="phone_datetime" string="Date Time"/>
+                
+                <!-- Predefined filters -->
+                <filter string="Today" name="today" 
+                    domain="[('phone_datetime','&gt;=',context_today().strftime('%Y-%m-%d 00:00:00'))]"/>
+                
+                <filter string="Last 7 Days" name="last_7_days" 
+                    domain="[('phone_datetime','&gt;=',(context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d 00:00:00'))]"/>
+                
+                <filter string="Last 30 Days" name="last_30_days" 
+                    domain="[('phone_datetime','&gt;=',(context_today() - datetime.timedelta(days=30)).strftime('%Y-%m-%d 00:00:00'))]"/>
+                
+                <!-- Group By options -->
+                <group expand="0" string="Group By">
+                    <filter string="Country" name="country" context="{'group_by': 'country_id'}"/>
+                    <filter string="Lead" name="lead" context="{'group_by': 'lead_id'}"/>
+                    <filter string="Date (Day)" name="date_day" context="{'group_by': 'phone_datetime:day'}"/>
+                    <filter string="Date (Month)" name="date_month" context="{'group_by': 'phone_datetime:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_temer_phone_form" model="ir.ui.view">
+        <field name="name">temer.phone.form</field>
+        <field name="model">temer.phone</field>
+        <field name="arch" type="xml">
+            <form string="Phone Number">
+                <sheet>
+                    <group>
+                        <field name="phone" readonly="1"/>
+                        <field name="country_id" readonly="1"/>
+                        <field name="lead_id" readonly="1"/>
+                        <field name="phone_datetime" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_temer_phone" model="ir.actions.act_window">
+        <field name="name">Phone Numbers</field>
+        <field name="res_model">temer.phone</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_temer_phone_search"/>
+    </record>
+
+    <menuitem id="menu_temer_phones" name="Phone Numbers" parent="menu_temer_leads_root" action="action_temer_phone" sequence="20" groups="temer_crm.group_temer_lead_manager" />
+</odoo>

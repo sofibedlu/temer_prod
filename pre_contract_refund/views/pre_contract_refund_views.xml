@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_property_pre_contract_refund_tree" model="ir.ui.view">
+        <field name="name">property.pre.contract.refund.tree</field>
+        <field name="model">property.pre.contract.refund</field>
+        <field name="arch" type="xml">
+            <tree string="Pre Contract Refunds" delete="0"
+                  decoration-info="state in ('pending_interview', 'interview', 'pending_approval')"
+                  decoration-success="state in ('approved', 'paid')"
+                  decoration-danger="state == 'retained'">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="partner_id"/>
+                <field name="reservation_id"/>
+                <field name="site_id"/>
+                <field name="wing_name"/>
+                <field name="sales_supervisor_name"/>
+                <field name="sales_officer_id"/>
+                <field name="refund_type_id"/>
+                <field name="actual_refund_reason"/>
+                <field name="payment_option"/>
+                <field name="expected_execution_label"/>
+                <field name="expected_execution_date"/>
+                <field name="audit_status" widget="badge"
+                       decoration-warning="audit_status == 'waiting'"
+                       decoration-success="audit_status == 'audited'"/>
+                <field name="audited_by_id"/>
+                <field name="audited_date"/>
+                <field name="total_deposit_amount"/>
+                <field name="refund_amount"/>
+                <field name="is_paid"/>
+                <field name="paid_date"/>
+                <field name="state" widget="badge"
+                       decoration-info="state in ('pending_interview', 'interview', 'pending_approval')"
+                       decoration-success="state in ('approved', 'paid')"
+                       decoration-danger="state == 'retained'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_property_pre_contract_refund_search" model="ir.ui.view">
+        <field name="name">property.pre.contract.refund.search</field>
+        <field name="model">property.pre.contract.refund</field>
+        <field name="arch" type="xml">
+            <search string="Pre Contract Refunds">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="property_id"/>
+                <field name="reservation_id"/>
+                <field name="refund_type_id"/>
+                <field name="refund_reason_id"/>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Pending Interview" name="pending_interview" domain="[('state', '=', 'pending_interview')]"/>
+                <filter string="Pending Approval" name="pending_approval" domain="[('state', '=', 'pending_approval')]"/>
+                <filter string="Approved" name="approved" domain="[('state', '=', 'approved')]"/>
+                <filter string="Waiting Audit" name="waiting_audit" domain="[('state', '=', 'approved'), ('audit_status', '=', 'waiting')]"/>
+                <filter string="Audited" name="audited" domain="[('audit_status', '=', 'audited')]"/>
+                <filter string="Retained" name="retained" domain="[('state', '=', 'retained')]"/>
+                <filter string="Paid" name="paid" domain="[('state', '=', 'paid')]"/>
+                <filter string="Full Cancellation" name="full_cancellation" domain="[('refund_type_code', '=', 'full_cancellation')]"/>
+                <filter string="Overpayment" name="overpayment" domain="[('refund_type_code', '=', 'overpayment')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Customer" name="group_partner" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Refund Type" name="group_refund_type" context="{'group_by': 'refund_type_id'}"/>
+                    <filter string="Payment Option" name="group_payment_option" context="{'group_by': 'payment_option'}"/>
+                    <filter string="Paid" name="group_paid" context="{'group_by': 'is_paid'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_property_pre_contract_refund_form" model="ir.ui.view">
+        <field name="name">property.pre.contract.refund.form</field>
+        <field name="model">property.pre.contract.refund</field>
+        <field name="arch" type="xml">
+            <form string="Pre Contract Refund" delete="0">
+                <header>
+                    <button name="action_save_draft" type="object" string="Save Draft"
+                            class="btn-secondary" invisible="state != 'draft' or create_date != False"/>
+                    <button name="action_submit" type="object" string="Submit"
+                            class="oe_highlight" invisible="state != 'draft' or is_submitted"
+                            groups="pre_contract_refund.group_pre_contract_refund_user,pre_contract_refund.group_pre_contract_refund_manager"/>
+                    <button name="action_start_interview" type="object" string="Start Interview"
+                            class="oe_highlight" invisible="state != 'pending_interview'"
+                            groups="pre_contract_refund.group_pre_contract_refund_deputy_head_pmca,pre_contract_refund.group_pre_contract_refund_head_pmca"/>
+                    <button name="action_retain" type="object" string="Retain"
+                            invisible="state not in ('interview', 'pending_approval') or refund_type_code != 'full_cancellation'"
+                            groups="pre_contract_refund.group_pre_contract_refund_deputy_head_pmca,pre_contract_refund.group_pre_contract_refund_head_pmca"/>
+                    <button name="action_proceed_to_refund" type="object" string="Proceed to Refund"
+                            class="oe_highlight" invisible="state != 'interview'"
+                            groups="pre_contract_refund.group_pre_contract_refund_deputy_head_pmca,pre_contract_refund.group_pre_contract_refund_head_pmca"/>
+                    <button name="action_approve" type="object" string="Approve Refund"
+                            class="oe_highlight" invisible="state != 'pending_approval'"
+                            groups="pre_contract_refund.group_pre_contract_refund_head_pmca"/>
+                    <button name="action_audit_refund" type="object" string="Audit"
+                            class="oe_highlight"
+                            invisible="state != 'approved' or is_paid or audit_status == 'audited'"
+                            groups="pre_contract_refund.group_pre_contract_refund_auditor,pre_contract_refund.group_pre_contract_refund_manager"/>
+                    <button name="action_reset_draft" type="object" string="Reset to Draft"
+                            invisible="state not in ('pending_interview', 'interview')"
+                            groups="pre_contract_refund.group_pre_contract_refund_manager,pre_contract_refund.group_pre_contract_refund_deputy_head_pmca,pre_contract_refund.group_pre_contract_refund_head_pmca"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,pending_interview,interview,pending_approval,approved,paid"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Customer &amp; Reservation">
+                            <field name="eligible_partner_ids" invisible="1"/>
+                            <field name="eligible_reservation_ids" invisible="1"/>
+                            <field name="create_date" invisible="1"/>
+                            <field name="is_submitted" invisible="1"/>
+                            <field name="credit_note_id" invisible="1"/>
+                            <field name="refund_type_code" invisible="1"/>
+                            <field name="crv_required" invisible="1"/>
+                            <field name="is_other_refund_reason" invisible="1"/>
+                            <field name="show_property_release_action" invisible="1"/>
+                            <field name="is_payment_viewer_only" invisible="1"/>
+                            <field name="partner_id" readonly="state != 'draft'"
+                                   domain="[('id', 'in', eligible_partner_ids)]"
+                                   context="{'pre_contract_refund_partner_phone_search': True}"
+                                   options="{'no_create': True, 'no_open': True}"/>
+                            <field name="reservation_id" readonly="state != 'draft'"
+                                   domain="[('id', 'in', eligible_reservation_ids)]"
+                                   context="{'default_partner_id': partner_id, 'pre_contract_refund_reservation_display': True}"
+                                   options="{'no_create': True, 'no_open': True}"/>
+                            <field name="salesperson_name" readonly="1"/>
+                            <field name="sales_supervisor_name" readonly="1"/>
+                            <field name="wing_name" readonly="1"/>
+                            <field name="property_id" readonly="1" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="site_id" readonly="1" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="original_payment_method" readonly="1"/>
+                            <field name="date" readonly="state != 'draft'"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="company_id" invisible="1"/>
+                        </group>
+                        <group string="Refund Details">
+                            <field name="refund_type_id" readonly="state != 'draft'" required="1"
+                                   options="{'no_create': True, 'no_create_edit': True}"/>
+                            <field name="payment_option" widget="radio" options="{'horizontal': true}" readonly="state != 'draft'" required="1"/>
+                            <field name="property_release_action" widget="radio" options="{'horizontal': true}"
+                                   invisible="not show_property_release_action" readonly="state != 'pending_approval'"/>
+                            <field name="total_deposit_amount" widget="monetary" readonly="1"/>
+                            <field name="prior_refund_amount" widget="monetary" readonly="1"/>
+                            <field name="available_refund_amount" widget="monetary" readonly="1"/>
+                            <field name="refund_amount" widget="monetary" readonly="1"/>
+                            <field name="remaining_amount" widget="monetary" readonly="1"/>
+                            <field name="actual_refund_reason" readonly="1" invisible="not actual_refund_reason"/>
+                        </group>
+                    </group>
+
+                    <group string="Review" invisible="state == 'draft'">
+                        <group>
+                            <field name="interview_started_by_id" readonly="1"/>
+                            <field name="interview_started_date" readonly="1"/>
+                            <field name="interview_completed_by_id" readonly="1"/>
+                            <field name="interview_completed_date" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="approved_by_id" readonly="1"/>
+                            <field name="approved_date" readonly="1"/>
+                            <field name="audit_status" readonly="1" widget="badge"
+                                   decoration-warning="audit_status == 'waiting'"
+                                   decoration-success="audit_status == 'audited'"/>
+                            <field name="audited_by_id" readonly="1"/>
+                            <field name="audited_date" readonly="1"/>
+                            <field name="audit_note" readonly="state != 'approved' or audit_status == 'audited'"/>
+                            <field name="expected_execution_label" readonly="1"/>
+                            <field name="expected_execution_date" readonly="1"/>
+                            <field name="is_paid" readonly="1"/>
+                            <field name="paid_date" readonly="1"/>
+                            <field name="payment_reference" readonly="state != 'approved'"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Bank Account Refund" name="refund_banks">
+                            <field name="refund_bank_line_ids" readonly="state != 'draft'">
+                                <tree string="Bank Refund Lines" editable="bottom">
+                                    <control>
+                                        <create name="add_refund_bank_line" string="Add a line"/>
+                                    </control>
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <field name="bank_name" column_invisible="1"/>
+                                    <field name="account_number" column_invisible="1"/>
+                                    <field name="reservation_id" column_invisible="1"/>
+                                    <field name="refund_type_code" column_invisible="1"/>
+                                    <field name="partner_id" readonly="1"/>
+                                    <field name="payment_line_id"
+                                           column_invisible="parent.refund_type_code != 'overpayment'"
+                                           required="parent.refund_type_code == 'overpayment'"
+                                           context="{'pre_contract_refund_payment_selection': True}"
+                                           options="{'no_create': True, 'no_open': True}"/>
+                                    <field name="bank_id" options="{'no_quick_create': True}"/>
+                                    <field name="account_detail_id"
+                                           context="{
+                                               'default_partner_id': partner_id or parent.partner_id,
+                                               'default_bank_name': bank_name,
+                                           }"
+                                           options="{'no_quick_create': True}"/>
+                                    <field name="account_holder"/>
+                                    <field name="amount" sum="Total"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Reservation Payments" name="payments">
+                            <field name="payment_line_ids" readonly="1">
+                                <tree create="0" delete="0" edit="0">
+                                    <field name="transaction_date"/>
+                                    <field name="document_type_id"/>
+                                    <field name="amount"/>
+                                    <field name="ref_number"/>
+                                    <field name="bank_id"/>
+                                    <field name="payment_status"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Interview" name="interview"
+                              invisible="is_payment_viewer_only or state not in ('interview', 'pending_approval', 'approved', 'retained', 'paid') or refund_type_code != 'full_cancellation'">
+                            <group>
+                                <field name="refund_reason_id" string="Q1: What is the primary reason for cancelling?"
+                                       readonly="state != 'interview'" required="state == 'interview'"
+                                       options="{'no_quick_create': False, 'no_create_edit': False}"/>
+                                <field name="refund_reason_other" readonly="state != 'interview'"
+                                       required="state == 'interview' and is_other_refund_reason"
+                                       invisible="not is_other_refund_reason"/>
+                                <field name="interview_q1" readonly="1" invisible="not interview_q1"/>
+                                <field name="interview_q2" readonly="state != 'interview'" required="state == 'interview'"/>
+                                <field name="interview_q3" readonly="state != 'interview'" required="state == 'interview'"/>
+                                <field name="interview_q4" readonly="state != 'interview'" required="state == 'interview'"/>
+                                <field name="interview_q5" readonly="state != 'interview'" required="state == 'interview'"/>
+                            </group>
+                        </page>
+                        <page string="Attachments" name="attachments">
+                            <group string="Mandatory Labelled Documents">
+                                <field name="document_line_ids" readonly="state != 'draft'">
+                                    <tree editable="bottom">
+                                        <control>
+                                            <create name="add_document_line" string="Add another labelled document"/>
+                                        </control>
+                                        <field name="sequence" column_invisible="1"/>
+                                        <field name="document_type" column_invisible="1"/>
+                                        <field name="document_label_id"
+                                               required="1"
+                                               options="{'no_quick_create': False, 'no_create_edit': False}"/>
+                                        <field name="file" widget="binary" filename="filename"/>
+                                        <field name="filename" readonly="1"/>
+                                        <field name="note"/>
+                                        <button name="action_preview_file" type="object" string="Preview"
+                                                icon="fa-eye" invisible="not file"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group string="Additional Attachments">
+                                <field name="attachment_ids" widget="many2many_binary" readonly="state != 'draft'"/>
+                            </group>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="note" readonly="state != 'draft'" placeholder="Internal notes..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_property_pre_contract_refund" model="ir.actions.act_window">
+        <field name="name">New Refund</field>
+        <field name="res_model">property.pre.contract.refund</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a pre-contract refund request for a reservation deposit.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_property_pre_contract_refund_manager_queue" model="ir.actions.act_window">
+        <field name="name">Refund Approval</field>
+        <field name="res_model">property.pre.contract.refund</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', 'in', ['pending_interview', 'interview', 'pending_approval', 'approved', 'retained', 'paid'])]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record id="action_property_pre_contract_refund_payment_queue" model="ir.actions.act_window">
+        <field name="name">Refund Payments</field>
+        <field name="res_model">property.pre.contract.refund</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', 'in', ['approved', 'paid'])]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record id="action_property_pre_contract_refund_audit_queue" model="ir.actions.act_window">
+        <field name="name">Audit</field>
+        <field name="res_model">property.pre.contract.refund</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', '=', 'approved'), ('is_paid', '=', False)]</field>
+        <field name="context">{'search_default_waiting_audit': 1}</field>
+    </record>
+</odoo>

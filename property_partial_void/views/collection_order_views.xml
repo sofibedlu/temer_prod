@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_collection_order_form_inherit_partial_void" model="ir.ui.view">
+        <field name="name">collection.order.form.inherit.partial.void</field>
+        <field name="model">collection.order</field>
+        <field name="inherit_id" ref="collection_management.view_collection_order_form"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="//header" position="inside">
+                <field name="is_property_merged" invisible="1"/>
+                <field name="has_pending_partial_void" invisible="1"/>
+
+                <!-- Button visible to Requesters only if property is merged and no pending requests exist -->
+                <button name="%(action_partial_void_wizard)d" 
+                        string="Partial Void (Drop Unit)" 
+                        type="action" 
+                        context="{'default_collection_id': active_id}"
+                        groups="property_contract_collection.group_collection_amend_void_requests"
+                        invisible="state != 'active' or not is_property_merged or has_pending_partial_void"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

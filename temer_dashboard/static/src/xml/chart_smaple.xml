@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+<t t-name="crm_dashboard.sales_performance_dashboard">
+    <div class="o_sales_performance_dashboard" style="padding: 16px;">
+        <!-- Filter Section -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Filters</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="form-label">Start Date</label>
+                        <input type="date" class="form-control" t-model="state.filters.dateStart"/>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">End Date</label>
+                        <input type="date" class="form-control" t-model="state.filters.dateEnd"/>
+                    </div>
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button class="btn btn-primary me-2" t-on-click="applyFilters">
+                            <i class="fa fa-filter me-1"/> Apply
+                        </button>
+                        <button class="btn btn-outline-secondary" t-on-click="resetFilters">
+                            <i class="fa fa-undo me-1"/> Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3 mb-3 mb-md-0">
+                <div class="card text-white bg-info h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Total Planned</h5>
+                        <p class="card-text display-6 mb-0">
+                            <t t-esc="formatCurrency(state.summary.totalPlanned)"/>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3 mb-md-0">
+                <div class="card text-white bg-success h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Total Actual</h5>
+                        <p class="card-text display-6 mb-0">
+                            <t t-esc="formatCurrency(state.summary.totalActual)"/>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3 mb-md-0">
+                <div class="card text-white h-100" 
+                     t-att-class="state.summary.totalDeviation >= 0 ? 'bg-success' : 'bg-danger'">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Total Deviation</h5>
+                        <p class="card-text display-6 mb-0">
+                            <t t-esc="formatCurrency(state.summary.totalDeviation)"/>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white h-100" 
+                     t-att-class="parseFloat(state.summary.avgDeviationPercent) >= 0 ? 'bg-success' : 'bg-danger'">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Deviation %</h5>
+                        <p class="card-text display-6 mb-0">
+                            <t t-esc="state.summary.avgDeviationPercent"/>%
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Table -->
+        <div class="card">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Sales Performance Details</h5>
+                <div>
+                    <t t-if="state.loading" class="spinner-border spinner-border-sm text-light"/>
+                    <t t-if="!state.loading" class="badge bg-light text-dark">
+                        <t t-esc="state.data.length"/> records
+                    </t>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Category</th>
+                                <th>Product</th>
+                                <th class="text-end">Planned</th>
+                                <th class="text-end">Actual</th>
+                                <th class="text-end">Deviation</th>
+                                <th class="text-end">Deviation %</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-if="state.loading">
+                                <tr>
+                                    <td colspan="6" class="text-center py-4">
+                                        <div class="spinner-border text-primary"/>
+                                        <div class="mt-2">Loading data...</div>
+                                    </td>
+                                </tr>
+                            </t>
+                            <t t-elif="state.data.length === 0">
+                                <tr>
+                                    <td colspan="6" class="text-center py-4">
+                                        <div class="text-muted">No data available for the selected period</div>
+                                    </td>
+                                </tr>
+                            </t>
+                            <t t-else="">
+                                <t t-foreach="state.data" t-as="row" t-key="row.productId">
+                                    <tr t-on-click="() => openProduct(row.productId)" style="cursor: pointer;">
+                                        <td><t t-esc="row.categoryName"/></td>
+                                        <td><t t-esc="row.productName"/></td>
+                                        <td class="text-end"><t t-esc="formatCurrency(row.planned)"/></td>
+                                        <td class="text-end"><t t-esc="formatCurrency(row.actual)"/></td>
+                                        <td class="text-end" 
+                                            t-att-class="row.deviation >= 0 ? 'text-success' : 'text-danger'">
+                                            <t t-esc="formatCurrency(row.deviation)"/>
+                                        </td>
+                                        <td class="text-end" 
+                                            t-att-class="parseFloat(row.deviationPercent) >= 0 ? 'text-success' : 'text-danger'">
+                                            <t t-esc="row.deviationPercent"/>%
+                                        </td>
+                                    </tr>
+                                </t>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .o_sales_performance_dashboard {
+            max-height: calc(100vh - 32px);
+            overflow-y: auto;
+        }
+        .card {
+            border-radius: 0.5rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            border: none;
+        }
+        .card-header {
+            border-radius: 0.5rem 0.5rem 0 0 !important;
+            padding: 1rem 1.25rem;
+        }
+        .table th {
+            border-top: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+        tr:hover {
+            background-color: rgba(0, 0, 0, 0.02) !important;
+        }
+        .display-6 {
+            font-size: 1.75rem;
+            font-weight: 500;
+        }
+        .table-responsive {
+            min-height: 300px;
+        }
+        @media (max-width: 768px) {
+            .o_sales_performance_dashboard {
+                padding: 0.5rem !important;
+            }
+            .card-body {
+                padding: 1rem !important;
+            }
+        }
+    </style>
+</t>
+</templates>

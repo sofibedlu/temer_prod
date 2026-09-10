@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="collection_progress_integration.SmoothSlider">
+        <div class="d-flex align-items-center w-100">
+            <t t-if="props.readonly">
+                <div class="progress w-100 shadow-sm" style="height: 16px; border-radius: 8px; background-color: #e9ecef;">
+                    <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" 
+                         role="progressbar" 
+                         t-att-style="'width: ' + percentage + '%; transition: width 0.3s ease;'"/>
+                </div>
+                <span class="ms-3 fw-bold text-muted" style="min-width: 50px;"><t t-esc="displayValue"/>%</span>
+            </t>
+
+            <t t-else="">
+                <input type="range" 
+                       class="form-range w-100" 
+                       min="0" 
+                       t-att-max="max" 
+                       t-att-step="step"
+                       t-att-value="state.value" 
+                       t-on-input="onInput" 
+                       t-on-change="onChange"
+                       style="height: 20px; cursor: pointer;"/>
+                <span class="ms-3 fw-bold text-primary" style="min-width: 50px; font-size: 1.1em;"><t t-esc="displayValue"/>%</span>
+            </t>
+            
+        </div>
+    </t>
+</templates>

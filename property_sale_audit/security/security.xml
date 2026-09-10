@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="group_property_sale_auditor" model="res.groups">
+            <field name="name">Check Property Sale</field>
+            <field name="category_id" ref="temer_structure.property_mgmt_category"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+    </data>
+</odoo>

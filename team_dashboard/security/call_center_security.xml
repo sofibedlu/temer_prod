@@ -1,0 +1,28 @@
+<odoo>
+    <data noupdate="1">
+   
+        <record id="module_category_dashboard_group_132_ajwaandtaj" model="ir.module.category">
+            <field name="name">Dashboard </field>
+            <field name="sequence">10</field>
+        </record>
+
+      
+        <record id="group_dashboard_new_1232121212rrrer1212345" model="res.groups">
+            <field name="name">team</field>
+            <field name="category_id" ref="team_dashboard.module_category_dashboard_group_132_ajwaandtaj"/>
+            <field name="comment">This group is for teams</field>
+        </record>
+
+        <!-- <record id="group_property_sales_ceo" model="res.groups">
+    <field name="name">CEO</field>
+    <field name="category_id" ref="base.module_category_sales_management"/>
+</record>
+<record id="group_property_sales_supervisor" model="res.groups">
+    <field name="name">Supervisor</field>
+    <field name="category_id" ref="base.module_category_sales_management"/>
+</record> -->
+
+
+
+    </data>
+</odoo>

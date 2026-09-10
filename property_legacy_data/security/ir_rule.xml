@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Rule for Legacy User: See own documents only (assigned or created) -->
+        <record id="property_legacy_sale_rule_user_own" model="ir.rule">
+            <field name="name">Property Legacy Sale: Own Documents</field>
+            <field name="model_id" ref="model_property_legacy_sale"/>
+            <field name="domain_force">[('create_uid', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('property_legacy_data.group_property_legacy_user'))]"/>
+        </record>
+
+        <!-- Rule for Property Manager: See all documents -->
+        <record id="property_legacy_sale_rule_manager_all" model="ir.rule">
+            <field name="name">Property Legacy Sale: All Documents</field>
+            <field name="model_id" ref="model_property_legacy_sale"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('advanced_property_management.group_property_manager'))]"/>
+        </record>
+
+    </data>
+</odoo>

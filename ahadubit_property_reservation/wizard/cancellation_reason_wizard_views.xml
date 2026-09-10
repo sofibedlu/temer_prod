@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record model="ir.ui.view" id="cancel_reservation_form_view_wizard_id">
+        <field name="name">Cancellation Reason</field>
+        <field name="model">cancellation.reason.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Cancellation Reason">
+                <group string="Cancellation Reason">
+                    
+                    <group>
+                        <field name="reason" invisible="other != True" required="other == True"/>
+                        <field name="reason_id"  options="{'no_create': True}" invisible="other == True" required="other != True"/>
+                       
+                    </group>
+                    <group>
+                        <field name="other"/>
+                        
+                    </group>
+
+                </group>
+                <footer>
+                    <button string="Save" name="action_cancel_reservation" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="cancel_reservation_wizard_action_id" model="ir.actions.act_window">
+        <field name="name">Reservation Cancel Reason</field>
+        <field name="res_model">cancellation.reason.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

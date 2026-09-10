@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_property_payment_register_wizard_form_inherit_discount_req" model="ir.ui.view">
+        <field name="name">property.payment.register.wizard.form.inherit.discount.req</field>
+        <field name="model">property.payment.register.wizard</field>
+        <field name="inherit_id" ref="collection_management.view_property_payment_register_wizard_form"/>
+        <field name="arch" type="xml">
+            <!-- Hide the toggle -->
+            <xpath expr="//field[@name='apply_discount']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            
+            <!-- Hide the label for the percentage -->
+            <xpath expr="//label[@for='discount_percentage']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            
+            <!-- Hide the percentage input block -->
+            <xpath expr="//div[hasclass('o_row') and @invisible='not apply_discount']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            
+            <!-- Hide the resulting amount -->
+            <xpath expr="//field[@name='discount_amount']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

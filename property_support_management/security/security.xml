@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- Module Category -->
+        <record model="ir.module.category" id="module_category_support_management">
+            <field name="name">Support Management</field>
+            <field name="description">Access rights for Support Management module.</field>
+            <field name="sequence">15</field>
+        </record>
+
+        <!-- Normal User Group -->
+        <record id="group_support_user" model="res.groups">
+            <field name="name">User</field>
+            <field name="category_id" ref="module_category_support_management"/>
+            <field name="comment">the user will be able to see their own assigned tasks.</field>
+        </record>
+
+        <!-- Support Team Group (Internal technical group for domain filtering) -->
+        <record id="group_support_team" model="res.groups">
+            <field name="name">Support Team Member</field>
+            <field name="category_id" ref="module_category_support_management"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <!-- Manager Group -->
+        <record id="group_support_manager" model="res.groups">
+            <field name="name">Manager</field>
+            <field name="category_id" ref="module_category_support_management"/>
+            <field name="implied_ids" eval="[(4, ref('group_support_user')), (4, ref('group_support_team'))]"/>
+            <field name="comment">the user will have full access to support tasks.</field>
+        </record>
+
+    </data>
+
+    <data noupdate="1">
+        <!-- Record Rules -->
+        
+        <!-- User Rule: See only assigned tasks -->
+        <record id="rule_support_management_user" model="ir.rule">
+            <field name="name">Support Management: User assigned tasks</field>
+            <field name="model_id" ref="model_support_management"/>
+            <field name="groups" eval="[(4, ref('group_support_user'))]"/>
+            <field name="domain_force">[('assigned_to', '=', user.id)]</field>
+        </record>
+
+        <!-- Manager Rule: See all tasks -->
+        <record id="rule_support_management_manager" model="ir.rule">
+            <field name="name">Support Management: Manager all tasks</field>
+            <field name="model_id" ref="model_support_management"/>
+            <field name="groups" eval="[(4, ref('group_support_manager'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <record id="property_sale_view_form_inherit" model="ir.ui.view">
+        <field name="name">property.sale.inherit</field>
+        <field name="model">property.sale</field>
+        <field name="inherit_id" ref="advanced_property_management.property_sale_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Group commission-related modifications -->
+
+            <xpath expr="//field[@name='property_id']" position="after">
+                <field name="has_payment_based_discount" invisible="1"/>
+                <field name="has_discount" invisible="1"/>
+                <field name="is_from_reservation" invisible="1"/>
+                <field name="payment_based_discount" invisible="has_payment_based_discount != True"/>
+                <field name="total_paid"/>
+            </xpath>
+
+            <xpath expr="//field[@name='sale_price']" position="after">
+                <field name="show_new_price" invisible="1"/>
+                <field name="new_sale_price" invisible="show_new_price != True"/>
+                <field name="property_payment_term" readonly="state in ['confirm','cancel']"/>
+                <field name="discount" invisible="has_discount != True"/>
+                <field name="remaining"/>
+                <field name="cancel_reason" string="Cancel Reason" readonly="state in ['confirm','cancel']"
+                       invisible="state not in ['cancel']"/>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="readonly">state in ['confirm','cancel'] or is_from_reservation==True</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_date']" position="attributes">
+                <attribute name="readonly">state in ['confirm','cancel']</attribute>
+            </xpath>
+            <xpath expr="//field[@name='property_id']" position="attributes">
+                <attribute name="readonly">state in ['confirm','cancel'] or is_from_reservation == True</attribute>
+            </xpath>
+            <xpath expr="//field[@name='sale_price']" position="attributes">
+                <attribute name="readonly">state in ['confirm','cancel'] or is_from_reservation == True</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='any_broker']" position="attributes">
+                <attribute name="readonly">state in ['confirm','cancel']</attribute>
+            </xpath>
+            <xpath expr="//field[@name='any_broker']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='broker_id']" position="attributes">
+                <attribute name="readonly">state in ['confirm','cancel']</attribute>
+            </xpath>
+            <xpath expr="//field[@name='broker_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+
+            <!-- Hide commission-related elements -->
+            <xpath
+                    expr="//field[@name='commission_plan_id' or @name='commission_type' or @name='commission']"
+                    position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+
+            <!-- Remove buttons -->
+            <xpath expr="//button[@name='create_invoice' or @name='commission_bill']"
+                   position="replace"/>
+        </field>
+    </record>
+
+    <record id="property_property_view_form_inherit" model="ir.ui.view">
+        <field name="name">property.property.inherit</field>
+        <field name="model">property.property</field>
+        <field name="inherit_id" ref="advanced_property_management.property_property_view_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Add invisible state fields at the top for use in attrs -->
+            <form position="inside">
+                <field name="state" invisible="1"/>
+                <field name="is_multi" invisible="1"/>
+                <field name="is_show_address" invisible="1"/>
+                <field name="sale_rent" invisible="1"/>
+            </form>
+
+            <!-- Status bar and buttons -->
+            <xpath expr="//header" position="replace">
+                <header>
+                    <!--                                            options="{'clickable': '1'}"-->
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,available,reserved"/>
+
+                    <button name="action_available"
+                            string="Available"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state not in ['draft']"
+                            confirm="Are you sure you want to mark this property as available?"
+                            />
+
+                    <button name="sold_property"
+                            string="Sold"
+                            type="object"
+                            class="btn-primary"
+                            confirm="Are you sure you want to mark this property as sold?" invisible="1"/>
+                    <button name="action_draft"
+                            string="Draft"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state not in ['available']"
+                            groups="advanced_property_management.group_property_manager"
+                            confirm="Are you sure you want to mark this property as Draft?"/>
+                </header>
+            </xpath>
+
+            <xpath expr="//field[@name='property_tags']" position="attributes">
+                <attribute name="readonly">state not in ['draft',False]</attribute>
+            </xpath>
+            <xpath expr="//field[@name='property_type']" position="attributes">
+                <attribute name="readonly">state not in ['draft',False]</attribute>
+            </xpath>
+            <xpath expr="//field[@name='responsible_id']" position="attributes">
+                <attribute name="readonly">state not in ['draft',False]</attribute>
+            </xpath>
+            <xpath expr="//field[@name='bedroom']" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </xpath>
+            <xpath expr="//field[@name='bathroom']" position="attributes">
+                <attribute name="readonly">True</attribute>
+            </xpath>
+            <xpath expr="//field[@name='total_floor']" position="attributes">
+                <attribute name="readonly">state not in ['draft',False]</attribute>
+            </xpath>
+            <xpath expr="//field[@name='sale_rent']" position="attributes">
+                <attribute name="readonly">state not in ['draft',False]</attribute>
+            </xpath>
+            <xpath expr="//field[@name='property_image_ids']" position="attributes">
+                <attribute name="readonly">state not in ['draft',False]</attribute>
+            </xpath>
+            <!-- <xpath expr="//field[@name='area_measurement_ids']" position="attributes">
+               <attribute name="readonly">state not in  ['draft',False]</attribute>
+           </xpath> -->
+
+            <xpath expr="//field[@name='facility_ids']" position="attributes">
+                <attribute name="readonly">state not in ['draft',False]</attribute>
+            </xpath>
+
+            <!-- <xpath expr="//field[@name='nearby_connectivity_ids']" position="attributes">
+               <attribute name="readonly">state not in  ['draft',False]</attribute>
+           </xpath> -->
+            <!-- <xpath expr="//field[@name='furnishing']" position="attributes">
+                <attribute name="readonly">state not in  ['draft',False]</attribute>
+            </xpath> -->
+
+            <!-- Payment Structure Fields -->
+            <xpath expr="//field[@name='property_tags']" position="after">
+                <field name="payment_structure_id"
+                       required="is_multi != True"
+                       invisible="is_multi == True" readonly="state not in  ['draft',False]"/>
+                <field name="site_payment_structure_id"
+                       required="is_multi == True"
+                       invisible="is_multi != True" readonly="state not in  ['draft',False]"/>
+            </xpath>
+
+            <!-- Property Information Fields -->
+            <xpath expr="//field[@name='responsible_id']" position="after">
+                <field name="property_type" invisible="1"/>
+                <field name="site" no_create="1" readonly="state not in  ['draft',False]"
+                       domain="[('state', '=', 'active'),
+                        '|',
+                        ('site_type.property_type', '=', property_type),
+                        ('site_type.property_type', '=', 'mixed'),
+                    ]"/>
+                <field name="block" readonly="state not in  ['draft',False]"/>
+                <field name="site_property_type_id" no_create="1" readonly="state not in  ['draft',False]"/>
+            </xpath>
+            <!-- Area and Price Fields -->
+            <xpath expr="//field[@name='unit_price']" position="before">
+                <field name="gross_area"/>
+                <field name="net_area"/>
+                <field name="price"/>
+            </xpath>
+
+            <!-- Property Details Fields -->
+            <xpath expr="//field[@name='bedroom']" position="before">
+                <field name="finishing" readonly="state not in  ['draft',False]"/>
+                <field name="floor_id" invisible="state == False" readonly="state not in  ['draft',False]"/>
+                <field name="floor_ids" invisible="state != False" readonly="state not in  ['draft',False]"
+                       widget="many2many_tags"/>
+                <field name="floor_ids_domian" invisible="1"/>
+            </xpath>
+
+            <!-- Hide unnecessary fields -->
+            <xpath
+                    expr="//field[
+                    @name='license_no' or 
+                    @name='parking' or 
+                    @name='type_residence' or 
+                    @name='code']"
+                    position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='construct_year']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='sale_rent']" position="attributes">
+                <attribute name="invisible">0</attribute>
+            </xpath>
+            <xpath expr="//field[@name='license_no']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='parking']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='type_residence']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='code']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='landlord_id']" position="attributes">
+                <attribute name="invisible">sale_rent != 'for_tenancy'</attribute>
+            </xpath>
+            <xpath expr="//label[@for='street']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='latitude']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='longitude']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//group[@id='address_group_id']" position="attributes">
+                <attribute name="invisible">is_show_address != True</attribute>
+            </xpath>
+            <xpath expr="//div[@class='o_address_format']" position="replace">
+                <group invisible="is_show_address != True">
+                    <field name="street" invisible="1"/>
+                    <field name="is_show_address" invisible="1"/>
+                    <field name="country_id"/>
+                    <field name="city_id"/>
+                    <field name="sub_city_id"/>
+                    <field name="wereda"/>
+                    <field name="area"/>
+                    <field name="latitude" readonly="state not in ['draft', False]"/>
+                    <field name="longitude" readonly="state not in ['draft', False]"/>
+                </group>
+            </xpath>
+
+        </field>
+    </record>
+    <record id="property_property_view_search_inherit" model="ir.ui.view">
+        <field name="name">property.property.view.search.inherit</field>
+        <field name="model">property.property</field>
+        <field name="inherit_id" ref="advanced_property_management.property_property_view_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='state']" position="after">
+                <filter string="Reserved" name="filter_reserved"
+                        domain="[('state', '=', 'reserved')]"/>
+                <filter string="Sold" name="filter_sold" domain="[('state', '=', 'sold')]"/>
+                <filter string="Available" name="filter_available"
+                        domain="[('state', '=', 'available')]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_site" string="Site" context="{'group_by': 'site'}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+    <record id="property_property_view_tree_inherit_id" model="ir.ui.view">
+        <field name="name">property.property.inherit</field>
+        <field name="model">property.property</field>
+        <field name="inherit_id" ref="advanced_property_management.property_property_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='landlord_id']" position="replace"/>
+            <xpath expr="//field[@name='city']" position="replace"/>
+            <xpath expr="//field[@name='street']" position="replace"/>
+            <xpath expr="//field[@name='code']" position="replace"/>
+            <xpath expr="//field[@name='property_type']" position="after">
+                <field name="gross_area"/>
+                <field name="net_area"/>
+                <field name="bedroom" readonly="1"/>
+                <field name="state" widget="badge" decoration-success="state == 'available'"
+                       decoration-warning="state == 'reserved'" decoration-danger="state == 'sold'"/>
+                <field name="reservation_end_date" invisible="state != 'reserved'"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- <record model="ir.actions.server" id="action_make_available">
+        <field name="name">Make Available</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="model_property_property"/>
+        <field name="binding_model_id" ref="model_property_property"/>
+        <field name="state">code</field>
+        <field name="code">
+            for record in records:
+                if record.state == "draft":
+                    record.action_available()
+        </field>
+    </record> -->
+
+    <record model="ir.actions.server" id="action_make_draft">
+        <field name="name">Make Draft</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="model_property_property"/>
+        <field name="binding_model_id" ref="model_property_property"/>
+        <field name="state">code</field>
+        <field name="code">
+            for record in records:
+                if record.state != "draft":
+                    record.action_draft()
+        </field>
+        <field name="groups_id" eval="[(4, ref('advanced_property_management.group_property_manager'))]"/>
+
+    </record>
+
+    <record id="view_property_kanban_inherit" model="ir.ui.view">
+        <field name="name">property.kanban.inherit</field>
+        <field name="model">property.property</field>
+        <field name="inherit_id" ref="advanced_property_management.property_property_view_kanban"/>
+        <field name="arch" type="xml">
+            <!-- Add the state field after the property type -->
+            <xpath expr="//span[field[@name='property_type']]" position="after">
+                <span t-if="record.reservation_end_date.raw_value" class="o_kanban_record_subtitle">
+                                <field name="reservation_end_date" string="Reservation End Date: "
+                                  invisible="state != 'reserved'"/>
+
+                </span>
+
+            </xpath>
+            <xpath expr="//span[field[@name='property_type']]" position="after">
+                     <span class="o_kanban_record_subtitle">
+                        <field widget="badge" name="state"
+                               decoration-success="state == 'available'"
+                               decoration-warning="state == 'reserved'"
+                               decoration-danger="state == 'sold'"/>
+                 </span>
+            </xpath>
+        </field>
+    </record>
+
+        <record id="inherit_property_kanban_view" model="ir.ui.view">
+            <field name="name">your.kanban.view.inherit</field>
+            <field name="model">property.property</field>
+            <field name="inherit_id" ref="advanced_property_management.property_property_view_kanban"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@class='hr_activity_container mb-1 me-n1']" position="replace">
+                    <div class="hr_activity_container mb-1 me-n1"/>
+                </xpath>
+            </field>
+        </record>
+
+     <record id="inherit_property_form_view" model="ir.ui.view">
+            <field name="name">property.form.view.inherit</field>
+            <field name="model">property.property</field>
+            <field name="inherit_id" ref="advanced_property_management.property_property_view_form"/>
+            <field name="arch" type="xml">
+                <field name="activity_ids" position="replace"/>
+            </field>
+        </record>
+
+
+</odoo>

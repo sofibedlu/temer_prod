@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_commercial_rate_range_all,commercial.rate.range all,model_commercial_rate_range,,1,0,0,0
+access_commercial_rate_range_stock_manager,commercial.rate.range stock manager,model_commercial_rate_range,temer_structure.access_property_stock_manager_group,1,1,1,1
+access_commercial_rate_range_reservation_manager,commercial.rate.range reservation manager,model_commercial_rate_range,temer_structure.access_property_reservation_manager_group,1,1,1,1
+access_commercial_rate_range_contract_admin,commercial.rate.range contract admin,model_commercial_rate_range,temer_structure.access_property_contract_admin_group,1,1,1,1
+access_commercial_rate_range_super_admin,commercial.rate.range super admin,model_commercial_rate_range,temer_structure.access_property_super_admin_group,1,1,1,1

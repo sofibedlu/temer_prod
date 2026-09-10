@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Gross Area in Property Type Details: range selector for commercial (like Commercial Rate Range) -->
+    <record id="property_property_view_form_commercial_gross_range" model="ir.ui.view">
+        <field name="name">property.property.form.commercial.gross.range</field>
+        <field name="model">property.property</field>
+        <field name="inherit_id" ref="property_type_details.inherit_property_form_property_type_details"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='property_type_gross_area']" position="before">
+                <field name="commercial_gross_area_mode"
+                       widget="radio"
+                       invisible="property_type != 'commercial'"/>
+            </xpath>
+
+            <xpath expr="//field[@name='property_type_gross_area']" position="attributes">
+                <attribute name="invisible">property_type == 'commercial' and commercial_gross_area_mode != 'normal'</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='property_type_gross_area']" position="after">
+                <field name="commercial_gross_range_id"
+                       string="Gross Area"
+                       invisible="property_type != 'commercial' or commercial_gross_area_mode == 'normal'"
+                       options="{'no_create': True, 'no_open': True}"/>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

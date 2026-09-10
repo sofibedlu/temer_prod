@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_move_form_inherit_void_refund" model="ir.ui.view">
+        <field name="name">account.move.form.inherit.void.refund</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='ref']" position="after">
+                <field name="is_void_refund" invisible="1"/>
+                <field name="void_penalty_amount" 
+                       invisible="not is_void_refund" 
+                       decoration-warning="1" 
+                       string="Deducted Void Penalty"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

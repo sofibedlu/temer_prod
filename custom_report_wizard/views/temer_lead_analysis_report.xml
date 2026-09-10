@@ -1,0 +1,184 @@
+<odoo>
+    <!-- PDF Report for Download -->
+    <record id="temer_lead_analysis_pdf" model="ir.actions.report">
+        <field name="name">Temer Lead Analysis PDF</field>
+        <field name="model">temer.lead.analysis.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">custom_report_wizard.temer_lead_analysis_report_template</field>
+        <field name="print_report_name">'Temer Lead Analysis Report - %s' % (object.date_from)</field>
+    </record>
+
+    <!-- Report Template -->
+    <template id="temer_lead_analysis_report_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <!-- Get the prepared data from the report model -->
+                <t t-set="report_data" t-value="data"/>
+
+                <!-- Header Section -->
+                <div style="font-size:22px; font-weight:700; color:#2563eb; margin-bottom:8px;">
+                    <t t-if="report_data.get('report_by') == 'wing'">
+                        <t t-esc="report_data.get('wing_name', 'All Wings')"/> Temer Lead Analysis Report
+                    </t>
+                    <t t-if="report_data.get('report_by') == 'supervisor'">
+                        Supervisor Temer Lead Analysis Report
+                    </t>
+                    <t t-if="report_data.get('report_by') == 'salesperson'">
+                        Salesperson Temer Lead Analysis Report
+                    </t>
+                    <t t-if="report_data.get('include_crm_leads')">
+                        <span style="color:#dc2626; font-size:14px;"> (Including OLD CRM Leads)</span>
+                    </t>
+                </div>
+
+                <!-- Date Range -->
+                <div style="font-size:14px; color:#4a5568; margin-bottom:18px;">
+                    <t t-if="report_data.get('date_from')">
+                        <span style="background:#e2e8f0;padding:2px 8px;border-radius:6px;margin-right:8px;">
+                            From: <t t-esc="report_data.get('date_from')"/>
+                        </span>
+                    </t>
+                    <t t-if="report_data.get('date_to')">
+                        <span style="background:#e2e8f0;padding:2px 8px;border-radius:6px;">
+                            To: <t t-esc="report_data.get('date_to')"/>
+                        </span>
+                    </t>
+                </div>
+
+                <!-- Legend Section -->
+                <div style="margin-bottom:10px;">
+                    <span style="display:inline-block;background:#e0e7ff;color:#3730a3;border-radius:10px;padding:2px 10px;font-size:13px;margin-right:8px;">Prospect</span>
+                    <span style="display:inline-block;background:#fef9c3;color:#b45309;border-radius:10px;padding:2px 10px;font-size:13px;margin-right:8px;">Follow Up</span>
+                    <span style="display:inline-block;background:#A8AF94;color:#334155;border-radius:10px;padding:2px 10px;font-size:13px;margin-right:8px;">Reservations</span>
+                    <span style="display:inline-block;background:#fde68a;color:#b45309;border-radius:10px;padding:2px 10px;font-size:13px;">Sold</span>
+                    <span style="display:inline-block;background:#fee2e2;color:#991b1b;border-radius:10px;padding:2px 10px;font-size:13px;margin-right:8px;">Expired</span>
+                    <span style="display:inline-block;background:#fee2e2;color:#991b1b;border-radius:10px;padding:2px 10px;font-size:13px;margin-right:8px;">Lost</span>
+                    <span style="display:inline-block;background:#dbeafe;color:#1e40af;border-radius:10px;padding:2px 10px;font-size:13px;margin-right:8px;">Activities</span>
+                    <span style="display:inline-block;background:#e0e8f0;color:#334155;border-radius:10px;padding:2px 10px;font-size:13px;">Total</span>
+                </div>
+                
+                <!-- TABLE -->
+                <table style="width:100%; margin-top:40px; margin-bottom:16px; border-collapse:collapse; page-break-inside:auto; font-size:13px;">
+                    <thead style="background: #f3f4f6; display: table-header-group;">
+                        <tr style="font-size:15px; color:#374151;">
+                            <th style="padding:7px 10px; border:1px solid #e5e7eb;">Wing</th>
+                            <th style="padding:7px 10px; border:1px solid #e5e7eb;">Wing Manager</th>
+                            <t t-if="report_data.get('report_by') in ('supervisor', 'salesperson')">
+                                <th style="padding:7px 10px; border:1px solid #e5e7eb;">Supervisor</th>
+                            </t>
+                            <t t-if="report_data.get('report_by') == 'salesperson'">
+                                <th style="padding:7px 10px; border:1px solid #e5e7eb;">Salesperson</th>
+                            </t>
+                            <th style="text-align:center; border:1px solid #e5e7eb;">Prospect</th>
+                            <th style="text-align:center; border:1px solid #e5e7eb;">Follow Up</th>
+                            <th style="text-align:center; border:1px solid #e5e7eb;">Reservations</th>
+                            <th style="text-align:center; border:1px solid #e5e7eb;">Sold</th>
+                            <th style="text-align:center; border:1px solid #e5e7eb;">Expired</th>
+                            <th style="text-align:center; border:1px solid #e5e7eb;">Lost</th>
+                            <th style="text-align:center; border:1px solid #e5e7eb;">Activities</th>
+                            <th style="text-align:center; border:1px solid #e5e7eb;">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody style="page-break-inside:auto;">
+                        <t t-foreach="report_data.get('rows', [])" t-as="row" t-index="i">
+                            <tr t-att-style="'background-color:' + ('#f9fafb' if ((i or 0) % 2) else '#fff') + '; page-break-inside: avoid;'">
+                                <td style="padding:6px 10px; font-weight:600; color:#0891b2; border:1px solid #e5e7eb;">
+                                    <t t-esc="row.get('wing_name', '')"/>
+                                </td>
+                                <td style="padding:6px 10px; color:#1e293b; border:1px solid #e5e7eb;">
+                                    <t t-esc="row.get('wing_manager_name', '')"/>
+                                </td>
+                                <t t-if="report_data.get('report_by') in ('supervisor', 'salesperson')">
+                                    <td style="padding:6px 10px; color:#6366f1; border:1px solid #e5e7eb;">
+                                        <t t-esc="row.get('supervisor_name', '')"/>
+                                    </td>
+                                </t>
+                                <t t-if="report_data.get('report_by') == 'salesperson'">
+                                    <td style="padding:6px 10px; font-weight:500; border:1px solid #e5e7eb;">
+                                        <t t-esc="row.get('sales_person', '')"/>
+                                    </td>
+                                </t>
+                                <td style="text-align:center; border:1px solid #e5e7eb;"><t t-esc="row.get('prospect', 0)"/></td>
+                                <td style="text-align:center; border:1px solid #e5e7eb;"><t t-esc="row.get('follow_up', 0)"/></td>
+                                <td style="text-align:center; border:1px solid #e5e7eb;">
+                                    <span style="display:inline-block;background:#A8AF94;color:#334155;padding:2px 10px;border-radius:12px;font-weight:bold;">
+                                        <t t-esc="row.get('reservation_count', 0)"/>
+                                    </span>
+                                </td>
+                                <td style="text-align:center; border:1px solid #e5e7eb;"><t t-esc="row.get('sold_reservation_count', 0)"/></td>
+                                <td style="text-align:center; border:1px solid #e5e7eb;"><t t-esc="row.get('expired', 0)"/></td>
+                                <td style="text-align:center; border:1px solid #e5e7eb;">
+                                    <span style="display:inline-block;background:#fee2e2;color:#991b1b;padding:2px 10px;border-radius:12px;font-weight:bold;">
+                                        <t t-esc="row.get('lost', 0)"/>
+                                    </span>
+                                </td>
+                                <td style="text-align:center; border:1px solid #e5e7eb;">
+                                    <span style="display:inline-block;background:#dbeafe;color:#1e40af;padding:2px 10px;border-radius:12px;font-weight:bold;">
+                                        <t t-esc="row.get('total_activities', 0)"/>
+                                    </span>
+                                </td>
+                                <td style="text-align:center; border:1px solid #e5e7eb;">
+                                    <span style="display:inline-block;background:#e0e8f0;color:#334155;padding:2px 10px;border-radius:12px;font-weight:bold;">
+                                        <t t-esc="row.get('total', 0)"/>
+                                    </span>
+                                </td>
+                            </tr>
+                        </t>
+                        <!-- TOTAL ROW -->
+                        <t t-if="report_data.get('totals')">
+                            <tr style="font-weight: bold; background: #A8AF94;">
+                                <td>Total</td>
+                                <td></td>
+                                <t t-if="report_data.get('report_by') in ('supervisor',)">
+                                    <td></td>
+                                </t>
+                                <t t-if="report_data.get('report_by') == 'salesperson'">
+                                    <td></td>
+                                    <td></td>
+                                </t>
+                                <td style="text-align:center; border:1px solid #e5e7eb;"><t t-esc="report_data.get('totals', {}).get('prospect', 0)"/></td>
+                                <td style="text-align:center; border:1px solid #e5e7eb;"><t t-esc="report_data.get('totals', {}).get('follow_up', 0)"/></td>
+                                <td style="text-align:center; border:1px solid #e5e7eb;">
+                                    <span style="display:inline-block;background:#A8AF94;color:#334155;padding:2px 10px;border-radius:12px;font-weight:bold;">
+                                        <t t-esc="report_data.get('totals', {}).get('reservation_count', 0)"/>
+                                    </span>
+                                </td>
+                                <td style="text-align:center; border:1px solid #e5e7eb;"><t t-esc="report_data.get('totals', {}).get('sold_reservation_count', 0)"/></td>
+                                <td style="text-align:center; border:1px solid #e5e7eb;"><t t-esc="report_data.get('totals', {}).get('expired', 0)"/></td>
+                                <td style="text-align:center; border:1px solid #e5e7eb;">
+                                    <span style="display:inline-block;background:#fee2e2;color:#991b1b;padding:2px 10px;border-radius:12px;font-weight:bold;">
+                                        <t t-esc="report_data.get('totals', {}).get('lost', 0)"/>
+                                    </span>
+                                </td>
+                                <td style="text-align:center; border:1px solid #e5e7eb;">
+                                    <span style="display:inline-block;background:#dbeafe;color:#1e40af;padding:2px 10px;border-radius:12px;font-weight:bold;">
+                                        <t t-esc="report_data.get('totals', {}).get('total_activities', 0)"/>
+                                    </span>
+                                </td>
+                                <td style="text-align:center; border:1px solid #e5e7eb;">
+                                    <span style="display:inline-block;background:#e0e8f0;color:#334155;padding:2px 10px;border-radius:12px;font-weight:bold;">
+                                        <t t-esc="report_data.get('totals', {}).get('total', 0)"/>
+                                    </span>
+                                </td>
+                            </tr>
+                        </t>
+                        <t t-if="not report_data.get('rows')">
+                            <tr>
+                                <td colspan="14" style="text-align:center; padding:20px; color:#6b7280;">
+                                    No data found for the selected criteria.
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+                
+                <!-- Footer or Remark -->
+                <div style="margin-top:20px; font-size:12px; color:#94a3b8;">
+                    <t t-if="report_data.get('include_crm_leads')">
+                        <i style="color:#dc2626;">* Includes data from both Temer Leads and OLD CRM Leads</i>
+                    </t>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

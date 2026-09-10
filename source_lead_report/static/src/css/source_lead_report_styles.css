@@ -1,0 +1,334 @@
+.source_lead_report_container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    min-height: 100vh;
+}
+
+.report_header {
+    margin-bottom: 20px;
+    flex-shrink: 0;
+}
+
+.report_header h1 {
+    color: #366092;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.filters {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    padding: 15px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.filter_group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.filter_group label {
+    font-weight: bold;
+    color: #333;
+}
+
+.filter_group input[type="date"],
+.filter_group select {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    min-width: 150px;
+}
+
+/* Use Odoo standard button styles - buttons already have o_button class from XML */
+.filter_group button,
+.export_buttons button {
+    margin-left: 5px;
+}
+
+.report_content {
+    margin-top: 20px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+}
+
+.table_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    flex-wrap: wrap;
+    gap: 15px;
+    flex-shrink: 0;
+}
+
+.table_info {
+    font-size: 16px;
+    color: #333;
+}
+
+.table_controls {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.search_group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.search_group label {
+    font-weight: bold;
+    color: #333;
+    font-size: 14px;
+}
+
+.search_group .search-input {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    min-width: 200px;
+}
+
+.export_buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.table_wrapper {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    position: relative;
+    width: 100%;
+    max-height: calc(100vh - 380px);
+    overflow: visible;
+}
+
+.table_container {
+    overflow-x: auto;
+    overflow-y: auto;
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+}
+
+.source_lead_table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    table-layout: auto;
+}
+
+.source_lead_table td {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
+.source_lead_table thead {
+    background-color: #366092;
+    color: white;
+}
+
+.source_lead_table th {
+    padding: 12px;
+    text-align: left;
+    font-weight: bold;
+    border: 1px solid #ddd;
+}
+
+.source_lead_table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.source_lead_table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.source_lead_table tbody tr:hover {
+    background-color: #f0f0f0;
+}
+
+.source_lead_table tbody tr.clickable_row {
+    cursor: pointer;
+}
+
+.source_lead_table tbody tr.clickable_row:hover {
+    background-color: #e0e8f5;
+}
+
+.no_data {
+    text-align: center;
+    padding: 20px;
+    color: #999;
+    font-style: italic;
+}
+
+.no_data_message {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-size: 16px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    border: 1px dashed #ddd;
+}
+
+/* Mobile Responsive Styles */
+@media screen and (max-width: 768px) {
+    .source_lead_report_container {
+        padding: 10px;
+    }
+
+    .report_header {
+        margin-bottom: 10px;
+    }
+
+    .report_header h1 {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .filters {
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .filter_group {
+        flex: 1 1 auto;
+        min-width: 120px;
+    }
+
+    .filter_group input[type="date"],
+    .filter_group select {
+        font-size: 14px;
+        padding: 6px;
+    }
+
+    .report_content {
+        padding: 10px;
+        margin-top: 10px;
+    }
+
+    .table_header {
+        padding: 8px;
+        margin-bottom: 10px;
+        gap: 10px;
+    }
+
+    .table_info {
+        font-size: 14px;
+    }
+
+    .table_controls {
+        gap: 10px;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search_group {
+        width: 100%;
+    }
+
+    .search_group .search-input {
+        width: 100%;
+        min-width: auto;
+        font-size: 14px;
+    }
+
+    .export_buttons {
+        width: 100%;
+        justify-content: stretch;
+        gap: 5px;
+    }
+
+    .export_buttons button {
+        flex: 1;
+        font-size: 12px;
+        padding: 8px 12px;
+    }
+
+    .table_wrapper {
+        max-height: calc(100vh - 200px);
+    }
+
+    .source_lead_table {
+        font-size: 11px;
+    }
+
+    .source_lead_table th {
+        padding: 6px 4px;
+        font-size: 10px;
+        font-weight: bold;
+    }
+
+    .source_lead_table td {
+        padding: 6px 4px;
+        font-size: 11px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        max-width: 150px;
+    }
+
+    .table_container {
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* Very small screens */
+@media screen and (max-width: 480px) {
+    .source_lead_report_container {
+        padding: 5px;
+    }
+
+    .report_header h1 {
+        font-size: 16px;
+    }
+
+    .report_content {
+        padding: 5px;
+    }
+
+    .source_lead_table {
+        font-size: 10px;
+    }
+
+    .source_lead_table th {
+        padding: 4px 2px;
+        font-size: 9px;
+    }
+
+    .source_lead_table td {
+        padding: 4px 2px;
+        font-size: 10px;
+        max-width: 120px;
+    }
+
+    .table_wrapper {
+        max-height: calc(100vh - 150px);
+    }
+}
+

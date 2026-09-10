@@ -1,0 +1,25 @@
+<odoo>
+    <record id="view_property_set_due_date_wizard_form" model="ir.ui.view">
+        <field name="name">property.set.due.date.wizard.form</field>
+        <field name="model">property.set.due.date.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Set Due Date for Partial Payment Line">
+                <div class="alert alert-info text-center" role="alert" invisible="not new_due_date">
+                    The due date will be set for <strong><field name="due_days_count" class="oe_inline"/> days</strong> from today.
+                </div>
+                
+                <group>
+                    <field name="sale_id" invisible="1"/>
+                    <field name="available_payment_line_ids" invisible="1"/>
+                    <field name="payment_line_id" domain="[('id', 'in', available_payment_line_ids)]" options="{'no_create': True, 'no_open': True}"/>
+                    <field name="remaining_amount"/>
+                    <field name="new_due_date"/>
+                </group>
+                <footer>
+                    <button string="Confirm" type="object" name="action_confirm" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

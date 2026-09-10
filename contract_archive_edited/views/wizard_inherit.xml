@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_contract_preview_wizard_archive_edit_inherit" model="ir.ui.view">
+        <field name="name">contract.preview.wizard.archive.edit.inherit</field>
+        <field name="model">contract.preview.wizard</field>
+        <field name="inherit_id" ref="contract_managment.view_contract_preview_wizard_form"/>
+        <field name="arch" type="xml">
+            <!-- Add "Save to Archive" button before the first footer button -->
+            <xpath expr="//footer/button[1]" position="before">
+                <button name="action_save_to_archive"
+                        string="Save to Archive"
+                        type="object"
+                        class="btn-success"
+                        icon="fa-save"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

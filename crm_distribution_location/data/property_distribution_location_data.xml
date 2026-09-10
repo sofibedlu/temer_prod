@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="distribution_location_head_office" model="property.distribution.location">
+        <field name="name">Head Office</field>
+        <field name="sequence">1</field>
+        <field name="active" eval="True"/>
+    </record>
+
+</odoo>

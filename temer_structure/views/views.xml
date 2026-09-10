@@ -1,0 +1,180 @@
+<odoo>
+  <data>
+    <!-- Form View for Property Sales Wing -->
+    <record id="view_property_sales_wing_form" model="ir.ui.view">
+      <field name="name">property.sales.wing.form</field>
+      <field name="model">property.sales.wing</field>
+      <field name="arch" type="xml">
+        <form string="Property Sales Wing">
+          <sheet>
+            <group>
+              <field name="name" />
+              <field name="manager_id" />
+              <field name="commission_config_id" />
+            </group>
+            <notebook>
+              <page string="Sales Managers">
+                <field name="team_ids" >
+                  
+                </field>
+              </page>
+            </notebook>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <!-- Tree View for Property Sales Wing -->
+    <record id="view_property_sales_wing_tree" model="ir.ui.view">
+      <field name="name">property.sales.wing.tree</field>
+      <field name="model">property.sales.wing</field>
+      <field name="arch" type="xml">
+        <tree string="Property Sales Wings">
+          <field name="name" />
+          <field name="manager_id" />
+          <field name="commission_config_id" />
+        </tree>
+      </field>
+    </record>
+
+    <!-- Action for Property Sales Wing -->
+    <record model="ir.actions.act_window" id="action_property_sales_wing">
+      <field name="name">Sales Wing</field>
+      <field name="res_model">property.sales.wing</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+   
+
+    <!-- Form View for Property Sales Team -->
+    <record id="view_property_sales_team_form" model="ir.ui.view">
+      <field name="name">property.sales.team.form</field>
+      <field name="model">property.sales.team</field>
+      <field name="arch" type="xml">
+        <form string="Property Sales Team">
+          <sheet>
+            <group>
+              <!-- <field name="name" /> -->
+              <field name="manager_id" />
+              <field name="commission_config_id" />
+            </group>
+            <notebook>
+                <page string="Supervisors">
+                  <field name="supervisor_ids"/>
+                </page>
+                 <!-- <page string="sales_supervisor_ids">
+                            <field name="sales_supervisor_ids" />
+                          </page> -->
+              </notebook>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <!-- Tree View for Property Sales Team -->
+    <record id="view_property_sales_team_tree" model="ir.ui.view">
+      <field name="name">property.sales.team.tree</field>
+      <field name="model">property.sales.team</field>
+      <field name="arch" type="xml">
+        <tree string="Property Sales Teams">
+          <!-- <field name="name" /> -->
+          <field name="manager_id" />
+          <field name="wing_id" />
+          <field name="commission_config_id" />
+          <!-- <field name="added" /> -->
+          <field name="computed_added" />
+        </tree>
+      </field>
+    </record>
+
+    <!-- Action for Property Sales Team -->
+    <record model="ir.actions.act_window" id="action_property_sales_team">
+      <field name="name">Sales Manager</field>
+      <field name="res_model">property.sales.team</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    
+
+      
+    <!-- Form View for Property Sales Supervisor   -->
+    <record id="view_property_sales_supervisor_form" model="ir.ui.view">
+      <field name="name">property.sales.supervisor.form</field>
+      <field name="model">property.sales.supervisor</field>
+      <field name="arch" type="xml">
+          <form string="Property Sales Supervisor">
+          <sheet>
+            <group>
+              <field name="name" />
+              <field name="type" />
+              <field name="commission_config_id" />
+            </group>
+            <notebook>
+                <page string="Salespersons" invisible="type != 'internal'">
+                  <field name="salespersons" >
+                  <tree editable="bottom">
+                  <field name="user_id" />
+
+                  </tree>
+                     </field>
+                </page>
+              </notebook>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <!-- Tree View for Property Sales Supervisor -->
+    <record id="view_property_sales_supervisor_tree" model="ir.ui.view">
+      <field name="name">property.sales.supervisor.tree</field>
+      <field name="model">property.sales.supervisor</field>
+      <field name="arch" type="xml">
+        <tree string="Property Sales Supervisors">
+          <field name="name" />
+
+          <field name="sales_team_id" />
+          <field name="type" />
+          <field name="computed_added" />
+          <!-- <field name="added" /> -->
+        </tree>
+      </field>
+    </record>
+
+    <!-- Action for Property Sales Supervisor -->
+    <record model="ir.actions.act_window" id="action_property_sales_supervisor">
+      <field name="name">Sales Team / External Agent / Freelance</field>
+      <field name="res_model">property.sales.supervisor</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    
+
+    <menuitem id="menu_property_sales_team_menu" 
+              name="Property Sales Team Structure"
+              sequence="50"
+              parent="advanced_property_management.property_configuration_menu"/>
+              <!-- Menu Item for Property Sales Supervisor -->
+    <menuitem id="menu_property_sales_supervisor" 
+          name="Sales Team"
+          action="action_property_sales_supervisor" 
+          sequence="53"
+          parent="menu_property_sales_team_menu"/>
+
+    <!-- Menu Item for Property Sales Team -->
+    <menuitem id="menu_property_sales_team" 
+              name="Sales Manager"
+              action="action_property_sales_team" 
+              sequence="52"
+              parent="menu_property_sales_team_menu"/>
+     <!-- Menu Item for Property Sales Wing -->
+     <menuitem id="menu_property_sales_structure" 
+     name="Sales Wing"
+     action="action_property_sales_wing" 
+     sequence="51"
+     parent="menu_property_sales_team_menu"/>
+
+
+   
+
+  </data>
+</odoo>

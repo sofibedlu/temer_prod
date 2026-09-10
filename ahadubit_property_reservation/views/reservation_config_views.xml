@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- bank action -->
+    <record id="bank_action" model="ir.actions.act_window">
+        <field name="name">Bank</field>
+        <field name="res_model">bank.configuration</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Site
+            </p>
+        </field>
+    </record>
+
+    <!-- Bank tree view -->
+    <record id="bank_tree_id" model="ir.ui.view">
+        <field name="name">Bank.tree</field>
+        <field name="model">bank.configuration</field>
+        <field name="arch" type="xml">
+            <tree editable="top">
+                <field name="bank" />
+                <field name="account_number" />
+            </tree>
+        </field>
+    </record>
+
+    <!-- Document type action -->
+    <record id="document_type_action" model="ir.actions.act_window">
+        <field name="name">Document type</field>
+        <field name="res_model">bank.document.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Site
+            </p>
+        </field>
+    </record>
+
+    <!-- Document type tree view -->
+    <record id="document_type_tree_id" model="ir.ui.view">
+        <field name="name">Document Type tree</field>
+        <field name="model">bank.document.type</field>
+        <field name="arch" type="xml">
+            <tree editable="top">
+                <field name="name" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="property_payment_cancel_reason_action" model="ir.actions.act_window">
+        <field name="name">Reason</field>
+        <field name="res_model">payment.cancellation.reason</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new reason
+            </p>
+        </field>
+    </record>
+
+    <!-- Property floor tree view -->
+    <record id="property_payment_cancel_reason_view_tree_id" model="ir.ui.view">
+        <field name="name">payment.cancellation.reason</field>
+        <field name="model">payment.cancellation.reason</field>
+        <field name="arch" type="xml">
+            <tree editable="top">
+                <field name="name"  class="text-left"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="property_payment_cancel_reason_view_form_id2" model="ir.ui.view">
+        <field name="name">payment.cancellation.reason</field>
+        <field name="model">payment.cancellation.reason</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group string="Reason">
+                        <group>
+                            <field name="name" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <menuitem id="property_reserveation_config_menu"
+        name="Reservation"
+        parent="advanced_property_management.property_configuration_menu"
+        sequence="10" />
+    <!-- Reservation Configuration Sub-menus -->
+    <menuitem id="bank_menu"
+        name="Banks"
+        parent="ahadubit_property_base.property_payment_menu"
+        action="bank_action"
+        sequence="24" />
+
+    <menuitem id="document_type_menu"
+        name="Document Type"
+        parent="property_reserveation_config_menu"
+        action="document_type_action"
+        sequence="25" />
+
+    <menuitem id="property_payment_cancel_menu"
+        name="Payment Cancellation Reason"
+        parent="property_reserveation_config_menu"
+        action="property_payment_cancel_reason_action"
+        sequence="25" />
+     <menuitem id="property_sale_cancel_reason__action_menu"
+        name="Sale Cancel Reason"
+        parent="property_reserveation_config_menu"
+        action="ahadubit_property_base.property_sale_cancel_reason_action"
+        sequence="26" />
+
+</odoo>

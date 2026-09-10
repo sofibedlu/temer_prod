@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="property_property_view_form_commercial_rate" model="ir.ui.view">
+        <field name="name">property.property.form.commercial.rate</field>
+        <field name="model">property.property</field>
+        <field name="inherit_id" ref="advanced_property_management.property_property_view_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='property_type']" position="after">
+                <field name="commercial_rate_range_id"
+                       string="Commercial Rate Range"
+                       invisible="property_type != 'commercial'"/>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

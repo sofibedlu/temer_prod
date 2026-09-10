@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+    <!-- ── Menu entry under Collection Management ───────────────────────── -->
+    <menuitem
+        id="menu_installment_bulk_letter"
+        name="Bulk Letter by Installment"
+        parent="collection_management.menu_collection_root"
+        action="installment_bulk_letter.action_installment_bulk_letter_wizard"
+        sequence="50"
+        groups="collection_management.group_collection_user"/>
+
+</data>
+</odoo>

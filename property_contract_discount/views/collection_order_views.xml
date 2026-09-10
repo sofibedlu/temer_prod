@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_collection_order_form_discount_inherit" model="ir.ui.view">
+        <field name="name">collection.order.form.discount.inherit</field>
+        <field name="model">collection.order</field>
+        <field name="inherit_id" ref="collection_management.view_collection_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='amount_total']" position="after">
+                <field name="total_discount" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

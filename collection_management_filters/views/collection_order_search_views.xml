@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_collection_order_search_inherit_filters" model="ir.ui.view">
+        <field name="name">collection.order.search.inherit.filters</field>
+        <field name="model">collection.order</field>
+        <field name="inherit_id" ref="collection_filter.view_collection_order_search_enhanced"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="//search" position="inside">
+                <filter string="Void" name="state_void" domain="[('state', '=', 'void')]"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

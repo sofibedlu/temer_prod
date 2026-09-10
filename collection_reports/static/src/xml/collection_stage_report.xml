@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="collection_reports.CollectionStageReportClient" owl="1">
+        <div class="collection-report-container">
+            <div class="report-header">
+                <h1 class="report-title">Collection Report Based on Collection Stage</h1>
+                <div class="filter-section">
+                    <div class="filters-row">
+                        <div class="filter-group">
+                            <label>
+                                <input type="checkbox" t-model="state.show_all_dates" t-on-change="onShowAllDatesChange"/>
+                                Show All
+                            </label>
+                        </div>
+                        <div class="filter-group">
+                            <label>From:</label>
+                            <input type="date" t-model="state.date_from" class="date-input" t-att-disabled="state.show_all_dates"/>
+                        </div>
+                        <div class="filter-group">
+                            <label>To:</label>
+                            <input type="date" t-model="state.date_to" class="date-input" t-att-disabled="state.show_all_dates"/>
+                        </div>
+                        <div class="filter-group">
+                            <label>Search:</label>
+                            <input type="text" t-model="state.search_text" class="search-input" placeholder="Search table..." t-on-input="onSearchChange"/>
+                        </div>
+                        <button class="btn-show" t-on-click="loadData">
+                            Show
+                        </button>
+                        <div class="export-buttons" style="margin-left: auto;">
+                            <button class="btn-export btn-export-excel" t-on-click="exportExcel">
+                                Export Excel
+                            </button>
+                            <button class="btn-export btn-export-pdf" t-on-click="exportPDF">
+                                Export PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="report-table-container" t-if="!state.loading" style="overflow-x: auto; overflow-y: auto; max-height: calc(100vh - 300px);">
+                <table class="report-table" style="min-width: 100%;">
+                    <thead>
+                        <tr>
+                            <th rowspan="2">S.NO</th>
+                            <th rowspan="2">DESCRIPTION</th>
+                            <th rowspan="2">PAYMENT ROUND NUMBER</th>
+                            <th colspan="3">PLAN</th>
+                            <th colspan="3">REPORT</th>
+                            <th rowspan="2">REMARK</th>
+                        </tr>
+                        <tr>
+                            <th>NUMBER OF CUSTOMER</th>
+                            <th>AMOUNT IN BIRR</th>
+                            <th>AMOUNT IN DOLLAR</th>
+                            <th>NUMBER OF CUSTOMER</th>
+                            <th>AMOUNT IN BIRR</th>
+                            <th>AMOUNT IN DOLLAR</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-if="state.filtered_data.length === 0">
+                            <td colspan="10" style="text-align:center;padding:20px;">No data available</td>
+                        </tr>
+                        <tr t-foreach="state.filtered_data" t-as="row" t-key="row.sno" t-att-class="row.is_total ? 'total-row' : ''">
+                            <td><t t-esc="row.sno"/></td>
+                            <td style="text-align:left;padding-left:10px;"><t t-esc="row.description or ''"/></td>
+                            <td><t t-esc="row.payment_round_number or ''"/></td>
+                            <td><t t-esc="row.plan_customers or 0"/></td>
+                            <td><t t-esc="row.plan_amount_birr or 0"/></td>
+                            <td><t t-esc="row.plan_amount_dollar or 0"/></td>
+                            <td><t t-esc="row.report_customers or 0"/></td>
+                            <td><t t-esc="row.report_amount_birr or 0"/></td>
+                            <td><t t-esc="row.report_amount_dollar or 0"/></td>
+                            <td><t t-esc="row.remark or ''"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="loading-spinner" t-if="state.loading">
+                Loading report data...
+            </div>
+        </div>
+    </t>
+</templates>
+

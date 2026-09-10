@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_add_shifted_installment_wizard_form" model="ir.ui.view">
+        <field name="name">add.shifted.installment.wizard.form</field>
+        <field name="model">add.shifted.installment.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Add Date-Shifted Installment">
+                <div class="alert alert-info" role="alert">
+                    Enter the Base Date and the number of days to shift. The system will calculate the Due Date and generate the Amharic installement name.
+                </div>
+                <group>
+                    <group>
+                        <field name="sale_id" invisible="1"/>
+                        <field name="base_date"/>
+                        <field name="shift_days"/>
+                    </group>
+                    <group>
+                        <field name="calculated_date" decoration-bf="1" decoration-success="1"/>
+                        <field name="amharic_preview" decoration-bf="1" decoration-success="1"/>
+                    </group>
+                </group>
+                <footer>
+                    <button string="Add to Schedule" name="action_confirm_add" type="object" class="btn-primary" icon="fa-plus"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_add_shifted_installment_wizard" model="ir.actions.act_window">
+        <field name="name">Add Shifted Installment</field>
+        <field name="res_model">add.shifted.installment.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

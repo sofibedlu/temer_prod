@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Inherit Collection Order Form View -->
+    <record id="view_collection_order_form_inherit_pending" model="ir.ui.view">
+        <field name="name">collection.order.form.inherit.pending</field>
+        <field name="model">collection.order</field>
+        <field name="inherit_id" ref="collection_management.view_collection_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Make entire row blue when pending -->
+            <xpath expr="//field[@name='installment_ids']/tree" position="attributes">
+                <attribute name="decoration-info">state == 'pending'</attribute>
+            </xpath>
+
+            <!-- Add pending badge decoration to state field -->
+            <xpath expr="//field[@name='installment_ids']/tree/field[@name='state']" position="replace">
+                <field name="state" widget="badge"
+                    decoration-info="state == 'pending'"
+                    decoration-danger="state == 'overdue'"
+                    decoration-warning="state == 'partial'"
+                    decoration-success="state == 'paid'"/>
+            </xpath>
+
+            <!-- Replace Pay button with pending+paid invisible condition -->
+            <xpath expr="//field[@name='installment_ids']/tree/button[@name='action_open_payment_wizard']" position="replace">
+                <button name="action_open_payment_wizard" string="Pay" type="object" icon="fa-money"
+                        invisible="state == 'paid' or state == 'pending'"
+                        groups="collection_management.group_collection_payment_initiator"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Inherit Installment Form View: hide Pay button when pending or paid -->
+    <record id="view_collection_installment_form_inherit_hide_pay_pending" model="ir.ui.view">
+        <field name="name">collection.installment.form.hide.pay.when.pending</field>
+        <field name="model">collection.installment</field>
+        <field name="inherit_id" ref="collection_management.view_collection_installment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/button[@name='action_open_payment_wizard']" position="replace">
+                <button name="action_open_payment_wizard"
+                        string="Pay"
+                        type="object"
+                        class="btn-primary"
+                        invisible="state == 'paid' or state == 'pending'"
+                        groups="collection_management.group_collection_payment_initiator"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

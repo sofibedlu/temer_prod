@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="collection_reports.GeneralInfoReport" owl="1">
+        <div class="collection-report-container">
+            <div class="report-header">
+                <h1 class="report-title">General Information Report</h1>
+                <div class="filter-section">
+                    <div class="filters-row">
+                        <div class="filter-group">
+                            <label>From:</label>
+                            <input type="date" t-model="state.date_from" class="date-input"/>
+                        </div>
+                        <div class="filter-group">
+                            <label>To:</label>
+                            <input type="date" t-model="state.date_to" class="date-input"/>
+                        </div>
+                        <button class="btn-show" t-on-click="loadData">
+                            Show
+                        </button>
+                        <div class="export-buttons" style="margin-left: auto;">
+                            <button class="btn-export btn-export-excel" t-on-click="exportExcel">
+                                Export Excel
+                            </button>
+                            <button class="btn-export btn-export-pdf" t-on-click="exportPDF">
+                                Export PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="report-table-container" t-if="!state.loading" style="overflow-x: auto; overflow-y: auto; max-height: calc(100vh - 300px);">
+                <table class="report-table" style="min-width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>S.NO</th>
+                            <th>PROJECT NAME</th>
+                            <th>TOTAL STOCK</th>
+                            <th>SOLD STOCK</th>
+                            <th>ACTIVE IN MASTER DOCUMENT</th>
+                            <th>ACTIVE IN COLLECTION</th>
+                            <th>MERGED CONTRACT</th>
+                            <th>SITE SHIFT</th>
+                            <th>FULLY PAID (100%)</th>
+                            <th>DHL NUMBER</th>
+                            <th>PAYMENT ROUND NUMBER</th>
+                            <th>REFUND</th>
+                            <th>CONTRACT/NOT COMPLETE</th>
+                            <th>INCOME CONTRACT</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-if="state.data.length === 0">
+                            <td colspan="14" style="text-align:center;padding:20px;">No data available</td>
+                        </tr>
+                        <tr t-foreach="state.data" t-as="row" t-key="row.sno">
+                            <td><t t-esc="row.sno or ''"/></td>
+                            <td style="text-align:left;padding-left:10px;"><t t-esc="row.project_name or ''"/></td>
+                            <td><t t-esc="row.total_stock or 0"/></td>
+                            <td><t t-esc="row.sold_stock or 0"/></td>
+                            <td><t t-esc="row.active_in_master_document or 0"/></td>
+                            <td><t t-esc="row.active_in_collection or 0"/></td>
+                            <td><t t-esc="row.merged_contract or 0"/></td>
+                            <td><t t-esc="row.site_shift or 0"/></td>
+                            <td><t t-esc="row.fully_paid or 0"/></td>
+                            <td><t t-esc="row.dhl_number or 0"/></td>
+                            <td><t t-esc="row.payment_round_number or 0"/></td>
+                            <td><t t-esc="row.refund or 0"/></td>
+                            <td><t t-esc="row.contract_not_complete or 0"/></td>
+                            <td><t t-esc="row.income_contract or 0"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="loading-spinner" t-if="state.loading">
+                Loading report data...
+            </div>
+        </div>
+    </t>
+</templates>
+

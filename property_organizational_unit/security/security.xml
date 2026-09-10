@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="group_bypass_org_unit_approval" model="res.groups">
+        <field name="name">Bypass Org Unit Visibility Rule</field>
+        <field name="category_id" ref="base.module_category_hidden"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <!-- RECORD RULE: Standard Visibility -->
+    <record id="rule_property_sale_org_unit_standard" model="ir.rule">
+        <field name="name">Property Sale: Org Unit Standard Visibility</field>
+        <field name="model_id" ref="ahadubit_property_base.model_property_sale"/> 
+        <field name="domain_force">['|', '|', ('org_unit_id', '=', False), ('create_uid', '=', user.id), ('org_unit_id.assignment_ids.user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <!-- RECORD RULE: Bypass / Admin Visibility -->
+    <record id="rule_property_sale_org_unit_bypass" model="ir.rule">
+        <field name="name">Org Unit Bypass</field>
+        <field name="model_id" ref="ahadubit_property_base.model_property_sale"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('property_organizational_unit.group_bypass_org_unit_approval'))]"/>
+    </record>
+</odoo>

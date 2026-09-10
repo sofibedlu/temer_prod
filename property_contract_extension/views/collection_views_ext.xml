@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Hide Pay button in the Collection Order's Installment Tree -->
+        <record id="view_collection_order_form_inherit_void" model="ir.ui.view">
+            <field name="name">collection.order.form.inherit.void</field>
+            <field name="model">collection.order</field>
+            <field name="inherit_id" ref="collection_management.view_collection_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[1]" position="before">
+                    <widget name="web_ribbon" title="Void" bg_color="bg-danger" invisible="state != 'void'"/>
+                    <widget name="web_ribbon" title="Paid" bg_color="bg-success" invisible="state != 'completed'"/>
+                </xpath>
+
+                <xpath expr="//field[@name='installment_ids']/tree/button[@name='action_open_payment_wizard']" position="attributes">
+                    <attribute name="invisible">state == 'paid' or parent.state in ['void', 'terminated']</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Hide pay in the Collection Installment Form View -->
+        <record id="view_collection_installment_form_inherit_void" model="ir.ui.view">
+            <field name="name">collection.installment.form.inherit.void</field>
+            <field name="model">collection.installment</field>
+            <field name="inherit_id" ref="collection_management.view_collection_installment_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet" position="inside">
+                    <field name="collection_state" invisible="1"/>
+                </xpath>
+                
+                <xpath expr="//button[@name='action_open_payment_wizard']" position="attributes">
+                    <attribute name="invisible">state == 'paid' or collection_state in ['void', 'terminated']</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_collection_order_tree_inherit_colors" model="ir.ui.view">
+            <field name="name">collection.order.tree.inherit.colors</field>
+            <field name="model">collection.order</field>
+            <field name="inherit_id" ref="collection_management.view_collection_order_tree"/>
+            <field name="arch" type="xml">
+                
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="decoration-info">state == 'active'</attribute>
+                    <attribute name="decoration-success">state == 'completed'</attribute>
+                    <attribute name="decoration-danger">state == 'void'</attribute>
+                    <attribute name="decoration-warning">state == 'terminated'</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='state']" position="replace">
+                    <field name="state" 
+                           widget="badge"
+                           decoration-info="state == 'active'"
+                           decoration-success="state == 'completed'"
+                           decoration-danger="state == 'void'"
+                           decoration-warning="state == 'terminated'"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

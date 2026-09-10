@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- Payment Dashboard: read all collection records (all sites), even for users
+             who also have Collection User site rules. Write/create/delete stay blocked
+             via ir.model.access on this group (1,0,0,0). Uses group_payment_dashboard_user_new only. -->
+        <record id="rule_collection_order_payment_dashboard_read" model="ir.rule">
+            <field name="name">Collection Order: Payment Dashboard Read</field>
+            <field name="model_id" ref="collection_management.model_collection_order"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('payment_approval_new.group_payment_dashboard_user_new'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="rule_collection_installment_payment_dashboard_read" model="ir.rule">
+            <field name="name">Collection Installment: Payment Dashboard Read</field>
+            <field name="model_id" ref="collection_management.model_collection_installment"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('payment_approval_new.group_payment_dashboard_user_new'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,22 @@
+<odoo>
+  <data>
+   
+    <record id="property_commission_view_tree_inherit" model="ir.ui.view">
+      <field name="name">property.commission.inherit</field>
+      <field name="model">property.commission</field>
+      <field name="inherit_id" ref="advanced_property_management.property_commission_view_tree"/>
+      <field name="arch" type="xml">
+
+<!--            <xpath expr="//field[@name='name']" position="after">-->
+<!--                <field name="site_id" />-->
+
+<!--            </xpath>-->
+          <xpath expr="//field[@name='commission']" position="before">
+              <field name="type" />
+              <field name="self_rate" />
+          </xpath>
+
+      </field>
+  </record>
+  </data>
+</odoo>

@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_contract_section_user,contract.template.user,model_contract_template,advanced_property_management.group_property_manager,1,1,1,1
+access_contract_section_content_user,contract.template.content.user,model_contract_template_content,advanced_property_management.group_property_manager,1,1,1,1
+access_contract_application_user,contract.application.user,model_contract_application,advanced_property_management.group_property_manager,1,1,1,1
+access_contract_person_user,contract.person.user,model_contract_person,advanced_property_management.group_property_manager,1,1,1,1

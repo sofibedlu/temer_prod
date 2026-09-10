@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_discount_request_mgr,discount.request.manager,model_discount_request,,1,1,1,1
+access_discount_request_wizard,discount.request.wizard,model_discount_request_wizard,,1,1,1,1
+access_discount_request_reject_wizard,discount.request.reject.wizard,model_discount_request_reject_wizard,,1,1,1,1
+access_discount_order_approver,discount.order.approver,collection_management.model_collection_order,group_collection_discount_approver,1,1,1,0
+access_discount_installment_approver,discount.installment.approver,collection_management.model_collection_installment,group_collection_discount_approver,1,1,1,0

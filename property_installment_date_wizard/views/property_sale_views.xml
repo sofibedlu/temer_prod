@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_property_sale_form_inherit_add_shifted" model="ir.ui.view">
+        <field name="name">property.sale.form.inherit.add.shifted</field>
+        <field name="model">property.sale</field>
+        <field name="inherit_id" ref="advanced_property_management.property_sale_view_form"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="//field[@name='payment_installment_line_ids']" position="before">
+                <button name="%(action_add_shifted_installment_wizard)d" 
+                        type="action" 
+                        string="Add Date-Shifted Installment" 
+                        class="btn-secondary ms-2"
+                        icon="fa-calendar-plus-o"
+                        invisible="state not in ['draft', 'request_for_confirm', 'confirm']"
+                        context="{'default_sale_id': active_id}"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

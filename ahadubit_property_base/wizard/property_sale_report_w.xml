@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="property_sale_report_view_form_inherit" model="ir.ui.view">
+        <field name="name">property.sale.report.view.form.inherited</field>
+        <field name="model">property.sale.report</field>
+        <field name="inherit_id" ref="advanced_property_management.property_sale_report_view_form"/>
+        <field eval="1" name="priority"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="replace">
+                <field name="site_ids" widget="many2many_tags"/>
+            </xpath>
+            <xpath expr="//field[@name='property_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

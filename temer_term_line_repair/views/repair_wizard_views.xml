@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Wizard View -->
+    <record id="view_term_line_repair_wizard_form" model="ir.ui.view">
+        <field name="name">term.line.repair.wizard.form</field>
+        <field name="model">term.line.repair.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Repair Term Lines">
+                <div class="alert alert-info" role="alert">
+                    Below are all the broken payment term lines and the suggested fix.
+                </div>
+                
+                <group>
+                    <group>
+                        <field name="total_count" style="font-weight: bold; font-size: 16px;"/>
+                    </group>
+                </group>
+
+                <field name="line_ids" nolabel="1">
+                    <tree create="0" edit="0" delete="0" decoration-danger="is_conflict" limit="500">
+                        <field name="term_line_id"/>
+                        <field name="sale_details"/>
+                        <field name="suggested_term_details"/>
+                        <field name="target_term_ids" invisible="1"/>
+                        <field name="is_conflict"/>
+                    </tree>
+                </field>
+
+                <footer>
+                    <button name="action_repair_term_lines" string="Execute Data Repair" type="object" class="btn-primary" data-hotkey="q"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="z"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Menu Action -->
+    <record id="action_term_line_repair_wizard" model="ir.actions.act_window">
+        <field name="name">Preview &amp; Repair Term Lines</field>
+        <field name="res_model">term.line.repair.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Add to Menu under Technical settings -->
+    <menuitem id="menu_term_line_repair" 
+              name="Repair Payment Term Lines" 
+              parent="base.menu_custom" 
+              action="action_term_line_repair_wizard" 
+              sequence="100"/>
+</odoo>

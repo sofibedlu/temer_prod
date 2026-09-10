@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+
+ <record id="action_chart_js_crm_new" model="ir.actions.client">
+        <field name="name">Chart js Sample</field>
+        <field name="tag">chartjs_sample_crm</field>
+        <field name="target"></field>
+
+    </record>
+
+     
+ <record id="action_chart_js_crm_new_21" model="ir.actions.client">
+        <field name="name">supervisor dashboard</field>
+        <field name="tag">dashboard</field>
+        <field name="target"></field>
+
+    </record>
+
+
+     <!-- <record id="action_chart_js_crm_new_21_website_card" model="ir.actions.client">
+        <field name="name">website dashboard</field>
+        <field name="tag">website_leads_dashboard</field>
+        <field name="target"></field>
+
+    </record> -->
+
+
+<menuitem id="menu_chart_js_sample_crm_new_general_123"
+          name="Dashboard"
+          groups="crm_dashboard.group_dashboard_new_123"
+          sequence="-10"
+          web_icon="crm_dashboard,static/description/dashboard_new.png"/>
+
+
+<menuitem id="menu_chart_js_sample_crm_new" parent="menu_chart_js_sample_crm_new_general_123" action="action_chart_js_crm_new"
+              name="General Dashboard" groups="crm_dashboard.group_dashboard_new_123" sequence="-10" />
+
+<!-- <menuitem id="menu_chart_js_sample_crm_new_website" parent="menu_chart_js_sample_crm_new_general_123" action="action_chart_js_crm_new_21_website_card"
+              name="Website Dashboard" groups="crm_dashboard.group_dashboard_new_123" sequence="-10" /> -->
+
+<menuitem id="menu_chart_js_sample_crm_new_542" parent="menu_chart_js_sample_crm_new_general_123" action="action_chart_js_crm_new_21"
+              name="Site Dashboard" groups="crm_dashboard.group_dashboard_new_123" sequence="-10" />
+
+
+</odoo>

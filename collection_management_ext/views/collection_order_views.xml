@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Update Tree View -->
+    <record id="view_collection_order_tree_inherit_ext" model="ir.ui.view">
+        <field name="name">collection.order.tree.inherit.ext</field>
+        <field name="model">collection.order</field>
+        <field name="inherit_id" ref="collection_management.view_collection_order_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="buyers_name"/>
+                <field name="contract_number"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Update Search View -->
+    <record id="view_collection_order_search_inherit_ext" model="ir.ui.view">
+        <field name="name">collection.order.search.inherit.ext</field>
+        <field name="model">collection.order</field>
+        <field name="inherit_id" ref="collection_filter.view_collection_order_search_enhanced"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <field name="buyers_name_text" string="Buyers Name" filter_domain="[('buyers_name_text', 'ilike', self)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Buyers Name" name="group_buyers_name" context="{'group_by':'buyers_name_text'}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Update Property Contract Search View -->
+    <record id="view_property_contract_search_inherit_ext" model="ir.ui.view">
+        <field name="name">property.contract.search.inherit.ext.buyers.name</field>
+        <field name="model">property.sale</field>
+        <field name="inherit_id" ref="property_contract.view_property_contract_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <field name="buyers_name_text" string="Buyers Name" filter_domain="[('buyers_name_text', 'ilike', self)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Buyers Name" name="group_buyers_name" context="{'group_by':'buyers_name_text'}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Disable (Add a line) on Installments -->
+    <record id="view_collection_order_form_inherit_ext" model="ir.ui.view">
+        <field name="name">collection.order.form.inherit.ext</field>
+        <field name="model">collection.order</field>
+        <field name="inherit_id" ref="collection_management.view_collection_order_form"/> 
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='installment_ids']/tree" position="attributes">
+                <attribute name="create">0</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

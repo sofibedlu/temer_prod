@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_early_settlement_wizard_form_inherit" model="ir.ui.view">
+        <field name="name">collection.early.settlement.wizard.form.inherit</field>
+        <field name="model">collection.early.settlement.wizard</field>
+        <field name="inherit_id" ref="collection_management.view_collection_early_settlement_wizard_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[last()]" position="after">
+                <group>
+                    <field name="reason" placeholder="Provide a detailed reason for the discount request..."/>
+                    <field name="attachment_ids" widget="many2many_binary" string="Supporting Documents"/>
+                </group>
+            </xpath>
+            
+            <!-- Rename the submit button -->
+            <xpath expr="//button[@name='action_confirm_settlement']" position="attributes">
+                <attribute name="string">Submit Request</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

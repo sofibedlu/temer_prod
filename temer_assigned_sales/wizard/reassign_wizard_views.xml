@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_reservation_reassign_wizard_form" model="ir.ui.view">
+        <field name="name">reservation.reassign.wizard.form</field>
+        <field name="model">reservation.reassign.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Reassign Reservation">
+                <sheet>
+                    <group>
+                        <field name="reservation_id" invisible="1"/>
+                        <field name="contract_team_user_ids" invisible="1" widget="many2many_tags"/>
+                        <field name="current_user_id" readonly="1"/>
+                        <field name="new_user_id"
+                               domain="[('id', 'in', contract_team_user_ids)]"
+                               options="{'no_create': True, 'no_open': True}"/>
+                        <field name="remark" placeholder="Optional reason for reassignment..."/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_reassign" string="Reassign" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

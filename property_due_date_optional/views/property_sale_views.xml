@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_property_sale_form_inherit_date_optional" model="ir.ui.view">
+        <field name="name">property.sale.form.inherit.date.optional</field>
+        <field name="model">property.sale</field>
+        <field name="inherit_id" ref="advanced_property_management.property_sale_view_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='payment_installment_line_ids']//tree/field[@name='due_date']" position="before">
+                <field name="date_optional" optional="show"/>
+            </xpath>
+
+            <xpath expr="//field[@name='payment_installment_line_ids']//tree/field[@name='due_date']" position="attributes">
+                <!-- It is only required if: Schedule is Time Based AND Not Fully Paid AND Date is NOT Optional -->
+                <attribute name="required">parent.payment_schedule_type == 'time' and not is_fully_paid and not date_optional</attribute>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

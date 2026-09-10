@@ -1,0 +1,25 @@
+<odoo>
+    <data noupdate="1">
+        <record id="wing_distribution_type_walk_in" model="wing.distribution.type">
+            <field name="name">Walk In</field>
+            <field name="code">walk_in</field>
+            <field name="active">True</field>
+        </record>
+        <record id="wing_distribution_type_website" model="wing.distribution.type">
+            <field name="name">Website</field>
+            <field name="code">website</field>
+            <field name="active">True</field>
+        </record>
+        <record id="wing_distribution_type_6033" model="wing.distribution.type">
+            <field name="name">6033</field>
+            <field name="code">6033</field>
+            <field name="active">True</field>
+        </record>
+        <record id="wing_distribution_type_affiliate" model="wing.distribution.type">
+            <field name="name">Affiliate</field>
+            <field name="code">affiliate</field>
+            <field name="active">True</field>
+        </record>
+    </data>
+</odoo>
+

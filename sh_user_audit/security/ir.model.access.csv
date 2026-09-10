@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sh_user_audit,access_sh_user_audit,model_sh_user_audit,base.group_user,1,1,1,1
+access_sh_user_audit_log,access_sh_user_audit_log,model_sh_user_audit_log,base.group_user,1,1,1,1
+access_sh_clear_log,access_sh_clear_log,model_sh_clear_log,base.group_user,1,1,1,1

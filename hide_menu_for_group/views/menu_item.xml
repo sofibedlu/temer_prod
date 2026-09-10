@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <!-- Actions -->
+    <record id="action_menu_visibility_rules" model="ir.actions.act_window">
+        <field name="name">Menu Visibility Rules</field>
+        <field name="res_model">menu.visibility.rule</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first menu visibility rule!
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_visibility_root"
+        name="Menu Visibility"
+        sequence="100" />
+
+    <menuitem id="menu_visibility_rules"
+        name="Visibility Rules"
+        parent="menu_visibility_root"
+        action="action_menu_visibility_rules"
+        sequence="10" />
+</odoo>

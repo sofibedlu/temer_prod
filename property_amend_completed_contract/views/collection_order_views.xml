@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_collection_order_request_inherit_completed" model="ir.ui.view">
+            <field name="name">collection.order.request.inherit.completed</field>
+            <field name="model">collection.order</field>
+            <field name="inherit_id" ref="property_contract_collection.view_collection_order_form_inherit_termination"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//button[@name='action_open_amendment_request_wizard']" position="attributes">
+                    <attribute name="invisible">state not in ('active', 'completed') or has_pending_amendment_request</attribute>
+                </xpath>
+                
+            </field>
+        </record>
+
+        <record id="view_collection_order_form_inherit_amendment_completed" model="ir.ui.view">
+            <field name="name">collection.order.form.inherit.amendment.completed</field>
+            <field name="model">collection.order</field>
+            <field name="inherit_id" ref="collection_property_amendment.view_collection_order_form_inherit_amendment"/> 
+            <field name="arch" type="xml">
+
+                <xpath expr="//button[@name='action_open_property_amendment_wizard']" position="attributes">
+                    <attribute name="invisible">state not in ('active', 'completed') or has_pending_amendment_request</attribute>
+                </xpath>
+                
+            </field>
+        </record>
+
+        <record id="view_property_sale_payment_schedule_edit_done" model="ir.ui.view">
+            <field name="name">property.sale.payment.schedule.edit.done</field>
+            <field name="model">property.sale</field>
+            <field name="inherit_id" ref="temer_hotfixes.view_property_sale_payment_schedule_edit_until_confirm"/>
+            <field name="arch" type="xml">
+                
+                <xpath expr="//field[@name='payment_installment_line_ids']" position="attributes">
+                    <attribute name="readonly">state in ['void', 'cancel'] or (state in ['approve', 'done', 'audited'] and not is_schedule_unlocked)</attribute>
+                </xpath>
+
+            </field>
+        </record>
+    </data>
+    
+</odoo>

@@ -1,0 +1,666 @@
+/* Manager Reports CSS */
+
+.manager_reports_container {
+    padding: 20px;
+    background-color: #f5f5f5;
+    min-height: 100vh;
+}
+
+.report_header {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.manager_reports_container .report_header_compact {
+    padding: 10px 16px;
+    margin-bottom: 16px;
+}
+
+.manager_reports_container .report_header_compact .report_header_row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.manager_reports_container .report_header_compact .report_header_title {
+    margin: 0;
+    font-size: 18px;
+    color: #2c3e50;
+    flex-shrink: 0;
+}
+
+.manager_reports_container .report_header_compact .filter_row {
+    margin: 0;
+    flex: 1;
+    min-width: 200px;
+}
+
+.manager_reports_container .report_header_compact .filter_row label {
+    min-width: auto;
+}
+
+.manager_reports_container .report_header_compact .date_input {
+    padding: 6px 10px;
+    font-size: 13px;
+}
+
+.manager_reports_container .report_header_compact .btn {
+    padding: 6px 14px;
+    font-size: 13px;
+}
+
+.manager_reports_container .report_header_kpis {
+    display: flex;
+    gap: 20px;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #e5e7eb;
+    flex-wrap: wrap;
+}
+
+.manager_reports_container .header_kpi {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #374151;
+}
+
+.manager_reports_container .header_kpi_label {
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.manager_reports_container .report_header h2 {
+    margin: 0 0 20px 0;
+    color: #2c3e50;
+    font-size: 24px;
+}
+
+.filter_section {
+    margin-top: 15px;
+}
+
+.filter_row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.manager_reports_container .filter_checkbox_label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #555;
+    white-space: nowrap;
+}
+.manager_reports_container .filter_checkbox_label input[type="checkbox"] {
+    cursor: pointer;
+}
+
+.manager_reports_container .filter_row label {
+    font-weight: 600;
+    color: #555;
+    min-width: 80px;
+}
+
+.manager_reports_container .date_input, 
+.manager_reports_container .wing_select, 
+.manager_reports_container .period_select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.manager_reports_container .wing_select {
+    width: 150px;
+    min-width: 120px;
+    max-width: 200px;
+}
+
+.manager_reports_container .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.manager_reports_container .btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.manager_reports_container .btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.manager_reports_container .btn-secondary {
+    background-color: #111827;
+    color: #fff;
+}
+
+.manager_reports_container .btn-secondary:hover {
+    background-color: #374151;
+}
+
+/* Sales Performance Report specific styles */
+.manager_reports_container .criteria_group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+}
+
+.manager_reports_container .criteria_label {
+    font-weight: bold;
+    color: #555;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.manager_reports_container .date_range_group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-left: 10px;
+}
+
+.manager_reports_container .date_label {
+    font-weight: bold;
+    color: #555;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.manager_reports_container .date_display {
+    color: #666;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.manager_reports_container .export_buttons {
+    display: flex;
+    gap: 10px;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.manager_reports_container .loading_message {
+    text-align: center;
+    padding: 40px;
+    font-size: 18px;
+    color: #666;
+}
+
+/* Inventory Absorption Ratio (IAR) - next to summary items, show divided numbers */
+.manager_reports_container .iar_summary_item .iar_divided {
+    font-variant-numeric: tabular-nums;
+}
+.manager_reports_container .iar_summary_item .iar_divided strong {
+    color: #111827;
+}
+
+.manager_reports_container .report_content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.manager_reports_container .mr_scroll_y {
+    max-height: calc(100vh - 220px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-bottom: 100px;
+    margin-bottom: 20px;
+    scroll-behavior: smooth;
+}
+
+.manager_reports_container .mr_scroll_y::-webkit-scrollbar {
+    width: 10px;
+}
+
+.manager_reports_container .mr_scroll_y::-webkit-scrollbar-track {
+    background: #e8f5e9;
+    border-radius: 5px;
+}
+
+.manager_reports_container .mr_scroll_y::-webkit-scrollbar-thumb {
+    background: #43a047;
+    border-radius: 5px;
+}
+
+.manager_reports_container .mr_scroll_y::-webkit-scrollbar-thumb:hover {
+    background: #2e7d32;
+}
+
+.manager_reports_container .summary_section {
+    margin-bottom: 30px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+}
+
+.manager_reports_container .summary_section h3 {
+    margin-top: 0;
+    color: #2c3e50;
+    font-size: 18px;
+}
+
+.manager_reports_container .summary_item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.manager_reports_container .summary_item:last-child {
+    border-bottom: none;
+}
+
+.manager_reports_container .summary_item label {
+    font-weight: 600;
+    color: #555;
+}
+
+.manager_reports_container .table_section {
+    margin-bottom: 20px;
+}
+
+.manager_reports_container .table_section h3 {
+    margin-bottom: 12px;
+    color: #2c3e50;
+    font-size: 16px;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 6px;
+    font-weight: 600;
+}
+
+/* KPI Cards - Compact */
+.manager_reports_container .kpi_section {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.manager_reports_container .kpi_card {
+    flex: 1 1 180px;
+    min-width: 150px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 12px 14px;
+}
+
+.manager_reports_container .kpi_label {
+    font-size: 12px;
+    color: #6b7280;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.manager_reports_container .kpi_value {
+    font-size: 18px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.manager_reports_container .report_table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: white;
+}
+
+.manager_reports_container .report_table thead {
+    background-color: #e8f5e9;
+    color: #1b5e20;
+}
+
+.manager_reports_container .report_table th {
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    border: 1px solid #e5e7eb;
+}
+
+.manager_reports_container .report_table td {
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    text-align: right;
+}
+
+.manager_reports_container .report_table td:first-child {
+    text-align: left;
+    font-weight: 500;
+}
+
+.manager_reports_container .report_table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.manager_reports_container .report_table tbody tr:hover {
+    background-color: #e9ecef;
+}
+
+.manager_reports_container .total_row {
+    background-color: #e8f5e9 !important;
+    font-weight: 600;
+}
+
+.manager_reports_container .total_row td {
+    border-top: 2px solid #43a047;
+}
+
+.manager_reports_container .total_cell {
+    font-weight: 600;
+}
+
+/* Keep Conversion/IAR plan and actual inside cells (no overflow) */
+.manager_reports_container .mr_metric_cell {
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.manager_reports_container .sales_table thead tr:first-child th {
+    background-color: #e8f5e9;
+    color: #1b5e20;
+}
+
+.manager_reports_container .sales_table thead tr:first-child th:first-child {
+    background-color: #e8f5e9;
+    color: #1b5e20;
+}
+
+.manager_reports_container .sales_table thead tr:first-child th:nth-child(2) {
+    background-color: #e8f5e9;
+    color: #1b5e20;
+}
+
+.manager_reports_container .sales_table thead tr:first-child th:nth-child(3) {
+    background-color: #e8f5e9;
+    color: #1b5e20;
+}
+
+.manager_reports_container .sales_table thead tr:first-child th:nth-child(n+4) {
+    background-color: #e8f5e9;
+    color: #1b5e20;
+}
+
+/* Horizontal scrolling for wide tables */
+.manager_reports_container .mr_table_scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.manager_reports_container .mr_table_scroll .report_table {
+    min-width: 760px;
+}
+
+/* Report 1 layout helpers */
+.manager_reports_container .mr_grid {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.manager_reports_container .mr_left {
+    flex: 1 1 520px;
+    min-width: 420px;
+}
+
+.manager_reports_container .mr_right {
+    flex: 0 1 360px;
+    min-width: 320px;
+}
+
+.manager_reports_container .mr_charts {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.manager_reports_container .mr_chart_box {
+    flex: 1 1 420px;
+    min-width: 320px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 12px;
+}
+
+.manager_reports_container .mr_chart_box h4 {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    color: #2c3e50;
+}
+
+.manager_reports_container .mr_chart_box canvas {
+    width: 100% !important;
+    height: 280px !important;
+}
+
+/* Sales table + highlight graphs side-by-side */
+.manager_reports_container .mr_card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.manager_reports_container .mr_table_graph_grid {
+    display: grid;
+    grid-template-columns: 1.35fr 0.65fr;
+    gap: 12px;
+    align-items: start;
+}
+
+.manager_reports_container .mr_graph_side {
+    position: sticky;
+    top: 12px;
+}
+
+.manager_reports_container .mr_graph_side_grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+}
+
+.manager_reports_container .mr_graph_mini {
+    border: 1px solid #eef2f7;
+    border-radius: 8px;
+    padding: 8px;
+    background: #fafafa;
+}
+
+.manager_reports_container .mr_graph_mini_title {
+    font-weight: 700;
+    font-size: 12px;
+    color: #111827;
+    margin-bottom: 8px;
+}
+
+.manager_reports_container .mr_graph_mini canvas {
+    width: 100% !important;
+    height: 160px !important;
+}
+
+/* Timeline Charts - Large and Clear (only for charts with timeline_chart class) */
+.manager_reports_container .mr_graph_mini.timeline_chart {
+    width: 100% !important;
+    min-height: 500px !important;
+    height: 500px !important;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.manager_reports_container .mr_graph_mini.timeline_chart canvas {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 450px !important;
+    max-height: none !important;
+}
+
+/* New graphs layout (simple professional grid) */
+.manager_reports_container .mr_graphs {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.manager_reports_container .mr_graph_row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.manager_reports_container .mr_graph_row .mr_graph_card:only-child {
+    grid-column: 1 / -1;
+}
+
+.manager_reports_container .mr_graph_card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 12px;
+}
+
+.manager_reports_container .mr_graph_title {
+    font-weight: 700;
+    color: #111827;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+.manager_reports_container .mr_graph_card canvas {
+    width: 100% !important;
+    height: 260px !important;
+}
+
+/* Reduce chart glitch/flicker on hover (Collection & Consolidate reports) */
+.manager_reports_container .mr_graph_mini canvas,
+.manager_reports_container .mr_graph_card canvas {
+    backface-visibility: hidden;
+    transform: translateZ(0);
+}
+
+@media (max-width: 992px) {
+    .manager_reports_container .mr_table_graph_grid {
+        grid-template-columns: 1fr;
+    }
+    .manager_reports_container .mr_graph_side {
+        position: static;
+    }
+    .manager_reports_container .mr_graph_row {
+        grid-template-columns: 1fr;
+    }
+}
+
+.manager_reports_container .mr_progress {
+    position: relative;
+    width: 100%;
+    min-width: 90px;
+    height: 16px;
+    border-radius: 999px;
+    background: #c8e6c9;
+    overflow: hidden;
+}
+
+.manager_reports_container .mr_progress.mr_progress_gray {
+    background: #e8f5e9;
+}
+
+.manager_reports_container .mr_progress_bar {
+    height: 100%;
+    background: linear-gradient(90deg, #2e7d32, #43a047);
+}
+
+.manager_reports_container .mr_progress_gray .mr_progress_bar {
+    background: linear-gradient(90deg, #2e7d32, #66bb6a);
+}
+
+.manager_reports_container .progress_cell {
+    padding: 8px;
+    min-width: 150px;
+}
+
+.manager_reports_container .progress_bar_container {
+    position: relative;
+    width: 100%;
+    height: 24px;
+    background-color: #c8e6c9;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.manager_reports_container .progress_bar {
+    height: 100%;
+    background: linear-gradient(90deg, #2e7d32, #43a047);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.manager_reports_container .progress_text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 11px;
+    font-weight: 600;
+    color: #374151;
+    z-index: 1;
+    white-space: nowrap;
+}
+
+.manager_reports_container .mr_progress_label {
+    position: absolute;
+    top: 0;
+    left: 8px;
+    height: 16px;
+    line-height: 16px;
+    font-size: 11px;
+    color: #111827;
+    font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .manager_reports_container .filter_row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .manager_reports_container .filter_row label {
+        min-width: auto;
+    }
+    
+    .manager_reports_container .date_input, 
+    .manager_reports_container .wing_select, 
+    .manager_reports_container .period_select {
+        width: 100%;
+    }
+    
+    .manager_reports_container .report_table {
+        font-size: 12px;
+    }
+    
+    .manager_reports_container .report_table th,
+    .manager_reports_container .report_table td {
+        padding: 8px;
+    }
+}
+

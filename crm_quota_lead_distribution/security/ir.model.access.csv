@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_crm_lead_quota_user,crm.lead.quota.user,model_crm_lead_quota,,1,1,1,1
+access_crm_wing_member_user,crm.wing.member.user,model_crm_wing_member,base.group_user,1,1,1,1
+access_crm_wing_member_manager,crm.wing.member.manager,model_crm_wing_member,base.group_system,1,1,1,1
+access_crm_team_rotation_user,crm.team.rotation.user,model_crm_team_rotation,base.group_user,1,0,0,0
+access_crm_team_rotation_manager,crm.team.rotation.manager,model_crm_team_rotation,base.group_system,1,1,1,1
+access_crm_lead_duplicate_message_wizard_user,crm.lead.duplicate.message.wizard.user,model_crm_lead_duplicate_message_wizard,base.group_user,1,1,1,1

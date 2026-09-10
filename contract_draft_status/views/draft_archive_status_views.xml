@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Add draft_status field to the draft.contract.archive form view -->
+    <record id="view_draft_contract_archive_status_inherit" model="ir.ui.view">
+        <field name="name">draft.contract.archive.form.status.inherit</field>
+        <field name="model">draft.contract.archive</field>
+        <field name="inherit_id" ref="draft_archive_model.view_draft_contract_archive_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='status']" position="after">
+                <field name="draft_status" widget="badge"
+                       decoration-warning="draft_status == 'draft'"
+                       decoration-success="draft_status == 'saved'"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

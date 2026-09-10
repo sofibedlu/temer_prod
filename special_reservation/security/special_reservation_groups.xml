@@ -1,0 +1,82 @@
+<odoo>
+    <data noupdate="1">
+        <!-- Define a New Category -->
+        <record id="module_special_reservation_new_category" model="ir.module.category">
+            <field name="name">Special Reservation</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <record id="group_supervisor" model="res.groups">
+            <field name="name">supervisor</field>
+            <field name="category_id" ref="crm_custom_menu.module_category_call_center"/>
+            <field name="comment">This group is for supervisors.</field>
+        </record>
+           <record id="group_manager" model="res.groups">
+            <field name="name">manager</field>
+            <field name="category_id" ref="crm_custom_menu.module_category_call_center"/>
+            <field name="comment">This group is for managers.</field>
+        </record>
+
+        <record id="group_ceo" model="res.groups">
+            <field name="name">ceo</field>
+            <field name="category_id" ref="crm_custom_menu.module_category_call_center"/>
+            <field name="comment">This group is for ceo.</field>
+        </record>
+
+     <!-- <record id="property_reservation_sales_supervisor_rule_new" model="ir.rule">
+            <field name="name">Property Reservation: Supervisor can only see their own</field>
+            <field name="model_id" ref="ahadubit_property_reservation.model_property_reservation"/>
+            <field name="groups" eval="[(4, ref('ahadubit_property_reservation.access_property_sales_supervisor'))]"/>
+            <field name="domain_force">['|', ('supervisor_id', '=', user.id), ('salesperson_ids', 'in', [user.id])]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record> -->
+<!-- 
+    <record id="property_reservation_sales_supervisor_rule_new" model="ir.rule">
+        <field name="name">Property Reservation: Supervisor can only see their own</field>
+        <field name="model_id" ref="ahadubit_property_reservation.model_property_reservation"/>
+        <field name="groups" eval="[(4, ref('special_reservation.group_supervisor'))]"/>
+        <field name="domain_force">['|', ('supervisor_id', '=', user.id), ('salesperson_ids', 'in', [user.id])]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record> -->
+<!-- 
+    <record id="property_reservation_sales_supervisor_rule_new" model="ir.rule">
+    <field name="name">Property Reservation: Supervisor can only see their own salespersons' records</field>
+    <field name="model_id" ref="ahadubit_property_reservation.model_property_reservation"/>
+    <field name="groups" eval="[(4, ref('special_reservation.group_supervisor'))]"/>
+    <field name="domain_force">['|', ('supervisor_id', '=', user.id), ('salesperson_ids', 'in', [user.id])]</field>
+    <field name="perm_read" eval="True"/>
+    <field name="perm_write" eval="True"/>
+    <field name="perm_create" eval="True"/>
+    <field name="perm_unlink" eval="True"/>
+</record> -->
+
+<!-- <record id="property_reservation_sales_supervisor_rule_new" model="ir.rule">
+    <field name="name">Property Reservation: Supervisor can only see their own team's reservations</field>
+    <field name="model_id" ref="ahadubit_property_reservation.model_property_reservation"/>
+    <field name="groups" eval="[(4, ref('special_reservation.group_supervisor'))]"/>
+    <field name="domain_force">[('supervisor_id', '=', user.id)]</field>
+    <field name="perm_read" eval="True"/>
+    <field name="perm_write" eval="False"/>
+    <field name="perm_create" eval="False"/>
+    <field name="perm_unlink" eval="False"/>
+</record> -->
+
+
+    <!-- <record id="action_salesperson_supervisor" model="ir.actions.act_window">
+        <field name="name">Salespersons (Supervisors Only)</field>
+        <field name="res_model">property.reservation</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('supervisor_id', '=', user.id)]</field>
+    </record> -->
+
+    </data>
+</odoo>
+
+
+

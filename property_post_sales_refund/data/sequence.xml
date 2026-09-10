@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="seq_post_sales_refund_request" model="ir.sequence">
+            <field name="name">Post Sales Refund Request</field>
+            <field name="code">post.sales.refund.request</field>
+            <field name="prefix">PSR/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

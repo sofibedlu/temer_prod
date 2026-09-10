@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Add invisible fields for use in attrs -->
+    <record id="property_property_view_form_lock" model="ir.ui.view">
+        <field name="name">property.property.form.lock</field>
+        <field name="model">property.property</field>
+        <field name="inherit_id" ref="ahadubit_property_base.property_property_view_form_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <field name="is_locked" invisible="1"/>
+                <field name="state_before_lock" invisible="1"/>
+                <field name="lock_on_expire" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='state'][@widget='statusbar']" position="attributes">
+                <attribute name="statusbar_visible">draft,available,lock,reserved</attribute>
+            </xpath>
+            <xpath expr="//header" position="inside">
+                <field name="lock_display" invisible="not is_locked" class="o_property_lock_badge"/>
+            </xpath>
+            <!-- Lock button: only for draft/available (real lock) -->
+            <xpath expr="//button[@name='action_draft']" position="after">
+                <button name="action_lock"
+                        string="Lock"
+                        type="object"
+                        class="btn-danger"
+                        icon="fa-lock"
+                        invisible="is_locked or state not in ['draft', 'available']"
+                        groups="property_lock_unlock.property_lock_group"
+                        confirm="Lock this property? It will be excluded from reservations."/>
+                <!-- Info button when reserved: schedules lock on expiry -->
+                <button name="action_lock_reserved_info"
+                        string="Lock on Expiry"
+                        type="object"
+                        class="btn-warning"
+                        icon="fa-clock-o"
+                        invisible="is_locked or state != 'reserved' or lock_on_expire"
+                        groups="property_lock_unlock.property_lock_group"/>
+                <!-- Already scheduled indicator -->
+                <button name="action_lock_reserved_info"
+                        string="🔒 Locks on Expiry"
+                        type="object"
+                        class="btn-secondary"
+                        invisible="is_locked or state != 'reserved' or not lock_on_expire"
+                        groups="property_lock_unlock.property_lock_group"/>
+                <button name="action_unlock"
+                        string="Unlock"
+                        type="object"
+                        class="btn-success"
+                        icon="fa-unlock"
+                        invisible="not is_locked"
+                        groups="property_lock_unlock.property_unlock_group"
+                        confirm="Unlock this property? It will be available for reservations."/>
+            </xpath>
+            <!-- Hide Draft button when locked -->
+            <xpath expr="//button[@name='action_draft']" position="attributes">
+                <attribute name="invisible">state not in ['available'] or is_locked</attribute>
+            </xpath>
+            <!-- Hide Available button when locked -->
+            <xpath expr="//button[@name='action_available']" position="attributes">
+                <attribute name="invisible">state not in ['draft'] or is_locked</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Tree view: header buttons (Lock/Unlock like Print), gray row when locked -->
+    <record id="property_property_view_tree_lock" model="ir.ui.view">
+        <field name="name">property.property.tree.lock</field>
+        <field name="model">property.property</field>
+        <field name="inherit_id" ref="ahadubit_property_base.property_property_view_tree_inherit_id"/>
+        <field name="arch" type="xml">
+            <!-- Lock/Unlock as standalone header buttons (like Print) -->
+            <xpath expr="//tree" position="inside">
+                <header>
+                    <button name="action_lock"
+                            string="Lock"
+                            type="object"
+                            icon="fa-lock"
+                            class="btn-danger"
+                            invisible="is_locked or state not in ['draft', 'available', 'reserved']"
+                            groups="property_lock_unlock.property_lock_group"
+                            title="Lock selected properties (draft/available only; reserved properties lock on expiry)"/>
+                    <button name="action_unlock"
+                            string="Unlock"
+                            type="object"
+                            icon="fa-unlock"
+                            class="btn-success"
+                            invisible="is_locked == False"
+                            groups="property_lock_unlock.property_unlock_group"
+                            title="Unlock selected properties (when all selected are locked)"/>
+                </header>
+            </xpath>
+            <xpath expr="//tree" position="attributes">
+                <attribute name="decoration-muted">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="is_locked" column_invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="lock_display" optional="show" string="" class="o_lock_icon"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Actions dropdown: Lock -->
+    <record id="action_server_property_lock" model="ir.actions.server">
+        <field name="name">Lock</field>
+        <field name="model_id" ref="ahadubit_property_base.model_property_property"/>
+        <field name="binding_model_id" ref="ahadubit_property_base.model_property_property"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+if env.user.has_group('property_lock_unlock.property_lock_group'):
+    records.action_lock()
+        </field>
+        <field name="groups_id" eval="[(4, ref('property_lock_unlock.property_lock_group'))]"/>
+    </record>
+
+    <!-- Actions dropdown: Lock on Expiry (for reserved properties) -->
+    <record id="action_server_property_lock_on_expire" model="ir.actions.server">
+        <field name="name">Lock on Expiry</field>
+        <field name="model_id" ref="ahadubit_property_base.model_property_property"/>
+        <field name="binding_model_id" ref="ahadubit_property_base.model_property_property"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+if env.user.has_group('property_lock_unlock.property_lock_group'):
+    records.action_lock_reserved_info()
+        </field>
+        <field name="groups_id" eval="[(4, ref('property_lock_unlock.property_lock_group'))]"/>
+    </record>
+
+    <!-- Actions dropdown: Unlock -->
+    <record id="action_server_property_unlock" model="ir.actions.server">
+        <field name="name">Unlock</field>
+        <field name="model_id" ref="ahadubit_property_base.model_property_property"/>
+        <field name="binding_model_id" ref="ahadubit_property_base.model_property_property"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+if env.user.has_group('property_lock_unlock.property_unlock_group'):
+    records.action_unlock()
+        </field>
+        <field name="groups_id" eval="[(4, ref('property_lock_unlock.property_unlock_group'))]"/>
+    </record>
+
+</odoo>

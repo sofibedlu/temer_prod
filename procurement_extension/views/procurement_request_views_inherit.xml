@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_procurement_request_form_inherit_security" model="ir.ui.view">
+        <field name="name">procurement.request.form.inherit.security</field>
+        <field name="model">procurement.request</field>
+        <field name="inherit_id" ref="procurement_management.view_procurement_request_form"/>
+        <field name="arch" type="xml">
+            <!-- Add Security to the Approve Button -->
+            <xpath expr="//button[@name='action_approve']" position="attributes">
+                <attribute name="groups">procurement_extension.group_procurement_request_approver</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

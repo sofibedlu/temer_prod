@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_collection_letter_template_form" model="ir.ui.view">
+        <field name="name">collection.letter.template.form</field>
+        <field name="model">collection.letter.template</field>
+        <field name="arch" type="xml">
+            <form string="Letter Template">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="subject"/>
+                    </group>
+                    <notebook>
+                        <field name="model_id" invisible="True"/>
+                        <field name="model" invisible="True"/>
+                        <page name="receiver" string="Receiver">
+                            <field name="receiver_html" 
+                                   widget="html" 
+                                   options="{'dynamic_placeholder': true, 'dynamic_placeholder_model_reference_field': 'model'}"/>
+                        </page>
+                        
+                        <page name="body" string="Letter Body">
+                            <field name="body_html" 
+                                   widget="html" 
+                                   options="{'dynamic_placeholder': true, 'dynamic_placeholder_model_reference_field': 'model'}"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_collection_letter_template_tree" model="ir.ui.view">
+        <field name="name">collection.letter.template.tree</field>
+        <field name="model">collection.letter.template</field>
+        <field name="arch" type="xml">
+            <tree string="Letter Templates">
+                <field name="name"/>
+                <field name="subject"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_collection_letter_template" model="ir.actions.act_window">
+        <field name="name">Letter Templates</field>
+        <field name="res_model">collection.letter.template</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_collection_letter_template"
+              name="Letter Templates"
+              parent="collection_management.menu_collection_configuration"
+              action="action_collection_letter_template"
+              sequence="15"/>
+</odoo>

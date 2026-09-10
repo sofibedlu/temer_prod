@@ -1,0 +1,14 @@
+<odoo>
+    <data noupdate="1">
+        <record id="module_category_wing_distribution" model="ir.module.category">
+            <field name="name">Wing Distribution</field>
+            <field name="sequence">15</field>
+        </record>
+
+        <record id="group_wing_distribution_user" model="res.groups">
+            <field name="name">Wing Distribution User</field>
+            <field name="category_id" ref="wing_distribution_configuration.module_category_wing_distribution"/>
+        </record>
+    </data>
+</odoo>
+

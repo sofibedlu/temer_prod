@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Standalone menu entry under Configuration.
+        Opens the Fix Missed Installment wizard directly —
+        no dependency on any existing log record.
+    -->
+    <menuitem
+        id="menu_fix_missed_installment"
+        name="Fix Missed Installment"
+        parent="advanced_property_management.property_configuration_menu"
+        action="fix_missed_installment.action_fix_missed_installment_wizard"
+        groups="base.group_user"
+        sequence="95"/>
+</odoo>

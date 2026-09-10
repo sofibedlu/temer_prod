@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_temer_site_visit_tree" model="ir.ui.view">
+        <field name="name">temer.site.visit.tree</field>
+        <field name="model">temer.lead.followup</field>
+        <field name="arch" type="xml">
+            <tree string="Site Visit" create="false" delete="false" edit="false">
+                <header>
+                    <button string="Export Excel" name="action_temer_export_site_visit" type="object" display="always"/>
+                </header>
+                <field name="report_wing_display" string="Wing Name"/>
+                <field name="report_supervisor_display" string="Sales Supervisor"/>
+                <field name="user_id" string="Sales Consultant"/>
+                <field name="report_date_display" string="Date"/>
+                <field name="lead_id" string="Lead"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_temer_site_visit_search" model="ir.ui.view">
+        <field name="name">temer.site.visit.search</field>
+        <field name="model">temer.lead.followup</field>
+        <field name="arch" type="xml">
+            <search string="Site Visit">
+                <!-- Search fields -->
+                <field name="user_id" string="Sales Consultant"/>
+                <field name="lead_id" string="Lead"/>
+
+                <!-- Filters by activity date -->
+                <filter string="Today" name="filter_today" domain="[('activity_date','&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),('activity_date','&lt;=', datetime.datetime.now().strftime('%Y-%m-%d 23:59:59'))]"/>
+                <filter string="This Month" name="filter_month" domain="[('activity_date','&gt;=', (context_today() + relativedelta(day=1)).strftime('%Y-%m-%d')),('activity_date','&lt;=', (context_today() + relativedelta(day=31)).strftime('%Y-%m-%d'))]"/>
+
+                <!-- Group By -->
+                <separator/>
+                <filter string="Sales Consultant" name="group_user" context="{'group_by': 'user_id'}"/>
+                <filter string="Lead" name="group_lead" context="{'group_by': 'lead_id'}"/>
+                <filter string="Activity Date" name="group_date" context="{'group_by': 'activity_date:month'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_temer_site_visit" model="ir.actions.act_window">
+        <field name="name">Site Visit</field>
+        <field name="res_model">temer.lead.followup</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_temer_site_visit_tree"/>
+        <field name="search_view_id" ref="view_temer_site_visit_search"/>
+        <field name="domain">[('activity_type', '=', 'site_visit')]</field>
+        <field name="context">{}</field>
+    </record>
+
+</odoo>

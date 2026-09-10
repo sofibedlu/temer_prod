@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+    <!-- Main Sales Report Menu - Parent menu for all sales reports -->
+    <!-- This menu is visible ONLY to Managers (Sales Manager/Wing Manager) and CRM Admin -->
+    <menuitem id="menu_sales_report_root"
+              name="Sales Report"
+              parent="sales_plan_module.menu_sales_plan_root"
+              sequence="30"/>
+    
+    <!-- Submenu: Report by Wing -->
+    <menuitem id="menu_sales_report_by_wing"
+              name="Report by Wing"
+              parent="menu_sales_report_root"
+              action="action_sales_report_wing"
+              sequence="10"/>
+    
+    <!-- Submenu: Report by Supervisor -->
+    <menuitem id="menu_sales_report_by_supervisor"
+              name="Report by Supervisor"
+              parent="menu_sales_report_root"
+              action="action_sales_report_supervisor"
+              sequence="20"/>
+    
+    <!-- Restrict main Sales Report menu to managers only (same groups as Plan Document menu) -->
+    <record id="menu_sales_report_root" model="ir.ui.menu">
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_system'), ref('sales_plan_module.group_sales_plan_manager'), ref('temer_structure.access_property_crm_admin_group')])]"/>
+        <!-- Only managers (assigned via post_init_hook) and CRM Admin can see this menu -->
+    </record>
+</data>
+</odoo>

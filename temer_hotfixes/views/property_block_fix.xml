@@ -1,0 +1,34 @@
+<odoo>
+    <record id="view_property_property_form_block_fix" model="ir.ui.view">
+        <field name="name">property.property.form.block.fix</field>
+        <field name="model">property.property</field>
+        <field name="inherit_id" ref="advanced_property_management.property_property_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='block']" position="attributes">
+                <attribute name="options">{'no_create': True, 'no_create_edit': True}</attribute>
+                <attribute name="domain">[('site', '=', site)]</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_property_block_form" model="ir.ui.view">
+        <field name="name">property.block.form</field>
+        <field name="model">property.block</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="site"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="ahadubit_property_base.property_block_action" model="ir.actions.act_window">
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

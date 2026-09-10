@@ -1,0 +1,346 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sh_user_audit
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 15.1alpha1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-09-17 07:47+0000\n"
+"PO-Revision-Date: 2021-09-17 07:47+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sh_user_audit
+#: model_terms:ir.ui.view,arch_db:sh_user_audit.sh_clear_log_wizard_form
+msgid ""
+"<span class=\"o_form_label o_td_label\">\n"
+"                                <b>Type</b>\n"
+"                            </span>"
+msgstr ""
+"<span class=\"o_form_label o_td_label\">\n"
+"                                <b>Taper</b>\n"
+"                            </span>"
+
+#. module: sh_user_audit
+#: model_terms:ir.ui.view,arch_db:sh_user_audit.sh_clear_log_wizard_form
+msgid ""
+"<span>Create</span>\n"
+"                                <br/>"
+msgstr ""
+"<span>Créer</span>\n"
+"                                <br/>"
+
+#. module: sh_user_audit
+#: model_terms:ir.ui.view,arch_db:sh_user_audit.sh_clear_log_wizard_form
+msgid "<span>Delete</span>"
+msgstr "<span> Supprimer </ span>"
+
+#. module: sh_user_audit
+#: model_terms:ir.ui.view,arch_db:sh_user_audit.sh_clear_log_wizard_form
+msgid ""
+"<span>Read</span>\n"
+"                                <br/>"
+msgstr ""
+"<span>Lire</span>\n"
+"                                <br/>"
+
+#. module: sh_user_audit
+#: model_terms:ir.ui.view,arch_db:sh_user_audit.sh_clear_log_wizard_form
+msgid ""
+"<span>Write</span>\n"
+"                                <br/>"
+msgstr ""
+"<span>Écrivez</span>\n"
+"                                <br/>"
+
+#. module: sh_user_audit
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_clear_log__all_log
+msgid "All Log"
+msgstr "Tous les journaux"
+
+#. module: sh_user_audit
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_user_audit__is_all_users
+msgid "All Users"
+msgstr "Tous les utilisateurs"
+
+#. module: sh_user_audit
+#: model:ir.model,name:sh_user_audit.model_base
+msgid "Base"
+msgstr "Base"
+
+#. module: sh_user_audit
+#: model_terms:ir.ui.view,arch_db:sh_user_audit.sh_clear_log_wizard_form
+msgid "Cancel"
+msgstr "Annuler"
+
+#. module: sh_user_audit
+#: model:ir.actions.act_window,name:sh_user_audit.sh_clear_log_wizard_action
+#: model:ir.ui.menu,name:sh_user_audit.sh_clear_log_detail_menu
+#: model_terms:ir.ui.view,arch_db:sh_user_audit.sh_clear_log_wizard_form
+msgid "Clear Log"
+msgstr "Journal clair"
+
+#. module: sh_user_audit
+#: model:ir.model,name:sh_user_audit.model_sh_clear_log
+msgid "Clear Log Details"
+msgstr "Détails du journal clair"
+
+#. module: sh_user_audit
+#: model_terms:ir.ui.view,arch_db:sh_user_audit.sh_clear_log_wizard_form
+msgid "Clear Log Wizard"
+msgstr "Assistant de journal clair"
+
+#. module: sh_user_audit
+#: model:ir.actions.act_window,name:sh_user_audit.sh_user_audit_id_action
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_clear_log__configuration_ids
+#: model:ir.ui.menu,name:sh_user_audit.sh_user_detail_menu
+msgid "Configuration"
+msgstr "Configuration"
+
+#. module: sh_user_audit
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_user_audit__is_create
+#: model:ir.model.fields.selection,name:sh_user_audit.selection__sh_user_audit_log__type__create
+#: model_terms:ir.ui.view,arch_db:sh_user_audit.sh_user_audit_id_search
+msgid "Create"
+msgstr "Créer"
+
+#. module: sh_user_audit
+#: model_terms:ir.actions.act_window,help:sh_user_audit.sh_user_audit_id_action
+#: model_terms:ir.actions.act_window,help:sh_user_audit.sh_user_audit_log_action
+msgid "Create a new Record"
+msgstr "Créer un nouvel enregistrement"
+
+#. module: sh_user_audit
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_clear_log__create_uid
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_user_audit__create_uid
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_user_audit_log__create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: sh_user_audit
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_clear_log__create_date
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_user_audit__create_date
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_user_audit_log__create_date
+msgid "Created on"
+msgstr "Créé sur"
+
+#. module: sh_user_audit
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_user_audit_log__modify_date
+msgid "Date"
+msgstr "Date"
+
+#. module: sh_user_audit
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_user_audit__is_delete
+#: model:ir.model.fields.selection,name:sh_user_audit.selection__sh_user_audit_log__type__delete
+#: model_terms:ir.ui.view,arch_db:sh_user_audit.sh_user_audit_id_search
+msgid "Delete"
+msgstr "Effacer"
+
+#. module: sh_user_audit
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_clear_log__display_name
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_user_audit__display_name
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_user_audit_log__display_name
+msgid "Display Name"
+msgstr "Afficher un nom"
+
+#. module: sh_user_audit
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_user_audit__field_ids
+msgid "Field"
+msgstr "Champ"
+
+#. module: sh_user_audit
+#: model_terms:ir.ui.view,arch_db:sh_user_audit.sh_user_audit_form
+msgid "Fields"
+msgstr "Des champs"
+
+#. module: sh_user_audit
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_user_audit__is_full_log
+msgid "Full Log"
+msgstr "Journal complet"
+
+#. module: sh_user_audit
+#: model_terms:ir.ui.view,arch_db:sh_user_audit.sh_user_audit_log_search
+msgid "Group By"
+msgstr "Par groupe"
+
+#. module: sh_user_audit
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_clear_log__id
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_user_audit__id
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_user_audit_log__id
+msgid "ID"
+msgstr "identifiant"
+
+#. module: sh_user_audit
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_clear_log____last_update
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_user_audit____last_update
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_user_audit_log____last_update
+msgid "Last Modified on"
+msgstr "Dernière modification sur"
+
+#. module: sh_user_audit
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_clear_log__write_uid
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_user_audit__write_uid
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_user_audit_log__write_uid
+msgid "Last Updated by"
+msgstr "Dernière mise à jour par"
+
+#. module: sh_user_audit
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_clear_log__write_date
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_user_audit__write_date
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_user_audit_log__write_date
+msgid "Last Updated on"
+msgstr "Dernière mise à jour le"
+
+#. module: sh_user_audit
+#: model:res.groups,name:sh_user_audit.sh_user_audit_manager_id
+msgid "Manager"
+msgstr "Directeur"
+
+#. module: sh_user_audit
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_user_audit__model_ids
+msgid "Model"
+msgstr "Modèle"
+
+#. module: sh_user_audit
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_user_audit__name
+msgid "Name"
+msgstr "Nom"
+
+#. module: sh_user_audit
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_user_audit_log__object
+#: model_terms:ir.ui.view,arch_db:sh_user_audit.sh_user_audit_log_search
+msgid "Object"
+msgstr "Objet"
+
+#. module: sh_user_audit
+#: model_terms:ir.ui.view,arch_db:sh_user_audit.sh_clear_log_wizard_form
+#: model_terms:ir.ui.view,arch_db:sh_user_audit.sh_user_audit_form
+msgid "Objects"
+msgstr "Objets"
+
+#. module: sh_user_audit
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_user_audit_log__old_value
+msgid "Old Values"
+msgstr "Vieilles valeurs"
+
+#. module: sh_user_audit
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_user_audit__is_read
+#: model:ir.model.fields.selection,name:sh_user_audit.selection__sh_user_audit_log__type__read
+#: model_terms:ir.ui.view,arch_db:sh_user_audit.sh_user_audit_id_search
+msgid "Read"
+msgstr "Lire"
+
+#. module: sh_user_audit
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_user_audit_log__record_id
+msgid "Record ID"
+msgstr "Carte d'enregistrement"
+
+#. module: sh_user_audit
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_user_audit_log__name
+msgid "Reference"
+msgstr "Référence"
+
+#. module: sh_user_audit
+#: model_terms:ir.ui.view,arch_db:sh_user_audit.sh_user_audit_id_search
+#: model_terms:ir.ui.view,arch_db:sh_user_audit.sh_user_audit_log_search
+msgid "Search By"
+msgstr "Recherché par"
+
+#. module: sh_user_audit
+#: model_terms:ir.ui.view,arch_db:sh_user_audit.sh_user_audit_form
+msgid ""
+"This configuration may cause issue to your database because read operation "
+"perform many time it may increase size of your log."
+msgstr ""
+"Cette configuration peut entraîner une question dans votre base de données car une opération de lecture"
+"Effectuez plusieurs fois qu'il peut augmenter la taille de votre journal."
+
+#. module: sh_user_audit
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_clear_log__to_date
+msgid "To Date"
+msgstr "À ce jour"
+
+#. module: sh_user_audit
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_user_audit_log__type
+#: model_terms:ir.ui.view,arch_db:sh_user_audit.sh_user_audit_log_search
+msgid "Type"
+msgstr "Taper"
+
+#. module: sh_user_audit
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_user_audit_log__updated_field
+msgid "Update Field"
+msgstr "Champ de mise à jour"
+
+#. module: sh_user_audit
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_user_audit_log__value_updated
+msgid "Updated Value"
+msgstr "Valeur mise à jour"
+
+#. module: sh_user_audit
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_user_audit_log__user
+#: model:res.groups,name:sh_user_audit.sh_user_audit_user
+#: model_terms:ir.ui.view,arch_db:sh_user_audit.sh_user_audit_log_search
+msgid "User"
+msgstr "Utilisateur"
+
+#. module: sh_user_audit
+#: model:ir.model,name:sh_user_audit.model_sh_user_audit
+#: model:ir.module.category,name:sh_user_audit.sh_user_audit_system_category
+#: model:ir.ui.menu,name:sh_user_audit.sh_user_audit
+msgid "User Audit"
+msgstr "Audit de l'utilisateur"
+
+#. module: sh_user_audit
+#: model:ir.actions.act_window,name:sh_user_audit.sh_user_audit_log_action
+#: model:ir.ui.menu,name:sh_user_audit.sh_user_log_detail_menu
+msgid "User Audit Log "
+msgstr "Journal d'audit de l'utilisateur"
+
+#. module: sh_user_audit
+#: model:ir.model,name:sh_user_audit.model_sh_user_audit_log
+msgid "User Audit Logs"
+msgstr "Journaux d'audit des utilisateurs"
+
+#. module: sh_user_audit
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_user_audit__user_ids
+#: model_terms:ir.ui.view,arch_db:sh_user_audit.sh_user_audit_form
+msgid "Users"
+msgstr "Utilisateurs"
+
+#. module: sh_user_audit
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_clear_log__wizard_create
+msgid "Wizard Create"
+msgstr "Magicien crée"
+
+#. module: sh_user_audit
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_clear_log__wizard_delete
+msgid "Wizard Delete"
+msgstr "Magicien supprimer"
+
+#. module: sh_user_audit
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_clear_log__wizard_read
+msgid "Wizard Read"
+msgstr "Lire la lecture"
+
+#. module: sh_user_audit
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_clear_log__wizard_write
+msgid "Wizard Write"
+msgstr "Magicien écrit"
+
+#. module: sh_user_audit
+#: model:ir.model.fields,field_description:sh_user_audit.field_sh_user_audit__is_write
+#: model:ir.model.fields.selection,name:sh_user_audit.selection__sh_user_audit_log__type__write
+#: model_terms:ir.ui.view,arch_db:sh_user_audit.sh_user_audit_id_search
+msgid "Write"
+msgstr "Écrivez"
+
+#. module: sh_user_audit
+#: model_terms:ir.ui.view,arch_db:sh_user_audit.sh_user_audit_form
+#: model_terms:ir.ui.view,arch_db:sh_user_audit.sh_user_audit_log_form
+msgid "form"
+msgstr "former"

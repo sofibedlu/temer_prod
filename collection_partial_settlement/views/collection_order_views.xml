@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_collection_order_form_inherit_partial_settlement" model="ir.ui.view">
+        <field name="name">collection.order.form.inherit.partial.settlement</field>
+        <field name="model">collection.order</field>
+        <field name="inherit_id" ref="collection_management.view_collection_order_form"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="//header" position="inside">
+                <button name="action_open_partial_settlement_wizard" 
+                        string="Partial Settlement" 
+                        type="object" 
+                        class="oe_highlight"
+                        invisible="state not in ['active']"
+                        groups="collection_management.group_collection_settlement_manager"/>
+            </xpath>
+            
+            <xpath expr="//sheet" position="inside">
+                <field name="has_partial_settlement" invisible="1"/>
+            </xpath>
+
+            <xpath expr="//page[1]" position="after">
+                <page string="Partial Settlement History" invisible="not has_partial_settlement">
+                    <field name="partial_settlement_session_ids">
+                        <tree string="Settlement Sessions">
+                            <field name="settlement_date"/>
+                            <field name="name" string="Merge Reference"/>
+                            <field name="new_installment_amount" sum="Total Folded Amount" widget="monetary"/>
+                            <field name="currency_id" column_invisible="1"/>
+                        </tree>
+                        <form string="Settlement Session">
+                            <sheet>
+                                <group>
+                                    <field name="settlement_date"/>
+                                    <field name="name"/>
+                                    <field name="new_installment_amount" widget="monetary"/>
+                                    <field name="currency_id" invisible="1"/>
+                                </group>
+                                <notebook>
+                                    <page string="Merged Installments">
+                                        <field name="history_line_ids">
+                                            <!-- <tree string="Merged Data" decoration-danger="state == 'overdue'" decoration-warning="state == 'partial'" decoration-success="state == 'paid'"> -->
+                                            <tree string="Merged Data"> 
+                                                <field name="currency_id" column_invisible="1"/>
+                                                <field name="name"/>
+                                                <!-- <field name="due_date"/> -->
+                                                <field name="amount_total" sum="Total Amount" widget="monetary"/>
+                                                <field name="amount_paid" sum="Total Paid" widget="monetary"/>
+                                                <field name="amount_residual" sum="Total Residual" widget="monetary"/>
+                                                <field name="discount_amount" sum="Total Discount" widget="monetary"/>
+                                                <!-- <field name="state" widget="badge" decoration-danger="state == 'overdue'" decoration-warning="state == 'partial'" decoration-success="state == 'paid'"/> -->
+                                            </tree>
+                                        </field>
+                                    </page>
+                                </notebook>
+                            </sheet>
+                        </form>
+                    </field>
+                </page>
+            </xpath>
+            
+        </field>
+    </record>
+</odoo>

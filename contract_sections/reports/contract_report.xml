@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="report_contract_document">
+  
+
+            <t t-call="web.html_container">
+                <t t-set="property" t-value="property"/>
+                <t t-call="contract_sections.report_custom_internal_layout">
+                    
+                    <t t-set="custom_css">
+                        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;500;600&amp;display=swap');
+
+                        body {
+                            font-family: 'Noto Sans Ethiopic', sans-serif !important;
+                            font-size: 14px !important;
+                            line-height: 1.5 !important;
+                      
+                        }
+                        P{
+                             font-family: 'Noto Sans Ethiopic', sans-serif !important;
+                              margin: -1px !important;
+                        }
+
+                         h4, h5, div {
+                            font-family: 'Noto Sans Ethiopic', sans-serif !important;
+                          
+                        }
+
+                        .amharic-text {
+                            font-family: 'Noto Sans Ethiopic', sans-serif !important;
+                    
+                        }
+
+                        .header-text {
+                            font-family: 'Noto Sans Ethiopic', sans-serif !important;
+                            text-decoration: underline;
+                            text-align: center;
+                            font-weight: bold !important;
+                        }
+
+                        .page-break-after {
+                            page-break-after: always;
+                        }
+
+                    </t>
+                    <style t-out="custom_css" />
+
+                   <div class="page" >
+
+
+ 
+                        <t t-foreach="sections" t-as="section">
+                            <div class="section " style="margin-top: -20px;">
+
+                                <t t-foreach="section['contents']" t-as="content">
+                                    <div class="content ">
+                                        <center>
+                                            <h4 class="header-text "
+                                                t-if="content['is_title_printed']">
+                                                <t t-esc="content['main_title']"/>
+                                            </h4>
+                                            <h5 class="header-text "
+                                                t-if="content['is_title_printed']">
+                                                <t t-esc="content['subtitle']" />
+                                            </h5>
+                                        </center>
+                                       
+                                        <div class="amharic-text">
+                                            <t t-raw="content['content']" />
+                                        </div>
+                                    </div>
+                             
+                                    <t t-if="content['main_title'] == 'break'">
+                                        <div style="page-break-after: always;"></div>
+                                    </t>
+
+                                </t>
+                            </div>
+
+                           
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+        <record id="action_report_contract" model="ir.actions.report">
+            <field name="name">Contract Agreement</field>
+            <field name="model">property.sale</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">contract_sections.report_contract_document</field>
+            <field name="report_file">contract_sections.report_contract_document</field>
+            <field name="paperformat_id" ref="paperformat_contract_agreement"/>
+            <field name="print_report_name">'Contract Agreement - %s' % (object.name)</field>
+
+        </record>
+    </data>
+</odoo>

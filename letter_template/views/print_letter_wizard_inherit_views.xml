@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_print_letter_wizard_form_inherit_preview"
+            model="ir.ui.view">
+        <field name="name">property.print.letter.wizard.form.inherit.preview</field>
+        <field name="model">property.print.letter.wizard</field>
+        <field name="inherit_id"
+               ref="collection_management.view_print_letter_wizard_form"/>
+        <field name="arch" type="xml">
+
+            <!-- ── 1. Hide the base letter_type Selection ─────────────── -->
+            <xpath expr="//field[@name='letter_type']" position="attributes">
+                <attribute name="invisible">1</attribute>
+                <attribute name="required">0</attribute>
+            </xpath>
+
+            <!-- ── 2. Hide letterhead_id ──────────────────────────────── -->
+            <xpath expr="//field[@name='letterhead_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+                <attribute name="required">0</attribute>
+            </xpath>
+
+            <!-- ── 3. Hide custom_template_id (collection_letter_template)-->
+            <xpath expr="//field[@name='custom_template_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+                <attribute name="required">0</attribute>
+            </xpath>
+
+            <!-- ── 4. Inject letter_type_id + letter_template_id ─────── -->
+            <xpath expr="//field[@name='letterhead_id']" position="after">
+                <!-- Letter Type — pick first to filter templates -->
+                <field name="letter_type_id"
+                       options="{'no_create': True}"
+                       placeholder="Select letter type…"/>
+                <!-- Letter Template — domain filtered by letter_type_id,
+                     opens a list view so user can browse all matching templates -->
+                <field name="letter_template_id"
+                       required="1"
+                       options="{'no_create': True, 'no_open': True, 'no_quick_create': True}"
+                       domain="letter_type_id and [('letter_type_id', '=', letter_type_id)] or []"
+                       context="{'default_letter_type_id': letter_type_id}"
+                       placeholder="Select a letter template…"/>
+            </xpath>
+
+            <!-- ── 5. Preview Letter button before Print Letter ──────── -->
+            <xpath expr="//button[@name='action_print_letter']" position="before">
+                <button name="action_preview_letter"
+                        string="Preview Letter"
+                        type="object"
+                        class="btn-secondary"
+                        icon="fa-eye"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

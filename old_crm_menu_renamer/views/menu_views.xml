@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Rename only the main CRM menu to OLD CRM, keep the icon and all submenus -->
+        <record id="crm.crm_menu_root" model="ir.ui.menu">
+            <field name="name">OLD CRM</field>
+            <!-- Keep the original CRM icon -->
+            <field name="web_icon">crm,static/description/icon.png</field>
+        </record>
+    </data>
+</odoo>

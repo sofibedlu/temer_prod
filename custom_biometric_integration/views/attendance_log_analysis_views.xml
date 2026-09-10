@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View: No Create, No Edit, No Delete -->
+    <record id="view_attendance_log_analysis_tree" model="ir.ui.view">
+        <field name="name">attendance.log.analysis.tree</field>
+        <field name="model">attendance.log.analysis</field>
+        <field name="arch" type="xml">
+            <tree string="Log Analysis" decoration-muted="is_archived" decoration-info="is_locked" 
+                  create="0" edit="0" delete="0">
+                
+                <header>
+                    <button name="%(action_manual_read_wizard)d" type="action" 
+                            string="Manual Read Override" class="btn-primary" display="always"/>
+                </header>
+
+                <field name="bio_id"/>
+                <field name="machine_id"/>
+                <field name="timestamp"/>
+                <field name="read_by"/>
+                <field name="is_locked"/>
+                <field name="is_archived"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View: No Create, No Edit, No Delete -->
+    <record id="view_attendance_log_analysis_form" model="ir.ui.view">
+        <field name="name">attendance.log.analysis.form</field>
+        <field name="model">attendance.log.analysis</field>
+        <field name="arch" type="xml">
+            <form string="Log Analysis" create="0" edit="0" delete="0">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="bio_id"/>
+                            <field name="machine_id"/>
+                            <field name="timestamp"/>
+                        </group>
+                        <group>
+                            <field name="read_by"/>
+                            <field name="is_locked"/>
+                            <field name="is_archived"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_attendance_log_analysis_search" model="ir.ui.view">
+        <field name="name">attendance.log.analysis.search</field>
+        <field name="model">attendance.log.analysis</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="bio_id"/>
+                <field name="machine_id"/>
+                <filter string="Locked" name="locked" domain="[('is_locked', '=', True)]"/>
+                <filter string="Archived" name="archived" domain="[('is_archived', '=', True)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Machine" name="group_machine" context="{'group_by':'machine_id'}"/>
+                    <filter string="Biometric ID" name="group_bio" context="{'group_by':'bio_id'}"/>
+                    <filter string="Date" name="group_date" context="{'group_by':'timestamp:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_attendance_log_analysis" model="ir.actions.act_window">
+        <field name="name">Log Analysis</field>
+        <field name="res_model">attendance.log.analysis</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_attendance_log_analysis_search"/>
+    </record>
+</odoo>

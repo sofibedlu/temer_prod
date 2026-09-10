@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- ========================================== -->
+    <!-- 1. HIDE OLD MENUS FROM ATTENDANCES APP     -->
+    <!-- ========================================== -->
+    
+    <!-- Hide old "Biometric Attendance Log" menu -->
+    <menuitem id="tis_hr_biometric_attendance.menu_biometric_attnd_log" active="False"/>
+    
+    <!-- Hide old "Manager" root menu (which hides Calc & Report wizards inside it) -->
+    <menuitem id="tis_hr_biometric_attendance.menu_attendance_manager_custom" active="False"/>
+    
+    <!-- Hide old "Biometric Device Config" menu -->
+    <menuitem id="tis_hr_biometric_attendance.menu_biometric_device_config" active="False"/>
+
+
+    <!-- ========================================== -->
+    <!-- 2. HIDE OLD ACTION BUTTONS IN EMPLOYEE APP -->
+    <!-- ========================================== -->
+    
+    <!-- Remove binding for "Scan with Biometric" -->
+    <record id="tis_hr_biometric_attendance.action_view_biometric_device_wizard_form1" model="ir.actions.act_window">
+        <field name="binding_model_id" eval="False"/>
+    </record>
+
+    <!-- Remove binding for "Update with Biometric" -->
+    <record id="tis_hr_biometric_attendance.action_view_biometric_device_wizard_form2" model="ir.actions.act_window">
+        <field name="binding_model_id" eval="False"/>
+    </record>
+
+    <!-- Remove binding for "Remove from Biometric" -->
+    <record id="tis_hr_biometric_attendance.action_view_biometric_device_wizard_form3" model="ir.actions.act_window">
+        <field name="binding_model_id" eval="False"/>
+    </record>
+
+
+    <!-- ========================================== -->
+    <!-- 3. NEW CUSTOM MODULE MENUS                 -->
+    <!-- ========================================== -->
+    
+    <!-- Employee Configuration Menus -->
+    <menuitem id="menu_machine_registration"
+              name="Machine Registration"
+              parent="hr.menu_human_resources_configuration"
+              action="tis_hr_biometric_attendance.action_biometric_device_config_view"
+              sequence="100"/>
+              
+    <menuitem id="menu_hr_attendance_period"
+              name="HR Periods"
+              parent="hr.menu_human_resources_configuration"
+              action="action_hr_attendance_period"
+              sequence="101"/>
+
+    <menuitem id="menu_attendance_identification"
+              name="Attendance Identification"
+              parent="hr.menu_human_resources_configuration"
+              action="action_attendance_identification"
+              sequence="102"/>
+
+    <!-- New Top Level Root Menu for Data Lake -->
+    <menuitem id="menu_attendance_log_root"
+              name="Attendance Log"
+              web_icon="hr_attendance,static/description/icon.png"
+              sequence="80"/>
+
+    <menuitem id="menu_attendance_log_analysis"
+              name="Log Analysis"
+              parent="menu_attendance_log_root"
+              action="action_attendance_log_analysis"
+              sequence="10"/>
+
+</odoo>

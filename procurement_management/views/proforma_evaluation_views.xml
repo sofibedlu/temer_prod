@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_proforma_evaluation_tree" model="ir.ui.view">
+        <field name="name">procurement.proforma.evaluation.tree</field>
+        <field name="model">procurement.proforma.evaluation</field>
+        <field name="arch" type="xml">
+            <tree string="Proforma Analysis">
+                <field name="name"/>
+                <field name="procurement_ids" widget="many2many_tags"/>
+                <field name="state" widget="badge" decoration-success="state == 'done'" decoration-info="state == 'draft'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_proforma_evaluation_form" model="ir.ui.view">
+        <field name="name">procurement.proforma.evaluation.form</field>
+        <field name="model">procurement.proforma.evaluation</field>
+        <field name="arch" type="xml">
+            <form string="Proforma Analysis">
+                <header>
+                    <button name="action_create_rfqs" string="Generate RFQs" type="object" class="oe_highlight" invisible="state == 'done'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_rfqs" type="object" class="oe_stat_button" icon="fa-list-alt" invisible="po_count == 0">
+                            <field name="po_count" widget="statinfo" string="Purchase Orders"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <label for="procurement_ids"/>
+                        <div>
+                            <field name="procurement_ids" widget="many2many_tags" readonly="state == 'done'" domain="[('state', '=', 'approved')]"/>
+                            <div invisible="not procurement_summary">
+                                <field name="procurement_summary" nolabel="1" readonly="1"/>
+                            </div>
+                        </div>
+                    </group>
+                    <notebook>
+                        <page string="Evaluation Lines">
+                            <field name="line_ids" readonly="state == 'done'">
+                                <tree editable="bottom" decoration-success="is_winner" default_order="product_id, total_score desc">
+                                    <field name="product_id" readonly="1"/>
+                                    <field name="collection_id" string="Proforma Collection" readonly="1"/>
+                                    <field name="proforma_line_id" string="Vendor Quote" readonly="1" force_save="1" decoration-bf="1"/> 
+                                    <field name="technical"/>
+                                    <field name="financial"/>
+                                    <field name="total_score" readonly="1" decoration-bf="1"/>
+                                    <field name="is_winner" widget="boolean_toggle" readonly="parent.state == 'done'"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                        <page string="Specifications" name="specifications">
+                            <field name="spec_line_ids">
+                                <tree create="0" delete="0">
+                                    <field name="product_id" readonly="1"/>
+                                    <field name="specifications" widget="html"/>
+                                </tree>
+                                <form>
+                                    <sheet>
+                                        <group>
+                                            <field name="product_id" readonly="1"/>
+                                        </group>
+                                        <separator string="Specifications"/>
+                                        <field name="specifications" widget="html" nolabel="1"/>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_proforma_evaluation" model="ir.actions.act_window">
+        <field name="name">Proforma Analysis</field>
+        <field name="res_model">procurement.proforma.evaluation</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_proforma_evaluation" name="Proforma Analysis" parent="menu_purchase_department" action="action_proforma_evaluation" sequence="21"/>
+</odoo>

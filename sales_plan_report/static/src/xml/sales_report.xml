@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="sales_plan_report.SalesReportClient" owl="1">
+        <div class="collection-report-container">
+            <div class="report-header">
+                <h1 class="report-title">Sales Performance Report</h1>
+                <div t-if="state.role_display || state.selected_wing_name" 
+                     style="margin-bottom: 15px; padding: 10px; background-color: #f0f0f0; border-radius: 4px; font-size: 14px;">
+                    <span t-if="state.role_display">Role: <strong><t t-esc="state.role_display"/></strong></span>
+                    <span t-if="state.role_display &amp;&amp; state.selected_wing_name"> | </span>
+                    <span t-if="state.selected_wing_name">Wing: <strong><t t-esc="state.selected_wing_name"/></strong></span>
+                </div>
+                <div class="filter-section">
+                    <div class="filters-row">
+                        <div class="filter-group" t-if="state.report_type === 'wing'">
+                            <label>Wing:</label>
+                            <select class="select-input" 
+                                    t-model="state.selected_wing_id"
+                                    t-on-change="onWingChange">
+                                <option value="">Select Wing</option>
+                                <option t-foreach="state.wings" t-as="wing" t-key="wing.id" t-att-value="wing.id">
+                                    <t t-esc="wing.name"/>
+                                </option>
+                            </select>
+                        </div>
+                        <div class="filter-group" t-if="state.report_type === 'supervisor'">
+                            <label>Supervisor:</label>
+                            <select class="select-input" 
+                                    t-model="state.selected_supervisor_id"
+                                    t-on-change="onSupervisorChange">
+                                <option value="">Select Supervisor</option>
+                                <option t-foreach="state.supervisors" t-as="supervisor" t-key="supervisor.id" t-att-value="supervisor.id">
+                                    <t t-esc="supervisor.name"/>
+                                </option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>From:</label>
+                            <input type="date" t-model="state.date_from" class="date-input"/>
+                        </div>
+                        <div class="filter-group">
+                            <label>To:</label>
+                            <input type="date" t-model="state.date_to" class="date-input"/>
+                        </div>
+                        <button class="btn-show" t-on-click="loadData">
+                            Show
+                        </button>
+                        <div class="export-buttons" style="margin-left: auto;">
+                            <button class="btn-export btn-export-excel" t-on-click="exportExcel">
+                                Export Excel
+                            </button>
+                            <button class="btn-export btn-export-pdf" t-on-click="exportPDF">
+                                Export PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="report-table-grid" t-if="!state.loading">
+                <div class="report-table-container" style="overflow-x: auto; overflow-y: auto; max-height: calc(100vh - 300px);">
+                    <table class="report-table" style="min-width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Actual Previous Week</th>
+                            <th>Plan</th>
+                            <th>Actual</th>
+                            <th>Difference<br/>(This week - Previous week)</th>
+                            <th>Difference<br/>(Actual - Plan)</th>
+                            <th>% Achievement</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-if="!state.data || Object.keys(state.data).length === 0">
+                            <td colspan="7" style="text-align:center;padding:20px;">No data available. Please select filters and click Show.</td>
+                        </tr>
+                        <tr t-if="state.data &amp;&amp; Object.keys(state.data).length &gt; 0">
+                            <td style="text-align:left;padding-left:10px;font-weight:700;font-size:15px;"><strong>Prospects (Leads)</strong></td>
+                            <td><t t-esc="state.data.actual_previous_week_prospects or 0"/></td>
+                            <td style="color:red;"><t t-esc="state.data.plan_prospects or 0"/></td>
+                            <td><t t-esc="state.data.actual_prospects or 0"/></td>
+                            <td><t t-esc="state.data.diff_week_prospects or 0"/></td>
+                            <td><t t-esc="state.data.diff_prospects or 0"/></td>
+                            <td>
+                                <div class="progress-bar-container">
+                                    <span class="progress-text-outside"><t t-esc="(state.data.percent_prospects || 0).toFixed(2)"/>%</span>
+                                    <div class="progress-bar" t-att-style="'width: ' + Math.min(Math.max((state.data.percent_prospects || 0), 0), 100) + '%'">
+                                        <span class="progress-text"><t t-esc="(state.data.percent_prospects || 0).toFixed(2)"/>%</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr t-if="state.data &amp;&amp; Object.keys(state.data).length &gt; 0">
+                            <td style="text-align:left;padding-left:10px;font-weight:700;font-size:15px;"><strong>Follow-ups</strong></td>
+                            <td><t t-esc="state.data.actual_previous_week_follow_ups or 0"/></td>
+                            <td style="color:red;"><t t-esc="state.data.plan_follow_ups or 0"/></td>
+                            <td><t t-esc="state.data.actual_follow_ups or 0"/></td>
+                            <td><t t-esc="state.data.diff_week_follow_ups or 0"/></td>
+                            <td><t t-esc="state.data.diff_follow_ups or 0"/></td>
+                            <td>
+                                <div class="progress-bar-container">
+                                    <span class="progress-text-outside"><t t-esc="(state.data.percent_follow_ups || 0).toFixed(2)"/>%</span>
+                                    <div class="progress-bar" t-att-style="'width: ' + Math.min(Math.max((state.data.percent_follow_ups || 0), 0), 100) + '%'">
+                                        <span class="progress-text"><t t-esc="(state.data.percent_follow_ups || 0).toFixed(2)"/>%</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr t-if="state.data &amp;&amp; Object.keys(state.data).length &gt; 0">
+                            <td style="text-align:left;padding-left:10px;font-weight:700;font-size:15px;"><strong>Site Visits</strong></td>
+                            <td><t t-esc="state.data.actual_previous_week_site_visits or 0"/></td>
+                            <td style="color:red;"><t t-esc="state.data.plan_site_visits or 0"/></td>
+                            <td><t t-esc="state.data.actual_site_visits or 0"/></td>
+                            <td><t t-esc="state.data.diff_week_site_visits or 0"/></td>
+                            <td><t t-esc="state.data.diff_site_visits or 0"/></td>
+                            <td>
+                                <div class="progress-bar-container">
+                                    <span class="progress-text-outside"><t t-esc="(state.data.percent_site_visits || 0).toFixed(2)"/>%</span>
+                                    <div class="progress-bar" t-att-style="'width: ' + Math.min(Math.max((state.data.percent_site_visits || 0), 0), 100) + '%'">
+                                        <span class="progress-text"><t t-esc="(state.data.percent_site_visits || 0).toFixed(2)"/>%</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr t-if="state.data &amp;&amp; Object.keys(state.data).length &gt; 0">
+                            <td style="text-align:left;padding-left:10px;font-weight:700;font-size:15px;"><strong>Office Visits</strong></td>
+                            <td><t t-esc="state.data.actual_previous_week_office_visits or 0"/></td>
+                            <td style="color:red;"><t t-esc="state.data.plan_office_visits or 0"/></td>
+                            <td><t t-esc="state.data.actual_office_visits or 0"/></td>
+                            <td><t t-esc="state.data.diff_week_office_visits or 0"/></td>
+                            <td><t t-esc="state.data.diff_office_visits or 0"/></td>
+                            <td>
+                                <div class="progress-bar-container">
+                                    <span class="progress-text-outside"><t t-esc="(state.data.percent_office_visits || 0).toFixed(2)"/>%</span>
+                                    <div class="progress-bar" t-att-style="'width: ' + Math.min(Math.max((state.data.percent_office_visits || 0), 0), 100) + '%'">
+                                        <span class="progress-text"><t t-esc="(state.data.percent_office_visits || 0).toFixed(2)"/>%</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr t-if="state.data &amp;&amp; Object.keys(state.data).length &gt; 0" style="background-color:#e3f2fd;">
+                            <td style="text-align:left;padding-left:10px;font-weight:700;font-size:15px;"><strong>Total Visits (Site + Office)</strong></td>
+                            <td><t t-esc="state.data.actual_previous_week_total_visits or 0"/></td>
+                            <td style="color:red;"><t t-esc="state.data.plan_total_visits or 0"/></td>
+                            <td><t t-esc="state.data.actual_total_visits or 0"/></td>
+                            <td><t t-esc="state.data.diff_week_total_visits or 0"/></td>
+                            <td><t t-esc="state.data.diff_total_visits or 0"/></td>
+                            <td>
+                                <div class="progress-bar-container">
+                                    <span class="progress-text-outside"><t t-esc="(state.data.percent_total_visits || 0).toFixed(2)"/>%</span>
+                                    <div class="progress-bar" t-att-style="'width: ' + Math.min(Math.max((state.data.percent_total_visits || 0), 0), 100) + '%'">
+                                        <span class="progress-text"><t t-esc="(state.data.percent_total_visits || 0).toFixed(2)"/>%</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr t-if="state.data &amp;&amp; Object.keys(state.data).length &gt; 0" style="background-color:#fff3cd;">
+                            <td style="text-align:left;padding-left:10px;font-weight:700;font-size:15px;"><strong>Total unit reservations</strong></td>
+                            <td><t t-esc="state.data.actual_previous_week_unit_reservations or 0"/></td>
+                            <td style="color:red;"><t t-esc="state.data.plan_unit_reservations or 0"/></td>
+                            <td><t t-esc="state.data.actual_unit_reservations or 0"/></td>
+                            <td><t t-esc="state.data.diff_week_unit_reservations or 0"/></td>
+                            <td><t t-esc="state.data.diff_unit_reservations or 0"/></td>
+                            <td>
+                                <div class="progress-bar-container">
+                                    <span class="progress-text-outside"><t t-esc="(state.data.percent_unit_reservations || 0).toFixed(2)"/>%</span>
+                                    <div class="progress-bar" t-att-style="'width: ' + Math.min(Math.max((state.data.percent_unit_reservations || 0), 0), 100) + '%'">
+                                        <span class="progress-text"><t t-esc="(state.data.percent_unit_reservations || 0).toFixed(2)"/>%</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr t-if="state.data &amp;&amp; Object.keys(state.data).length &gt; 0" style="background-color:#d4edda;">
+                            <td style="text-align:left;padding-left:10px;font-weight:700;font-size:15px;"><strong>Deals Closed (QTY)</strong></td>
+                            <td><t t-esc="state.data.actual_previous_week_deals_closed or 0"/></td>
+                            <td style="color:red;"><t t-esc="state.data.plan_deals_closed or 0"/></td>
+                            <td><t t-esc="state.data.actual_deals_closed or 0"/></td>
+                            <td><t t-esc="state.data.diff_week_deals_closed or 0"/></td>
+                            <td><t t-esc="state.data.diff_deals_closed or 0"/></td>
+                            <td>
+                                <div class="progress-bar-container">
+                                    <span class="progress-text-outside"><t t-esc="(state.data.percent_deals_closed || 0).toFixed(2)"/>%</span>
+                                    <div class="progress-bar" t-att-style="'width: ' + Math.min(Math.max((state.data.percent_deals_closed || 0), 0), 100) + '%'">
+                                        <span class="progress-text"><t t-esc="(state.data.percent_deals_closed || 0).toFixed(2)"/>%</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr t-if="state.data &amp;&amp; Object.keys(state.data).length &gt; 0">
+                            <td style="text-align:left;padding-left:10px;font-weight:700;font-size:15px;"><strong>Conversion (sales/leads)</strong></td>
+                            <td><t t-esc="(state.data.actual_previous_week_conversion_rate || 0).toFixed(4)"/></td>
+                            <td style="color:red;"><t t-esc="(state.data.plan_conversion_rate || 0).toFixed(4)"/></td>
+                            <td><t t-esc="(state.data.conversion_rate || 0).toFixed(4)"/></td>
+                            <td><t t-esc="(state.data.diff_week_conversion_rate || 0).toFixed(4)"/></td>
+                            <td><t t-esc="(state.data.diff_conversion_rate || 0).toFixed(4)"/></td>
+                            <td>
+                                <div class="progress-bar-container">
+                                    <span class="progress-text-outside"><t t-esc="(state.data.percent_conversion_rate || 0).toFixed(2)"/>%</span>
+                                    <div class="progress-bar" t-att-style="'width: ' + Math.min(Math.max((state.data.percent_conversion_rate || 0), 0), 100) + '%'">
+                                        <span class="progress-text"><t t-esc="(state.data.percent_conversion_rate || 0).toFixed(2)"/>%</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr t-if="state.data &amp;&amp; Object.keys(state.data).length &gt; 0">
+                            <td style="text-align:left;padding-left:10px;font-weight:700;font-size:15px;"><strong>Cash Collected (Birr)</strong></td>
+                            <td><t t-esc="(state.data.actual_previous_week_cash_collected || 0).toFixed(2)"/> Birr</td>
+                            <td style="color:red;"><t t-esc="(state.data.plan_cash_collected || 0).toFixed(2)"/> Birr</td>
+                            <td><t t-esc="(state.data.actual_cash_collected || 0).toFixed(2)"/> Birr</td>
+                            <td><t t-esc="(state.data.diff_week_cash_collected || 0).toFixed(2)"/> Birr</td>
+                            <td><t t-esc="(state.data.diff_cash_collected || 0).toFixed(2)"/> Birr</td>
+                            <td>
+                                <div class="progress-bar-container">
+                                    <span class="progress-text-outside"><t t-esc="(state.data.percent_cash_collected || 0).toFixed(2)"/>%</span>
+                                    <div class="progress-bar" t-att-style="'width: ' + Math.min(Math.max((state.data.percent_cash_collected || 0), 0), 100) + '%'">
+                                        <span class="progress-text"><t t-esc="(state.data.percent_cash_collected || 0).toFixed(2)"/>%</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr t-if="state.data &amp;&amp; Object.keys(state.data).length &gt; 0">
+                            <td style="text-align:left;padding-left:10px;font-weight:700;font-size:15px;"><strong>Total Deal Value (Birr)</strong></td>
+                            <td><t t-esc="(state.data.actual_previous_week_total_deal_value || 0).toFixed(2)"/> Birr</td>
+                            <td style="color:red;"><t t-esc="(state.data.plan_total_deal_value || 0).toFixed(2)"/> Birr</td>
+                            <td><t t-esc="(state.data.actual_total_deal_value || 0).toFixed(2)"/> Birr</td>
+                            <td><t t-esc="(state.data.diff_week_total_deal_value || 0).toFixed(2)"/> Birr</td>
+                            <td><t t-esc="(state.data.diff_total_deal_value || 0).toFixed(2)"/> Birr</td>
+                            <td>
+                                <div class="progress-bar-container">
+                                    <span class="progress-text-outside"><t t-esc="(state.data.percent_total_deal_value || 0).toFixed(2)"/>%</span>
+                                    <div class="progress-bar" t-att-style="'width: ' + Math.min(Math.max((state.data.percent_total_deal_value || 0), 0), 100) + '%'">
+                                        <span class="progress-text"><t t-esc="(state.data.percent_total_deal_value || 0).toFixed(2)"/>%</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr t-if="state.data &amp;&amp; Object.keys(state.data).length &gt; 0">
+                            <td style="text-align:left;padding-left:10px;font-weight:700;font-size:15px;"><strong>IAR (sales/opening stock)</strong></td>
+                            <td><t t-esc="(state.data.actual_previous_week_iar_rate || 0).toFixed(2)"/>%</td>
+                            <td style="color:red;"><t t-esc="(state.data.plan_iar_rate || 0).toFixed(2)"/>%</td>
+                            <td><t t-esc="(state.data.iar_rate || 0).toFixed(2)"/>%</td>
+                            <td><t t-esc="(state.data.diff_week_iar_rate || 0).toFixed(2)"/>%</td>
+                            <td><t t-esc="(state.data.diff_iar_rate || 0).toFixed(2)"/>%</td>
+                            <td>
+                                <div class="progress-bar-container">
+                                    <span class="progress-text-outside"><t t-esc="(state.data.percent_iar_rate || 0).toFixed(2)"/>%</span>
+                                    <div class="progress-bar" t-att-style="'width: ' + Math.min(Math.max((state.data.percent_iar_rate || 0), 0), 100) + '%'">
+                                        <span class="progress-text"><t t-esc="(state.data.percent_iar_rate || 0).toFixed(2)"/>%</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    </table>
+                </div>
+
+                <div class="report-table-container opening-stock-container" t-if="state.data &amp;&amp; Object.keys(state.data).length &gt; 0">
+                    <h3>Opening Stock</h3>
+                    <table class="report-table" style="min-width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>QTY</th>
+                                <th>Estimated Value (Birr)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="text-align:left;padding-left:10px;"><strong>Residence</strong></td>
+                                <td><t t-esc="state.data.plan_opening_stock_residence_qty or 0"/></td>
+                                <td><t t-esc="(state.data.plan_opening_stock_residence_value || 0).toFixed(2)"/></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:left;padding-left:10px;"><strong>Shops</strong></td>
+                                <td><t t-esc="state.data.plan_opening_stock_shops_qty or 0"/></td>
+                                <td><t t-esc="(state.data.plan_opening_stock_shops_value || 0).toFixed(2)"/></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:left;padding-left:10px;"><strong>Total</strong></td>
+                                <td><t t-esc="state.data.plan_opening_stock_total_qty or 0"/></td>
+                                <td><t t-esc="(state.data.plan_opening_stock_total_value || 0).toFixed(2)"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="loading-spinner" t-if="state.loading">
+                Loading report data...
+            </div>
+        </div>
+    </t>
+</templates>
+

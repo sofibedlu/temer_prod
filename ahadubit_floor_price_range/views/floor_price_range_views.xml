@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Search view: filters and group by -->
+    <record id="floor_price_range_view_search" model="ir.ui.view">
+        <field name="name">floor.price.range.search</field>
+        <field name="model">floor.price.range</field>
+        <field name="arch" type="xml">
+            <search string="Floor Price Range">
+                <field name="site_id" string="Site"/>
+                <field name="floor_from_id" string="Floor From"/>
+                <field name="floor_to_id" string="Floor To"/>
+                <field name="price" string="Price"/>
+                <separator/>
+                <filter string="Price &gt; 0" name="filter_price_positive" domain="[('price', '>', 0)]"/>
+                <filter string="Price = 0" name="filter_price_zero" domain="[('price', '=', 0)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Site" name="group_site" context="{'group_by': 'site_id'}"/>
+                    <filter string="Floor From" name="group_floor_from" context="{'group_by': 'floor_from_id'}"/>
+                    <filter string="Floor To" name="group_floor_to" context="{'group_by': 'floor_to_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Tree view -->
+    <record id="floor_price_range_view_tree" model="ir.ui.view">
+        <field name="name">floor.price.range.tree</field>
+        <field name="model">floor.price.range</field>
+        <field name="arch" type="xml">
+            <tree string="Floor Price Ranges" editable="bottom">
+                <field name="site_id" options="{'no_create': True}" domain="[('state', '=', 'active'), ('has_full_floor_price_coverage', '=', False)]" widget="many2one"/>
+                <field name="floor_ids_available" column_invisible="1"/>
+                <field name="floor_from_id" options="{'no_create': True}" domain="[('id', 'in', floor_ids_available)]"/>
+                <field name="floor_to_id" options="{'no_create': True}" domain="[('id', 'in', floor_ids_available)]"/>
+                <field name="price"/>
+                <field name="currency_id" column_invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form view -->
+    <record id="floor_price_range_view_form" model="ir.ui.view">
+        <field name="name">floor.price.range.form</field>
+        <field name="model">floor.price.range</field>
+        <field name="arch" type="xml">
+            <form string="Floor Price Range">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="site_id" options="{'no_create': True}" domain="[('state', '=', 'active'), ('has_full_floor_price_coverage', '=', False)]" placeholder="Select site..."/>
+                            <field name="floor_ids_available" column_invisible="1"/>
+                            <field name="floor_from_id" options="{'no_create': True}" domain="[('id', 'in', floor_ids_available)]" placeholder="From floor..."/>
+                            <field name="floor_to_id" options="{'no_create': True}" domain="[('id', 'in', floor_ids_available)]" placeholder="To floor..."/>
+                        </group>
+                        <group>
+                            <field name="price"/>
+                            <field name="currency_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="floor_price_range_action" model="ir.actions.act_window">
+        <field name="name">Floor Price Range</field>
+        <field name="res_model">floor.price.range</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a Floor Price Range: select a Site (active sites only), then choose Floor From and Floor To from the floors of that site. Floor From must be smaller than Floor To. Set Price per m2.
+            </p>
+            <p>
+                When a floor is selected on a property of this site, Price(m2) will be set from the matching range and Sales Price will be calculated automatically.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu: Configuration > Site > Floor price range -->
+    <menuitem id="menu_floor_price_range"
+        name="Floor price range"
+        parent="ahadubit_property_base.property_config_menu"
+        action="floor_price_range_action"
+        sequence="7"/>
+</odoo>

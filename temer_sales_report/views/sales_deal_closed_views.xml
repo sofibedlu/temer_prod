@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_temer_sales_deal_closed_tree" model="ir.ui.view">
+        <field name="name">temer.sales.deal.closed.tree</field>
+        <field name="model">property.sale</field>
+        <field name="arch" type="xml">
+            <tree string="Sales Deal Closed" create="false" delete="false" edit="false">
+                <header>
+                    <button string="Export Excel" name="action_temer_export_sales_deal_closed" type="object" display="always"/>
+                </header>
+                <field name="report_wing_display" string="Wing Name"/>
+                <field name="report_supervisor_display" string="Sales Supervisor"/>
+                <field name="sales_person" string="Sales Consultant"/>
+                <field name="site_id" string="Site"/>
+                <field name="property_id" string="Property Name"/>
+                <field name="report_property_type" string="Property Type"/>
+                <field name="report_unit_type" string="Unit Type"/>
+                <field name="report_gross_area" string="Gross Area" optional="show"/>
+                <field name="report_net_area" string="Net Area" optional="show"/>
+                <field name="report_fiscal_year" string="Fiscal Year"/>
+                <field name="report_period" string="Period"/>
+                <field name="report_date_display" string="Date"/>
+                <field name="sale_price" string="Property Value"/>
+                <field name="report_cash_collection" string="Cash Collection"/>
+                <field name="report_property_is_legacy" string="Is Legacy" widget="boolean"/>
+                <field name="state" string="State" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_temer_sales_deal_closed_search" model="ir.ui.view">
+        <field name="name">temer.sales.deal.closed.search</field>
+        <field name="model">property.sale</field>
+        <field name="arch" type="xml">
+            <search string="Sales Deal Closed">
+                <field name="sales_person" string="Sales Consultant"/>
+                <field name="site_id" string="Site"/>
+                <field name="property_id" string="Property Name"/>
+                <filter string="Confirmed" name="confirmed" domain="[('state','=','confirm')]"/>
+                <filter string="Cancelled" name="cancelled" domain="[('state','=','cancel')]"/>
+                <filter string="Audited" name="audited" domain="[('state','=','audit')]"/>
+                <filter string="Approved" name="approved" domain="[('state','=','approve')]"/>
+                <filter string="Done" name="done" domain="[('state','=','done')]"/>
+                <filter string="Void" name="void" domain="[('state','=','void')]"/>
+                <filter string="Legacy Property" name="filter_legacy_property" domain="[('report_property_is_legacy', '=', True)]"/>
+                <filter string="Non-Legacy Property" name="filter_not_legacy_property" domain="[('report_property_is_legacy', '=', False)]"/>
+                <filter string="Residential" name="filter_residential" domain="[('report_property_type_stored','=','residential')]"/>
+                <filter string="Commercial" name="filter_commercial" domain="[('report_property_type_stored','=','commercial')]"/>
+                <separator/>
+                <filter string="Site" name="group_site" context="{'group_by': 'site_id'}"/>
+                <filter string="Sales Consultant" name="group_user" context="{'group_by': 'sales_person'}"/>
+                <filter string="Property Type" name="group_property_type" context="{'group_by': 'report_property_type_stored'}"/>
+                <filter string="Bedrooms" name="group_bedroom" context="{'group_by': 'report_bedroom_stored'}"/>
+                <filter string="State" name="group_state" context="{'group_by': 'state'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_temer_sales_deal_closed" model="ir.actions.act_window">
+        <field name="name">Sales Deal Closed</field>
+        <field name="res_model">property.sale</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_temer_sales_deal_closed_tree"/>
+        <field name="search_view_id" ref="view_temer_sales_deal_closed_search"/>
+        <field name="domain">[('state', 'in', ['confirm', 'audit', 'approve', 'done'])]</field>
+        <field name="context">{}</field>
+    </record>
+
+</odoo>

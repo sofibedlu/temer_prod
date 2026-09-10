@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_property_sale_form_inherit_void" model="ir.ui.view">
+            <field name="name">property.sale.form.inherit.void</field>
+            <field name="model">property.sale</field>
+            <field name="inherit_id" ref="advanced_property_management.property_sale_view_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//header" position="inside">
+                    <field name="is_schedule_unlocked" invisible="1"/>
+                    
+                    <button name="action_open_amendment_wizard" 
+                            string="Amend Schedule" 
+                            type="object" 
+                            class="btn-secondary" 
+                            invisible="state != 'approve' or is_schedule_unlocked"
+                            groups="property_contract_extension.group_property_void_contract_button"/>
+                            
+                    <button name="action_sync_and_lock_schedule" 
+                            string="Sync &amp; Lock Schedule" 
+                            type="object" 
+                            class="btn-success" 
+                            invisible="not is_schedule_unlocked"/>
+                </xpath>
+
+                <!-- History Tab -->
+                <xpath expr="//notebook" position="inside">
+                    <page string="Schedule History" invisible="not schedule_history_ids">
+                        <field name="schedule_history_ids" readonly="1">
+                            <tree>
+                                <field name="date"/>
+                                <field name="user_id"/>
+                                <field name="reason"/>
+                            </tree>
+                            <form>
+                                <group>
+                                    <field name="date"/>
+                                    <field name="user_id"/>
+                                    <field name="reason"/>
+                                </group>
+                                <field name="line_ids">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="expected"/>
+                                        <field name="expected_amount"/>
+                                        <field name="paid_amount"/>
+                                    </tree>
+                                </field>
+                            </form>
+                        </field>
+                    </page>
+                </xpath>
+
+                <xpath expr="//button[@name='action_print_contract']" position="attributes">
+                    <attribute name="invisible">not contract_id or state not in ['confirm', 'approve', 'void', 'done', 'cancel']</attribute>
+                </xpath>
+
+                <xpath expr="//header" position="inside">
+                    <field name="has_pending_void_request" invisible="1"/>
+
+                    <button name="action_approve_sale" 
+                            string="Approve" 
+                            type="object" 
+                            class="oe_highlight" 
+                            invisible="state != 'confirm'"/>
+
+                    <button name="action_open_void_wizard" 
+                            string="Void Contract" 
+                            type="object" 
+                            class="oe_highlight btn-warning" 
+                            invisible="state != 'approve' or has_pending_void_request"
+                            groups="property_contract_extension.group_property_void_contract_button"/>
+                </xpath>
+
+                <!-- Hide the Cancel button -->
+                <xpath expr="//button[@name='action_cancel_sale']" position="attributes">
+                    <attribute name="invisible">state not in ['draft', 'request_for_confirm', 'confirm']</attribute>
+                </xpath>
+
+                <!-- Hide the Calculate Commission button -->
+                <xpath expr="//button[@name='calculate_commission']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='state' and @widget='statusbar']" position="attributes">
+                    <attribute name="statusbar_visible">draft,request_for_confirm,confirm,approve,done,void</attribute>
+                </xpath>
+
+                <!-- Hide the Commission Details Tab -->
+                <xpath expr="//page[.//field[@name='commission_detail_ids']]" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+            </field>
+        </record>
+
+
+        <record id="view_property_sale_tree_inherit_colors" model="ir.ui.view">
+            <field name="name">property.sale.tree.inherit.colors</field>
+            <field name="model">property.sale</field>
+            <field name="inherit_id" ref="advanced_property_management.property_sale_view_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="inside">
+                    <header>
+                        <button name="action_approve_sale" 
+                                string="Approve" 
+                                type="object" 
+                                class="btn-primary"/>
+                    </header>
+                </xpath>
+
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="decoration-muted">state == 'draft'</attribute>
+                    <attribute name="decoration-info">state == 'confirm'</attribute>
+                    <attribute name="decoration-success">state == 'approve'</attribute>
+                        <attribute name="decoration-primary">state == 'done'</attribute>
+                    <attribute name="decoration-danger">state == 'void'</attribute>
+                </xpath> 
+
+                <xpath expr="//field[@name='state']" position="replace">
+                    <field name="state" 
+                           widget="badge" 
+                           decoration-muted="state == 'draft'"
+                           decoration-info="state == 'confirm'"
+                           decoration-success="state == 'approve'"
+                           decoration-primary="state == 'done'"
+                           decoration-danger="state == 'void'"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

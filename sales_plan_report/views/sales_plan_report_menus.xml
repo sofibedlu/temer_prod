@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+    <!-- Add menu under the existing Plan Reports menu from sales_plan_module -->
+    <menuitem id="menu_sales_performance_reports"
+              name="Performance Reports"
+              parent="sales_plan_module.menu_plan_reports"
+              action="action_sales_report"
+              sequence="30"/>
+</data>
+</odoo>

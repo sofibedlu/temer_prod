@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="sequence_collection_customer_service" model="ir.sequence">
+        <field name="name">Collection Customer Service</field>
+        <field name="code">collection.customer.service</field>
+        <field name="prefix">CS</field>
+        <field name="padding">5</field>
+        <field name="number_increment">1</field>
+        <field name="number_next">1</field>
+    </record>
+</odoo>

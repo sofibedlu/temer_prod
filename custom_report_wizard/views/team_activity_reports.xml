@@ -1,0 +1,230 @@
+<odoo>
+    <!-- Report Action -->
+    <record id="team_activity_pdf" model="ir.actions.report">
+        <field name="name">Team Activity PDF</field>
+        <field name="model">team.activity.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">custom_report_wizard.team_activity_report_template</field>
+        <field name="report_file">custom_report_wizard.team_activity_report_template</field>
+    </record>
+
+    <!-- Report Template -->
+    <!-- <template id="team_activity_report_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+     
+                <div style="font-size:22px; font-weight:700; color:#2563eb; margin-bottom:8px;">
+                    <t t-if="report_by == 'wing'">
+                        <t t-esc="wing_name"/> Team Activity Report
+                    </t>
+                    <t t-if="report_by == 'supervisor'">
+                        Supervisor Team Activity Report
+                    </t>
+                    <t t-if="report_by == 'salesperson'">
+                        Salesperson Team Activity Report
+                    </t>
+                </div>
+
+                <div style="font-size:14px; color:#4a5568; margin-bottom:18px;">
+                    <t t-if="date_from">
+                        <span style="background:#e2e8f0;padding:2px 8px;border-radius:6px;margin-right:8px;">
+                            From: <t t-esc="date_from"/>
+                        </span>
+                    </t>
+                    <t t-if="date_to">
+                        <span style="background:#e2e8f0;padding:2px 8px;border-radius:6px;">
+                            To: <t t-esc="date_to"/>
+                        </span>
+                    </t>
+                </div>
+
+                <div style="margin-bottom:10px;">
+                    <span style="display:inline-block;background:#89AF31;color:#fff;border-radius:10px;padding:2px 10px;font-size:13px;margin-right:8px;">Office Visit</span>
+                    <span style="display:inline-block;background:#fef9c3;color:#92400e;border-radius:10px;padding:2px 10px;font-size:13px;margin-right:8px;">Site Visit</span>
+                    <span style="display:inline-block;background:#A8AF94;color:#334155;border-radius:10px;padding:2px 10px;font-size:13px;margin-right:8px;">Call</span>
+                    <span style="display:inline-block;background:#dbeafe;color:#1e3a8a;border-radius:10px;padding:2px 10px;font-size:13px;margin-right:8px;">Email</span>
+                    <span style="display:inline-block;background:#fee2e2;color:#991b1b;border-radius:10px;padding:2px 10px;font-size:13px;">SMS</span>
+                </div>
+
+                <div style="margin-top: 40px; padding-top: 10px; clear: both; overflow-x:auto;">
+                <table style="width:100%; margin-bottom:16px; border-collapse: collapse; page-break-inside: auto; font-size: 13px;">
+                        <thead style="background: #f3f4f6; display: table-header-group;">
+                            <tr style="font-size:15px; color:#374151;">
+                                <th style="padding:7px 10px; border:1px solid #e5e7eb;">Wing</th>
+                                <th style="padding:7px 10px; border:1px solid #e5e7eb;">Wing Manager</th>
+                                <t t-if="report_by in ('supervisor', 'salesperson')">
+                                    <th style="padding:7px 10px; border:1px solid #e5e7eb;">Supervisor</th>
+                                </t>
+                                <t t-if="report_by == 'salesperson'">
+                                    <th style="padding:7px 10px; border:1px solid #e5e7eb;">Salesperson</th>
+                                </t>
+                                <th style="text-align:center; border:1px solid #e5e7eb;">Office Visit</th>
+                                <th style="text-align:center; border:1px solid #e5e7eb;">Site Visit</th>
+                                <th style="text-align:center; border:1px solid #e5e7eb;">Call</th>
+                                <th style="text-align:center; border:1px solid #e5e7eb;">Email</th>
+                                <th style="text-align:center; border:1px solid #e5e7eb;">SMS</th>
+                                <th style="text-align:center; border:1px solid #e5e7eb;">Total Events</th>
+                            </tr>
+                        </thead>
+                        <tbody style="page-break-inside: auto;">
+                            <t t-foreach="rows" t-as="row" t-index="i">
+                                <tr t-att-style="'background-color:' + ('#f9fafb' if ((i or 0) % 2) else '#fff') + '; page-break-inside: avoid;'">
+                                    <td style="padding:6px 10px; font-weight:600; color:#0891b2; border:1px solid #e5e7eb;">
+                                        <t t-esc="row['wing_name']"/>
+                                    </td>
+                                    <td style="padding:6px 10px; color:#2d3748; border:1px solid #e5e7eb;">
+                                        <t t-esc="row['wing_manager_name']"/>
+                                    </td>
+                                    <t t-if="report_by in ('supervisor', 'salesperson')">
+                                        <td style="padding:6px 10px; color:#6366f1; border:1px solid #e5e7eb;">
+                                            <t t-esc="row['supervisor_name']"/>
+                                        </td>
+                                    </t>
+                                    <t t-if="report_by == 'salesperson'">
+                                        <td style="padding:6px 10px; font-weight:500; border:1px solid #e5e7eb;">
+                                            <t t-esc="row['sales_person']"/>
+                                        </td>
+                                    </t>
+                                    <td style="text-align:center; font-size:15px; border:1px solid #e5e7eb;"><t t-esc="row['office_visit_count']"/></td>
+                                    <td style="text-align:center; font-size:15px; border:1px solid #e5e7eb;"><t t-esc="row['site_visit_count']"/></td>
+                                    <td style="text-align:center; font-size:15px; border:1px solid #e5e7eb;"><t t-esc="row['call_count']"/></td>
+                                    <td style="text-align:center; font-size:15px; border:1px solid #e5e7eb;"><t t-esc="row['email_count']"/></td>
+                                    <td style="text-align:center; font-size:15px; border:1px solid #e5e7eb;"><t t-esc="row['sms_count']"/></td>
+                                    <td style="text-align:center; border:1px solid #e5e7eb;">
+                                        <span style="display:inline-block;background:#89AF31;color:#fff;padding:2px 10px;border-radius:16px;font-weight:bold;">
+                                            <t t-esc="row['total_key_events']"/>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </t>
+    
+                            <tr style="font-weight: bold; background: #A8AF94;">
+                                <td>Total</td>
+                                <td></td>
+                                <t t-if="report_by in ('supervisor', 'salesperson')">
+                                    <td></td>
+                                </t>
+                                <t t-if="report_by == 'salesperson'">
+                                    <td></td>
+                                </t>
+                                <td style="text-align:center; border:1px solid #e5e7eb;"><t t-esc="totals['office_visit_count']"/></td>
+                                <td style="text-align:center; border:1px solid #e5e7eb;"><t t-esc="totals['site_visit_count']"/></td>
+                                <td style="text-align:center; border:1px solid #e5e7eb;"><t t-esc="totals['call_count']"/></td>
+                                <td style="text-align:center; border:1px solid #e5e7eb;"><t t-esc="totals['email_count']"/></td>
+                                <td style="text-align:center; border:1px solid #e5e7eb;"><t t-esc="totals['sms_count']"/></td>
+                                <td style="text-align:center; border:1px solid #e5e7eb;">
+                                    <span style="display:inline-block;background:#89AF31;color:#fff;padding:2px 10px;border-radius:16px;">
+                                        <t t-esc="totals['total_key_events']"/>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+   
+                <div style="margin-top:20px; font-size:12px; color:#94a3b8;">
+                    <i>Team Activity Wizard Report Generated - Temer Properties Dev Team</i>
+                </div>
+            </t>
+        </t>
+    </template> -->
+
+    <template id="team_activity_report_template">
+    <t t-call="web.html_container">
+        <t t-call="web.external_layout">
+
+            <!-- Header and Branding Section -->
+            <div style="margin-bottom:18px;">
+                <div style="font-size:22px; font-weight:700; color:#2563eb; margin-top:8px;">
+                    <t t-if="report_by == 'wing'"><t t-esc="wing_name"/> Team Activity Report</t>
+                    <t t-if="report_by == 'supervisor'">Supervisor Team Activity Report</t>
+                    <t t-if="report_by == 'salesperson'">Salesperson Team Activity Report</t>
+                </div>
+                <div style="font-size:14px; color:#4a5568; margin-top:4px;">
+                    <t t-if="date_from">
+                        <span style="background:#e2e8f0; padding:2px 8px; border-radius:6px; margin-right:8px;">
+                            From: <t t-esc="date_from"/>
+                        </span>
+                    </t>
+                    <t t-if="date_to">
+                        <span style="background:#e2e8f0; padding:2px 8px; border-radius:6px;">
+                            To: <t t-esc="date_to"/>
+                        </span>
+                    </t>
+                </div>
+                <!-- Legend here if you wish -->
+            </div>
+
+            <!-- Table Section (no extra div!) -->
+            <table style="width:100%; margin-top:18px; margin-bottom:16px; border-collapse:collapse; page-break-inside:auto; font-size:13px;">
+                <thead style="background:#f3f4f6; display:table-header-group;">
+                    <tr style="font-size:15px; color:#374151;">
+                        <th style="padding:7px 10px; border:1px solid #e5e7eb;">Wing</th>
+                        <th style="padding:7px 10px; border:1px solid #e5e7eb;">Wing Manager</th>
+                        <t t-if="report_by in ('supervisor', 'salesperson')">
+                            <th style="padding:7px 10px; border:1px solid #e5e7eb;">Supervisor</th>
+                        </t>
+                        <t t-if="report_by == 'salesperson'">
+                            <th style="padding:7px 10px; border:1px solid #e5e7eb;">Salesperson</th>
+                        </t>
+                        <th style="text-align:center; border:1px solid #e5e7eb;">Office Visit</th>
+                        <th style="text-align:center; border:1px solid #e5e7eb;">Site Visit</th>
+                        <th style="text-align:center; border:1px solid #e5e7eb;">Call</th>
+                        <th style="text-align:center; border:1px solid #e5e7eb;">Email</th>
+                        <th style="text-align:center; border:1px solid #e5e7eb;">SMS</th>
+                        <th style="text-align:center; border:1px solid #e5e7eb;">Total Events</th>
+                    </tr>
+                </thead>
+                <tbody style="page-break-inside:auto;">
+                    <t t-foreach="rows" t-as="row" t-index="i">
+                        <tr t-att-style="'background-color:' + ('#f9fafb' if ((i or 0) % 2) else '#fff') + '; page-break-inside: avoid;'">
+                            <td style="padding:6px 10px; font-weight:600; color:#0891b2; border:1px solid #e5e7eb;"><t t-esc="row['wing_name']"/></td>
+                            <td style="padding:6px 10px; color:#2d3748; border:1px solid #e5e7eb;"><t t-esc="row['wing_manager_name']"/></td>
+                            <t t-if="report_by in ('supervisor', 'salesperson')">
+                                <td style="padding:6px 10px; color:#6366f1; border:1px solid #e5e7eb;"><t t-esc="row['supervisor_name']"/></td>
+                            </t>
+                            <t t-if="report_by == 'salesperson'">
+                                <td style="padding:6px 10px; font-weight:500; border:1px solid #e5e7eb;"><t t-esc="row['sales_person']"/></td>
+                            </t>
+                            <td style="text-align:center; font-size:15px; border:1px solid #e5e7eb;"><t t-esc="row['office_visit_count']"/></td>
+                            <td style="text-align:center; font-size:15px; border:1px solid #e5e7eb;"><t t-esc="row['site_visit_count']"/></td>
+                            <td style="text-align:center; font-size:15px; border:1px solid #e5e7eb;"><t t-esc="row['call_count']"/></td>
+                            <td style="text-align:center; font-size:15px; border:1px solid #e5e7eb;"><t t-esc="row['email_count']"/></td>
+                            <td style="text-align:center; font-size:15px; border:1px solid #e5e7eb;"><t t-esc="row['sms_count']"/></td>
+                            <td style="text-align:center; border:1px solid #e5e7eb;">
+                                <span style="display:inline-block;background:#89AF31;color:#fff;padding:2px 10px;border-radius:16px;font-weight:bold;">
+                                    <t t-esc="row['total_key_events']"/>
+                                </span>
+                            </td>
+                        </tr>
+                    </t>
+                    <!-- TOTAL ROW -->
+                    <tr style="font-weight: bold; background: #A8AF94;">
+                        <td>Total</td>
+                        <td></td>
+                        <t t-if="report_by in ('supervisor', 'salesperson')">
+                            <td></td>
+                        </t>
+                        <t t-if="report_by == 'salesperson'">
+                            <td></td>
+                        </t>
+                        <td style="text-align:center; border:1px solid #e5e7eb;"><t t-esc="totals['office_visit_count']"/></td>
+                        <td style="text-align:center; border:1px solid #e5e7eb;"><t t-esc="totals['site_visit_count']"/></td>
+                        <td style="text-align:center; border:1px solid #e5e7eb;"><t t-esc="totals['call_count']"/></td>
+                        <td style="text-align:center; border:1px solid #e5e7eb;"><t t-esc="totals['email_count']"/></td>
+                        <td style="text-align:center; border:1px solid #e5e7eb;"><t t-esc="totals['sms_count']"/></td>
+                        <td style="text-align:center; border:1px solid #e5e7eb;">
+                            <span style="display:inline-block;background:#89AF31;color:#fff;padding:2px 10px;border-radius:16px;">
+                                <t t-esc="totals['total_key_events']"/>
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="margin-top:20px; font-size:12px; color:#94a3b8;">
+                <i>Team Activity Wizard Report Generated - Temer Properties Dev Team</i>
+            </div>
+        </t>
+    </t>
+</template>
+
+</odoo>

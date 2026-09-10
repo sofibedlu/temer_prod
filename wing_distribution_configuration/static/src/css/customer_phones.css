@@ -1,0 +1,4 @@
+/* Hide "Add a line" in Customer Phones section - phones are read-only */
+.o_customer_phones_no_add .o_field_x2many_list_row_add {
+    display: none !important;
+}

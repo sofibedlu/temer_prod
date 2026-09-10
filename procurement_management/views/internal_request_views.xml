@@ -1,0 +1,85 @@
+<odoo>
+    <record id="view_internal_request_tree" model="ir.ui.view">
+        <field name="name">internal.request.tree</field>
+        <field name="model">internal.request</field>
+        <field name="arch" type="xml">
+            <tree string="Internal Requests">
+                <field name="name"/>
+                <field name="department_id"/>
+                <field name="responsible_department_id"/>
+                <field name="state" widget="badge" 
+                       decoration-success="state == 'approved'" 
+                       decoration-info="state == 'requested'" 
+                       decoration-warning="state == 'checked'" 
+                       decoration-danger="state == 'rejected'" 
+                       decoration-muted="state == 'draft'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_internal_request_form" model="ir.ui.view">
+        <field name="name">internal.request.form</field>
+        <field name="model">internal.request</field>
+        <field name="arch" type="xml">
+            <form string="Internal Request">
+                <header>
+                    <button name="action_request" string="Request" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_check" string="Check" type="object" class="oe_highlight" invisible="state != 'requested'"/>
+                    <button name="action_approve" string="Approve" type="object" class="oe_highlight" invisible="state != 'checked'"/>
+                    <button name="action_reject" string="Reject" type="object" invisible="state in ['draft', 'approved', 'rejected']" class="btn-danger"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,requested,checked,approved,rejected"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="priority" widget="priority" class="mr-3"/>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="department_id" readonly="state in ['approved', 'rejected']"/>
+                            <field name="responsible_department_id" readonly="state in ['approved', 'rejected']"/>
+                            <field name="date" readonly="state in ['approved', 'rejected']"/>
+                            <field name="expected_date" readonly="state in ['approved', 'rejected']"/>
+                        </group>
+                        <group>
+                            <field name="requestor_id" invisible="not requestor_id"/>
+                            <field name="checked_by_id" invisible="not checked_by_id"/>
+                            <field name="approved_by_id" invisible="not approved_by_id"/>
+                            <field name="rejected_by_id" invisible="not rejected_by_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Products" name="products">
+                            <field name="line_ids" readonly="state in ['approved', 'rejected']">
+                                <tree editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="purpose"/>
+                                    <field name="quantity"/>
+                                    <field name="product_uom_category_id" column_invisible="True"/>
+                                    <field name="product_uom_id" 
+                                        domain="[('category_id', '=', product_uom_category_id)]"
+                                        options="{'no_create': True, 'no_open': True}"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_internal_request" model="ir.actions.act_window">
+        <field name="name">Internal Requests</field>
+        <field name="res_model">internal.request</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    
+    <menuitem id="menu_internal_req_list" name="Internal Requests" parent="menu_procurement_root" action="action_internal_request" sequence="0"/>
+</odoo>

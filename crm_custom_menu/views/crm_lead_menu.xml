@@ -1,0 +1,26 @@
+<odoo>
+<menuitem id="menu_crm_custom_leads"
+              name="Call Center CRM"
+              parent="temer_crm.menu_temer_leads_root"
+              sequence="25"
+              action="action_crm_callcenter"
+              groups="crm_custom_menu.group_call_center"/>
+<menuitem id="menu_crm_custom_leads_2"
+              name="Reception CRM"
+              parent="temer_crm.menu_temer_leads_root"
+              sequence="30"
+              action="action_crm_reception"
+              groups="crm_custom_menu.group_reception"/>
+<menuitem id="menu_crm_custom_leads_3"
+              name="Website CRM"
+              parent="temer_crm.menu_temer_leads_root"
+              sequence="35"
+              action="action_crm_website"
+              groups="crm_custom_menu.group_Crmwebsite"/>
+<menuitem id="menu_crm_custom_leads_4"
+              name="Referral CRM"
+              parent="temer_crm.menu_temer_leads_root"
+              sequence="40"
+              action="action_crm_affilater"
+              groups="crm_custom_menu.group_affilater"/>
+</odoo>

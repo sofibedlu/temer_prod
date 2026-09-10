@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_property_contract_print_letter_wizard_form_inherited" model="ir.ui.view">
+        <field name="name">property.print.letter.wizard.form.inherit</field>
+        <field name="model">property.print.letter.wizard</field>
+        <field name="inherit_id" ref="collection_management.view_print_letter_wizard_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='letter_type']" position="after">
+                <field name="export_format" widget="radio" options="{'horizontal': true}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

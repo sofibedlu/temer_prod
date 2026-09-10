@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="refund_reason_financial_difficulty" model="property.pre.contract.refund.reason">
+            <field name="name">Financial difficulty</field>
+        </record>
+        <record id="refund_reason_better_price" model="property.pre.contract.refund.reason">
+            <field name="name">Found better price elsewhere</field>
+        </record>
+        <record id="refund_reason_location_preference" model="property.pre.contract.refund.reason">
+            <field name="name">Changed location preference</field>
+        </record>
+        <record id="refund_reason_family_emergency" model="property.pre.contract.refund.reason">
+            <field name="name">Family emergency</field>
+        </record>
+        <record id="refund_reason_unsatisfied_project_site" model="property.pre.contract.refund.reason">
+            <field name="name">Unsatisfied with project / site</field>
+        </record>
+        <record id="refund_reason_delayed_construction" model="property.pre.contract.refund.reason">
+            <field name="name">Delayed construction</field>
+        </record>
+        <record id="refund_reason_staff_dispute" model="property.pre.contract.refund.reason">
+            <field name="name">Dispute with our company staff</field>
+        </record>
+        <record id="refund_reason_service_dissatisfaction" model="property.pre.contract.refund.reason">
+            <field name="name">Dissatisfaction with our company services</field>
+        </record>
+        <record id="refund_reason_other" model="property.pre.contract.refund.reason">
+            <field name="name">Other</field>
+        </record>
+    </data>
+</odoo>

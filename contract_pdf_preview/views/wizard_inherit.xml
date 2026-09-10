@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_contract_preview_wizard_pdf_inherit" model="ir.ui.view">
+        <field name="name">contract.preview.wizard.pdf.inherit</field>
+        <field name="model">contract.preview.wizard</field>
+        <field name="inherit_id" ref="contract_managment.view_contract_preview_wizard_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//footer/button[1]" position="before">
+                <button name="action_download_docx"
+                        string="Download DOCX"
+                        type="object"
+                        class="btn-primary"
+                        icon="fa-file-word-o"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

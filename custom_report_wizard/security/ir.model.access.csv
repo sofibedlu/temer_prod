@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_team_activity_wizards,access.team.activity.wizards,model_team_activity_wizard,custom_report_wizard.team_activity_report,1,1,1,1
+access_lead_analysis_wizards,access.lead.analysis.wizards,model_lead_analysis_wizard,custom_report_wizard.lead_analysis_report,1,1,1,1
+access_temer_lead_analysis_wizard,temer.lead.analysis.wizard,model_temer_lead_analysis_wizard,custom_report_wizard.lead_analysis_report,1,1,1,1
+access_report_analysis,temer.lead.analysis.report,model_report_custom_report_wizard_temer_lead_analysis_report_template,custom_report_wizard.lead_analysis_report,1,1,1,1

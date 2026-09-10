@@ -1,0 +1,57 @@
+<odoo>
+    <record id="view_property_legacy_sale_form_wizard" model="ir.ui.view">
+        <field name="name">property.legacy.sale.form.wizard</field>
+        <field name="model">property.legacy.sale</field>
+        <field name="inherit_id" ref="property_legacy_data.view_property_legacy_sale_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='property_id']" position="after">
+                <field name="payment_schedule_type" widget="radio" options="{'horizontal': true}"/>
+            </xpath>
+
+            <xpath expr="//field[@name='installment_ids']" position="before">
+                <button name="action_open_generator" 
+                        string="Generate Schedule Wizard" 
+                        type="object" 
+                        class="btn-secondary" 
+                        icon="fa-cogs"
+                        invisible="state != 'draft' or payment_schedule_type != 'time'"/>
+            </xpath>
+            
+            <xpath expr="//field[@name='installment_ids']/tree/field[@name='amount']" position="before">
+                <field name="due_date" 
+                       column_invisible="parent.payment_schedule_type != 'time'" 
+                       required="parent.payment_schedule_type == 'time' and status != 'paid'"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Wizard View -->
+    <record id="view_property_legacy_schedule_generator_form" model="ir.ui.view">
+        <field name="name">property.legacy.schedule.generator.form</field>
+        <field name="model">property.legacy.schedule.generator</field>
+        <field name="arch" type="xml">
+            <form string="Generate Schedule">
+                <group>
+                    <field name="generation_mode"/>
+                </group>
+                <group>
+                    <group>
+                        <field name="amount"/>
+                        <field name="interval_type"/>
+                    </group>
+                    <group>
+                        <field name="start_date"/>
+                        <field name="number_of_installments"/>
+                    </group>
+                </group>
+                <group>
+                    <field name="description_prefix"/>
+                </group>
+                <footer>
+                    <button name="action_generate_lines" string="Generate" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

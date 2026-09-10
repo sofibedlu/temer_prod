@@ -1,0 +1,218 @@
+<odoo>
+    <data>
+        <record id="view_property_payment_term_form_inherit_payment_type" model="ir.ui.view">
+            <field name="name">property.payment.term.form.inherit.payment.type</field>
+            <field name="model">property.payment.term</field>
+            <field name="inherit_id" ref="ahadubit_property_base.property_site_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="payment_type"/>
+                    <field name="cash_collection"/>
+                </xpath>
+                <xpath expr="//notebook/page[last()]" position="after">
+                    <page string="Properties">
+                        <field name="property_ids" readonly="1">
+                            <tree editable="false">
+                                <field name="name"/>
+                                <field name="site"/>
+                                <field name="property_type"/>
+                                <field name="block"/>
+                                <field name="site_property_type_id"/>
+                                <field name="state"/>
+                            </tree>
+                            <form>
+                                <sheet>
+                                    <sheet>
+                                        <field name="image" widget="image" class="oe_avatar"/>
+                                        <div class="oe_title">
+                                            <h1>
+                                                <field name="name"/>
+                                            </h1>
+                                            <h3>
+                                                <field name="code"/>
+                                            </h3>
+                                            <br/>
+                                        </div>
+                                        <group>
+                                            <group>
+                                                <field name="property_type" widget="radio"
+                                                       options="{'horizontal': True}"/>
+                                                <field name="property_tags" widget="many2many_tags"/>
+                                            </group>
+                                            <group>
+                                                <field name="license_no"/>
+                                                <field name="responsible_id"/>
+                                            </group>
+                                        </group>
+                                        <group>
+                                            <group string="Address Details" id="address_group_id">
+                                                <field name="country_id"/>
+                                                <field name="city_id"/>
+                                                <field name="sub_city_id"/>
+                                                <field name="wereda"/>
+                                                <field name="area"/>
+                                            </group>
+                                            <group string="Price Details" name="price_details">
+                                                <field name="sale_rent"/>
+                                                <field name="unit_price" invisible="sale_rent != 'for_sale'"/>
+                                                <field name="rent_month" invisible="sale_rent != 'for_tenancy'"/>
+                                            </group>
+                                        </group>
+                                        <group string="Land Details" invisible="property_type != 'land'">
+                                            <group>
+                                                <field name="land_name"/>
+                                            </group>
+                                            <group>
+                                                <field name="land_area"/>
+                                            </group>
+                                        </group>
+                                        <group string="Property Details">
+                                            <group>
+                                                <field name="total_floor" invisible="1"/>
+                                                <field name="usage" invisible="property_type != 'commercial'"/>
+                                            </group>
+                                            <group>
+                                                <field name="bedroom"/>
+                                                <field name="bathroom"/>
+                                                <field name="parking"/>
+                                            </group>
+                                        </group>
+                                        <group string="Industrial Details" invisible="property_type != 'industry'">
+                                            <group>
+                                                <field name="industry_name"/>
+                                            </group>
+                                            <group>
+                                                <field name="location"/>
+                                            </group>
+                                        </group>
+                                        <notebook>
+                                            <page string="Description">
+                                                <field name="description"/>
+                                            </page>
+                                            <page string="Floor Plan">
+                                                <field name="property_image_ids">
+                                                    <kanban>
+                                                        <field name="id"/>
+                                                        <field name="name"/>
+                                                        <field name="image"/>
+                                                        <field name="description"/>
+                                                        <templates>
+                                                            <t t-name="kanban-box">
+                                                                <div t-attf-class="oe_kanban_global_click">
+                                                                    <div class="o_kanban_image">
+                                                                        <field name="image" widget="image"
+                                                                               class="oe_avatar"/>
+                                                                    </div>
+                                                                    <div class="oe_kanban_details">
+                                                                        <t class="o_kanban_record_title">
+                                                                            <strong>
+                                                                                <field name="name"/>
+                                                                            </strong>
+                                                                            <br/>
+                                                                            <field name="description"/>
+                                                                        </t>
+                                                                    </div>
+                                                                </div>
+                                                            </t>
+                                                        </templates>
+                                                    </kanban>
+                                                    <form>
+                                                        <sheet>
+                                                            <group>
+                                                                <group>
+                                                                    <field name="name"/>
+                                                                    <field name="description"/>
+                                                                </group>
+                                                                <group>
+                                                                    <field name="image" widget="image"
+                                                                           class="oe_avatar"/>
+                                                                </group>
+                                                            </group>
+                                                        </sheet>
+                                                    </form>
+                                                </field>
+                                            </page>
+                                            <page string="Facilities">
+                                                <field name="facility_ids">
+                                                    <tree>
+                                                        <field name="facility"/>
+                                                    </tree>
+                                                </field>
+                                            </page>
+                                        </notebook>
+                                    </sheet>
+                                </sheet>
+                            </form>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="property_property_view_form_inherit_payment_term" model="ir.ui.view">
+            <field name="name">property.property.inherit.payment.line</field>
+            <field name="model">property.property</field>
+            <field name="inherit_id" ref="advanced_property_management.property_property_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook/page[last()]" position="after">
+                    <page string="Payment Term Plan">
+                        <field name="payment_term_line_ids" readonly="1">
+                            <tree decoration-success="is_used_in_progress == True" >
+                                <field name="sequence" invisible="1" column_invisible="1"/>
+                                <field name="name"/>
+                                <field name="percentage"/>
+                                <field name="is_used_in_progress" invisible="1" column_invisible="1"/>
+                                <field name="due_date_term"/>
+                                <field name="payment_type" invisible="1" column_invisible="1"/>
+                                <field name="cash_collection" invisible="1" column_invisible="1"/>
+                            </tree>
+                            <form>
+                                <sheet>
+                                    <div class="oe_title">
+                                        <h1>
+                                            <field name="name"/>
+                                            <field name="is_used_in_progress" invisible="1" column_invisible="1"/>
+                                        </h1>
+                                        <br/>
+                                    </div>
+                                    <group>
+                                        <group>
+                                            <field name="percentage"/>
+                                            <field name="due_date_term"/>
+                                            <field name="payment_type" readonly="1" />
+                                            <field name="cash_collection" readonly="1" />
+                                        </group>
+                                    </group>
+                                </sheet>
+                            </form>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="property_payment_term_line_view_inherit_extra_fields" model="ir.ui.view">
+            <field name="name">property.payment.term.line.view.inherit</field>
+            <field name="model">property.payment.term</field>
+            <field name="inherit_id" ref="ahadubit_property_base.property_site_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='payment_line']" position="replace">
+                    <field name="payment_line" options="{'no_open': True}">
+                        <tree decoration-success="is_used_in_progress == True" editable="bottom">
+                            <field name="sequence" invisible="1" column_invisible="1"/>
+                            <field name="is_used_in_progress" invisible="1" column_invisible="1"/>
+                            <field name="name"/>
+                            <field name="percentage" readonly="payment_type == 'fixed' "/>
+                            <field name="amount" readonly="payment_type == 'percentage' "/>
+                            <field name="due_date_term" readonly="cash_collection == 'by_site' "/>
+                            <field name="payment_type" invisible="1" column_invisible="1"/>
+                            <field name="cash_collection" invisible="1" column_invisible="1"/>
+                        </tree>
+                    </field>
+                </xpath>
+
+            </field>
+        </record>
+        
+    </data>
+</odoo>

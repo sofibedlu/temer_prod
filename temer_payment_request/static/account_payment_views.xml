@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_account_payment_tree_inherit_temer" model="ir.ui.view">
+        <field name="name">account.payment.tree.inherit.temer</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="create">0</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_account_payment_form_inherit_temer" model="ir.ui.view">
+        <field name="name">account.payment.form.inherit.temer</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="attributes">
+                <attribute name="create">0</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_draft']" position="replace">
+            </xpath>
+            <xpath expr="//button[@name='action_post']" position="attributes">
+                <attribute name="confirm">Are you sure you want to post this payment?</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_cancel']" position="attributes">
+                <attribute name="name">action_open_cancel_wizard</attribute>
+                <attribute name="confirm"></attribute>
+            </xpath>
+            <xpath expr="//field[@name='ref']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='ref']" position="after">
+                <field name="payment_order_id" readonly="1"/>
+                <field name="payment_request_id" readonly="1"/>
+            </xpath>
+            <xpath expr="//field[@name='partner_bank_id']" position="after">
+                <field name="payment_request_reason" readonly="1" invisible="not payment_request_id"/>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="replace">
+                <field name="partner_id" 
+                       domain="[('customer_rank', '>', 0)]" 
+                       invisible="partner_type != 'customer'"/>
+                <field name="partner_id" 
+                       string="Vendor"
+                       domain="[('supplier_rank', '>', 0)]" 
+                       invisible="partner_type != 'supplier'"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

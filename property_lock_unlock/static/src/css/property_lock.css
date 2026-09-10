@@ -1,0 +1,18 @@
+/* Locked property row - stronger disabled/locked appearance (decoration-muted adds text-muted) */
+.o_list_table tbody tr.text-muted,
+.o_list_view tbody tr.text-muted {
+    background-color: #d6d8db !important;
+    opacity: 0.9;
+}
+
+/* Larger lock icon in list view */
+.o_lock_icon {
+    font-size: 1.25rem !important;
+}
+
+/* Lock icon in form view header */
+.o_property_lock_badge,
+.o_property_lock_badge .o_field_widget {
+    font-size: 1.5rem !important;
+    vertical-align: middle;
+}

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_crm_reception_form_lead_distribution" model="ir.ui.view">
+        <field name="name">crm.reception.form.lead.distribution</field>
+        <field name="model">crm.reception</field>
+        <field name="inherit_id" ref="crm_custom_menu.view_crm_reception_form"/>
+        <field name="priority">250</field>
+        <field name="arch" type="xml">
+            <!-- Hide inline duplicate text; popup wizard shows message instead -->
+            <xpath expr="//field[@name='phone_number_message']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_send_sms_to_existing_customer']" position="before">
+                <button name="action_reassign_lead"
+                    string="Re Assign"
+                    type="object"
+                    class="btn-primary"
+                    invisible="not reassign_lead"
+                    confirm="Remove this phone from the existing lead and assign as a new lead?"/>
+            </xpath>
+            <xpath expr="//button[@name='action_send_sms_to_existing_customer']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <field name="assigned_salesperson_id" position="replace">
+                <field name="display_salesperson_id" string="Assigned Salesperson"
+                    readonly="1" invisible="not display_salesperson_id"/>
+                <field name="display_salesperson_phone" string="Salesperson Phone"
+                    readonly="1" invisible="not display_salesperson_phone"/>
+                <field name="display_supervisor_id" string="Supervisor"
+                    readonly="1" invisible="not display_supervisor_id"/>
+                <field name="assigned_salesperson_id" invisible="1"/>
+            </field>
+            <field name="existing_salesperson_id" position="attributes">
+                <attribute name="invisible">not existing_salesperson_id</attribute>
+                <attribute name="string">Existing Salesperson</attribute>
+            </field>
+            <field name="existing_salesperson_id" position="after">
+                <field name="existing_salesperson_phone" string="Existing Salesperson Phone"
+                    readonly="1" invisible="not existing_salesperson_id"/>
+                <field name="status" readonly="1" invisible="not status"/>
+                <field name="reassign_lead" invisible="1"/>
+                <field name="quota_duplicate_popup_pending" invisible="1"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_crm_website_form_lead_distribution" model="ir.ui.view">
+        <field name="name">crm.website.form.lead.distribution</field>
+        <field name="model">crm.website</field>
+        <field name="inherit_id" ref="crm_custom_menu.view_crm_website_form"/>
+        <field name="priority">250</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='phone_number_message']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_send_sms_to_existing_customer']" position="before">
+                <button name="action_reassign_lead"
+                    string="Re Assign"
+                    type="object"
+                    class="btn-primary"
+                    invisible="not reassign_lead"
+                    confirm="Remove this phone from the existing lead and assign as a new lead?"/>
+            </xpath>
+            <xpath expr="//button[@name='action_send_sms_to_existing_customer']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <field name="assigned_salesperson_id" position="replace">
+                <field name="display_salesperson_id" string="Assigned Salesperson"
+                    readonly="1" invisible="not display_salesperson_id"/>
+                <field name="display_salesperson_phone" string="Salesperson Phone"
+                    readonly="1" invisible="not display_salesperson_phone"/>
+                <field name="display_supervisor_id" string="Supervisor"
+                    readonly="1" invisible="not display_supervisor_id"/>
+                <field name="assigned_salesperson_id" invisible="1"/>
+            </field>
+            <field name="existing_salesperson_id" position="attributes">
+                <attribute name="invisible">not existing_salesperson_id</attribute>
+                <attribute name="string">Existing Salesperson</attribute>
+            </field>
+            <field name="existing_salesperson_id" position="after">
+                <field name="existing_salesperson_phone" string="Existing Salesperson Phone"
+                    readonly="1" invisible="not existing_salesperson_id"/>
+                <field name="status" readonly="1" invisible="not status"/>
+                <field name="reassign_lead" invisible="1"/>
+                <field name="quota_duplicate_popup_pending" invisible="1"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_crm_callcenter_form_lead_distribution" model="ir.ui.view">
+        <field name="name">crm.callcenter.form.lead.distribution</field>
+        <field name="model">crm.callcenter</field>
+        <field name="inherit_id" ref="crm_custom_menu.view_crm_callcenter_form"/>
+        <field name="priority">250</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='phone_number_message']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_send_sms_to_existing_customer']" position="before">
+                <button name="action_reassign_lead"
+                    string="Re Assign"
+                    type="object"
+                    class="btn-primary"
+                    invisible="not reassign_lead"
+                    confirm="Remove this phone from the existing lead and assign as a new lead?"/>
+            </xpath>
+            <xpath expr="//button[@name='action_send_sms_to_existing_customer']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <field name="assigned_salesperson_id" position="replace">
+                <field name="display_salesperson_id" string="Assigned Salesperson"
+                    readonly="1" invisible="not display_salesperson_id"/>
+                <field name="display_salesperson_phone" string="Salesperson Phone"
+                    readonly="1" invisible="not display_salesperson_phone"/>
+                <field name="display_supervisor_id" string="Supervisor"
+                    readonly="1" invisible="not display_supervisor_id"/>
+                <field name="assigned_salesperson_id" invisible="1"/>
+            </field>
+            <field name="existing_salesperson_id" position="attributes">
+                <attribute name="invisible">not existing_salesperson_id</attribute>
+                <attribute name="string">Existing Salesperson</attribute>
+            </field>
+            <field name="existing_salesperson_id" position="after">
+                <field name="existing_salesperson_phone" string="Existing Salesperson Phone"
+                    readonly="1" invisible="not existing_salesperson_id"/>
+                <field name="status" readonly="1" invisible="not status"/>
+                <field name="reassign_lead" invisible="1"/>
+                <field name="quota_duplicate_popup_pending" invisible="1"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

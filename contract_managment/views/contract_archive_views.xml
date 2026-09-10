@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_contract_archive_form" model="ir.ui.view">
+        <field name="name">contract.archive.form</field>
+        <field name="model">contract.archive</field>
+        <field name="arch" type="xml">
+            <form string="Contract Archive" create="0" edit="1">
+                <header>
+                    <field name="status" widget="statusbar" statusbar_visible="active,signed,void"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Customer Details">
+                           <field name="name"/>
+                            <field name="customer_name" readonly="1"/>
+                            <field name="property_name" readonly="1"/>
+                        </group>
+                        <group string="Sales Info">
+                            <field name="sales_no" readonly="1"/>
+                            <field name="date_created" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Articles" name="articles_page">
+                            <field name="article_ids" 
+                                   widget="many2many_list" 
+                                   nolabel="1">
+                                <tree string="Contract Articles" editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="main_title"/>
+                                    <field name="subtitle"/>
+                                    <field name="content"/>
+                                    <field name="is_title_printed" widget="boolean_toggle"/>
+                                    
+                                    <field name="is_dynamic_content" widget="boolean_toggle"/>
+                                    <field name="is_active" widget="boolean_toggle"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+</odoo>

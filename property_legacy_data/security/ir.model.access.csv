@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_property_legacy_sale_user,access.property.legacy.sale.user,model_property_legacy_sale,property_legacy_data.group_property_legacy_user,1,1,1,1
+access_property_legacy_sale_line_user,access.property.legacy.sale.line.user,model_property_legacy_sale_line,property_legacy_data.group_property_legacy_user,1,1,1,1
+access_property_property_user,access.property.property.user,model_property_property,property_legacy_data.group_property_legacy_user,1,0,0,0

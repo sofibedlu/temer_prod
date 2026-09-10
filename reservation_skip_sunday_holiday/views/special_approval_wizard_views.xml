@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Always show all approval steps including Draft (for every user/role). -->
+    <record id="view_special_approval_wizard_statusbar" model="ir.ui.view">
+        <field name="name">special.approval.wizard.statusbar.all.stages</field>
+        <field name="model">special.approval.wizard</field>
+        <field name="inherit_id" ref="special_reservation.view_special_approval_wizard_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state'][@widget='statusbar']" position="attributes">
+                <attribute name="statusbar_visible">draft,submitted,supervisor,manager,ceo,approved</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!--
+        Draft: duration/amount editable for everyone.
+        Manager/CEO: editable again at final approve (manager_step uses state=manager).
+    -->
+    <record id="view_special_approval_wizard_duration_edit" model="ir.ui.view">
+        <field name="name">special.approval.wizard.duration.edit.draft.ceo</field>
+        <field name="model">special.approval.wizard</field>
+        <field name="inherit_id" ref="special_reservation_final_approve.view_special_approval_wizard_form_ceo_edit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='amount']" position="attributes">
+                <attribute name="readonly">state not in ('draft', 'manager', 'ceo')</attribute>
+            </xpath>
+            <xpath expr="//field[@name='duration']" position="attributes">
+                <attribute name="readonly">state not in ('draft', 'manager', 'ceo')</attribute>
+            </xpath>
+            <xpath expr="//field[@name='duration_in']" position="attributes">
+                <attribute name="readonly">state not in ('draft', 'manager', 'ceo')</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_pre_contract_root"
+              name="Pre Contract Refund"
+              sequence="45"
+              groups="pre_contract_refund.group_pre_contract_refund_user,pre_contract_refund.group_pre_contract_refund_manager,pre_contract_refund.group_pre_contract_refund_deputy_head_pmca,pre_contract_refund.group_pre_contract_refund_head_pmca,pre_contract_refund.group_pre_contract_refund_auditor,pre_contract_refund.group_pre_contract_refund_payment_viewer"/>
+
+    <menuitem id="menu_pre_contract_refund_requests"
+              name="New Refund"
+              parent="menu_pre_contract_root"
+              action="action_property_pre_contract_refund"
+              sequence="10"
+              groups="pre_contract_refund.group_pre_contract_refund_user"/>
+
+    <menuitem id="menu_pre_contract_refund_check_approve"
+              name="Refund Approval"
+              parent="menu_pre_contract_root"
+              action="action_property_pre_contract_refund_manager_queue"
+              sequence="20"
+              groups="pre_contract_refund.group_pre_contract_refund_deputy_head_pmca,pre_contract_refund.group_pre_contract_refund_head_pmca"/>
+
+    <menuitem id="menu_pre_contract_refund_payments"
+              name="Refund Payments"
+              parent="menu_pre_contract_root"
+              action="action_property_pre_contract_refund_payment_queue"
+              sequence="25"
+              groups="pre_contract_refund.group_pre_contract_refund_payment_viewer"/>
+
+    <menuitem id="menu_pre_contract_refund_audit"
+              name="Audit"
+              parent="menu_pre_contract_root"
+              action="action_property_pre_contract_refund_audit_queue"
+              sequence="27"
+              groups="pre_contract_refund.group_pre_contract_refund_auditor,pre_contract_refund.group_pre_contract_refund_manager"/>
+
+    <menuitem id="menu_pre_contract_refund_reasons"
+              name="Refund Reasons"
+              parent="menu_pre_contract_root"
+              action="action_pre_contract_refund_reason"
+              sequence="30"
+              groups="pre_contract_refund.group_pre_contract_refund_manager"/>
+
+    <menuitem id="menu_pre_contract_refund_types"
+              name="Refund Types"
+              parent="menu_pre_contract_root"
+              action="action_pre_contract_refund_type"
+              sequence="40"
+              groups="pre_contract_refund.group_pre_contract_refund_manager"/>
+</odoo>

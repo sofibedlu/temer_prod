@@ -1,0 +1,345 @@
+<templates>
+<t t-name="property_dashboard.template">
+    <div class="property-dashboard p-4" style="overflow-x:auto; overflow-y:auto; max-height:80vh;">
+        <style>
+            :root{
+                /* moderately stronger tones */
+                --tp-green:#34d399; --tp-green-dark:#22c55e;
+                --tp-red:#f87171;   --tp-red-dark:#ef4444;
+                --tp-yellow:#f9b234; --tp-yellow-dark:#d78d00;
+                --tp-draft:#6c757d; --tp-indigo:#3b82f6;
+                --glass: rgba(255,255,255,.65);
+                /* height used to offset sticky table header below sticky filter bar */
+                --filter-bar-h: 64px;
+            }
+
+            /* FILTER BAR */
+            .filter-container{
+                display:flex; gap:.75rem; margin-bottom:1rem; align-items:center; flex-wrap:wrap;
+                background: linear-gradient(180deg,#ffffff,#f7f9ff);
+                border:1px solid #e6eaf5; padding:.75rem 1rem; border-radius:12px;
+                box-shadow: 0 6px 16px rgba(15,23,42,.06);
+                /* reverted: not sticky */
+                position: static; top:auto; z-index:auto; backdrop-filter:none;
+            }
+            .filter-label{ font-weight:700; font-size:.85rem; opacity:.8; margin-right:.25rem; }
+            .filter-container .form-control{
+                border-radius:10px; border:1px solid #cfd8ea; padding:.45rem .75rem; font-size:.88rem;
+                box-shadow: inset 0 1px 2px rgba(0,0,0,.02);
+                transition:border-color .2s ease, box-shadow .2s ease;
+            }
+            .filter-container .form-control:focus{
+                border-color:var(--tp-indigo);
+                box-shadow:0 0 0 3px rgba(59,130,246,.25); outline:none;
+            }
+            .site-select{ max-width:220px; min-width:180px; width:auto; }
+
+            /* STATE PILLS (fixed and strengthened) */
+            .state-filter{ display:flex; gap:.6rem; flex-wrap:wrap; align-items:center; margin-left:.75rem; }
+            .state-chip{
+                display:inline-flex; align-items:center; gap:.4rem;
+                padding:.32rem .85rem; border-radius:999px; font-size:.82rem; font-weight:900;
+                border:2px solid #dbe4ff; background:#eef2ff; color:#111827;
+                box-shadow: 0 2px 6px rgba(15,23,42,.08); cursor:pointer; user-select:none;
+                transition: transform .15s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease;
+            }
+            .state-chip:hover{ transform: translateY(-1px); box-shadow:0 6px 14px rgba(15,23,42,.12); }
+            .chip-dot{ width:.5rem; height:.5rem; border-radius:999px; }
+            .chip-available { border-color:rgba(34,197,94,.35); background:rgba(34,197,94,.12); color:#075e2b; }
+            .chip-available .chip-dot{ background:var(--tp-green); }
+            .chip-reserved { border-color:rgba(249,178,52,.35); background:rgba(249,178,52,.14); color:#7a5600; }
+            .chip-reserved .chip-dot{ background:var(--tp-yellow); }
+            .chip-sold { border-color:rgba(239,68,68,.35); background:rgba(239,68,68,.12); color:#7a1022; }
+            .chip-sold .chip-dot{ background:var(--tp-red); }
+            .chip-draft { border-color:rgba(108,117,125,.35); background:rgba(108,117,125,.14); color:#26323a; }
+            .chip-draft .chip-dot{ background:var(--tp-draft); }
+            .state-chip.is-active{ color:#fff; transform: translateY(-1px); }
+            .chip-available.is-active{ background: linear-gradient(180deg,var(--tp-green),var(--tp-green-dark)); border-color:#22c55e; }
+            .chip-reserved.is-active{ background: linear-gradient(180deg,var(--tp-yellow),var(--tp-yellow-dark)); border-color:#a86e00; }
+            .chip-sold.is-active{ background: linear-gradient(180deg,var(--tp-red),var(--tp-red-dark)); border-color:#ef4444; }
+            .chip-draft.is-active{ background: linear-gradient(180deg,#9aa3ae,#6c757d); border-color:#545b62; }
+
+            /* TABLE */
+            .property-dashboard table{ width:100%; border-collapse:separate; border-spacing:16px; }
+            .property-dashboard thead th{
+                position:sticky; top:0; z-index:2;
+                background: linear-gradient(180deg,#eef4ff,#e7efff);
+                color:#0f172a; font-weight:700; border:none; padding:.85rem 1rem; text-transform:uppercase; letter-spacing:.6px;
+                border-radius:12px; box-shadow: 0 6px 14px rgba(59,130,246,.12);
+            }
+            .property-dashboard td{ vertical-align:top; padding:0; border:none; }
+            /* stylish, colored per-floor count badge */
+            .count-badge{
+                display:inline-flex; align-items:center; justify-content:center; margin-left:.5rem;
+                min-width:1.8rem; height:1.4rem; padding:0 .5rem; border-radius:999px;
+                font-size:.78rem; font-weight:900; line-height:1; color:#fff;
+                background: linear-gradient(180deg,#60a5fa,#3b82f6);
+                border:1px solid #2563eb;
+                box-shadow: 0 4px 10px rgba(59,130,246,.25), inset 0 1px 0 rgba(255,255,255,.35);
+                text-shadow: 0 1px 0 rgba(0,0,0,.18);
+            }
+
+            /* CARD */
+            .tp-card{
+                position:relative; margin:10px auto; min-width:220px; max-width:300px; border-radius:14px;
+                background: linear-gradient(180deg,#ffffff, #f9fbff);
+                border:1px solid #e6ecfb;
+                box-shadow: 0 10px 24px rgba(15,23,42,.10), inset 0 1px 0 rgba(255,255,255,.6);
+                transition:.22s ease; overflow:hidden; cursor:pointer;
+            }
+            .tp-card:hover{ transform: translateY(-4px); box-shadow: 0 16px 36px rgba(15,23,42,.16); }
+            .tp-card::after{
+                content:""; position:absolute; inset:0; pointer-events:none;
+                background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,.2) 35%, transparent 70%);
+                transform: translateX(-60%); transition: transform .6s ease;
+            }
+            .tp-card:hover::after{ transform: translateX(10%); }
+
+            /* STATE SKINS (updated borders/shadows to match stronger tones) */
+            .tp-available{ background: linear-gradient(180deg,var(--tp-green), var(--tp-green-dark)) !important; color:#fff !important; border:1px solid #22c55e; box-shadow: 0 12px 28px rgba(34,197,94,.30), inset 0 1px 0 rgba(255,255,255,.22); }
+            .tp-sold{ background: linear-gradient(180deg,var(--tp-red), var(--tp-red-dark)) !important; color:#fff !important; border:1px solid #ef4444; box-shadow: 0 12px 28px rgba(239,68,68,.30), inset 0 1px 0 rgba(255,255,255,.18); }
+            .tp-reserved{ background: linear-gradient(180deg,var(--tp-yellow), var(--tp-yellow-dark)) !important; color:#fff !important; border:1px solid #a86e00; box-shadow: 0 12px 28px rgba(249,178,52,.35), inset 0 1px 0 rgba(255,255,255,.22); }
+            .tp-draft{ background: linear-gradient(180deg,#9aa3ae,#6c757d) !important; color:#fff !important; border:1px solid #545b62; box-shadow: 0 12px 28px rgba(108,117,125,.30), inset 0 1px 0 rgba(255,255,255,.15); }
+
+            /* RIBBON (fixed corrupted lines) */
+            .property-ribbon{
+                position:absolute; top:.7rem; right:-.65rem;
+                padding:.18rem .7rem; color:#fff; font-size:.62rem; font-weight:800;
+                border-radius:.4rem 0 0 .4rem; transform: rotate(30deg);
+                box-shadow: 0 6px 14px rgba(0,0,0,.16);
+                letter-spacing:.6px; text-transform:uppercase;
+            }
+            .ribbon-draft{ background: linear-gradient(180deg,#7e8893,#5e6770); }
+            .ribbon-available{ background: linear-gradient(180deg,var(--tp-green),var(--tp-green-dark)); }
+            .ribbon-sold{ background: linear-gradient(180deg,var(--tp-red),var(--tp-red-dark)); }
+            .ribbon-reserved{ background: linear-gradient(180deg,#f9b234,#d78d00); }
+
+            /* CARD BODY */
+            .tp-body{ padding:.9rem .9rem 1rem .9rem; text-align:center; }
+            .tp-title{ font-size:1.06rem; font-weight:800; letter-spacing:.3px; margin-bottom:.35rem; color:#0f172a; }
+            .tp-available .tp-title, .tp-sold .tp-title, .tp-draft .tp-title, .tp-reserved .tp-title{ color:#fff; }
+
+            .tp-badges{ display:flex; justify-content:center; gap:.35rem; margin-bottom:.35rem; flex-wrap:wrap; }
+            .chip{ display:inline-flex; align-items:center; gap:.35rem; padding:.18rem .5rem; border-radius:999px; font-size:.75rem; font-weight:700; background:#eef2ff; color:#1f2937; border:1px solid #dbe4ff; box-shadow: 0 2px 6px rgba(15,23,42,.08); }
+            .chip-dot{ width:.45rem; height:.45rem; border-radius:999px; }
+            .chip-success{ background:rgba(0,168,61,.12); color:#065f2a; border-color:rgba(0,168,61,.25); }
+            .chip-success .chip-dot{ background:var(--tp-green); }
+            .chip-danger{ background:rgba(225,25,57,.12); color:#7a1022; border-color:rgba(225,25,57,.25); }
+            .chip-danger .chip-dot{ background:var(--tp-red); }
+            .chip-warning{ background:rgba(249,178,52,.15); color:#7a5600; border-color:rgba(249,178,52,.25); }
+            .chip-warning .chip-dot{ background:#f9b234; }
+            .chip-info{ background:#ecfeff; color:#0c4a6e; border-color:#bae6fd; }
+            .chip-info .chip-dot{ background:#38bdf8; }
+
+            .tp-specs{ text-align:left; font-size:.86rem; line-height:1.3; margin-top:.4rem; background:rgba(255,255,255,.66); border:1px dashed #dce3f7; padding:.55rem .65rem; border-radius:10px; }
+            .tp-available .tp-specs, .tp-sold .tp-specs, .tp-draft .tp-specs, .tp-reserved .tp-specs{ background:rgba(255,255,255,.15); border-color:rgba(255,255,255,.35); color:#fff; }
+            .tp-specs .kv{ display:flex; justify-content:space-between; gap:.75rem; margin:.22rem 0; align-items:center; }
+            .tp-specs .k{ opacity:.8; }
+            .tp-specs .v{ font-weight:700; white-space:nowrap; }
+
+            /* POPUP (clamped) */
+            .pop-root{ position:fixed; z-index:99999; left:0; top:0; transform: translate(var(--x,0px), var(--y,0px)); pointer-events:none; }
+            .pop-wrap{ position:relative; }
+            .pop-card{
+                min-width:340px; max-width:460px; pointer-events:auto;
+                border-radius:16px; padding:12px 14px;
+                background:
+                    radial-gradient(120% 100% at 0% 0%, rgba(124,58,237,.20), transparent 60%),
+                    radial-gradient(120% 100% at 100% 0%, rgba(59,130,246,.20), transparent 60%),
+                    radial-gradient(120% 100% at 50% 100%, rgba(0,168,61,.20), transparent 60%),
+                    linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.92));
+                border:1px solid rgba(148,163,184,.35);
+                box-shadow: 0 24px 56px rgba(15,23,42,.25), inset 0 1px 0 rgba(255,255,255,.8);
+                backdrop-filter: blur(6px);
+                color:#0f172a;
+            }
+            .pop-header{ display:flex; align-items:center; justify-content:space-between; gap:.5rem; margin-bottom:.35rem; }
+            .pop-title{
+                font-weight:900; letter-spacing:.3px;
+                background: linear-gradient(90deg, #7c3aed, #3b82f6, #00a83d, #f59e0b, #ef4444);
+                -webkit-background-clip:text; background-clip:text; color:transparent;
+                font-size:1rem; display:flex; align-items:center; gap:.45rem;
+            }
+            .pop-title .pill{ font-size:.68rem; font-weight:900; padding:.14rem .42rem; border-radius:999px; color:#fff; box-shadow: 0 6px 14px rgba(0,0,0,.12); }
+            .pill-reserved{ background: linear-gradient(180deg, #fbbf24, #d97706); }
+            .pill-sold{ background: linear-gradient(180deg, #ef4444, #b91c1c); }
+            .pop-close{ border:none; background:transparent; cursor:pointer; padding:.2rem; margin:-.2rem; opacity:.7; }
+            .pop-close:hover{ opacity:1; }
+            .pop-close svg{ width:18px; height:18px; }
+
+            .pop-rows{ display:grid; grid-template-columns: 1fr; gap:.35rem; margin-top:.25rem; }
+            .pop-row{ display:flex; justify-content:space-between; gap:.75rem; background:var(--glass); border:1px dashed rgba(148,163,184,.4); border-radius:10px; padding:.45rem .55rem; }
+            .pop-k{ opacity:.7; }
+            .pop-v{ font-weight:800; text-align:right; max-width:60%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+            .pop-arrow{ position:absolute; width:14px; height:14px; left: var(--ax, 50%); transform: translateX(-50%); }
+            .pop-arrow.above{
+                bottom:-7px; background:#fff; border:1px solid rgba(148,163,184,.35);
+                box-shadow: 0 6px 12px rgba(15,23,42,.12);
+                clip-path: polygon(50% 100%, 0 0, 100% 0);
+            }
+            .pop-arrow.below{
+                top:-7px; background:#fff; border:1px solid rgba(148,163,184,.35);
+                box-shadow: 0 -6px 12px rgba(15,23,42,.12);
+                clip-path: polygon(50% 0, 0 100%, 100% 100%);
+            }
+
+            .property-dashboard ul{ list-style:none; padding:0; margin:0; }
+        </style>
+
+        <!-- FILTERS -->
+        <div class="filter-container">
+            <span class="filter-label">Site</span>
+            <select class="form-control site-select"
+                    t-on-change="this.onSiteFilterChange"
+                    t-att-value="state.selectedSite || ''">
+                <option value="">All Sites</option>
+                <t t-foreach="state.sites" t-as="site" t-key="site.id">
+                    <option t-att-value="site.id" t-esc="site.name"/>
+                </t>
+            </select>
+
+            <span class="filter-label" style="margin-left:.5rem;">State</span>
+            <div class="state-filter">
+                <div class="state-chip chip-available"
+                     t-att-class="{'is-active': state.selectedStates.includes('available')}"
+                     t-on-click="() => this.toggleState('available')">
+                    <span class="chip-dot"></span> Available
+                </div>
+                <div class="state-chip chip-reserved"
+                     t-att-class="{'is-active': state.selectedStates.includes('reserved')}"
+                     t-on-click="() => this.toggleState('reserved')">
+                    <span class="chip-dot"></span> Reserved
+                </div>
+                <div class="state-chip chip-sold"
+                     t-att-class="{'is-active': state.selectedStates.includes('sold')}"
+                     t-on-click="() => this.toggleState('sold')">
+                    <span class="chip-dot"></span> Sold
+                </div>
+                <div class="state-chip chip-draft"
+                     t-att-class="{'is-active': state.selectedStates.includes('draft')}"
+                     t-on-click="() => this.toggleState('draft')">
+                    <span class="chip-dot"></span> Draft
+                </div>
+            </div>
+        </div>
+
+        <!-- EMPTY STATE -->
+        <t t-if="!state.floors.length">
+          <div class="empty-state">
+            <div class="empty-wrap">
+              <div class="empty-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.71.71l.27.28v.79L20 20.5 21.5 19 15.5 14zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/>
+                </svg>
+              </div>
+              <div class="empty-title">No data found</div>
+              <div class="empty-sub">There is no data for the selected filters.</div>
+              <div class="empty-actions">
+                <div class="btn-reset" t-on-click="this.clearFilters">
+                  <span class="dot"></span> Reset filters
+                </div>
+              </div>
+            </div>
+          </div>
+        </t>
+
+        <!-- TABLE -->
+        <t t-else="">
+            <table>
+                <thead>
+                    <tr>
+                        <t t-foreach="state.floors" t-as="floor" t-key="floor">
+                            <th>
+                                <span>Floor <t t-esc="floor"/></span>
+                                <span class="count-badge" t-esc="(state.propertiesByFloor[floor] || []).length"/>
+                            </th>
+                        </t>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <t t-foreach="state.floors" t-as="floor" t-key="floor">
+                            <td>
+                                <ul>
+                                    <li t-foreach="state.propertiesByFloor[floor]" t-as="prop" t-key="prop.id">
+                                        <div class="tp-card"
+                                             t-att-data-prop-id="prop.id"
+                                             t-att-class="{
+                                                'tp-available': prop.state === 'available',
+                                                'tp-sold': prop.state === 'sold',
+                                                'tp-draft': prop.state === 'draft',
+                                                'tp-reserved': prop.state === 'reserved'
+                                             }"
+                                             t-on-mouseenter="(ev) => this.onCardEnter(ev, prop)"
+                                             t-on-mouseleave="(ev) => this.onCardLeave(ev, prop)"
+                                             t-on-click="(ev) => this.onCardClick(ev, prop)">
+                                            <!-- RIBBONS -->
+                                            <t t-if="prop.state === 'draft'"><div class="property-ribbon ribbon-draft">Draft</div></t>
+                                            <t t-if="prop.state === 'available'"><div class="property-ribbon ribbon-available">Available</div></t>
+                                            <t t-if="prop.state === 'sold'"><div class="property-ribbon ribbon-sold">Sold</div></t>
+                                            <t t-if="prop.state === 'reserved'"><div class="property-ribbon ribbon-reserved">Reserved</div></t>
+
+                                            <div class="tp-body">
+                                                <div class="tp-title"><t t-esc="prop.name"/></div>
+
+                                                <div class="tp-badges">
+                                                    <span t-if="prop.state === 'sold'" class="chip chip-danger"><span class="chip-dot"></span> State: <t t-esc="prop.state"/></span>
+                                                    <span t-if="prop.state === 'available'" class="chip chip-success"><span class="chip-dot"></span> State: <t t-esc="prop.state"/></span>
+                                                    <span t-if="prop.state === 'reserved'" class="chip chip-warning"><span class="chip-dot"></span> State: <t t-esc="prop.state"/></span>
+                                                    <span t-if="['sold','available','reserved'].indexOf(prop.state) === -1" class="chip chip-info"><span class="chip-dot"></span> State: <t t-esc="prop.state"/></span>
+                                                </div>
+
+                                                <div class="tp-specs">
+                                                    <div class="kv"><span class="k">Net Area</span> <span class="v"><t t-esc="this.formatArea(prop.net_area)"/></span></div>
+                                                    <div class="kv"><span class="k">Gross Area</span> <span class="v"><t t-esc="this.formatArea(prop.gross_area)"/></span></div>
+                                                    <div class="kv"><span class="k">Bedrooms</span> <span class="v"><t t-esc="this.formatInt(prop.bedroom)"/></span></div>
+                                                    <div class="kv"><span class="k">Selling Price</span> <span class="v"><t t-esc="this.formatNumber(prop.unit_price)"/></span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </td>
+                        </t>
+                    </tr>
+                </tbody>
+            </table>
+        </t>
+
+        <!-- POPUP -->
+        <t t-if="state.pop.visible">
+            <div class="pop-root"
+                 t-att-style="'--x:'+state.pop.left+'px; --y:'+state.pop.top+'px; --ax:'+state.pop.arrowX+'px;'">
+                <div class="pop-wrap">
+                    <div class="pop-card">
+                        <div class="pop-header">
+                            <div class="pop-title">
+                                <span t-if="state.pop.kind === 'reserved'" class="pill pill-reserved">Reserved</span>
+                                <span t-if="state.pop.kind === 'sold'" class="pill pill-sold">Sold</span>
+                                <span>Property details</span>
+                            </div>
+                            <button class="pop-close" t-on-click="this.closePopup" aria-label="Close">
+                                <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                            </button>
+                        </div>
+
+                        <div class="pop-rows">
+                            <div class="pop-row"><span class="pop-k">Customer</span><span class="pop-v"><t t-esc="state.pop.info.customer || '—'"/></span></div>
+                            <div class="pop-row"><span class="pop-k">Salesperson</span><span class="pop-v"><t t-esc="state.pop.info.salesperson || '—'"/></span></div>
+                            <div class="pop-row"><span class="pop-k">Wing</span><span class="pop-v"><t t-esc="state.pop.info.wing || '—'"/></span></div>
+
+                            <t t-if="state.pop.kind === 'reserved'">
+                                <div class="pop-row"><span class="pop-k">Reservation</span><span class="pop-v"><t t-esc="state.pop.info.reservation_type || '—'"/></span></div>
+                                <div class="pop-row"><span class="pop-k">Expires</span><span class="pop-v"><t t-esc="this.formatDateTime(state.pop.info.expire_date)"/></span></div>
+                                <div class="pop-row"><span class="pop-k">First Payment</span><span class="pop-v"><t t-esc="this.formatNumber(state.pop.info.first_payment_amount)"/></span></div>
+                            </t>
+                        </div>
+                    </div>
+                    <div class="pop-arrow" t-att-class="{'above': state.pop.placement === 'above', 'below': state.pop.placement === 'below'}"></div>
+                </div>
+            </div>
+        </t>
+    </div>
+</t>
+</templates>

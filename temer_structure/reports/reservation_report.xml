@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_reservation_details_inherit" inherit_id="ahadubit_property_reservation.report_reservation_details">
+        <xpath expr="//div[@class='row']" position="after">
+         <br/>
+            <div class="row">
+                <div class="col-6">
+                    <p>Salesperson: <span t-esc="o.salesperson_ids.name"/></p>
+                    <p>Supervisor: <span t-esc="o.supervisor_id.name.name"/></p>
+                    
+                </div>
+                <div class="col-6">
+                    <p>Sales Team: <span t-esc="o.team_id.manager_id.name"/></p>
+                    <p>Wing : <span t-esc="o.wing_id.name"/></p>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+<template id="property_sale_report_template" inherit_id="ahadubit_property_base.property_sale_report_template_custom">
+    <xpath expr="//t[@t-call='web.external_layout']" position="replace">
+        <t t-call="web.external_layout">
+          <style>
+                @page {
+                    size: A4 landscape;
+                    margin: 10mm;
+                }
+                body {
+                    width: 100%;
+                    height: 100%;
+                }
+                @media print {
+                    @page {
+                        size: landscape;
+                    }
+                }
+            </style>
+            <!-- Your custom layout content goes here -->
+            <h1>Property Sale Report</h1>
+            <t t-if="from_date">
+                <div>
+                    <strong>Date From:</strong>
+                    <span t-esc="from_date"/>
+                </div>
+            </t>
+            <t t-if="to_date">
+                <div>
+                    <strong>Date To:</strong>
+                    <span t-esc="to_date"/>
+                </div>
+            </t>
+            <!-- <t t-if="partner_name">
+                <div>
+                    <strong>Partner Name:</strong>
+                    <span t-esc="partner_name"/>
+                </div>
+            </t>
+            <t t-if="property_name">
+                <div>
+                    <strong>Property Name:</strong>
+                    <span t-esc="property_name"/>
+                </div>
+            </t> -->
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Customer</th>
+                        <th>Site</th>
+                        <th>Property Name</th>
+                        
+                        <th>Salesperson</th> <!-- New column added -->
+                        <th>Supervisor</th> <!-- New column added -->
+                        <th>Team</th> <!-- New column added -->
+                        <th>Wing</th> <!-- New column added -->
+                        <th>Order Date</th>
+                        <th>Initial Price</th>
+                        <th>Discount</th>
+                        <th>Paid</th>
+                        <th>Remaining</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <t t-foreach="datas" t-as="line">
+                    <t t-set="i" t-value="0"/>
+                        <tr t-foreach="line['sales_details']" t-as="sale">
+                         <t t-set="reservation" t-value="request.env['property.reservation'].search([('id', '=', sale['reservation_id'] ) ]  )"/>
+                          <t t-set="i" t-value="i + 1"/>
+                            <td><span t-esc="i "/></td>
+                            <td><span t-esc="sale['customer']"/></td>
+                            <td><span t-esc="sale['site']"/></td>
+                            <td><span t-esc="sale['property']"/></td>
+                            <td><span t-esc="reservation.salesperson_ids.name"/></td>
+                            <td><span t-esc="reservation.supervisor_id.name.name"/></td>
+                            <td><span t-esc="reservation.team_id.manager_id.name"/></td>
+                            <td><span t-esc="reservation.wing_id.manager_id.name"/></td>
+                            <td><span t-esc="sale['order_date']"/></td>
+                            <td><span t-esc="'{:,.0f}'.format(float(sale['initial_price']))"/></td>
+                            <td><span t-esc="'{:,.0f}'.format(float(sale['total_discount']))"/></td>
+                            <td><span t-esc="'{:,.0f}'.format(float(sale['paid']))"/></td>
+                            <td><span t-esc="'{:,.0f}'.format(float(sale['remaining']))"/></td>
+                        </tr>
+                    
+                    <tr>
+                        <td colspan="9" style="text-align: right;">Total</td>
+                        <td><span t-esc="'{:,.0f}'.format(float(line['initial_price_sum']))"/></td>
+                        <td><span t-esc="'{:,.0f}'.format(float(line['discount_sum']))"/></td>
+                        <td><span t-esc="'{:,.0f}'.format(float(line['total_paid_sum']))"/></td>
+                        <td><span t-esc="'{:,.0f}'.format(float(line['remaining_sum']))"/></td>
+                    </tr>
+                    </t>
+                </tbody>
+            </table>
+        </t>
+    </xpath>
+</template>
+</odoo>

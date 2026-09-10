@@ -1,0 +1,24 @@
+<odoo>
+<record id="view_crm_lead_search_inherited" model="ir.ui.view">
+            <field name="name">temer.lead.search</field>
+            <field name="model">temer.lead</field>
+            <field name="inherit_id" ref="temer_crm.view_temer_lead_search_all" />
+            <field name="arch" type="xml">
+                <xpath expr="//search" position="inside">
+               
+                <field name="computed_supervisor_id"/>
+                <field name="computed_sales_team_id"/>
+                <field name="computed_wing_id"/>
+
+                 <group expand="0" string="Group By">
+            
+                    <filter string="Supervisor" name="group_by_supervisor" context="{'group_by': 'computed_supervisor_id'}"/>
+                    <filter string="Team" name="group_by_team" context="{'group_by': 'computed_sales_team_id'}"/>
+                    <filter string="Wing" name="group_by_wing" context="{'group_by': 'computed_wing_id'}"/>
+                    <filter string="Stage" name="group_by_state" context="{'group_by': 'state'}"/>
+                </group>
+                </xpath>
+                </field>
+                </record>
+
+                </odoo>

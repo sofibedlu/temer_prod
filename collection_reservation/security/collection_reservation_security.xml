@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="group_collection_reservation_user" model="res.groups">
+        <field name="name">Collection Reservation User</field>
+        <field name="category_id" ref="collection_management.module_category_collection_management"/>
+        <field name="implied_ids" eval="[(4, ref('collection_management.group_collection_user'))]"/>
+    </record>
+
+    <record id="group_collection_reservation_checker" model="res.groups">
+        <field name="name">Collection Reservation Checker</field>
+        <field name="category_id" ref="collection_management.module_category_collection_management"/>
+        <field name="implied_ids" eval="[
+            (4, ref('collection_reservation.group_collection_reservation_user')),
+            (4, ref('collection_management.group_collection_user'))
+        ]"/>
+    </record>
+
+    <record id="group_collection_reservation_approver" model="res.groups">
+        <field name="name">Collection Reservation Approver</field>
+        <field name="category_id" ref="collection_management.module_category_collection_management"/>
+        <field name="implied_ids" eval="[
+            (4, ref('collection_reservation.group_collection_reservation_user')),
+            (4, ref('collection_management.group_collection_user'))
+        ]"/>
+    </record>
+
+    <record id="collection_management.group_collection_manager" model="res.groups">
+        <field name="implied_ids" eval="[
+            (3, ref('collection_reservation.group_collection_reservation_user')),
+            (3, ref('collection_reservation.group_collection_reservation_checker')),
+            (3, ref('collection_reservation.group_collection_reservation_approver'))
+        ]"/>
+    </record>
+
+    <record id="rule_collection_reservation_all_role_users" model="ir.rule">
+        <field name="name">Collection Reservation role users see all</field>
+        <field name="model_id" ref="model_collection_reservation_request"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[
+            (4, ref('collection_reservation.group_collection_reservation_user')),
+            (4, ref('collection_reservation.group_collection_reservation_checker')),
+            (4, ref('collection_reservation.group_collection_reservation_approver'))
+        ]"/>
+    </record>
+</odoo>

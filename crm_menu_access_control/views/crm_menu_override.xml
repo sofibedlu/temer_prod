@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Override the four CRM sub-menus defined in crm_custom_menu so that
+        each menu is visible ONLY to users who hold the matching menu-visibility
+        group from this module.
+
+        Before this module:  all four menus were visible to anyone in the
+                             corresponding data-access group.
+        After this module:   a user must ALSO be in the matching
+                             crm_menu_access_control.group_menu_* group to see
+                             the menu.  Assign exactly one group per user to
+                             show only that section.
+    -->
+
+    <!-- Ensure the TEMER CRM root menu is visible to anyone who has any of the 4 menu groups -->
+    <record id="temer_crm.menu_temer_leads_root" model="ir.ui.menu">
+        <field name="groups_id" eval="[
+            (4, ref('temer_crm.group_temer_lead_user')),
+            (4, ref('temer_crm.group_temer_lead_manager')),
+            (4, ref('temer_crm.group_call_center_temer_access')),
+            (4, ref('crm_menu_access_control.group_menu_reception')),
+            (4, ref('crm_menu_access_control.group_menu_website')),
+            (4, ref('crm_menu_access_control.group_menu_callcenter')),
+            (4, ref('crm_menu_access_control.group_menu_affilater')),
+        ]"/>
+    </record>
+
+    <!-- Call Center CRM menu: add group_menu_callcenter alongside the original group -->
+    <record id="crm_custom_menu.menu_crm_custom_leads" model="ir.ui.menu">
+        <field name="groups_id" eval="[
+            (6, 0, [
+                ref('crm_custom_menu.group_call_center'),
+                ref('crm_menu_access_control.group_menu_callcenter'),
+            ])
+        ]"/>
+    </record>
+
+    <!-- Reception CRM menu: add group_menu_reception alongside the original group -->
+    <record id="crm_custom_menu.menu_crm_custom_leads_2" model="ir.ui.menu">
+        <field name="groups_id" eval="[
+            (6, 0, [
+                ref('crm_custom_menu.group_reception'),
+                ref('crm_menu_access_control.group_menu_reception'),
+            ])
+        ]"/>
+    </record>
+
+    <!-- Website CRM menu: add group_menu_website alongside the original group -->
+    <record id="crm_custom_menu.menu_crm_custom_leads_3" model="ir.ui.menu">
+        <field name="groups_id" eval="[
+            (6, 0, [
+                ref('crm_custom_menu.group_Crmwebsite'),
+                ref('crm_menu_access_control.group_menu_website'),
+            ])
+        ]"/>
+    </record>
+
+    <!-- Referral CRM menu: add group_menu_affilater alongside the original group -->
+    <record id="crm_custom_menu.menu_crm_custom_leads_4" model="ir.ui.menu">
+        <field name="groups_id" eval="[
+            (6, 0, [
+                ref('crm_custom_menu.group_affilater'),
+                ref('crm_menu_access_control.group_menu_affilater'),
+            ])
+        ]"/>
+    </record>
+
+</odoo>

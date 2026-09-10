@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_collection_order_form_inherit_extension" model="ir.ui.view">
+        <field name="name">collection.order.form.inherit.extension</field>
+        <field name="model">collection.order</field>
+        <field name="inherit_id" ref="collection_management.view_collection_order_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button name="action_view_extension_requests" 
+                        type="object" 
+                        class="oe_stat_button" 
+                        icon="fa-calendar"
+                        invisible="extension_request_count == 0">
+                    <field name="extension_request_count" widget="statinfo" string="Extensions"/>
+                </button>
+            </div>
+            
+            <xpath expr="//header/button[@name='action_open_extension_wizard']" position="before">
+                <field name="has_pending_extension" invisible="1"/>
+            </xpath>
+            
+            <xpath expr="//header/button[@name='action_open_extension_wizard']" position="attributes">
+                <attribute name="string">Request Extension</attribute>
+                
+                <attribute name="invisible">state != 'active' or has_pending_extension</attribute>
+
+                <attribute name="groups">collection_management.group_collection_due_date_editor</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_property_payment_extension_wizard_form_inherit" model="ir.ui.view">
+        <field name="name">property.payment.extension.wizard.form.inherit</field>
+        <field name="model">property.payment.extension.wizard</field>
+        <field name="inherit_id" ref="collection_management.view_property_payment_extension_wizard_form"/>
+        <field name="arch" type="xml">
+            <field name="reason" position="after">
+                <group>
+                    <field name="attachment_ids" widget="many2many_binary"/>
+                </group>
+            </field>
+            <xpath expr="//button[@name='action_confirm_extension']" position="attributes">
+                <attribute name="string">Submit Extension</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_extension_request_reject_wizard_form" model="ir.ui.view">
+        <field name="name">extension.request.reject.wizard.form</field>
+        <field name="model">extension.request.reject.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Reject Extension Request">
+                <group>
+                    <field name="reason" placeholder="Enter the reason for rejection..." />
+                </group>
+                <footer>
+                    <button name="action_confirm_reject" string="Confirm Rejection" type="object" class="btn-danger"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

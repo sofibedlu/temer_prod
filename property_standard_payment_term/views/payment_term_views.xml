@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_property_payment_term_form_inherit_standard" model="ir.ui.view">
+        <field name="name">property.payment.term.form.inherit.standard</field>
+        <field name="model">property.payment.term</field>
+        <field name="inherit_id" ref="ahadubit_property_base.property_site_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='payment_line']/tree/field[@name='percentage']" position="after">
+                <field name="is_standard"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

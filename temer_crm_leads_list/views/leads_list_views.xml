@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree view: All Leads columns WITHOUT phone number, list only -->
+    <record id="view_temer_lead_tree_list_only" model="ir.ui.view">
+        <field name="name">temer.lead.tree.list.only</field>
+        <field name="model">temer.lead</field>
+        <field name="arch" type="xml">
+            <tree string="All Lead" create="false" delete="false" class="o_insite_all_lead_list">
+                <field name="name" class="o_insite_lead_name_col"/>
+                <field name="user_id"/>
+                <field name="create_date"/>
+                <field name="state"/>
+                <field name="create_uid" string="Created By"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Search view: same as All Leads + Group By options for filter/group by -->
+    <record id="view_temer_lead_search_list_only" model="ir.ui.view">
+        <field name="name">temer.lead.search.list.only</field>
+        <field name="model">temer.lead</field>
+        <field name="inherit_id" ref="temer_crm.view_temer_lead_search_all"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='follow_up']" position="after">
+                <separator/>
+                <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                <filter string="Salesperson" name="group_by_user" context="{'group_by': 'user_id'}"/>
+                <filter string="Created By" name="group_by_create_uid" context="{'group_by': 'create_uid'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Action: tree only, no Create, uses same model and search; export/filter/group by from list -->
+    <record id="action_temer_lead_list_only" model="ir.actions.act_window">
+        <field name="name">All Lead</field>
+        <field name="res_model">temer.lead</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_temer_lead_tree_list_only"/>
+        <field name="search_view_id" ref="view_temer_lead_search_list_only"/>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Use filters and group by to analyze leads. Export from the list view.
+            </p>
+        </field>
+    </record>
+
+    <!-- Root menu: standalone top-level menu, not under TEMER CRM -->
+    <menuitem id="menu_temer_leads_list_root"
+              name="All Lead"
+              sequence="99"
+              groups="temer_crm_leads_list.group_insite_all_lead_user"/>
+
+    <menuitem id="menu_temer_leads_list_only"
+              name="All Lead"
+              parent="menu_temer_leads_list_root"
+              action="action_temer_lead_list_only"
+              sequence="1"
+              groups="temer_crm_leads_list.group_insite_all_lead_user"/>
+</odoo>

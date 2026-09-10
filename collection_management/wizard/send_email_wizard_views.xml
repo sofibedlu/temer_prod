@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_collection_send_email_wizard_form" model="ir.ui.view">
+        <field name="name">collection.send.email.wizard.form</field>
+        <field name="model">collection.send.email.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Send Email Notification">
+                <sheet>
+                    <group>
+                        <field name="collection_id" invisible="1"/>
+                        <field name="installment_id" options="{'no_create': True}"/>
+                        <field name="email_to" placeholder="e.g. customer@example.com"/>
+                        <field name="template_id" options="{'no_create': True}"/>
+                    </group>
+                    <group string="Attachment Settings">
+                        <field name="letter_type" widget="radio" options="{'horizontal': true}"/>
+                        <field name="attachment_ids" widget="many2many_binary"/>
+                    </group>
+                    <group string="Message Content">
+                        <field name="subject"/>
+                        <field name="body" widget="html" options="{'style-inline': true}"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_send_email" string="Send Email" type="object" class="btn-primary" icon="fa-paper-plane"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_collection_send_email_wizard" model="ir.actions.act_window">
+        <field name="name">Send Email Notification</field>
+        <field name="res_model">collection.send.email.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_collection_order"/>
+        <field name="binding_view_types">form</field>
+    </record>
+</odoo>

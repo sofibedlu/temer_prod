@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_void_contract_wizard_form" model="ir.ui.view">
+        <field name="name">void.contract.wizard.form</field>
+        <field name="model">void.contract.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Void Contract">
+                <group>
+                    <field name="sale_id" invisible="1"/>
+                    <field name="reason" placeholder="Enter the reason for voiding this contract..."/>
+                </group>
+                <footer>
+                    <button name="action_submit_request" string="Submit Request" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

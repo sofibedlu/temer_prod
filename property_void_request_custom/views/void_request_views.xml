@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_void_request_form_inherit_check_flow" model="ir.ui.view">
+        <field name="name">property.contract.void.request.form.inherit.check.flow</field>
+        <field name="model">property.contract.void.request</field>
+        <field name="inherit_id" ref="property_contract_extension.view_void_request_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//button[@name='action_approve']" position="before">
+                <button name="action_check" 
+                        string="Check" 
+                        type="object" 
+                        class="oe_highlight" 
+                        invisible="state != 'draft'"/>
+            </xpath>
+
+            <xpath expr="//button[@name='action_approve']" position="attributes">
+                <attribute name="invisible">state != 'checked'</attribute>
+                <attribute name="groups">property_void_request_custom.group_property_void_request_approver</attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='action_reject']" position="attributes">
+                <attribute name="invisible">state not in ('draft', 'checked')</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='state']" position="attributes">
+                <attribute name="statusbar_visible">draft,checked,approved,rejected</attribute>
+            </xpath>
+
+            <xpath expr="//sheet" position="inside">
+                <group string="Attachment">
+                    <field name="attachment_ids" widget="many2many_binary" string="Attachments" readonly="state in ['approved', 'rejected']"/>
+                </group>
+
+                <group string="Refund Details">
+                    <group>
+                        <field name="currency_id" invisible="1"/>
+                        <field name="pay_date" required="1" readonly="state in ('checked', 'approved', 'rejected')"/>
+                        <field name="penalty_percent" readonly="state in ('checked', 'approved', 'rejected')"/>
+                    </group>
+                    <group>
+                        <field name="collected_amount"/>
+                        <field name="penalty_amount"/>
+                        <field name="refund_amount" decoration-bf="1" decoration-success="1"/>
+                        <field name="credit_note_id" invisible="not credit_note_id"/>
+                    </group>
+                </group>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- decoration for 'checked' in the tree view -->
+    <record id="view_void_request_tree_inherit_check_flow" model="ir.ui.view">
+        <field name="name">property.contract.void.request.tree.inherit.check.flow</field>
+        <field name="model">property.contract.void.request</field>
+        <field name="inherit_id" ref="property_contract_extension.view_void_request_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="decoration-warning">state == 'checked'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='state']" position="attributes">
+                <attribute name="decoration-warning">state == 'checked'</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

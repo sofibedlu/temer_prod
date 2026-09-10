@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_property_customer_bank_detail_tree" model="ir.ui.view">
+        <field name="name">property.customer.bank.detail.tree</field>
+        <field name="model">property.customer.bank.detail</field>
+        <field name="arch" type="xml">
+            <tree string="Customer Bank Accounts" delete="0">
+                <field name="partner_id"/>
+                <field name="bank_name"/>
+                <field name="account_number"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_property_customer_bank_detail_form" model="ir.ui.view">
+        <field name="name">property.customer.bank.detail.form</field>
+        <field name="model">property.customer.bank.detail</field>
+        <field name="arch" type="xml">
+            <form string="Bank Account">
+                <sheet>
+                    <group>
+                        <field name="partner_id" readonly="context.get('default_partner_id')"/>
+                        <field name="bank_name" readonly="context.get('default_bank_name')"
+                               placeholder="e.g. Awash Bank"/>
+                        <field name="account_number" placeholder="e.g. 1000000000"/>
+                        <field name="active" invisible="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_property_customer_bank_detail_search" model="ir.ui.view">
+        <field name="name">property.customer.bank.detail.search</field>
+        <field name="model">property.customer.bank.detail</field>
+        <field name="arch" type="xml">
+            <search string="Bank Account Refund">
+                <field name="bank_name" string="Bank"
+                       filter_domain="[('bank_name', 'ilike', self)]"/>
+                <field name="account_number" string="Account"
+                       filter_domain="[('account_number', 'ilike', self)]"/>
+                <field name="partner_id"/>
+                <filter string="Active" name="active" domain="[('active', '=', True)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_property_customer_bank_detail" model="ir.actions.act_window">
+        <field name="name">Customer Bank Accounts</field>
+        <field name="res_model">property.customer.bank.detail</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

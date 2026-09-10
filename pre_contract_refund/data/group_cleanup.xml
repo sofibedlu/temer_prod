@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <function model="res.users" name="pre_contract_refund_cleanup_groups"/>
+    </data>
+</odoo>

@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_property_collection_config,property.collection.config,model_property_collection_config,base.group_user,1,1,1,1
+access_collection_reactivate_wizard,collection.reactivate.wizard,model_collection_reactivate_wizard,base.group_user,1,1,1,1
+access_amendment_request_wizard,amendment.request.wizard,model_amendment_request_wizard,base.group_user,1,1,1,1
+access_amendment_request_reject_wizard,amendment.request.reject.wizard,model_amendment_request_reject_wizard,base.group_user,1,1,1,1
+access_amendment_request_approve_wizard,amendment.request.approve.wizard,model_amendment_request_approve_wizard,base.group_user,1,1,1,1
+access_property_contract_void_request_collection_initiator,access.property.contract.void.request.collection.initiator,property_contract_extension.model_property_contract_void_request,base.group_user,1,1,1,1
+access_property_schedule_amendment_request_collection_initiator,access.property.schedule.amendment.request.collection.initiator,model_property_schedule_amendment_request,base.group_user,1,1,1,1

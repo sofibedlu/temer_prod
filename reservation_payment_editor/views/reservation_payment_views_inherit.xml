@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ───────────────────────────────────────────────
+         Inherit the payment FORM view — add Edit button
+         ─────────────────────────────────────────────── -->
+    <record id="view_reservation_payment_form_edit_btn" model="ir.ui.view">
+        <field name="name">property.reservation.payment.form.edit.btn</field>
+        <field name="model">property.reservation.payment</field>
+        <field name="inherit_id" ref="ahadubit_property_reservation.view_property_reservation_payment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button
+                    name="action_open_edit_wizard"
+                    string="Edit Payment"
+                    type="object"
+                    class="btn-primary"
+                    icon="fa-pencil"
+                    groups="reservation_payment_editor.group_payment_editor"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ──────────────────────────────────────────────────────
+         Inherit the payment TREE view — add Edit action button
+         ────────────────────────────────────────────────────── -->
+    <record id="view_reservation_payment_tree_edit_btn" model="ir.ui.view">
+        <field name="name">property.reservation.payment.tree.edit.btn</field>
+        <field name="model">property.reservation.payment</field>
+        <field name="inherit_id" ref="ahadubit_property_reservation.view_property_reservation_payment_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="inside">
+                <button
+                    name="action_open_edit_wizard"
+                    string="Edit"
+                    type="object"
+                    icon="fa-pencil"
+                    class="btn-sm btn-secondary"
+                    groups="reservation_payment_editor.group_payment_editor"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

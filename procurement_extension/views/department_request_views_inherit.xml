@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_department_request_form_inherit_smart_button" model="ir.ui.view">
+        <field name="name">department.request.form.inherit.smart.button</field>
+        <field name="model">department.request</field>
+        <field name="inherit_id" ref="procurement_management.view_department_request_form"/>
+        <field name="arch" type="xml">
+            
+            <!-- Hide the original Source Document field -->
+            <xpath expr="//field[@name='origin']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <!-- Inject the Button Box above the Title -->
+            <xpath expr="//div[@class='oe_title']" position="before">
+                <div class="oe_button_box" name="button_box">
+                    <field name="internal_request_id" invisible="1"/>
+                    <button name="action_view_internal_request" 
+                            type="object" 
+                            class="oe_stat_button" 
+                            icon="fa-file-text-o" 
+                            invisible="not internal_request_id">
+                        <field name="origin" widget="statinfo" string="Internal Req."/>
+                    </button>
+                </div>
+            </xpath>
+
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_pickings" 
+                        type="object" 
+                        class="oe_stat_button" 
+                        icon="fa-truck" 
+                        invisible="picking_count == 0">
+                    <field name="picking_count" widget="statinfo" string="Receipts"/>
+                </button>
+            </xpath>
+
+            <!-- Add the Original Requesting Dept below Expected Date -->
+            <xpath expr="//field[@name='expected_date']" position="after">
+                <field name="original_department_id" invisible="not original_department_id"/>
+            </xpath>
+
+            <!-- Add Security to the Approve Button -->
+            <xpath expr="//button[@name='action_approve']" position="attributes">
+                <attribute name="groups">procurement_extension.group_department_request_approver</attribute>
+            </xpath>
+            
+        </field>
+    </record>
+</odoo>

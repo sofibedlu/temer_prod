@@ -1,0 +1,6 @@
+id,lead_id/id,activity_type,description,activity_date,user_id/id
+activity_1,lead_1,call,"Initial customer call to discuss requirements",2024-01-15 09:00:00,base.user_admin
+activity_2,lead_1,sms,"Sent property details via SMS",2024-01-16 14:30:00,base.user_admin
+activity_3,lead_2,email,"Sent brochure and pricing information",2024-01-17 11:15:00,base.user_demo
+activity_4,lead_3,office_visit,"Customer visited office for detailed discussion",2024-01-18 10:00:00,base.user_admin
+activity_5,lead_4,site_visit,"Property site visit with customer",2024-01-19 15:45:00,base.user_demo

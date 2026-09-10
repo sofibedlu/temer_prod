@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_payment_order_cancel_wizard_form" model="ir.ui.view">
+        <field name="name">payment.order.cancel.wizard.form</field>
+        <field name="model">payment.order.cancel.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Cancel Payment Order">
+                <sheet>
+                    <group>
+                        <field name="payment_order_id" invisible="1"/>
+                        <field name="cancel_reason" 
+                               placeholder="Enter the reason for cancellation..."/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_confirm_cancel" string="Confirm Cancel" type="object"
+                            class="oe_highlight"/>
+                    <button string="Discard" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Make properties editable from the payment term form (remove readonly on property_ids) -->
+        <record id="view_property_payment_term_form_inherit_payment_type_price_edit"
+                model="ir.ui.view">
+            <field name="name">property.payment.term.form.inherit.payment.type.price.edit</field>
+            <field name="model">property.payment.term</field>
+            <field name="inherit_id"
+                   ref="temer_payment_modify.view_property_payment_term_form_inherit_payment_type"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='property_ids']" position="attributes">
+                    <attribute name="readonly">0</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
+

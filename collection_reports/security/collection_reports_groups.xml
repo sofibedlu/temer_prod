@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Collection Reports Security Groups -->
+    
+    <!-- General Information Report Group -->
+    <record id="group_collection_general_info_report" model="res.groups">
+        <field name="name">Collection Reports / General Information Report</field>
+        <field name="category_id" ref="base.module_category_sales"/>
+        <field name="comment">Access to General Information Report</field>
+    </record>
+    
+    <!-- Summarized Report Group -->
+    <record id="group_collection_summarized_report" model="res.groups">
+        <field name="name">Collection Reports / Summarized Report</field>
+        <field name="category_id" ref="base.module_category_sales"/>
+        <field name="comment">Access to Summarized Report</field>
+    </record>
+    
+    <!-- Plan Based on Collection Stage Group -->
+    <record id="group_collection_plan_stage_report" model="res.groups">
+        <field name="name">Collection Reports / Plan Based on Collection Stage</field>
+        <field name="category_id" ref="base.module_category_sales"/>
+        <field name="comment">Access to Plan Based on Collection Stage Report</field>
+    </record>
+    
+    <!-- Report Based on Collection Stage Group -->
+    <record id="group_collection_report_stage_report" model="res.groups">
+        <field name="name">Collection Reports / Report Based on Collection Stage</field>
+        <field name="category_id" ref="base.module_category_sales"/>
+        <field name="comment">Access to Report Based on Collection Stage</field>
+    </record>
+    
+    <!-- Collection Report Based on Collection Stage Group -->
+    <record id="group_collection_stage_report" model="res.groups">
+        <field name="name">Collection Reports / Collection Report Based on Collection Stage</field>
+        <field name="category_id" ref="base.module_category_sales"/>
+        <field name="comment">Access to Collection Report Based on Collection Stage</field>
+    </record>
+    
+    <!-- Collection Report Based on Actual Paid Amount Group -->
+    <record id="group_collection_actual_paid_report" model="res.groups">
+        <field name="name">Collection Reports / Collection Report Based on Actual Paid Amount</field>
+        <field name="category_id" ref="base.module_category_sales"/>
+        <field name="comment">Access to Collection Report Based on Actual Paid Amount</field>
+    </record>
+    
+    <!-- Plan for Collection Group -->
+    <record id="group_collection_plan_report" model="res.groups">
+        <field name="name">Collection Reports / Plan for Collection</field>
+        <field name="category_id" ref="base.module_category_sales"/>
+        <field name="comment">Access to Plan for Collection Report</field>
+    </record>
+    
+    <!-- Collection Plan (Model) Group -->
+    <record id="group_collection_plan_stage_model" model="res.groups">
+        <field name="name">Collection Reports / Collection Plan Management</field>
+        <field name="category_id" ref="base.module_category_sales"/>
+        <field name="comment">Access to Collection Plan Stage model (create/edit plans)</field>
+    </record>
+    
+    <!-- Customer Service (Model) Group -->
+    <record id="group_collection_customer_service_model" model="res.groups">
+        <field name="name">Collection Reports / Customer Service Management</field>
+        <field name="category_id" ref="base.module_category_sales"/>
+        <field name="comment">Access to Customer Service model (create/edit customer service records)</field>
+    </record>
+    
+    <!-- Customer Service Report Group -->
+    <record id="group_collection_customer_service_report" model="res.groups">
+        <field name="name">Collection Reports / Customer Service Report</field>
+        <field name="category_id" ref="base.module_category_sales"/>
+        <field name="comment">Access to Customer Service Report</field>
+    </record>
+    
+    <!-- Communication Report Group -->
+    <record id="group_collection_communication_report" model="res.groups">
+        <field name="name">Collection Reports / Communication Report</field>
+        <field name="category_id" ref="base.module_category_sales"/>
+        <field name="comment">Access to Communication Report</field>
+    </record>
+    
+</odoo>
+

@@ -1,0 +1,99 @@
+<odoo>
+    <record id="view_temer_commission_sheet_tree" model="ir.ui.view">
+        <field name="name">temer.commission.sheet.tree</field>
+        <field name="model">temer.commission.sheet</field>
+        <field name="arch" type="xml">
+            <tree decoration-success="state == 'closed'"
+                  decoration-danger="state == 'cancelled'"
+                  decoration-muted="state == 'draft'">
+                <field name="name"/>
+                <field name="sale_id"/>
+                <field name="policy_id"/>
+                <field name="sale_amount"/>
+                <field name="collected_amount"/>
+                <field name="collected_percentage"/>
+                <field name="state" widget="badge" decoration-success="state == 'closed'" decoration-warning="state == 'confirmed'" decoration-danger="state == 'cancelled'" decoration-muted="state == 'draft'"/>
+                <field name="currency_id" invisible="1" column_invisible="1"></field>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_temer_commission_sheet_form" model="ir.ui.view">
+        <field name="name">temer.commission.sheet.form</field>
+        <field name="model">temer.commission.sheet</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_confirm"
+                        type="object"
+                        string="Confirm"
+                        class="btn-primary"
+                        invisible="state != 'draft'"/>
+                    <button name="action_cancel_with_reason"
+                        type="object"
+                        string="Cancel"
+                        class="btn-secondary"
+                        invisible="state in ['cancelled', 'closed']"/>
+
+                    <button name="action_calculate_commission"
+                            type="object"
+                            string="Calculate Commission"
+                            class="btn-primary"
+                            invisible="not sale_id"/>
+                    <field name="state" widget="statusbar"
+                            statusbar_visible="draft,confirmed,closed,cancelled"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="sale_id" readonly="state != 'draft'" />
+                            <field name="policy_id"/>
+                        </group>
+                        <group>
+                            <field name="sale_amount" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Collection Data">
+                        <group>
+                            <field name="collected_amount" readonly="1"/>
+                            <field name="collected_percentage" readonly="1"/>
+                        </group>
+                     </group>
+                    <notebook>
+                        <page string="Beneficiaries">
+                            <field name="line_ids">
+                                <tree decoration-success="state == 'paid'"
+                                      decoration-warning="state == 'partial'">
+                                    <field name="currency_id" invisible="1" column_invisible="1"></field>
+                                    <field name="partner_id"/>
+                                    <field name="role"/>
+                                    <field name="percentage"/>
+                                    <field name="total_commission_amount" sum="Total Commission" widget="monetary"/>
+                                    <field name="paid_amount" readonly="1" sum="Paid Amount" widget="monetary"/>
+                                    <field name="balance_amount" readonly="1" sum="Remaining Balance" widget="monetary"/>
+                                    <button name="action_open_payment_wizard"
+                                        type="object"
+                                        string="Pay"
+                                        class="btn-secondary"
+                                        icon="fa-money"
+                                        invisible="state == 'paid'"/>
+                                    <field name="state" readonly="1" widget="badge" decoration-success="state == 'paid'" decoration-warning="state == 'partial'"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+</odoo>

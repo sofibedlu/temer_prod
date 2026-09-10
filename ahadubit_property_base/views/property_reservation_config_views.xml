@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inheriting the settings view to add the Property app section -->
+    <record id="res_config_settings_view_form_real_estate" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.real.estate</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="25"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Property" string="Property" name="ahadubit_property_base" groups="advanced_property_management.group_property_manager">
+                    <block title="Properties" name="properties_setting_container">
+                        <setting id="property_address_show" company_dependent="1"
+                                 help="Enable this option to display the complete address information.">
+                            <field name="show_address_detail"/>
+                        </setting>
+                        <setting id="allows_site_no" company_dependent="1"
+                                 help="Used to manage the number of allowed sites during lead creation.">
+                            <field name="allows_site_no"/>
+                        </setting>
+                        <setting id="custom_expiration_duration_in" company_dependent="1"
+                                 help="Used to manage the custom expiration duration in for lead creation.">
+                            <field name="custom_expiration_duration_in"/>
+                            <field name="custom_expiration_duration"/>
+                        </setting>
+                        
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+    <record id="action_property_settings" model="ir.actions.act_window">
+        <field name="name">Property Settings</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_id" ref="res_config_settings_view_form_real_estate"/>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module' : 'ahadubit_property_base'}</field>
+    </record>
+
+    <!-- Adding the menu item to access the Property settings -->
+    <menuitem id="menu_property_configuration"
+              name="Settings"
+              parent="advanced_property_management.property_configuration_menu"
+              action="action_property_settings"
+              sequence="-20"
+              groups="advanced_property_management.group_property_manager"/>
+</odoo>

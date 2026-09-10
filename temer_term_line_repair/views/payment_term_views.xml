@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_property_payment_term_form_inherit_clean" model="ir.ui.view">
+        <field name="name">property.payment.term.form.inherit.clean</field>
+        <field name="model">property.payment.term</field>
+        <field name="inherit_id" ref="ahadubit_property_base.property_site_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <button name="action_merge_duplicate_lines" 
+                            type="object" 
+                            string="Merge Duplicate Lines" 
+                            class="oe_highlight" 
+                            confirm="Are you sure you want to merge duplicate lines inside this template? This will cleanly re-link any active sales to the original lines."/>
+                </header>
+            </xpath>
+        </field>
+    </record>
+</odoo>

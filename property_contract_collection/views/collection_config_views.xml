@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_property_collection_config_form" model="ir.ui.view">
+        <field name="name">property.collection.config.form</field>
+        <field name="model">property.collection.config</field>
+        <field name="arch" type="xml">
+            <form string="Collection Configuration" create="0" delete="0">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Termination Policy">
+                            <field name="termination_threshold_days"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_property_collection_config" model="ir.actions.act_window">
+        <field name="name">Termination Threshold</field>
+        <field name="res_model">property.collection.config</field>
+        <field name="view_mode">tree,form</field>
+        <field name="target">current</field>
+    </record>
+
+    <menuitem id="menu_collection_config_custom"
+              name="Termination-Treshold"
+              parent="collection_management.menu_collection_configuration"
+              action="action_property_collection_config"
+              sequence="30"/>
+</odoo>

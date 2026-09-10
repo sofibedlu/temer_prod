@@ -1,0 +1,636 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+     <!-- Property floor action -->
+    <record id="property_sale_cancel_reason_action" model="ir.actions.act_window">
+        <field name="name">Sale Cancel Reason</field>
+        <field name="res_model">property.sale.cancel.reason</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new reason
+            </p>
+        </field>
+    </record>
+
+    <!-- Property floor tree view -->
+    <record id="property_sale_cancel_reason_view_tree_id" model="ir.ui.view">
+        <field name="name">property.sale.cancel.reason</field>
+        <field name="model">property.sale.cancel.reason</field>
+        <field name="arch" type="xml">
+            <tree editable="top">
+                <field name="name"  class="text-left"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="property_sale_cancel_reason_view_form_id2" model="ir.ui.view">
+        <field name="name">property.sale.cancel.reason</field>
+        <field name="model">property.sale.cancel.reason</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group string="Reason">
+                        <group>
+                            <field name="name" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+     <!-- Property floor action -->
+    <record id="property_floor_action" model="ir.actions.act_window">
+        <field name="name">Floor</field>
+        <field name="res_model">property.floor</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new property floor
+            </p>
+        </field>
+    </record>
+
+    <!-- Property floor tree view -->
+    <record id="property_floor_view_tree_id" model="ir.ui.view">
+        <field name="name">property.floor</field>
+        <field name="model">property.floor</field>
+        <field name="arch" type="xml">
+            <tree editable="top">
+                <field name="name"  class="text-left"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="property_floor_view_form_id2" model="ir.ui.view">
+        <field name="name">property.floor</field>
+        <field name="model">property.floor</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group string="Floor">
+                        <group>
+                            <field name="name" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+
+    <!-- Property site  type tree action -->
+    <record id="property_site_type_action" model="ir.actions.act_window">
+        <field name="name">Site Type</field>
+        <field name="res_model">property.site.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Site
+            </p>
+        </field>
+    </record>
+
+    <!-- Property site  type tree view -->
+    <record id="property_site_type_view_tree_id" model="ir.ui.view">
+        <field name="name">property.site.type.tree</field>
+        <field name="model">property.site.type</field>
+        <field name="arch" type="xml">
+            <tree editable="top">
+                <field name="name" />
+                <field name="property_type" />
+                <field name="multi_payment_method" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="property_site_type_view_form_id2" model="ir.ui.view">
+        <field name="name">property.site.type.form</field>
+        <field name="model">property.site.type</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group string="Site Type">
+                        <group>
+                            <field name="name" />
+                        </group>
+                        <group>
+                            <field name="multi_payment_method" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Property type action -->
+    <record id="property_type_action" model="ir.actions.act_window">
+        <field name="name">Property Type</field>
+        <field name="res_model">property.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Site
+            </p>
+        </field>
+    </record>
+
+    <!-- Property  type tree view -->
+    <record id="property_type_view_tree_id" model="ir.ui.view">
+        <field name="name">property.type</field>
+        <field name="model">property.type</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="code" />
+                <field name="number_be_room" />
+                <field name="number_bath_room" />
+                <field name="has_maid_room" />
+                <field name="net_area" />
+                <field name="gross_area" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="property_type_view_form_id" model="ir.ui.view">
+        <field name="name">property.type</field>
+        <field name="model">property.type</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group string="Property Type">
+                        <group>
+                            <field name="code" />
+                            <!--                        <field name="site" />-->
+                            <field name="number_be_room" />
+                            <field name="number_bath_room" />
+                            <field name="has_maid_room" />
+                        </group>
+                        <group>
+                            <field name="gross_area" />
+                            <field name="net_area" />
+                            <field name="image" />
+
+                        </group>
+
+                    </group>
+                </sheet>
+
+            </form>
+        </field>
+    </record>
+
+    <!-- Property site  City tree action -->
+    <record id="property_site_city_action" model="ir.actions.act_window">
+        <field name="name">City</field>
+        <field name="res_model">property.site.city</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Site
+            </p>
+        </field>
+    </record>
+
+    <!-- Property site  city tree view -->
+    <record id="property_site_city_view_tree1_id" model="ir.ui.view">
+        <field name="name">property.site.city.tree</field>
+        <field name="model">property.site.city</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="country_id" />
+                <field name="name" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="property_site_city_view_form_id" model="ir.ui.view">
+        <field name="name">property.site.city.form</field>
+        <field name="model">property.site.city</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="country_id" />
+                    </group>
+                    <group>
+                        <field name="name" />
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <!-- Property site  City subcity action -->
+    <record id="property_site_subcity_action" model="ir.actions.act_window">
+        <field name="name">City</field>
+        <field name="res_model">property.site.subcity</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Site
+            </p>
+        </field>
+    </record>
+
+    <!-- Property site  city tree view -->
+    <record id="property_site_city_view_tree_id" model="ir.ui.view">
+        <field name="name">property.site.subcity.tree</field>
+        <field name="model">property.site.subcity</field>
+        <field name="arch" type="xml">
+            <tree editable="top">
+                <field name="city_id" />
+                <field name="name" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="property_site_city_view_form_id" model="ir.ui.view">
+        <field name="name">property.site.subcity.tree</field>
+        <field name="model">property.site.subcity</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="city_id" />
+                    </group>
+                    <group>
+                        <field name="name" />
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <!-- Property site form view -->
+    <record id="property_site_view_form_id" model="ir.ui.view">
+        <field name="name">property.site.form</field>
+        <field name="model">property.site</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar"
+                        options="{'clickable': '1'}"
+                        statusbar_visible="draft,active,archived" />
+
+                    <button name="activate_site"
+                        string="Active"
+                        type="object"
+                        class="btn-primary"
+                        invisible="state not in ['draft','archived']"
+                        confirm="Are you sure you want to activate this site?" />
+
+                    <button name="archive_site"
+                        string="Archive"
+                        type="object"
+                        class="btn-primary"
+                        invisible="state not in ['draft','active']"
+                        confirm="Are you sure you want to archive this site?" />
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" />
+                            <field name="country_id" no_create="1" />
+                            <field name="city_id" no_create="1"
+                                domain="[('country_id', '=', country_id)]" />
+                            <field name="sub_city_id" no_create="1"
+                                domain="[('city_id', '=', city_id)]" />
+                            <field name="wereda" />
+                            <field name="house_no" />
+                            <field name="area" />
+                            <field name="latitude" />
+                            <field name="longitude" />
+                            <field name="phone" widget="phone" />
+                            <field name="email" />
+                            <field name="lessee_name" />
+                             <field name="finishing" />
+
+                        </group>
+                        <group>
+                            <field name="floor_structure" />
+                            <field name="site_type" />
+                            <field name="plot_area" />
+                            <field name="car_parking" />
+                            <field name="title_deed_no" />
+                            <field name="payment_structure_id" invisible="is_multi == True" />
+                            <field name="price_per_m2" invisible="is_multi == True" />
+                            <field name="leasehold_certificate" widget="binary_preview" />
+                            <field name="commercial_certificate" widget="binary_preview" />
+                            <field name="taxpayer_certificate" widget="binary_preview" />
+                            <field name="is_multi" invisible="1" />
+                        </group>
+                    </group>
+                    <notebook>
+
+                        <page string="Payment Type" invisible="is_multi != True">
+                            <field name="payment_line_ids">
+                                <tree editable="bottom">
+                                    <field name="name" />
+                                    <field name="property_type" />
+                                    <field name="payment_term_id" no_create="1" />
+                                    <field name="price" />
+                                </tree>
+                            </field>
+                        </page>
+
+                        <page string="Property Type">
+                            <field name="property_type_lin_ids">
+                                <tree editable="bottom">
+                                    <field name='property_type_id' />
+                                    <field name="number_be_room" />
+                                    <field name="number_bath_room" />
+                                    <field name="has_maid_room" />
+                                    <field name="gross_area" />
+                                    <field name="net_area" />
+                                    <field name="image" />
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Facilities">
+                            <field name="facility_ids">
+                                <tree editable="bottom">
+                                     <field name='facility_id' />
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="o_attachment_preview" />
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user" />
+                    <field name="activity_ids" />
+                    <field name="message_ids" />
+                </div>
+
+            </form>
+        </field>
+    </record>
+    <!-- Property site tree view -->
+    <record id="property_site_view_tree_id" model="ir.ui.view">
+        <field name="name">property.site.tree</field>
+        <field name="model">property.site</field>
+        <field name="arch" type="xml">
+            <tree decoration-info="state == 'draft'"
+                decoration-success="state == 'active'"
+                decoration-danger="state == 'archived'">
+                <field name="name" />
+                <field name="area" />
+                <field name="site_type" />
+                <field name="state" />
+            </tree>
+        </field>
+    </record>
+
+    <!-- Property site action -->
+    <record id="property_site_action" model="ir.actions.act_window">
+        <field name="name">Property Site</field>
+        <field name="res_model">property.site</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Site
+            </p>
+        </field>
+    </record>
+
+    <!-- Property block tree view -->
+    <record id="property_block_view_tree" model="ir.ui.view">
+        <field name="name">property.block.tree</field>
+        <field name="model">property.block</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name" />
+                <field name="site" />
+            </tree>
+        </field>
+    </record>
+
+
+    <!-- Property block action -->
+    <record id="property_block_action" model="ir.actions.act_window">
+        <field name="name">Property Block</field>
+        <field name="res_model">property.block</field>
+        <field name="view_mode">tree</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Block
+            </p>
+        </field>
+    </record>
+
+
+
+    <!-- Property property unique identification tree view -->
+    <record id="property_unique_identification_view_tree" model="ir.ui.view">
+        <field name="name">property.unique.identification.tree</field>
+        <field name="model">property.unique.identification</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name" />
+            </tree>
+        </field>
+    </record>
+
+
+    <!-- Property property unique identification action -->
+    <record id="property_unique_identification_action" model="ir.actions.act_window">
+        <field name="name">Unique Identification</field>
+        <field name="res_model">property.unique.identification</field>
+        <field name="view_mode">tree</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Unique Identification
+            </p>
+        </field>
+    </record>
+
+
+    <record id="property_site_view_tree" model="ir.ui.view">
+        <field name="name">property.payment.term.tree</field>
+        <field name="model">property.payment.term</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="apply_discount" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="property_site_view_form" model="ir.ui.view">
+        <field name="name">property.payment.term.form</field>
+        <field name="model">property.payment.term</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group string="Payment Term Detail">
+                        <group>
+                            <field name="name" />
+                        </group>
+                        <group>
+                            <field name="apply_discount" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Lines">
+                            <field name="payment_line">
+                                <tree editable="bottom">
+                                    <field name='sequence' widget='handle' />
+                                    <field name="name" />
+                                    <field name="percentage" sum="Total"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Discount Detail" invisible="apply_discount != True">
+                            <field name="discount_line">
+                                <tree editable="bottom">
+                                    <field name='sequence' widget='handle' />
+                                    <field name="name" />
+                                    <field name="discount_start_from" />
+                                    <field name="is_from_paid" />
+                                    <field name="amount_from" widget="percentage" />
+                                    <field name="amount_to" widget="percentage" />
+                                    <field name="amount" widget="percentage" />
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+
+            </form>
+        </field>
+    </record>
+    
+    <!-- Property payment term action -->
+    <record id="property_payment_term_action" model="ir.actions.act_window">
+        <field name="name">Property Payment Term</field>
+        <field name="res_model">property.payment.term</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create A Payment Term
+            </p>
+        </field>
+    </record>
+
+
+    <!-- ============= MENUS ============= -->
+    <!-- Main Configuration Menus -->
+    <menuitem id="property_config_menu"
+        name="Site"
+        parent="advanced_property_management.property_configuration_menu"
+        sequence="1" />
+    <menuitem id="advanced_property_management.property_tag_menu"
+              name="Property Tag"
+              parent="property_config_menu"
+              action="advanced_property_management.property_tag_action"
+              sequence="-3"/>
+
+
+
+    <menuitem id="property_config_location_menu"
+        name="Location"
+        parent="advanced_property_management.property_configuration_menu"
+        sequence="-2" />
+
+    <menuitem id="property_payment_menu"
+        name="Payment"
+        parent="advanced_property_management.property_configuration_menu"
+        sequence="15" />
+    <menuitem id="property_payment_term_action_menu"
+        name="Payment Term"
+        parent="property_payment_menu"
+        action="property_payment_term_action"
+        sequence="23" />
+
+    <!-- Site Detail Configuration Sub-menus -->
+    <menuitem id="property_site_menu"
+        name="Sites"
+        parent="property_config_menu"
+        action="property_site_action"
+        sequence="1" />
+
+    <menuitem id="property_site_type_menu"
+        name="Sites Type"
+        parent="property_config_menu"
+        action="property_site_type_action"
+        sequence="3" />
+
+    <menuitem id="property_type_menu"
+        name="Property Type"
+        parent="property_config_menu"
+        action="property_type_action"
+        sequence="4" />
+
+    <menuitem id="property_site_city_menu"
+        name="City"
+        parent="property_config_location_menu"
+        action="property_site_city_action"
+        sequence="5" />
+
+    <menuitem id="property_site_subcity_menu"
+        name="Subcity"
+        parent="property_config_location_menu"
+        action="property_site_subcity_action"
+        sequence="6" />
+
+    <menuitem id="property_block_menu"
+        name="Block"
+        parent="property_config_menu"
+        action="property_block_action"
+        sequence="2" />
+
+     <menuitem id="property_floor_action_menu"
+        name="Floor"
+        parent="property_config_menu"
+        action="property_floor_action"
+        sequence="8" />
+
+
+
+     <menuitem id="advanced_property_management.property_facilities_menu"
+               name="Facilities"
+               parent="property_config_menu"
+               action="advanced_property_management.property_facility_action"
+               sequence="9"/>
+
+   
+
+    <!-- Other Configuration Menus -->
+    <!-- <menuitem id="property_unique_identification_menu"
+        name="Unique Identification"
+        parent="advanced_property_management.property_configuration_menu"
+        action="property_unique_identification_action"
+        sequence="23" /> -->
+
+
+
+    <!-- <menuitem id="advanced_property_management.property_commission_menu"
+              name="Commission"
+              parent="ahadubit_property_base.property_payment_menu"
+              action="advanced_property_management.property_commission_action"
+              sequence="24"/> -->
+
+    <record id="advanced_property_management.rental_bills_menu" model="ir.ui.menu">
+            <field name="active">False</field>
+        </record>
+
+     <record id="advanced_property_management.property_auction_menu" model="ir.ui.menu">
+            <field name="active">False</field>
+        </record>
+
+     <record id="advanced_property_management.property_rental_menu" model="ir.ui.menu">
+            <field name="active">False</field>
+        </record>
+
+<!--    <menuitem id="advanced_property_management.rental_bills_menu"-->
+<!--                  name="Rental Bills"-->
+<!--                  parent="advanced_property_management.property_configuration_menu"-->
+<!--                  action="advanced_property_management.rental_bill_action"-->
+<!--                  invisible="1"-->
+<!--                  sequence="18"/>-->
+
+
+
+</odoo>

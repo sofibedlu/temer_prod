@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_amendment_request_form_inherit_attachments" model="ir.ui.view">
+        <field name="name">property.schedule.amendment.request.form.inherit.attachments</field>
+        <field name="model">property.schedule.amendment.request</field>
+        <field name="inherit_id" ref="property_contract_collection.view_property_schedule_amendment_request_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <group string="Attachment">
+                    <field name="attachment_ids" widget="many2many_binary" string="Attachments" readonly="state in ['approved', 'rejected']"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

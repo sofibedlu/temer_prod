@@ -1,0 +1,46 @@
+<odoo>
+    <record id="view_property_sale_update_wizard_form" model="ir.ui.view">
+        <field name="name">property.sale.update.wizard.form</field>
+        <field name="model">property.sale.update.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Update Sale Details">
+                <group>
+                    <group string="Basic Info">
+                        <field name="sale_id" readonly="1"/>
+                        <field name="partner_id"/>
+                        <field name="contract_number"/>
+                    </group>
+                    <group string="Property Info">
+                        <field name="property_id" readonly="1"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_apply_changes" string="Update Record" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_property_sale_update_wizard" model="ir.actions.act_window">
+        <field name="name">Update Sale Record</field>
+        <field name="res_model">property.sale.update.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="view_property_sale_form_inherit_amend" model="ir.ui.view">
+        <field name="name">property.sale.form.inherit.amend</field>
+        <field name="model">property.sale</field>
+        <field name="inherit_id" ref="advanced_property_management.property_sale_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="%(action_property_sale_update_wizard)d" 
+                        string="Update Sale" 
+                        type="action" 
+                        class="oe_highlight" 
+                        invisible="state not in ('confirm', 'approve')"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

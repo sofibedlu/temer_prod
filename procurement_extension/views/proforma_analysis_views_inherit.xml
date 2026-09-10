@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_procurement_proforma_form_inherit_warning" model="ir.ui.view">
+        <field name="name">procurement.proforma.analysis.form.inherit.warning</field>
+        <field name="model">procurement.proforma.analysis</field>
+        <field name="inherit_id" ref="procurement_management.view_procurement_proforma_form"/>
+        <field name="arch" type="xml">
+            
+            <!-- Smart Button for Purchase Requests -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_procurement_requests" 
+                        type="object" 
+                        class="oe_stat_button" 
+                        icon="fa-file-text-o" 
+                        invisible="procurement_count == 0">
+                    <field name="procurement_count" widget="statinfo" string="Requests"/>
+                </button>
+            </xpath>
+
+            <!-- Warning UI -->
+            <xpath expr="//div[hasclass('oe_edit_only')]" position="before">
+                <field name="has_duplicate_po_warning" invisible="1"/>
+                <div class="alert alert-warning mb-3" role="alert" invisible="not has_duplicate_po_warning">
+                    <i class="fa fa-exclamation-triangle mr-2"></i>
+                    <strong>Partial Procurement Alert: </strong>
+                    <field name="duplicate_po_warning_text" nolabel="1" readonly="1" class="mb-0"/>
+                </div>
+            </xpath>
+            
+        </field>
+    </record>
+</odoo>

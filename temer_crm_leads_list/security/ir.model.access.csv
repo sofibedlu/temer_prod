@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_temer_lead_insite_user,temer.lead.insite.user,temer_crm.model_temer_lead,temer_crm_leads_list.group_insite_all_lead_user,1,0,0,0
+access_property_site_insite_user,property.site.insite.user,ahadubit_property_base.model_property_site,temer_crm_leads_list.group_insite_all_lead_user,1,0,0,0

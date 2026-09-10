@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_reservation_details">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                     <style>
+                        .text-header {
+                            font-size: 16px;
+                            font-weight: bold;
+                            text-align: center;
+                            margin-bottom: 1px;
+                            text-decoration: underline;
+                        }
+
+                        .table {
+                            width: 100%;
+                            border-collapse: collapse;
+                        }
+
+                        .table th, .table td {
+                            border: 1px solid black;
+                            text-align: left;
+                            font-size: 14px;
+                            margin-bottom: 1px;
+                        }
+
+                        .table thead th {
+                            background-color: #f2f2f2;
+                        }
+
+                        .text-end {
+                            text-align: right;
+                        }
+
+                        .page {
+                            margin: 20px;
+                        }
+                    </style>
+                        <div class="page">
+                            <div class="text-header">
+                                <h3><u>Reservation Detail</u></h3>
+                            </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <p>Property:  <span t-esc="o.property_id.name"/></p>
+                                <p>Customer:  <span t-esc="o.partner_id.name"/></p>
+                                <p>Status:  <span t-esc="o.status"/></p>
+
+                            </div>
+                            <div class="col-6">
+
+                                <p>Reservation Type:  <span t-esc="o.reservation_type_id.name"/></p>
+                                <p>End Date:  <span t-esc="o.expire_date"/></p>
+                            </div>
+                        </div>
+                            <br/>
+                        <t t-set="subtotal" t-value="0"/>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Bank</th>
+                                    <th>Document Type</th>
+                                    <th>Reference Number</th>
+                                    <th>Transaction Date</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Pay Slip Lines -->
+
+                                <tr t-foreach="o.payment_line_ids" t-as="line">
+                                    <td>
+                                          <span t-esc="line.bank_id.rec_name"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="line.document_type_id.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="line.ref_number"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="line.transaction_date"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="line.amount"/>
+                                    </td>
+                                    <t t-set="subtotal" t-value="subtotal + line.amount"/>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">Subtotal:</td>
+                                    <td> <t t-esc="subtotal"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                            <br/>
+                            <br/>
+                            <p>Signature _____________________________________ </p>
+
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+     <record id="Reservation_details_report_action" model="ir.actions.report">
+        <field name="name">Reservation Details</field>
+        <field name="model">property.reservation</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ahadubit_property_reservation.report_reservation_details</field>
+        <field name="report_file">ahadubit_property_reservation.report_reservation_details</field>
+        <field name="print_report_name">('%s' % (object.print_report_name))</field>
+        <field name="binding_model_id" ref="model_property_reservation"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>
+
+
+

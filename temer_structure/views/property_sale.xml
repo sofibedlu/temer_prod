@@ -1,0 +1,53 @@
+<odoo>
+    <data>
+        <!-- Inherit the existing search view to add a new field -->
+        <record id="property_sale_view_search_inherit" model="ir.ui.view">
+            <field name="name">property.sale.view.search.inherit</field>
+            <field name="model">property.sale</field>
+            <field name="inherit_id" ref="ahadubit_property_base.property_sale_view_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//search" position="inside">
+                    <!-- Add new field to the search view -->
+                    <field name="contract_number" string="Contract Number"/>
+                    <!-- You can add additional filters or fields as needed -->
+                </xpath>
+            </field>
+        </record>
+
+        <record id="property_action_sales_person" model="ir.actions.act_window">
+        <field name="name">Property</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">property.property</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="domain">[('state', '!=', 'draft')]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create Your First Property!
+            </p>
+        </field>
+
+      
+    </record>
+      <menuitem id="property_property_menu_sales_person" name="Properties"
+              parent="advanced_property_management.property_menu"
+              action="property_action_sales_person" sequence="30" groups="temer_structure.access_property_sales_person_group"/>
+
+      <!-- Menu Item -->
+    <menuitem id="menu_property_report_analysis"
+              name="Properties Analysis"
+              parent="advanced_property_management.property_report_menu"
+              action="contract_sections.action_property_report_analysis"
+              sequence="5"
+             groups="temer_structure.access_property_managment_group"
+    />
+
+        <!-- Menu Item -->
+    <menuitem id="menu_reservation_report_analysis"
+              name="Reservation Analysis"
+              parent="advanced_property_management.property_report_menu"
+              action="contract_sections.action_reservation_report_analysis"
+              sequence="10"
+              groups="temer_structure.access_property_managment_group"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_collection_order_form_inherit_amendment" model="ir.ui.view">
+        <field name="name">collection.order.form.inherit.amendment</field>
+        <field name="model">collection.order</field>
+        <field name="inherit_id" ref="collection_management.view_collection_order_form"/> 
+        <field name="arch" type="xml">
+
+            <header position="inside">
+                <field name="has_pending_property_amendment" invisible="1"/>
+                <button name="action_open_property_amendment_wizard" 
+                        type="object" 
+                        string="Request Property Amendment" 
+                        class="btn-secondary"
+                        invisible="state != 'active' or has_pending_property_amendment"
+                        groups="property_contract_collection.group_collection_amend_void_requests"/>
+            </header>
+            
+        </field>
+    </record>
+</odoo>

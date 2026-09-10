@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_receipt_deny_wizard_form" model="ir.ui.view">
+        <field name="name">receipt.deny.wizard.form</field>
+        <field name="model">receipt.deny.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Deny Receipt">
+                <group>
+                    <field name="receipt_record_id" invisible="1"/>
+                    <field name="receipt_record_ids" invisible="1"/>
+                    <field name="reason_type_id" string="Reason Type" options="{'no_create': False, 'no_create_edit': False}" context="{'default_active': True}"/>
+                    <field name="description" string="Description" placeholder="Enter detailed description of why this receipt is being denied..." nolabel="1" colspan="2"/>
+                </group>
+                <footer>
+                    <button name="action_confirm_deny" string="Confirm Deny" type="object" class="btn-danger"
+                        confirm="This will deny the receipt and cancel the reservation. Are you sure you want to proceed?"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
+

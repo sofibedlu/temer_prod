@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_temer_commission_policy_user,temer.commission.policy user,model_temer_commission_policy,base.group_user,1,1,1,1
+access_temer_commission_policy_line_user,temer.commission.policy.line user,model_temer_commission_policy_line,base.group_user,1,1,1,1
+access_temer_commission_sheet_user,temer.commission.sheet user,model_temer_commission_sheet,base.group_user,1,1,1,1
+access_temer_commission_sheet_line_user,temer.commission.sheet.line user,model_temer_commission_sheet_line,base.group_user,1,1,1,1
+access_temer_commission_payment_user,temer.commission.payment user,model_temer_commission_payment,base.group_user,1,1,1,1
+access_temer_commission_payment_wizard_user,temer.commission.payment.wizard user,model_temer_commission_payment_wizard,base.group_user,1,1,1,1
+access_temer_commission_cancel_wizard_user,temer.commission.cancel.wizard user,model_temer_commission_cancel_wizard,base.group_user,1,1,1,1
+access_temer_commission_report_wizard_user,temer.commission.report.wizard user,model_temer_commission_report_wizard,base.group_user,1,1,1,1

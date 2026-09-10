@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+        All menu items hang under the existing Collection Management
+        Configuration menu (collection_management.menu_collection_configuration).
+    -->
+
+    <!-- ── Letter Types ─────────────────────────────────────────────────── -->
+    <menuitem
+        id="menu_letter_type"
+        name="Letter Types"
+        parent="collection_management.menu_collection_configuration"
+        action="letter_template.action_letter_type"
+        sequence="18"
+        groups="collection_management.group_collection_manager"/>
+
+    <!-- ── Directors ────────────────────────────────────────────────────── -->
+    <menuitem
+        id="menu_letter_director"
+        name="Directors"
+        parent="collection_management.menu_collection_configuration"
+        action="letter_template.action_letter_director"
+        sequence="19"
+        groups="collection_management.group_collection_manager"/>
+
+    <!-- ── Letter Number Generators ─────────────────────────────────────── -->
+    <menuitem
+        id="menu_letter_number_generator"
+        name="Letter Number Generators"
+        parent="collection_management.menu_collection_configuration"
+        action="letter_template.action_letter_number_generator"
+        sequence="21"
+        groups="collection_management.group_collection_manager"/>
+
+    <!-- ── Letter Type Prefixes ──────────────────────────────────────────── -->
+    <menuitem
+        id="menu_letter_type_prefix"
+        name="Letter Type Prefixes"
+        parent="collection_management.menu_collection_configuration"
+        action="letter_template.action_letter_type_prefix"
+        sequence="22"
+        groups="collection_management.group_collection_manager"/>
+
+    <!-- ── Letters Header & Footer ──────────────────────────────────────── -->
+    <menuitem
+        id="menu_letter_header_footer"
+        name="Letters Header &amp; Footer"
+        parent="collection_management.menu_collection_configuration"
+        action="letter_template.action_letter_header_footer"
+        sequence="20"
+        groups="collection_management.group_collection_manager"/>
+
+    <!-- ── Letters Body ─────────────────────────────────────────────────── -->
+    <menuitem
+        id="menu_letter_body"
+        name="Letters Body"
+        parent="collection_management.menu_collection_configuration"
+        action="letter_template.action_letter_body"
+        sequence="25"
+        groups="collection_management.group_collection_manager"/>
+
+    <!-- ── Full Letter Templates (combines header/footer + bodies) ───────── -->
+    <menuitem
+        id="menu_letter_template"
+        name="Letter Templates"
+        parent="collection_management.menu_collection_configuration"
+        action="letter_template.action_letter_template"
+        sequence="30"
+        groups="collection_management.group_collection_manager"/>
+
+</odoo>

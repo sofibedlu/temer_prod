@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Filters to the Installment Search View -->
+    <record id="view_collection_installment_search_inherit_filters" model="ir.ui.view">
+        <field name="name">collection.installment.search.inherit.filters</field>
+        <field name="model">collection.installment</field>
+        <field name="inherit_id" ref="collection_management.view_collection_installment_search"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="//search" position="inside">
+                <separator/>
+                <filter string="From Terminated Orders" name="terminated_orders" domain="[('collection_id.state', '=', 'terminated')]"/>
+                
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- Update the Menu Action to apply the Exclude Void -->
+    <record id="collection_management.action_collection_details" model="ir.actions.act_window">
+        <field name="name">Collection Details</field>
+        <field name="res_model">collection.installment</field>
+        <field name="view_mode">tree,form,pivot,graph</field>
+        <field name="view_id" ref="collection_management.view_collection_installment_analysis_tree"/>
+        <field name="search_view_id" ref="collection_management.view_collection_installment_search"/>
+        <field name="context">{'search_default_group_site': 1, 'search_default_unpaid': 1, 'search_default_overdue': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No installments found.
+            </p>
+            <p>
+                Use this view to analyze pending payments, overdue installments, and group by Site or Customer.
+            </p>
+        </field>
+        <!-- excludes void collection orders from this menu -->
+        <field name="domain">[('collection_id.state', '!=', 'void')]</field>
+    </record>
+</odoo>

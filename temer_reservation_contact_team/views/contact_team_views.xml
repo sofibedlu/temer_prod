@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="action_reservation_contact_team" model="ir.actions.act_window">
+        <field name="name">Contract Team</field>
+        <field name="res_model">reservation.contact.team</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_filter_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Configure Contract Team users who will receive reservations for contracts.
+            </p>
+        </field>
+    </record>
+
+    <record id="view_reservation_contact_team_tree" model="ir.ui.view">
+        <field name="name">reservation.contact.team.tree</field>
+        <field name="model">reservation.contact.team</field>
+        <field name="arch" type="xml">
+            <tree editable="top">
+                <field name="user_id"/>
+                <field name="status"/>
+                <field name="is_active" string="Active"/>
+                <field name="show_mine" widget="boolean_toggle"/>
+                <field name="show_all" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_reservation_contact_team_search" model="ir.ui.view">
+        <field name="name">reservation.contact.team.search</field>
+        <field name="model">reservation.contact.team</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="user_id"/>
+                <filter string="Active" name="filter_active" domain="[('is_active', '=', True)]"/>
+                <filter string="Inactive" name="filter_inactive" domain="[('is_active', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_reservation_contact_team_form" model="ir.ui.view">
+        <field name="name">reservation.contact.team.form</field>
+        <field name="model">reservation.contact.team</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group string="Contract Team">
+                        <field name="is_active" string="Active"/>
+                        <field name="user_id"/>
+                        <field name="status"/>
+                    </group>
+                    <group string="Assigned Sales Privilege">
+                        <field name="show_mine" widget="boolean_toggle"/>
+                        <field name="show_all" widget="boolean_toggle"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <menuitem id="menu_reservation_contact_team"
+              name="Contract Team"
+              parent="advanced_property_management.property_root_menu"
+              action="action_reservation_contact_team"
+              sequence="55"
+              groups="temer_reservation_contact_team.group_reservation_contact_team"/>
+</odoo>

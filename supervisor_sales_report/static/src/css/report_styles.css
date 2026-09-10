@@ -1,0 +1,465 @@
+.supervisor_sales_report_container {
+    padding: 20px;
+    background-color: #f5f5f5;
+    min-height: 100vh;
+}
+
+.report_header {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.report_header h2 {
+    margin: 0 0 10px 0;
+    color: #333;
+    font-size: 24px;
+}
+
+.wing_name_display {
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #e3f2fd;
+    border-left: 4px solid #2196f3;
+    border-radius: 4px;
+}
+
+.wing_name_display h3 {
+    margin: 0;
+    color: #1976d2;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.date_filter_section {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.date_filter_row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.date_filter_row label {
+    font-weight: 500;
+    color: #555;
+    white-space: nowrap;
+}
+
+.date_input {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.date_filter_row select.date_input {
+    width: auto;
+    min-width: 120px;
+    max-width: 150px;
+}
+
+.report_content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    max-width: 100%;
+}
+
+.report_table {
+    width: auto;
+    min-width: 800px;
+    border-collapse: collapse;
+    font-size: 14px;
+    table-layout: auto;
+}
+
+.report_table thead {
+    background-color: #f8f9fa;
+}
+
+.report_table th {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #dee2e6;
+    font-weight: 600;
+    color: #495057;
+}
+
+.report_table tbody tr {
+    background-color: white;
+}
+
+.report_table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.report_table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #dee2e6;
+}
+
+/* Desktop layout: avoid squeezed follow-up columns */
+@media screen and (min-width: 1025px) {
+    .report_content {
+        overflow-x: visible;
+    }
+
+    .report_table {
+        width: 100%;
+        min-width: 0;
+        table-layout: fixed;
+    }
+
+    .report_table th,
+    .report_table td {
+        min-width: 120px;
+    }
+}
+
+/* Ensure clear separation between Follow Up and Reservation columns */
+/* Add stronger right border to Follow Up total column */
+.report_table .total_cell {
+    border-right: 2px solid #495057 !important;
+}
+
+/* Add stronger left border to Reservation column headers and cells */
+.report_table th.reservation_col_header {
+    border-left: 2px solid #495057 !important;
+}
+
+.report_table td.reservation_col_cell {
+    border-left: 2px solid #495057 !important;
+}
+
+.number_cell {
+    font-weight: 500;
+    color: #212529;
+}
+
+.total_cell {
+    font-weight: 700;
+    background-color: #e9ecef;
+    color: #495057;
+}
+
+.loading_indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading_indicator p {
+    color: #666;
+    font-size: 16px;
+}
+
+.export_buttons_row {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #ddd;
+}
+
+.supervisor_sales_report_container .export_btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.supervisor_sales_report_container .export_btn.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.supervisor_sales_report_container .export_btn.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.supervisor_sales_report_container .export_btn.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.supervisor_sales_report_container .export_btn.btn-secondary:hover {
+    background-color: #545b62;
+}
+
+.supervisor_sales_report_container .export_btn.btn-success.show_report_btn {
+    background-color: #28a745;
+    color: white;
+    font-size: 15px;
+    padding: 10px 28px;
+}
+
+.supervisor_sales_report_container .export_btn.btn-success.show_report_btn:hover {
+    background-color: #1e7e34;
+}
+
+/* ============================================
+   Mobile Responsive Styles
+   ============================================ */
+
+/* Mobile devices (up to 768px) */
+@media screen and (max-width: 768px) {
+    /* Ensure body and html can scroll vertically but not horizontally */
+    body, html {
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        height: auto !important;
+        position: relative !important;
+    }
+    
+    .supervisor_sales_report_container {
+        padding: 10px 0;
+        min-height: auto;
+        overflow-x: hidden;
+        overflow-y: visible;
+        height: auto;
+        position: relative;
+        width: 100%;
+    }
+
+    .report_header {
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+
+    .report_header h2 {
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+
+    .wing_name_display {
+        padding: 8px;
+        margin-bottom: 10px;
+    }
+
+    .wing_name_display h3 {
+        font-size: 16px;
+    }
+
+    .date_filter_section {
+        gap: 10px;
+    }
+
+    .date_filter_row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .date_filter_row label {
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+
+    .date_input {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px; /* Prevents zoom on iOS */
+        box-sizing: border-box;
+        min-height: 44px; /* Touch-friendly size */
+    }
+
+    .report_content {
+        padding: 10px 0;
+        padding-bottom: 30px; /* Extra padding to ensure table is fully scrollable */
+        overflow-x: auto !important;
+        overflow-y: visible !important;
+        -webkit-overflow-scrolling: touch;
+        max-height: none !important;
+        height: auto !important;
+        position: relative;
+        width: 100%;
+        max-width: 100%;
+        display: block;
+        margin-bottom: 20px; /* Add space at bottom to ensure table is fully visible */
+    }
+
+    .report_table {
+        font-size: 12px;
+        min-width: 600px;
+        width: auto;
+        margin-bottom: 0;
+    }
+    
+    /* Ensure table is fully visible and scrollable on mobile */
+    .report_table tbody tr:last-child {
+        border-bottom: 2px solid #dee2e6; /* Visual indicator for last row */
+    }
+
+    .report_table th,
+    .report_table td {
+        padding: 8px 6px;
+        font-size: 12px;
+    }
+
+    .export_buttons_row {
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    .supervisor_sales_report_container .export_btn {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        min-height: 44px; /* Touch-friendly size */
+    }
+
+    .loading_indicator {
+        padding: 40px 15px;
+    }
+
+    .loading_indicator p {
+        font-size: 14px;
+    }
+}
+
+/* Tablet devices (769px to 1024px) */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+    .supervisor_sales_report_container {
+        padding: 15px;
+    }
+
+    .report_header {
+        padding: 18px;
+    }
+
+    .report_header h2 {
+        font-size: 22px;
+    }
+
+    .date_filter_row {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .date_input {
+        min-width: 150px;
+        padding: 9px;
+    }
+
+    .report_table {
+        font-size: 13px;
+    }
+
+    .report_table th,
+    .report_table td {
+        padding: 10px 8px;
+    }
+
+    .export_buttons_row {
+        flex-wrap: wrap;
+    }
+
+    .supervisor_sales_report_container .export_btn {
+        min-width: 120px;
+        padding: 10px 18px;
+    }
+}
+
+/* Small mobile devices (up to 480px) */
+@media screen and (max-width: 480px) {
+    .supervisor_sales_report_container {
+        padding: 8px 0;
+    }
+
+    .report_header {
+        padding: 12px;
+        border-radius: 6px;
+    }
+
+    .report_header h2 {
+        font-size: 18px;
+    }
+
+    .report_content {
+        padding: 10px 0;
+        margin-bottom: 30px; /* Extra space to ensure last columns are visible */
+        padding-bottom: 30px; /* Extra padding to ensure table is fully scrollable */
+    }
+
+    .report_table {
+        font-size: 11px;
+        min-width: 500px;
+        width: auto;
+        margin-bottom: 0;
+    }
+
+    .report_table th,
+    .report_table td {
+        padding: 6px 4px;
+        font-size: 11px;
+    }
+
+    .wing_name_display h3 {
+        font-size: 14px;
+    }
+}
+
+/* Landscape mobile orientation */
+@media screen and (max-width: 768px) and (orientation: landscape) {
+    .report_content {
+        max-height: none !important;
+        overflow-y: visible !important;
+    }
+
+    .report_table {
+        font-size: 11px;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .supervisor_sales_report_container .export_btn {
+        min-height: 44px;
+        padding: 12px 20px;
+    }
+
+    .date_input {
+        min-height: 44px;
+    }
+
+    .report_table tbody tr {
+        min-height: 44px;
+    }
+}
+

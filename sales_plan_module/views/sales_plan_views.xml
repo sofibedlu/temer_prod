@@ -1,0 +1,602 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ========== VIEWS ========== -->
+    <!-- Tree View for Plans -->
+    <record id="view_sales_plan_tree" model="ir.ui.view">
+        <field name="name">sales.plan.tree</field>
+        <field name="model">sales.plan</field>
+        <field name="arch" type="xml">
+            <tree string="Sales Plans">
+                <field name="name"/>
+                <field name="plan_type"/>
+                <field name="period_display"/>
+                <field name="state" widget="badge"/>
+                <field name="supervisor_id"/>
+                <field name="wing_id"/>
+                <field name="create_uid" string="Created By"/>
+            </tree>
+        </field>
+    </record>
+    
+    <!-- Search View for Plans -->
+    <record id="view_sales_plan_search" model="ir.ui.view">
+        <field name="name">sales.plan.search</field>
+        <field name="model">sales.plan</field>
+        <field name="arch" type="xml">
+            <search string="Sales Plans">
+                <field name="name"/>
+                <field name="plan_type"/>
+                <field name="supervisor_id"/>
+                <field name="wing_id"/>
+                <field name="create_uid" string="Created By"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Completed" name="completed" domain="[('state', '=', 'completed')]"/>
+                <filter string="Past Due" name="past_due" domain="[('end_date', '&lt;', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter string="Active" name="active" domain="[('end_date', '&gt;=', context_today().strftime('%Y-%m-%d'))]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Plan Type" name="group_by_plan_type" context="{'group_by': 'plan_type'}"/>
+                    <filter string="Supervisor" name="group_by_supervisor" context="{'group_by': 'supervisor_id'}"/>
+                    <filter string="Wing" name="group_by_wing" context="{'group_by': 'wing_id'}"/>
+                    <filter string="Created By" name="group_by_creator" context="{'group_by': 'create_uid'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
+    <!-- Plan Document View for Managers and CRM Admin (Table view with filtering) -->
+    <record id="view_sales_plan_document_tree" model="ir.ui.view">
+        <field name="name">sales.plan.document.tree</field>
+        <field name="model">sales.plan</field>
+        <field name="arch" type="xml">
+            <tree string="Plan Document" decoration-muted="end_date &lt; context_today().strftime('%Y-%m-%d')">
+                <field name="name" string="Plan Name"/>
+                <field name="plan_type" string="Plan Type"/>
+                <field name="start_date" string="From Date"/>
+                <field name="end_date" string="To Date"/>
+                <field name="supervisor_id" string="Planned By"/>
+                <field name="wing_id" string="Wing"/>
+                <field name="create_uid" string="Created By"/>
+                <field name="state" widget="badge"/>
+                <field name="prospect_plan"/>
+                <field name="followup_plan"/>
+                <field name="site_visit_plan"/>
+                <field name="office_visit_plan"/>
+                <field name="total_visit_plan"/>
+                <field name="unit_reservation_plan"/>
+                <field name="deals_closed_plan"/>
+                <field name="cash_collected_plan"/>
+                <field name="total_deal_value_plan"/>
+                <field name="conversion_plan"/>
+                <field name="iar_plan"/>
+            </tree>
+        </field>
+    </record>
+    
+    <!-- Search View for Plan Document -->
+    <record id="view_sales_plan_document_search" model="ir.ui.view">
+        <field name="name">sales.plan.document.search</field>
+        <field name="model">sales.plan</field>
+        <field name="arch" type="xml">
+            <search string="Plan Document">
+                <field name="name" string="Plan Name"/>
+                <field name="plan_type"/>
+                <field name="supervisor_id" string="Planned By"/>
+                <field name="wing_id"/>
+                <field name="create_uid" string="Created By"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <filter string="Today" name="today" domain="[('start_date', '&lt;=', context_today().strftime('%Y-%m-%d')), ('end_date', '&gt;=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter string="This Week" name="this_week" domain="[('start_date', '&lt;=', (context_today() + datetime.timedelta(days=7)).strftime('%Y-%m-%d')), ('end_date', '&gt;=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter string="This Month" name="this_month" domain="[('start_date', '&lt;=', (context_today() + datetime.timedelta(days=30)).strftime('%Y-%m-%d')), ('end_date', '&gt;=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter string="This Year" name="this_year" domain="[('start_date', '&lt;=', (context_today() + datetime.timedelta(days=365)).strftime('%Y-%m-%d')), ('end_date', '&gt;=', context_today().strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <filter string="Daily" name="daily" domain="[('plan_type', '=', 'weekly')]"/>
+                <filter string="Monthly" name="monthly" domain="[('plan_type', '=', 'monthly')]"/>
+                <filter string="Yearly" name="yearly" domain="[('plan_type', '=', 'quarterly')]"/>
+                <separator/>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Completed" name="completed" domain="[('state', '=', 'completed')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Plan Type" name="group_by_plan_type" context="{'group_by': 'plan_type'}"/>
+                    <filter string="Planned By" name="group_by_supervisor" context="{'group_by': 'supervisor_id'}"/>
+                    <filter string="Created By" name="group_by_creator" context="{'group_by': 'create_uid'}"/>
+                    <filter string="Wing" name="group_by_wing" context="{'group_by': 'wing_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Main Form View -->
+    <record id="view_sales_plan_form" model="ir.ui.view">
+        <field name="name">sales.plan.form</field>
+        <field name="model">sales.plan</field>
+        <field name="arch" type="xml">
+            <form string="Sales Plan">
+                <header>
+                    <!-- Buttons for 2-state workflow: Draft and Completed -->
+                    <button name="action_complete" string="Complete" type="object" class="btn-primary" 
+                            invisible="state == 'completed'"/>
+                    <button name="action_draft" string="Reset to Draft" type="object" class="btn-secondary"
+                            invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,completed"/>
+                </header>
+                <sheet>
+                    <!-- Warning message for past due plans -->
+                    <div class="alert alert-warning" role="alert" invisible="not is_past_due" style="margin-bottom: 20px;">
+                        <strong>⚠️ This plan is past due!</strong> The end date has already passed. 
+                        You cannot edit the dates or plan values. Please create a new plan for future dates.
+                    </div>
+                    
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                        <h2>
+                            <field name="period_display"/>
+                        </h2>
+                    </div>
+
+                    <!-- Top Section -->
+                    <group>
+                        <group string="Time Period">
+                            <field name="start_date" readonly="is_past_due"/>
+                            <field name="end_date" readonly="is_past_due"/>
+                            <field name="plan_type" widget="radio" readonly="is_past_due"/>
+                            <field name="is_past_due" invisible="1"/>
+                        </group>
+                        <group string="Plan Info">
+                            <field name="supervisor_id" readonly="1"/>
+                            <field name="wing_id" readonly="1"/>
+                            <field name="state"/>
+                            <field name="create_uid" readonly="1" string="Created By"/>
+                        </group>
+                    </group>
+
+                    <!-- Plan Targets Table -->
+                    <!-- Replace the quarterly section in the main form with: -->
+<div class="row mt32">
+    <div class="col-8">
+        <h3>Sales Plan Targets</h3>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th width="30%">Metric</th>
+                    <th width="20%">Plan</th>
+                    <th width="50%">Remark</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Prospects (Leads)</strong></td>
+                    <td><field name="prospect_plan" readonly="is_past_due"/></td>
+                    <td><field name="prospect_remark" nolabel="1" readonly="is_past_due"/></td>
+                </tr>
+                <tr>
+                    <td><strong>Follow-ups</strong></td>
+                    <td><field name="followup_plan" readonly="is_past_due"/></td>
+                    <td><field name="followup_remark" nolabel="1" readonly="is_past_due"/></td>
+                </tr>
+                <tr>
+                    <td><strong>Site Visits</strong></td>
+                    <td><field name="site_visit_plan" readonly="is_past_due"/></td>
+                    <td><field name="site_visit_remark" nolabel="1" readonly="is_past_due"/></td>
+                </tr>
+                <tr>
+                    <td><strong>Office Visits</strong></td>
+                    <td><field name="office_visit_plan" readonly="is_past_due"/></td>
+                    <td><field name="office_visit_remark" nolabel="1" readonly="is_past_due"/></td>
+                </tr>
+                <tr>
+                    <td><strong>Total Visits (Site + Office)</strong></td>
+                    <td><field name="total_visit_plan" readonly="1"/></td>
+                    <td><field name="total_visit_remark" nolabel="1" readonly="is_past_due"/></td>
+                </tr>
+                <tr>
+                    <td><strong>Total unit reservations</strong></td>
+                    <td><field name="unit_reservation_plan" readonly="is_past_due"/></td>
+                    <td><field name="unit_reservation_remark" nolabel="1" readonly="is_past_due"/></td>
+                </tr>
+                <tr>
+                    <td><strong>Deals Closed (QTY)</strong></td>
+                    <td><field name="deals_closed_plan" readonly="is_past_due"/></td>
+                    <td><field name="deals_closed_remark" nolabel="1" readonly="is_past_due"/></td>
+                </tr>
+                <tr>
+                    <td><strong>Cash Collected (Birr)</strong></td>
+                    <td><field name="cash_collected_plan" readonly="is_past_due"/></td>
+                    <td><field name="cash_collected_remark" nolabel="1" readonly="is_past_due"/></td>
+                </tr>
+                <tr>
+                    <td><strong>Total Deal Value (Birr)</strong></td>
+                    <td><field name="total_deal_value_plan" readonly="is_past_due"/></td>
+                    <td><field name="total_deal_value_remark" nolabel="1" readonly="is_past_due"/></td>
+                </tr>
+                <tr>
+                    <td><strong>Conversion (sales/leads)</strong></td>
+                    <td><field name="conversion_plan" readonly="is_past_due"/></td>
+                    <td><field name="conversion_remark" nolabel="1" readonly="is_past_due"/></td>
+                </tr>
+                <tr>
+                    <td><strong>IAR (sales/opening stock)</strong></td>
+                    <td><field name="iar_plan" readonly="is_past_due"/></td>
+                    <td><field name="iar_remark" nolabel="1" readonly="is_past_due"/></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-4">
+        <h3>Opening Stock (Plan)</h3>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th width="30%">Type</th>
+                    <th width="20%">QTY</th>
+                    <th width="50%">Estimated Value (Birr)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Residence</strong></td>
+                    <td><field name="opening_stock_residence_qty_plan" readonly="is_past_due"/></td>
+                    <td><field name="opening_stock_residence_value_plan" readonly="is_past_due"/></td>
+                </tr>
+                <tr>
+                    <td><strong>Shops</strong></td>
+                    <td><field name="opening_stock_shops_qty_plan" readonly="is_past_due"/></td>
+                    <td><field name="opening_stock_shops_value_plan" readonly="is_past_due"/></td>
+                </tr>
+                <tr>
+                    <td><strong>Total</strong></td>
+                    <td><field name="opening_stock_total_qty_plan" readonly="1"/></td>
+                    <td><field name="opening_stock_total_value_plan" readonly="1"/></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Report Form View -->
+    <record id="view_sales_plan_report_form" model="ir.ui.view">
+        <field name="name">sales.plan.report.form</field>
+        <field name="model">sales.plan</field>
+        <field name="arch" type="xml">
+            <form string="Sales Plan Report" create="false" edit="false">
+                <header>
+                    <button name="action_refresh_metrics" string="Refresh Report" type="object" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <!-- Report Header -->
+                    <div class="oe_title text-center">
+                        <h1>
+                            <field name="plan_type"/> Plan Report
+                        </h1>
+                        <h2>
+                            Period: <field name="period_display"/>
+                        </h2>
+                        <h3>
+                            Supervisor: <field name="supervisor_id"/> | Wing: <field name="wing_id"/>
+                        </h3>
+                    </div>
+
+                    <!-- Report Table -->
+                    <div class="mt32">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th width="15%">Metric</th>
+                                    <th width="10%">Previous Week</th>
+                                    <th width="10%">Plan</th>
+                                    <th width="10%">Actual</th>
+                                    <th width="10%">Difference</th>
+                                    <th width="10%">%</th>
+                                    <th width="35%">Remark</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Prospects Row -->
+                                <tr>
+                                    <td><strong>Prospects (Leads)</strong></td>
+                                    <td class="text-center"><field name="previous_prospects" readonly="1"/></td>
+                                    <td class="text-center"><field name="prospect_plan" readonly="1"/></td>
+                                    <td class="text-center"><field name="actual_prospects" readonly="1"/></td>
+                                    <td class="text-center"><field name="prospect_difference" readonly="1"/></td>
+                                    <td class="text-center"><field name="prospect_percentage" widget="progressbar" readonly="1"/></td>
+                                    <td><field name="prospect_remark" readonly="1"/></td>
+                                </tr>
+                                <!-- Follow-ups Row -->
+                                <tr>
+                                    <td><strong>Follow-ups</strong></td>
+                                    <td class="text-center"><field name="previous_followups" readonly="1"/></td>
+                                    <td class="text-center"><field name="followup_plan" readonly="1"/></td>
+                                    <td class="text-center"><field name="actual_followups" readonly="1"/></td>
+                                    <td class="text-center"><field name="followup_difference" readonly="1"/></td>
+                                    <td class="text-center"><field name="followup_percentage" widget="progressbar" readonly="1"/></td>
+                                    <td><field name="followup_remark" readonly="1"/></td>
+                                </tr>
+                                <!-- Site Visits Row -->
+                                <tr>
+                                    <td><strong>Site Visits</strong></td>
+                                    <td class="text-center"><field name="previous_site_visits" readonly="1"/></td>
+                                    <td class="text-center"><field name="site_visit_plan" readonly="1"/></td>
+                                    <td class="text-center"><field name="actual_site_visits" readonly="1"/></td>
+                                    <td class="text-center"><field name="site_visit_difference" readonly="1"/></td>
+                                    <td class="text-center"><field name="site_visit_percentage" widget="progressbar" readonly="1"/></td>
+                                    <td><field name="site_visit_remark" readonly="1"/></td>
+                                </tr>
+                                <!-- Office Visits Row -->
+                                <tr>
+                                    <td><strong>Office Visits</strong></td>
+                                    <td class="text-center"><field name="previous_office_visits" readonly="1"/></td>
+                                    <td class="text-center"><field name="office_visit_plan" readonly="1"/></td>
+                                    <td class="text-center"><field name="actual_office_visits" readonly="1"/></td>
+                                    <td class="text-center"><field name="office_visit_difference" readonly="1"/></td>
+                                    <td class="text-center"><field name="office_visit_percentage" widget="progressbar" readonly="1"/></td>
+                                    <td><field name="office_visit_remark" readonly="1"/></td>
+                                </tr>
+                                <!-- Total Visits Row -->
+                                <tr>
+                                    <td><strong>Total Visits (Site + Office)</strong></td>
+                                    <td class="text-center"><field name="previous_total_visits" readonly="1"/></td>
+                                    <td class="text-center"><field name="total_visit_plan" readonly="1"/></td>
+                                    <td class="text-center"><field name="actual_total_visits" readonly="1"/></td>
+                                    <td class="text-center"><field name="total_visit_difference" readonly="1"/></td>
+                                    <td class="text-center"><field name="total_visit_percentage" widget="progressbar" readonly="1"/></td>
+                                    <td><field name="total_visit_remark" readonly="1"/></td>
+                                </tr>
+                                <!-- Quarterly Report Rows -->
+                                <tr>
+                                    <td><strong>Unit Reservations</strong></td>
+                                    <td class="text-center"><field name="previous_unit_reservations" readonly="1"/></td>
+                                    <td class="text-center"><field name="unit_reservation_plan" readonly="1"/></td>
+                                    <td class="text-center"><field name="actual_unit_reservations" readonly="1"/></td>
+                                    <td class="text-center"><field name="unit_reservation_difference" readonly="1"/></td>
+                                    <td class="text-center"><field name="unit_reservation_percentage" widget="progressbar" readonly="1"/></td>
+                                    <td><field name="unit_reservation_remark" readonly="1"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Deals Closed (QTY)</strong></td>
+                                    <td class="text-center"><field name="previous_deals_closed" readonly="1"/></td>
+                                    <td class="text-center"><field name="deals_closed_plan" readonly="1"/></td>
+                                    <td class="text-center"><field name="actual_deals_closed" readonly="1"/></td>
+                                    <td class="text-center"><field name="deals_closed_difference" readonly="1"/></td>
+                                    <td class="text-center"><field name="deals_closed_percentage" widget="progressbar" readonly="1"/></td>
+                                    <td><field name="deals_closed_remark" readonly="1"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Cash Collected (Birr)</strong></td>
+                                    <td class="text-center"><field name="previous_cash_collected" readonly="1"/></td>
+                                    <td class="text-center"><field name="cash_collected_plan" readonly="1"/></td>
+                                    <td class="text-center"><field name="actual_cash_collected" readonly="1"/></td>
+                                    <td class="text-center"><field name="cash_collected_difference" readonly="1"/></td>
+                                    <td class="text-center"><field name="cash_collected_percentage" widget="progressbar" readonly="1"/></td>
+                                    <td><field name="cash_collected_remark" readonly="1"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Total Deal Value (Birr)</strong></td>
+                                    <td class="text-center"><field name="previous_total_deal_value" readonly="1"/></td>
+                                    <td class="text-center"><field name="total_deal_value_plan" readonly="1"/></td>
+                                    <td class="text-center"><field name="actual_total_deal_value" readonly="1"/></td>
+                                    <td class="text-center"><field name="total_deal_value_difference" readonly="1"/></td>
+                                    <td class="text-center"><field name="total_deal_value_percentage" widget="progressbar" readonly="1"/></td>
+                                    <td><field name="total_deal_value_remark" readonly="1"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Conversion</strong></td>
+                                    <td class="text-center">-</td>
+                                    <td class="text-center"><field name="conversion_plan" readonly="1"/></td>
+                                    <td class="text-center"><field name="actual_conversion" readonly="1"/></td>
+                                    <td class="text-center">-</td>
+                                    <td class="text-center"><field name="conversion_percentage" widget="progressbar" readonly="1"/></td>
+                                    <td><field name="conversion_remark" readonly="1"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>IAR (%)</strong></td>
+                                    <td class="text-center">-</td>
+                                    <td class="text-center"><field name="iar_plan" readonly="1"/></td>
+                                    <td class="text-center"><field name="actual_iar" readonly="1"/></td>
+                                    <td class="text-center">-</td>
+                                    <td class="text-center"><field name="iar_percentage" widget="progressbar" readonly="1"/></td>
+                                    <td><field name="iar_remark" readonly="1"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="mt32">
+                        <h3>Opening Stock</h3>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th width="30%">Type</th>
+                                    <th width="20%">QTY</th>
+                                    <th width="50%">Estimated Value (Birr)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Residence</strong></td>
+                                    <td class="text-center"><field name="actual_opening_stock_residence_qty" readonly="1"/></td>
+                                    <td class="text-center"><field name="actual_opening_stock_residence_value" readonly="1"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Shops</strong></td>
+                                    <td class="text-center"><field name="actual_opening_stock_shops_qty" readonly="1"/></td>
+                                    <td class="text-center"><field name="actual_opening_stock_shops_value" readonly="1"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Total</strong></td>
+                                    <td class="text-center"><field name="actual_opening_stock_total_qty" readonly="1"/></td>
+                                    <td class="text-center"><field name="actual_opening_stock_total_value" readonly="1"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Wing Plan Report Wizard Form -->
+    <record id="view_wing_plan_report_wizard_form" model="ir.ui.view">
+        <field name="name">wing.plan.report.wizard.form</field>
+        <field name="model">wing.plan.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Generate Wing Plan Report">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Wing Plan Report</h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="wing_id" required="1"/>
+                        </group>
+                        <group>
+                            <field name="start_date" required="1"/>
+                            <field name="end_date" required="1"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="action_generate_report" string="Generate Report" type="object" class="btn-primary"/>
+                        <button string="Cancel" special="cancel" class="btn-secondary"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Supervisor Plan Report Wizard Form -->
+    <record id="view_supervisor_plan_report_wizard_form" model="ir.ui.view">
+        <field name="name">supervisor.plan.report.wizard.form</field>
+        <field name="model">supervisor.plan.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Generate Supervisor Plan Report">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Supervisor Plan Report</h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="supervisor_id" required="1"/>
+                        </group>
+                        <group>
+                            <field name="start_date" required="1"/>
+                            <field name="end_date" required="1"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="action_generate_report" string="Generate Report" type="object" class="btn-primary"/>
+                        <button string="Cancel" special="cancel" class="btn-secondary"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ========== ACTIONS ========== -->
+    <record id="action_sales_plan" model="ir.actions.act_window">
+        <field name="name">Sales Plans</field>
+        <field name="res_model">sales.plan</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_sales_plan_search"/>
+        <field name="context">{'create': True}</field>
+        <field name="domain">[]</field>
+        <!-- Visible to all users - role checking done in model access methods -->
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_user')])]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first Sales Plan!
+            </p>
+            <p>
+                Sales plans help you track and manage your sales targets and performance.
+            </p>
+        </field>
+    </record>
+    
+    <!-- Plan Document Action for Managers and CRM Admin -->
+    <!-- Delete old action if it exists (act_window) -->
+    <delete id="action_sales_plan_document" model="ir.actions.act_window"/>
+    
+    <!-- Plan Document Client Action -->
+    <record id="action_sales_plan_document" model="ir.actions.client">
+        <field name="name">Plan Document</field>
+        <field name="tag">sales_plan_module.plan_document</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record id="action_wing_plan_report" model="ir.actions.act_window">
+        <field name="name">Wing Plan Report</field>
+        <field name="res_model">wing.plan.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="action_supervisor_plan_report" model="ir.actions.act_window">
+        <field name="name">Supervisor Plan Report</field>
+        <field name="res_model">supervisor.plan.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- ========== MENUS ========== -->
+    <!-- Sales Plans Menu - ONLY for supervisors (NOT for managers) -->
+    <menuitem id="menu_sales_plan_root" name="Sales Plan" sequence="100"/>
+    
+    <!-- Sales Plans Submenu - ONLY for supervisors -->
+    <menuitem id="menu_sales_plan"
+              name="Sales Plans"
+              parent="menu_sales_plan_root"
+              action="action_sales_plan"
+              sequence="10"/>
+    
+    <!-- Plan Document Submenu - For managers and CRM Admin (under Sales Plan menu) -->
+    <menuitem id="menu_plan_document"
+              name="Plan Document"
+              parent="menu_sales_plan_root"
+              action="action_sales_plan_document"
+              sequence="20"/>
+    
+    <!-- Sales Plan Root menu: Visible to supervisors and managers (role-based groups) -->
+    <record id="menu_sales_plan_root" model="ir.ui.menu">
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_system'), ref('sales_plan_module.group_sales_plan_manager'), ref('sales_plan_module.group_sales_plan_supervisor_only')])]"/>
+        <!-- Root menu visible to managers and supervisors - assigned via post_init_hook based on role -->
+    </record>
+    
+    <!-- Sales Plans menu: ONLY for supervisors (NOT managers) -->
+    <record id="menu_sales_plan" model="ir.ui.menu">
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_system'), ref('sales_plan_module.group_sales_plan_supervisor_only')])]"/>
+        <!-- Only supervisors who are NOT managers can see this menu -->
+    </record>
+    
+    <!-- Plan Document menu: ONLY for managers (Sales Manager/Wing Manager) and CRM Admin -->
+    <record id="menu_plan_document" model="ir.ui.menu">
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_system'), ref('sales_plan_module.group_sales_plan_manager'), ref('temer_structure.access_property_crm_admin_group')])]"/>
+        <!-- Only managers (assigned via post_init_hook) and CRM Admin can see this menu -->
+    </record>
+
+    <!-- Plan Reports Submenu - Admin only -->
+    <menuitem id="menu_plan_reports"
+              name="Plan Reports"
+              parent="menu_sales_plan_root"
+              sequence="20"
+              groups="base.group_system"/>
+
+    <!-- Wing Plan Report Submenu -->
+    <!-- <menuitem id="menu_wing_plan_report"
+              name="Wing Plan Report"
+              parent="menu_plan_reports"
+              action="action_wing_plan_report"
+              sequence="10"/> -->
+
+    <!-- Supervisor Plan Report Submenu -->
+    <!-- <menuitem id="menu_supervisor_plan_report"
+              name="Supervisor Plan Report"
+              parent="menu_plan_reports"
+              action="action_supervisor_plan_report"
+              sequence="20"/> -->
+</odoo>

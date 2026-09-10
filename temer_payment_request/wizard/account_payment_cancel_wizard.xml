@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_account_payment_cancel_wizard_form" model="ir.ui.view">
+        <field name="name">account.payment.cancel.wizard.form</field>
+        <field name="model">account.payment.cancel.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Cancel Account Payment">
+                <sheet>
+                    <group>
+                        <field name="account_payment_id" invisible="1"/>
+                        <field name="cancel_reason" 
+                               placeholder="Enter the reason for cancellation..."/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_confirm_cancel" string="Confirm Cancel" type="object"
+                            class="oe_highlight"/>
+                    <button string="Discard" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

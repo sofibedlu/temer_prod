@@ -1,0 +1,178 @@
+<odoo>
+    <record id="view_property_reservation_cancel_request_tree" model="ir.ui.view">
+        <field name="name">property.reservation.cancel.request.tree</field>
+        <field name="model">property.reservation.cancel.request</field>
+        <field name="arch" type="xml">
+            <tree create="0" delete="0"
+                  decoration-muted="state == 'prepare'"
+                  decoration-warning="state == 'check'"
+                  decoration-success="state == 'approve'">
+                <field name="property_id"/>
+                <field name="reservation_type_id"/>
+                <field name="requested_by_id"/>
+                <field name="salesperson_id"/>
+                <field name="wing_id"/>
+                <field name="amount" sum="Total"/>
+                <field name="state" widget="badge"
+                       decoration-muted="state == 'prepare'"
+                       decoration-warning="state == 'check'"
+                       decoration-success="state == 'approve'"/>
+                <button name="action_check"
+                        string="Manager Check"
+                        type="object"
+                        class="btn-primary"
+                        invisible="state != 'prepare'"
+                        confirm="Are you sure you want to check this cancel request?"
+                        groups="cancel_reservation_request.group_cancel_reservation_request_manager"/>
+                <button name="action_approve"
+                        string="Approve"
+                        type="object"
+                        class="btn-primary"
+                        invisible="state != 'check'"
+                        confirm="Are you sure you want to approve this cancel request?"
+                        groups="cancel_reservation_request.group_cancel_reservation_request_approver"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_property_reservation_cancel_request_form" model="ir.ui.view">
+        <field name="name">property.reservation.cancel.request.form</field>
+        <field name="model">property.reservation.cancel.request</field>
+        <field name="arch" type="xml">
+            <form create="0" delete="0">
+                <header>
+                    <field name="can_check" invisible="1"/>
+                    <field name="can_approve" invisible="1"/>
+                    <button name="action_check"
+                            string="Manager Check"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state != 'prepare' or can_check != True"
+                            confirm="Are you sure you want to check this cancel request?"
+                            groups="cancel_reservation_request.group_cancel_reservation_request_manager"/>
+                    <button name="action_approve"
+                            string="Approve"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state != 'check' or can_approve != True"
+                            confirm="Are you sure you want to approve this cancel request?"
+                            groups="cancel_reservation_request.group_cancel_reservation_request_approver"/>
+                    <field name="state" widget="statusbar" statusbar_visible="prepare,check,approve"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Reservation">
+                            <field name="reservation_id" readonly="1"/>
+                            <field name="property_id" readonly="1"/>
+                            <field name="reservation_type_id" readonly="1"/>
+                            <field name="amount" readonly="1"/>
+                            <field name="cancel_reason" readonly="1"/>
+                        </group>
+                        <group string="Request">
+                            <field name="requested_by_id" readonly="1"/>
+                            <field name="salesperson_id" readonly="1"/>
+                            <field name="wing_id" readonly="1"/>
+                            <field name="checked_by_id" readonly="1"/>
+                            <field name="checked_date" readonly="1"/>
+                            <field name="approved_by_id" readonly="1"/>
+                            <field name="approved_date" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_property_reservation_cancel_request_search" model="ir.ui.view">
+        <field name="name">property.reservation.cancel.request.search</field>
+        <field name="model">property.reservation.cancel.request</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="property_id"/>
+                <field name="reservation_type_id"/>
+                <field name="requested_by_id"/>
+                <field name="salesperson_id"/>
+                <field name="wing_id"/>
+                <filter name="prepare" string="Prepare" domain="[('state', '=', 'prepare')]"/>
+                <filter name="check" string="Check" domain="[('state', '=', 'check')]"/>
+                <filter name="approve" string="Approve" domain="[('state', '=', 'approve')]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_state" string="Status" context="{'group_by': 'state'}"/>
+                    <filter name="group_by_reservation_type" string="Reservation Type" context="{'group_by': 'reservation_type_id'}"/>
+                    <filter name="group_by_wing" string="Wing" context="{'group_by': 'wing_id'}"/>
+                    <filter name="group_by_salesperson" string="Sales Person" context="{'group_by': 'salesperson_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_property_reservation_cancel_request" model="ir.actions.act_window">
+        <field name="name">Cancel Requests</field>
+        <field name="res_model">property.reservation.cancel.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', 'in', ['prepare', 'check'])]</field>
+        <field name="search_view_id" ref="view_property_reservation_cancel_request_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No cancel requests found.</p>
+        </field>
+    </record>
+
+    <record id="action_property_reservation_cancel_request_checked" model="ir.actions.act_window">
+        <field name="name">Cancel Requests</field>
+        <field name="res_model">property.reservation.cancel.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', '=', 'check')]</field>
+        <field name="context">{'search_default_check': 1}</field>
+        <field name="search_view_id" ref="view_property_reservation_cancel_request_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No checked cancel requests to approve.</p>
+        </field>
+    </record>
+
+    <record id="action_property_reservation_cancel_request_approved" model="ir.actions.act_window">
+        <field name="name">Approved Requests</field>
+        <field name="res_model">property.reservation.cancel.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', '=', 'approve')]</field>
+        <field name="context">{'search_default_approve': 1}</field>
+        <field name="search_view_id" ref="view_property_reservation_cancel_request_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No approved cancel requests found.</p>
+        </field>
+    </record>
+
+    <menuitem id="menu_property_reservation_cancel_request"
+              name="Cancel Requests"
+              parent="ahadubit_property_reservation.reservation_property_menu"
+              action="action_property_reservation_cancel_request"
+              sequence="25"
+              groups="cancel_reservation_request.group_cancel_reservation_request_manager"/>
+
+    <record id="menu_property_reservation_cancel_request" model="ir.ui.menu">
+        <field name="parent_id" ref="ahadubit_property_reservation.reservation_property_menu"/>
+    </record>
+
+    <menuitem id="menu_cancel_reservation_approver_root"
+              name="Cancel Request"
+              sequence="85"
+              groups="cancel_reservation_request.group_cancel_reservation_request_approver"/>
+
+    <menuitem id="menu_property_reservation_cancel_request_checked"
+              name="Cancel Requests"
+              parent="menu_cancel_reservation_approver_root"
+              action="action_property_reservation_cancel_request_checked"
+              sequence="10"
+              groups="cancel_reservation_request.group_cancel_reservation_request_approver"/>
+
+    <menuitem id="menu_property_reservation_cancel_request_approved"
+              name="Approved Requests"
+              parent="menu_cancel_reservation_approver_root"
+              action="action_property_reservation_cancel_request_approved"
+              sequence="20"
+              groups="cancel_reservation_request.group_cancel_reservation_request_approver"/>
+</odoo>

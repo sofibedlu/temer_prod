@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_collection_order_form_inherit_early_settle" model="ir.ui.view">
+        <field name="name">collection.order.form.inherit.early.settle</field>
+        <field name="model">collection.order</field>
+        <field name="inherit_id" ref="collection_management.view_collection_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Early Settlement History" invisible="not early_settlement_history_ids">
+                    <field name="early_settlement_history_ids">
+                        <!-- <tree decoration-danger="state == 'overdue'" decoration-success="state == 'paid'" decoration-warning="state == 'partial'"> -->
+                        <tree>
+                            <field name="name"/>
+                            <!-- <field name="due_date"/> -->
+                            <field name="amount_total" widget="monetary"/>
+                            <field name="amount_paid" widget="monetary"/>
+                            <field name="amount_residual" widget="monetary" sum="Total Folded Balance"/>
+                            <!-- <field name="state"/> -->
+                            <field name="currency_id" column_invisible="1"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+
+            <xpath expr="//header/button[@groups='collection_management.group_collection_settlement_manager']" position="attributes">
+                <attribute name="string">Full Early Settlement</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

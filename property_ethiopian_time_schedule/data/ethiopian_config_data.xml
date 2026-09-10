@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+    <!-- Master Config Record -->
+    <record id="default_ethiopian_config" model="property.ethiopian.calendar.config">
+        <field name="name">Master Ethiopian Calendar Settings</field>
+        <field name="format_string">እስከ {month} {day_num} ቀን {year_num} ዓ.ም</field>
+    </record>
+
+    <!-- Special Key Exceptions -->
+    <record id="eth_num_zero" model="property.ethiopian.number">
+        <field name="config_id" ref="default_ethiopian_config"/>
+        <field name="category">special</field>
+        <field name="special_key">zero</field>
+        <field name="name">ዜሮ</field>
+    </record>
+    <record id="eth_num_ten_prefix" model="property.ethiopian.number">
+        <field name="config_id" ref="default_ethiopian_config"/>
+        <field name="category">special</field>
+        <field name="special_key">ten_prefix</field>
+        <field name="name">አስራ</field>
+    </record>
+    <record id="eth_num_hundred" model="property.ethiopian.number">
+        <field name="config_id" ref="default_ethiopian_config"/>
+        <field name="category">special</field>
+        <field name="special_key">hundred</field>
+        <field name="name">መቶ</field>
+    </record>
+</odoo>

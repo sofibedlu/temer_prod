@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_collection_order_form_collection_reservation" model="ir.ui.view">
+        <field name="name">collection.order.form.collection.reservation</field>
+        <field name="model">collection.order</field>
+        <field name="inherit_id" ref="collection_management.view_collection_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_collection_reservations"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-book"
+                        invisible="collection_reservation_count == 0"
+                        groups="collection_reservation.group_collection_reservation_user,collection_reservation.group_collection_reservation_checker,collection_reservation.group_collection_reservation_approver">
+                    <field name="collection_reservation_count" widget="statinfo" string="Reservations"/>
+                </button>
+            </xpath>
+            <xpath expr="//header" position="inside">
+                <button name="action_open_collection_reservation_request"
+                        string="Create Reservation"
+                        type="object"
+                        class="btn-primary"
+                        invisible="state not in ['active', 'void']"
+                        groups="collection_reservation.group_collection_reservation_user,collection_reservation.group_collection_reservation_checker,collection_reservation.group_collection_reservation_approver"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_collection_reservation_request_tree" model="ir.ui.view">
+        <field name="name">collection.reservation.request.tree</field>
+        <field name="model">collection.reservation.request</field>
+        <field name="arch" type="xml">
+            <tree string="Collection Reservation Requests" create="false">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="collection_id"/>
+                <field name="partner_id"/>
+                <field name="property_id"/>
+                <field name="state" widget="badge"
+                       decoration-muted="state == 'draft'"
+                       decoration-info="state == 'checked'"
+                       decoration-success="state == 'approved'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_collection_reservation_request_form" model="ir.ui.view">
+        <field name="name">collection.reservation.request.form</field>
+        <field name="model">collection.reservation.request</field>
+        <field name="arch" type="xml">
+            <form string="Collection Reservation Request" create="false" duplicate="false">
+                <header>
+                    <button name="action_check"
+                            string="Check &amp; Create Reservation"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state != 'draft'"
+                            groups="collection_reservation.group_collection_reservation_checker"/>
+                    <button name="action_approve"
+                            string="Approve"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state != 'checked'"
+                            groups="collection_reservation.group_collection_reservation_approver"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,checked,approved"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_reservation"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-book"
+                                invisible="reservation_count == 0">
+                            <field name="reservation_count" widget="statinfo" string="Reservation"/>
+                        </button>
+                    </div>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="date" readonly="1"/>
+                            <field name="collection_id" readonly="1"/>
+                            <field name="site_id" readonly="state != 'draft'"/>
+                            <field name="property_id" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="partner_id" readonly="1"/>
+                            <field name="reservation_type_id" readonly="state != 'draft'"/>
+                            <field name="end_date" readonly="state != 'draft'"/>
+                            <field name="supervisor_id" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <group string="Approval Information">
+                        <group>
+                            <field name="checked_by_id" readonly="1"/>
+                            <field name="checked_date" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="approved_by_id" readonly="1"/>
+                            <field name="approved_date" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <group string="Notes">
+                        <field name="note" nolabel="1" readonly="state != 'draft'"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_collection_reservation_request_form_create" model="ir.ui.view">
+        <field name="name">collection.reservation.request.form.create</field>
+        <field name="model">collection.reservation.request</field>
+        <field name="inherit_id" ref="view_collection_reservation_request_form"/>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="attributes">
+                <attribute name="create">true</attribute>
+                <attribute name="duplicate">false</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_collection_reservation_request_search" model="ir.ui.view">
+        <field name="name">collection.reservation.request.search</field>
+        <field name="model">collection.reservation.request</field>
+        <field name="arch" type="xml">
+            <search string="Collection Reservation Requests">
+                <field name="name"/>
+                <field name="collection_id"/>
+                <field name="partner_id"/>
+                <field name="property_id"/>
+                <filter string="Draft" name="filter_draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Checked" name="filter_checked" domain="[('state', '=', 'checked')]"/>
+                <filter string="Approved" name="filter_approved" domain="[('state', '=', 'approved')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_collection_reservation_request" model="ir.actions.act_window">
+        <field name="name">Collection Reservation Requests</field>
+        <field name="res_model">collection.reservation.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('view_collection_reservation_request_tree'), 'sequence': 1}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_collection_reservation_request_form'), 'sequence': 2})]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No collection reservation requests yet.
+            </p>
+            <p>
+                To create a request, open a collection order and click
+                <strong>Create Reservation</strong>.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_collection_reservation_request"
+              name="Collection Reservations"
+              parent="collection_management.menu_collection_root"
+              action="action_collection_reservation_request"
+              groups="collection_reservation.group_collection_reservation_user,collection_reservation.group_collection_reservation_checker,collection_reservation.group_collection_reservation_approver"
+              sequence="30"/>
+</odoo>

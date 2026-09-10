@@ -1,0 +1,16 @@
+<odoo>
+ <record id="property_sale_action" model="ir.actions.act_window">
+        <field name="name">Property Sale</field>
+        <field name="res_model">property.sale</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Sale Order
+            </p>
+        </field>
+    </record>
+ <menuitem id="property_sale_menu" name="Property Sale"
+              parent="advanced_property_management.property_menu"
+              action="property_sale_action"  sequence="7" groups="ahadubit_property_reservation.access_property_admin_team"/>
+
+</odoo>

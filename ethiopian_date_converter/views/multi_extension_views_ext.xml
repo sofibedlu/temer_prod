@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Wizard View Update -->
+    <record id="view_property_payment_extension_wizard_form_multi_eth" model="ir.ui.view">
+        <field name="name">property.payment.extension.wizard.form.multi.eth</field>
+        <field name="model">property.payment.extension.wizard</field>
+        <field name="inherit_id" ref="collection_payment_multi_extension.view_property_payment_extension_wizard_form_multi"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='line_ids']/tree/field[@name='new_date']" position="after">
+                <field name="new_date_eth" string="New Date (E.C)" width="150px"/>
+            </xpath>
+            
+        </field>
+    </record>
+
+    <!-- Request Form -->
+    <record id="view_collection_extension_request_form_multi_eth" model="ir.ui.view">
+        <field name="name">collection.payment.extension.request.form.multi.eth</field>
+        <field name="model">collection.payment.extension.request</field>
+        <field name="inherit_id" ref="collection_payment_multi_extension.view_collection_extension_request_form_multi"/>
+        <field name="arch" type="xml">
+            
+            <!-- for legacy header replace field with dual-row format -->
+            <xpath expr="//field[@name='new_date']" position="replace">
+                <label for="new_date" string="Requested Date" invisible="is_multi_extension"/>
+                <div class="o_row" invisible="is_multi_extension">
+                    <field name="new_date" readonly="state != 'pending'"/>
+                    <span class="mx-2">/</span>
+                    <field name="new_date_eth" readonly="state != 'pending'" placeholder="dd/mm/yyyy (E.C)"/>
+                </div>
+            </xpath>
+
+            <!-- For Multi Line Requests -->
+            <xpath expr="//field[@name='line_ids']/tree/field[@name='new_date']" position="after">
+                <field name="new_date_eth" string="Requested Date (E.C)" width="150px" readonly="state != 'pending'"/>
+            </xpath>
+            
+        </field>
+    </record>
+</odoo>

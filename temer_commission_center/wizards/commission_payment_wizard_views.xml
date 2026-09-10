@@ -1,0 +1,34 @@
+<odoo>
+    <record id="view_temer_commission_payment_wizard_form" model="ir.ui.view">
+        <field name="name">temer.commission.payment.wizard.form</field>
+        <field name="model">temer.commission.payment.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Register Commission Payment">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="sheet_line_id" readonly="1"/>
+                            <field name="payment_date"/>
+                        </group>
+                        <group string="Payment Details">
+                            <field name="amount"/>
+                            <label for="percentage"/>
+                            <div class="o_row">
+                                <field name="percentage" class="oe_inline"/>
+                                <span>%</span>
+                            </div>
+                            <field name="note"/>
+                        </group>
+                        <group name="info_group">
+                            <field name="remaining_balance" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_confirm" type="object" string="Prepare Payment" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

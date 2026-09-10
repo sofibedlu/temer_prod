@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_property_sale_form_inherit_contract" model="ir.ui.view">
+            <field name="name">property.sale.form.inherit.contract</field>
+            <field name="model">property.sale</field>
+            <field name="inherit_id" ref="advanced_property_management.property_sale_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="contract_section_template_id"  options="{'no_create': False, 'no_open': False}"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

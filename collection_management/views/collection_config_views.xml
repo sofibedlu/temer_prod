@@ -1,0 +1,26 @@
+<odoo>
+    <record id="view_collection_discount_config_tree" model="ir.ui.view">
+        <field name="name">collection.discount.config.tree</field>
+        <field name="model">collection.discount.config</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+                <field name="max_manual_discount_percentage"/>
+                <field name="max_early_settlement_percentage"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_collection_discount_config" model="ir.actions.act_window">
+        <field name="name">Discount Configuration</field>
+        <field name="res_model">collection.discount.config</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_collection_discount_config"
+              name="Discount Limits"
+              parent="collection_management.menu_collection_configuration"
+              action="action_collection_discount_config"
+              sequence="50"/>
+</odoo>

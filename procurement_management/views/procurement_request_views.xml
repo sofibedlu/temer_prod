@@ -1,0 +1,122 @@
+<odoo>
+    <record id="view_procurement_request_tree" model="ir.ui.view">
+        <field name="name">procurement.request.tree</field>
+        <field name="model">procurement.request</field>
+        <field name="arch" type="xml">
+            <tree string="Procurement Requests">
+                <field name="name"/>
+                <field name="origin"/>
+                <field name="department_id"/>
+                <field name="state" widget="badge" 
+                       decoration-success="state in ['approved', 'done']" 
+                       decoration-info="state == 'requested'" 
+                       decoration-danger="state == 'reject'" 
+                       decoration-muted="state == 'draft'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_procurement_request_form" model="ir.ui.view">
+        <field name="name">procurement.request.form</field>
+        <field name="model">procurement.request</field>
+        <field name="arch" type="xml">
+            <form string="Procurement Request">
+                <header>
+                    <button name="action_request" string="Request" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_approve" string="Approve Request" type="object" class="oe_highlight" invisible="state != 'requested'"/>
+                    <button name="action_reject" type="object" string="Reject" class="btn-danger" 
+                            invisible="state not in ['draft', 'requested']"/>
+                    <button name="action_create_proforma" string="Create Proforma Collection" type="object" class="oe_highlight" invisible="state != 'approved'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,requested,approved,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_department_request" type="object" class="oe_stat_button" icon="fa-file-text-o" invisible="not department_request_id">
+                            <field name="origin" widget="statinfo" string="Source Document"/>
+                        </button>
+                        <button name="action_view_proformas" type="object" class="oe_stat_button" icon="fa-list-alt" invisible="proforma_count == 0">
+                            <field name="proforma_count" widget="statinfo" string="Proformas"/>
+                        </button>
+                        <button name="action_view_evaluations" type="object" class="oe_stat_button" icon="fa-balance-scale" invisible="evaluation_count == 0">
+                            <field name="evaluation_count" widget="statinfo" string="Analyses"/>
+                        </button>
+                        <button name="action_view_pos" type="object" class="oe_stat_button" icon="fa-shopping-cart" invisible="po_count == 0">
+                            <field name="po_count" widget="statinfo" string="Purchase Orders"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <field name="priority" widget="priority" class="mr-3"/>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="origin" readonly="1"/>
+                            <field name="department_id" readonly="1"/>
+                            <field name="date" readonly="1"/>
+                            <field name="expected_date" readonly="1"/>
+                            <field name="department_request_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="requestor_id" readonly="1" invisible="not requestor_id"/>
+                            <field name="checked_by_id" readonly="1" invisible="not checked_by_id"/>
+                            <field name="approved_by_id" readonly="1" invisible="not approved_by_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Products Required">
+                            <field name="line_ids" readonly="state not in ['draft', 'requested']">
+                                <tree editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="purpose"/>
+                                    <field name="technical"/>
+                                    <field name="financial"/>
+                                    <field name="quantity"/>
+                                    <field name="product_uom_category_id" column_invisible="True"/>
+                                    <field name="product_uom_id" 
+                                        domain="[('category_id', '=', product_uom_category_id)]"
+                                        options="{'no_create': True, 'no_open': True}"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Specifications" name="specifications">
+                            <field name="line_ids" readonly="state in ['approved', 'rejected']">
+                                <tree create="0" delete="0">
+                                    <field name="product_id" readonly="1"/>
+                                    <field name="specifications" widget="html"/>
+                                </tree>
+
+                                <form>
+                                    <sheet>
+                                        <group>
+                                            <field name="product_id" readonly="1"/>
+                                        </group>
+                                        
+                                        <separator string="Specifications"/>
+                                        <field name="specifications" 
+                                            widget="html" 
+                                            nolabel="1" 
+                                            placeholder="e.g. 16GB RAM, Core i7 CPU..."/>
+                                    </sheet>
+                                </form>
+
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_procurement_request" model="ir.actions.act_window">
+        <field name="name">Procurement Requests</field>
+        <field name="res_model">procurement.request</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_proc_req_list" name="Purchase Requests" parent="menu_purchase_department" action="action_procurement_request" sequence="10"/>
+</odoo>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_batch_extension_request" model="ir.sequence">
+        <field name="name">Batch Extension Request</field>
+        <field name="code">batch.extension.request</field>
+        <field name="prefix">BEXT/</field>
+        <field name="padding">5</field>
+    </record>
+
+    <record id="view_batch_extension_request_form" model="ir.ui.view">
+        <field name="name">batch.extension.request.form</field>
+        <field name="model">batch.extension.request</field>
+        <field name="arch" type="xml">
+            <form string="Batch Extension Request" create="0" delete="0">
+                <header>
+                    <button name="action_check" string="Check" type="object" class="btn-primary" 
+                            invisible="state != 'draft'" groups="batch_due_date_extension.group_batch_extension_checker"/>
+                            
+                    <button name="action_approve" string="Approve" type="object" class="btn-success" 
+                            invisible="state != 'checked'" groups="batch_due_date_extension.group_batch_extension_approver"/>
+                            
+                    <button name="action_reject" string="Reject" type="object" class="btn-danger" 
+                            invisible="state in ['approved', 'rejected']" groups="batch_due_date_extension.group_batch_extension_checker,batch_due_date_extension.group_batch_extension_approver"/>
+                            
+                    <field name="state" widget="statusbar" statusbar_visible="draft,checked,approved,rejected"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="reason" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="attachment_ids" widget="many2many_binary" string="Attached Documents" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Installments">
+                            <field name="line_ids" readonly="state != 'draft'">
+                                <tree editable="bottom">
+                                    <field name="collection_id"/>
+                                    <field name="partner_id"/>
+                                    <field name="buyers_name"/>
+                                    <field name="installment_id"/>
+                                    <field name="current_due_date"/>
+                                    <field name="new_due_date"/>
+                                    <field name="new_due_date_ethiopian"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_batch_extension_request_tree" model="ir.ui.view">
+        <field name="name">batch.extension.request.tree</field>
+        <field name="model">batch.extension.request</field>
+        <field name="arch" type="xml">
+            <tree string="Batch Extension Requests" 
+                  decoration-info="state == 'draft'" 
+                  decoration-warning="state == 'checked'" 
+                  decoration-success="state == 'approved'" 
+                  decoration-danger="state == 'rejected'"
+                  create="0" delete="0">
+                <field name="name"/>
+                <field name="create_date"/>
+                <field name="create_uid" string="Requested By"/>
+                <field name="reason"/>
+                <field name="state" widget="badge" 
+                       decoration-info="state == 'draft'" 
+                       decoration-warning="state == 'checked'" 
+                       decoration-success="state == 'approved'" 
+                       decoration-danger="state == 'rejected'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Search View for Batch Extension Requests -->
+    <record id="view_batch_extension_request_search" model="ir.ui.view">
+        <field name="name">batch.extension.request.search</field>
+        <field name="model">batch.extension.request</field>
+        <field name="arch" type="xml">
+            <search string="Search Batch Requests">
+                <field name="name" string="Request Reference"/>
+                
+                <!-- Searches Buyer Name, Customer Name, or Collection Order simultaneously! -->
+                <field name="line_ids" 
+                       string="Buyer / Customer / Order" 
+                       filter_domain="['|', '|', ('line_ids.buyers_name_text', 'ilike', self), ('line_ids.partner_id.name', 'ilike', self), ('line_ids.collection_id.name', 'ilike', self)]"/>
+
+                <separator/>
+                
+                <!-- Status Filters -->
+                <filter string="Draft" name="filter_draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Checked" name="filter_checked" domain="[('state', '=', 'checked')]"/>
+                <filter string="Approved" name="filter_approved" domain="[('state', '=', 'approved')]"/>
+                <filter string="Rejected" name="filter_rejected" domain="[('state', '=', 'rejected')]"/>
+                
+            </search>
+        </field>
+    </record>
+
+    <record id="action_batch_extension_request" model="ir.actions.act_window">
+        <field name="name">Batch Extension Requests</field>
+        <field name="res_model">batch.extension.request</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_root_batch_extension" 
+              name="Batch Extensions" 
+              groups="batch_due_date_extension.group_batch_extension_checker,batch_due_date_extension.group_batch_extension_approver"
+              sequence="50"/>
+
+    <menuitem id="menu_batch_extension_requests"
+              name="Extension Requests"
+              parent="menu_root_batch_extension"
+              action="action_batch_extension_request"
+              sequence="10"/>
+</odoo>

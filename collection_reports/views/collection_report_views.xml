@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Delete old actions if they exist -->
+    <delete id="action_general_info_report" model="ir.actions.act_window"/>
+    <delete id="action_general_info_report" model="ir.actions.act_url"/>
+    
+    <!-- General Information Report Action - Old Format (Detailed) -->
+    <record id="action_general_info_report" model="ir.actions.client">
+        <field name="name">General Information Report</field>
+        <field name="tag">collection_reports.general_info_report</field>
+    </record>
+
+    <!-- Summarized Report Action -->
+    <delete id="action_summarized_report" model="ir.actions.act_window"/>
+    <delete id="action_summarized_report" model="ir.actions.act_url"/>
+    <record id="action_summarized_report" model="ir.actions.client">
+        <field name="name">Summarized Report</field>
+        <field name="tag">collection_reports.summarized_report</field>
+    </record>
+
+    <!-- Plan Based on Collection Stage Action -->
+    <delete id="action_plan_stage_report" model="ir.actions.act_window"/>
+    <delete id="action_plan_stage_report" model="ir.actions.act_url"/>
+    <record id="action_plan_stage_report" model="ir.actions.client">
+        <field name="name">Plan Based on Collection Stage</field>
+        <field name="tag">collection_reports.plan_stage_report</field>
+    </record>
+
+    <!-- Report Based on Collection Stage Action -->
+    <delete id="action_report_stage_report" model="ir.actions.act_window"/>
+    <delete id="action_report_stage_report" model="ir.actions.act_url"/>
+    <record id="action_report_stage_report" model="ir.actions.client">
+        <field name="name">Report Based on Collection Stage</field>
+        <field name="tag">collection_reports.report_stage_report</field>
+    </record>
+
+    <!-- Monthly Plan/Report Action -->
+    <delete id="action_monthly_report" model="ir.actions.act_window"/>
+    <record id="action_monthly_report" model="ir.actions.act_url">
+        <field name="name">Monthly Plan/Report</field>
+        <field name="url">/collection_reports/monthly</field>
+        <field name="target">self</field>
+    </record>
+
+    <!-- Reports Menu - Parent -->
+    <menuitem id="menu_collection_reports"
+              name="Reports"
+              parent="collection_management.menu_collection_root"
+              sequence="50"/>
+
+    <!-- Sub-menu 1: General Information Report -->
+    <menuitem id="menu_general_info_report"
+              name="General Information Report"
+              parent="menu_collection_reports"
+              action="action_general_info_report"
+              groups="collection_reports.group_collection_general_info_report"
+              sequence="10"/>
+
+    <!-- Sub-menu 2: Summarized Report -->
+    <menuitem id="menu_summarized_report"
+              name="Summarized Report"
+              parent="menu_collection_reports"
+              action="action_summarized_report"
+              groups="collection_reports.group_collection_summarized_report"
+              sequence="20"/>
+
+    <!-- Sub-menu 3: Plan Based on Collection Stage -->
+    <menuitem id="menu_plan_stage_report"
+              name="Plan Based on Collection Stage"
+              parent="menu_collection_reports"
+              action="action_plan_stage_report"
+              groups="collection_reports.group_collection_plan_stage_report"
+              sequence="30"/>
+
+    <!-- Sub-menu 4: Report Based on Collection Stage -->
+    <menuitem id="menu_report_stage_report"
+              name="Report Based on Collection Stage"
+              parent="menu_collection_reports"
+              action="action_report_stage_report"
+              groups="collection_reports.group_collection_report_stage_report"
+              sequence="40"/>
+
+    <!-- Sub-menu 5: Monthly Plan/Report -->
+    <!-- <menuitem id="menu_monthly_report"
+              name="Monthly Plan/Report"
+              parent="menu_collection_reports"
+              action="action_monthly_report"
+              sequence="50"/> -->
+
+</odoo>
+

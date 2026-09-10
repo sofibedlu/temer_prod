@@ -1,0 +1,1170 @@
+.team_activity_report_container {
+    padding: 20px;
+    background-color: #f5f5f5;
+    min-height: 100vh;
+}
+
+.report_header {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.report_header h1 {
+    margin: 0 0 20px 0;
+    color: #366092;
+    font-size: 24px;
+}
+
+.header_info {
+    margin-bottom: 15px;
+    padding: 15px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #333;
+    border: 1px solid #ddd;
+}
+
+.header_info strong {
+    color: #366092;
+    margin-right: 5px;
+}
+
+.filters {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+}
+
+.filter_group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.filter_group label {
+    font-weight: bold;
+    font-size: 12px;
+    color: #666;
+}
+
+.filter_group input[type="date"],
+.filter_group select,
+.filter_group input[type="text"].search-input {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.filter_group input[type="text"].search-input {
+    min-width: 200px;
+}
+
+.filter_group button {
+    padding: 8px 16px;
+    background-color: #366092;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.filter_group button:hover {
+    background-color: #2a4a6e;
+}
+
+.report_content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+}
+
+.date_range_info {
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    font-size: 14px;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.date_range_left {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.date_range_right {
+    display: flex;
+    gap: 10px;
+}
+
+.date_range_right .btn {
+    padding: 10px 20px;
+    background-color: #366092;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.date_range_right .btn:hover {
+    background-color: #2a4a6e;
+}
+
+.date_range_right .btn.btn-primary {
+    background-color: #366092;
+}
+
+.date_range_right .btn.btn-primary:hover {
+    background-color: #2a4a6e;
+}
+
+.user_count {
+    margin-left: 10px;
+    color: #366092;
+    font-weight: 500;
+}
+
+.table_wrapper {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    position: relative;
+    width: 100%;
+    max-height: calc(100vh - 380px);
+    overflow: visible;
+}
+
+.table_container {
+    overflow-x: auto;
+    overflow-y: auto;
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+    padding-bottom: 80px;
+}
+
+.total_row_container {
+    border-top: 2px solid #366092;
+    background-color: #e8f4f8;
+    overflow-x: auto;
+    overflow-y: visible;
+    flex: 0 0 auto;
+    z-index: 10;
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+    display: block !important;
+    visibility: visible !important;
+    min-height: 50px;
+    height: 60px;
+    margin-top: -1px;
+}
+
+.total_table {
+    margin: 0;
+    border-top: none;
+    width: 100%;
+    min-width: 800px;
+    table-layout: fixed;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+.total_table thead {
+    display: none;
+}
+
+.total_table tbody td {
+    padding: 8px 6px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+/* Ensure total row cells align with main table columns */
+.total_table tbody tr td:first-child {
+    min-width: 100px;
+    max-width: 120px;
+    width: 110px;
+}
+
+.total_table tbody tr td:nth-child(2) {
+    min-width: 100px;
+    max-width: 120px;
+    width: 110px;
+}
+
+.total_table tbody tr td.number_cell {
+    text-align: right;
+}
+
+/* Minimize number columns in total row - Prospect (3rd column) */
+.total_table tbody td:nth-child(3) {
+    min-width: 50px;
+    max-width: 60px;
+    width: 55px;
+    padding: 8px 4px;
+}
+
+/* Minimize number columns in total row - Follow Up columns (4th column onwards, excluding last 2) */
+.total_table tbody td:nth-child(n+4):not(:nth-last-child(-n+2)) {
+    min-width: 45px;
+    max-width: 55px;
+    width: 50px;
+    padding: 8px 4px;
+}
+
+/* Minimize number columns in total row - Reservation and Sold (last 2 columns) */
+.total_table tbody td:nth-last-child(2) {
+    min-width: 50px;
+    max-width: 60px;
+    width: 55px;
+    padding: 8px 4px;
+}
+
+.total_table tbody td:nth-last-child(1) {
+    min-width: 50px;
+    max-width: 60px;
+    width: 55px;
+    padding: 8px 4px;
+}
+
+.team_activity_table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    min-width: 800px;
+    table-layout: fixed;
+    border-spacing: 0;
+}
+
+.team_activity_table thead {
+    background-color: #366092;
+    color: white;
+}
+
+.team_activity_table th {
+    padding: 8px 6px;
+    text-align: left;
+    font-weight: bold;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.team_activity_table td {
+    padding: 8px 6px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+/* Hide inline total row by default (use sticky bar on desktop) */
+.team_activity_table .mobile_total_row {
+    display: none;
+}
+
+/* Sticky total row on desktop so it is always visible */
+/* Sticky total row container on desktop */
+.total_row_container {
+    position: sticky;
+    bottom: 0;
+    background-color: #e8f4f8;
+    z-index: 5;
+}
+
+/* Desktop layout: avoid squeezed columns */
+@media screen and (min-width: 1025px) {
+    .table_container {
+        overflow-x: auto;
+        overflow-y: auto;
+    }
+
+    .team_activity_table,
+    .total_table {
+        width: 100%;
+        min-width: 0;
+        table-layout: auto;
+    }
+
+    .team_activity_table th,
+    .team_activity_table td,
+    .total_table tbody td {
+        min-width: 90px;
+        max-width: none;
+        width: auto;
+        padding: 8px 10px;
+    }
+}
+
+/* Minimize Supervisor column (first column) */
+.team_activity_table th:first-child,
+.team_activity_table td:first-child {
+    min-width: 100px;
+    max-width: 120px;
+    width: 110px;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Minimize Salesperson column (second column) */
+.team_activity_table th:nth-child(2),
+.team_activity_table td:nth-child(2) {
+    min-width: 100px;
+    max-width: 120px;
+    width: 110px;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Minimize number columns - Prospect (3rd column) */
+.team_activity_table th:nth-child(3),
+.team_activity_table td:nth-child(3) {
+    min-width: 50px;
+    max-width: 60px;
+    width: 55px;
+    padding: 8px 4px;
+}
+
+/* Minimize number columns - Follow Up columns (4th column onwards, excluding last 2) */
+.team_activity_table th:nth-child(n+4):not(:nth-last-child(-n+2)),
+.team_activity_table td:nth-child(n+4):not(:nth-last-child(-n+2)) {
+    min-width: 45px;
+    max-width: 55px;
+    width: 50px;
+    padding: 8px 4px;
+}
+
+/* Minimize number columns - Reservation and Sold (last 2 columns) */
+.team_activity_table th:nth-last-child(2),
+.team_activity_table td:nth-last-child(2) {
+    min-width: 50px;
+    max-width: 60px;
+    width: 55px;
+    padding: 8px 4px;
+}
+
+.team_activity_table th:nth-last-child(1),
+.team_activity_table td:nth-last-child(1) {
+    min-width: 50px;
+    max-width: 60px;
+    width: 55px;
+    padding: 8px 4px;
+}
+
+.team_activity_table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.team_activity_table tbody tr:hover {
+    background-color: #f0f0f0;
+}
+
+.number_cell {
+    text-align: right;
+    font-weight: 500;
+}
+
+.total_cell {
+    font-weight: bold;
+    background-color: #e8f4f8;
+}
+
+.number_cell {
+    text-align: right;
+    font-weight: 500;
+}
+
+.total_cell {
+    font-weight: bold;
+    background-color: #e8f4f8;
+}
+
+.group_header {
+    background-color: #f0f0f0;
+    font-weight: bold;
+}
+
+.group_header_cell {
+    padding: 12px;
+    background-color: #e0e0e0;
+    border: 1px solid #ccc;
+}
+
+.total_row {
+    background-color: #e8f4f8;
+    font-weight: bold;
+}
+
+.header_info_row {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.header_label {
+    font-weight: bold;
+    color: #366092;
+    margin-right: 5px;
+}
+
+.header_value {
+    color: #333;
+}
+
+
+.no_data {
+    text-align: center;
+    padding: 40px;
+    color: #999;
+    font-style: italic;
+}
+
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-size: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.tar_spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #366092;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: tar_spin 1s linear infinite;
+}
+
+@keyframes tar_spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.team_activity_report_container .show_report_btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 24px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    min-height: 40px;
+}
+
+.team_activity_report_container .show_report_btn:hover {
+    background-color: #1e7e34;
+}
+
+/* Align button to bottom of filter group (same level as inputs) */
+.team_activity_report_container .filter_group_btn {
+    justify-content: flex-end;
+}
+
+/* ============================================
+   Mobile Responsive Styles
+   ============================================ */
+
+/* Mobile devices (up to 768px) */
+@media screen and (max-width: 768px) {
+    /* Ensure body and html can scroll on mobile */
+    body, html {
+        overflow-y: auto !important;
+        overflow-x: auto !important;
+        height: auto !important;
+        position: relative !important;
+    }
+    
+    .team_activity_report_container {
+        padding: 10px 0;
+        min-height: auto;
+        overflow-x: auto !important;
+        overflow-y: visible !important;
+        height: auto !important;
+        position: relative !important;
+        width: 100%;
+    }
+
+    .report_header {
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 4px;
+    }
+
+    .report_header h1 {
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+
+    .header_info {
+        padding: 10px;
+        font-size: 12px;
+        margin-bottom: 15px;
+        line-height: 1.6;
+    }
+
+    .header_info strong {
+        display: block;
+        margin-bottom: 3px;
+        margin-right: 0;
+    }
+
+    .filters {
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+    }
+
+    .filter_group {
+        width: 100%;
+    }
+
+    .filter_group label {
+        font-size: 13px;
+        margin-bottom: 5px;
+    }
+
+    .filter_group input[type="date"],
+    .filter_group select,
+    .filter_group input[type="text"].search-input {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px; /* Prevents zoom on iOS */
+        box-sizing: border-box;
+        min-height: 44px; /* Touch-friendly size */
+    }
+
+    .filter_group input[type="text"].search-input {
+        min-width: 100%;
+    }
+
+    .date_range_info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 12px;
+        font-size: 13px;
+    }
+
+    .date_range_left {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        width: 100%;
+    }
+
+    .date_range_right {
+        width: 100%;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .date_range_right .btn {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        min-height: 44px; /* Touch-friendly size */
+    }
+
+    .report_content {
+        padding: 10px 0;
+        max-height: none !important;
+        overflow-x: auto !important;
+        overflow-y: visible !important;
+        height: auto !important;
+        position: relative;
+        width: 100%;
+    }
+
+    .table_wrapper {
+        border-radius: 4px;
+        overflow: visible !important;
+        max-height: none !important;
+        height: auto !important;
+        position: relative;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .table_container {
+        overflow-x: auto !important;
+        overflow-y: visible !important;
+        -webkit-overflow-scrolling: touch;
+        max-height: none !important;
+        height: auto !important;
+        position: relative;
+        width: 100%;
+        flex: 1 1 auto;
+        padding-bottom: 0;
+    }
+    
+    .total_row_container {
+        position: sticky !important;
+        bottom: 0;
+        overflow-x: auto !important;
+        overflow-y: visible !important;
+        width: 100%;
+        display: block !important;
+        visibility: visible !important;
+        flex-shrink: 0;
+        flex: 0 0 auto;
+        background-color: #e8f4f8;
+        z-index: 10;
+        /* Hide scrollbar but allow scrolling */
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE and Edge */
+    }
+
+    /* On mobile, use inline total row to keep columns aligned */
+    .total_row_container {
+        display: none !important;
+    }
+
+    .team_activity_table .mobile_total_row {
+        display: table-footer-group;
+        background-color: #e8f4f8;
+    }
+
+    .team_activity_table .mobile_total_row td {
+        border-top: 2px solid #366092;
+    }
+    
+    .total_row_container::-webkit-scrollbar {
+        display: none; /* Chrome, Safari, Opera */
+    }
+
+    .team_activity_table {
+        font-size: 10px;
+        min-width: 450px;
+        width: auto;
+        table-layout: fixed;
+    }
+
+    .team_activity_table th {
+        padding: 3px 1px;
+        font-size: 8px;
+        white-space: normal;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        line-height: 1.2;
+        text-align: center;
+    }
+
+    .team_activity_table th:first-child,
+    .team_activity_table td:first-child {
+        min-width: 45px;
+        max-width: 55px;
+        width: 50px;
+        padding: 3px 1px !important;
+        font-size: 8px !important;
+    }
+
+    .team_activity_table th:nth-child(2),
+    .team_activity_table td:nth-child(2) {
+        min-width: 45px;
+        max-width: 55px;
+        width: 50px;
+        padding: 3px 1px !important;
+        font-size: 8px !important;
+        white-space: normal;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+    .team_activity_table td {
+        padding: 3px 1px;
+        font-size: 9px;
+    }
+
+    /* Minimize space for Prospect, Reservation, and Sold columns (max 4 digits = ~32px) */
+    .team_activity_table th:nth-child(3),
+    .team_activity_table td:nth-child(3) {
+        min-width: 30px !important;
+        max-width: 36px !important;
+        width: 33px !important;
+        padding: 3px 1px !important;
+        font-size: 8px !important;
+    }
+
+    /* Minimize space for Follow Up columns (4th column onwards, excluding last 2) */
+    .team_activity_table th:nth-child(n+4):not(:nth-last-child(-n+2)),
+    .team_activity_table td:nth-child(n+4):not(:nth-last-child(-n+2)) {
+        min-width: 28px !important;
+        max-width: 34px !important;
+        width: 31px !important;
+        padding: 3px 1px !important;
+        font-size: 8px !important;
+    }
+
+    .team_activity_table th:nth-last-child(2),
+    .team_activity_table td:nth-last-child(2) {
+        min-width: 30px !important;
+        max-width: 36px !important;
+        width: 33px !important;
+        padding: 3px 1px !important;
+        font-size: 8px !important;
+    }
+
+    .team_activity_table th:nth-last-child(1),
+    .team_activity_table td:nth-last-child(1) {
+        min-width: 30px !important;
+        max-width: 36px !important;
+        width: 33px !important;
+        padding: 3px 1px !important;
+        font-size: 8px !important;
+    }
+
+    /* Hide separate total bar on mobile; use inline tfoot only */
+    .total_row_container {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+    }
+    
+    .total_row_container::-webkit-scrollbar {
+        display: none !important; /* Chrome, Safari, Opera */
+    }
+
+    .total_table {
+        min-width: 450px;
+        font-size: 10px;
+        table-layout: fixed;
+        width: auto;
+        margin-top: -1px;
+    }
+
+    .total_table th:first-child,
+    .total_table td:first-child {
+        min-width: 45px;
+        max-width: 55px;
+        width: 50px;
+        padding: 3px 1px !important;
+        font-size: 8px !important;
+    }
+
+    .total_table th:nth-child(2),
+    .total_table td:nth-child(2) {
+        min-width: 45px;
+        max-width: 55px;
+        width: 50px;
+        padding: 3px 1px !important;
+        font-size: 8px !important;
+    }
+
+    .total_table td,
+    .total_table th {
+        padding: 3px 1px;
+        font-size: 9px;
+    }
+
+    /* Minimize space for Prospect, Reservation, and Sold columns in total row (max 4 digits) */
+    .total_table th:nth-child(3),
+    .total_table td:nth-child(3) {
+        min-width: 30px !important;
+        max-width: 36px !important;
+        width: 33px !important;
+        padding: 3px 1px !important;
+        font-size: 8px !important;
+    }
+
+    /* Minimize space for Follow Up columns in total row (4th column onwards, excluding last 2) */
+    .total_table th:nth-child(n+4):not(:nth-last-child(-n+2)),
+    .total_table td:nth-child(n+4):not(:nth-last-child(-n+2)) {
+        min-width: 28px !important;
+        max-width: 34px !important;
+        width: 31px !important;
+        padding: 3px 1px !important;
+        font-size: 8px !important;
+    }
+
+    .total_table th:nth-last-child(2),
+    .total_table td:nth-last-child(2) {
+        min-width: 30px !important;
+        max-width: 36px !important;
+        width: 33px !important;
+        padding: 3px 1px !important;
+        font-size: 8px !important;
+    }
+
+    .total_table th:nth-last-child(1),
+    .total_table td:nth-last-child(1) {
+        min-width: 30px !important;
+        max-width: 36px !important;
+        width: 33px !important;
+        padding: 3px 1px !important;
+        font-size: 8px !important;
+    }
+
+    .no_data,
+    .loading {
+        padding: 30px 15px;
+        font-size: 14px;
+    }
+}
+
+/* Tablet devices (769px to 1024px) */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+    .team_activity_report_container {
+        padding: 15px;
+    }
+
+    .report_header {
+        padding: 18px;
+    }
+
+    .report_header h1 {
+        font-size: 22px;
+    }
+
+    .filters {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .filter_group {
+        min-width: 180px;
+        flex: 1 1 auto;
+    }
+
+    .filter_group input[type="date"],
+    .filter_group select,
+    .filter_group input[type="text"].search-input {
+        min-width: 150px;
+        padding: 9px;
+    }
+
+    .date_range_info {
+        flex-wrap: wrap;
+    }
+
+    .date_range_right {
+        flex-direction: row;
+    }
+
+    .date_range_right .btn {
+        min-width: 120px;
+        padding: 10px 18px;
+    }
+
+    .table_wrapper {
+        overflow: visible;
+        max-height: none;
+    }
+
+    .table_container {
+        overflow-x: auto;
+        overflow-y: visible;
+        max-height: none;
+    }
+
+    .team_activity_table {
+        font-size: 13px;
+        min-width: 750px;
+    }
+
+    .team_activity_table th,
+    .team_activity_table td {
+        padding: 10px 8px;
+    }
+}
+
+/* Small mobile devices (up to 480px) */
+@media screen and (max-width: 480px) {
+    .team_activity_report_container {
+        padding: 8px 0;
+    }
+
+    .report_header {
+        padding: 12px;
+    }
+
+    .report_header h1 {
+        font-size: 18px;
+    }
+
+    .header_info {
+        font-size: 11px;
+        padding: 8px;
+    }
+
+    .filters {
+        gap: 10px;
+    }
+
+    .filter_group label {
+        font-size: 12px;
+    }
+
+    .filter_group input[type="date"],
+    .filter_group select,
+    .filter_group input[type="text"].search-input {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .date_range_info {
+        font-size: 12px;
+        padding: 10px;
+    }
+
+    .team_activity_table {
+        font-size: 11px;
+        min-width: 500px;
+    }
+
+    .team_activity_table th {
+        padding: 3px 1px;
+        font-size: 8px;
+        white-space: normal;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        line-height: 1.2;
+        text-align: center;
+    }
+
+    .team_activity_table th:first-child,
+    .team_activity_table td:first-child {
+        min-width: 60px;
+        max-width: 70px;
+        width: 65px;
+    }
+
+    .team_activity_table th:nth-child(2),
+    .team_activity_table td:nth-child(2) {
+        min-width: 60px;
+        max-width: 70px;
+        width: 65px;
+        white-space: normal;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+    .team_activity_table td {
+        padding: 4px 2px;
+        font-size: 10px;
+    }
+
+    /* Minimize space for Prospect, Reservation, and Sold columns (max 4 digits = ~32px) */
+    .team_activity_table th:nth-child(3),
+    .team_activity_table td:nth-child(3) {
+        min-width: 30px !important;
+        max-width: 36px !important;
+        width: 33px !important;
+        padding: 3px 1px !important;
+        font-size: 8px !important;
+    }
+
+    .team_activity_table th:nth-last-child(2),
+    .team_activity_table td:nth-last-child(2) {
+        min-width: 30px !important;
+        max-width: 36px !important;
+        width: 33px !important;
+        padding: 3px 1px !important;
+        font-size: 8px !important;
+    }
+
+    .team_activity_table th:nth-last-child(1),
+    .team_activity_table td:nth-last-child(1) {
+        min-width: 30px !important;
+        max-width: 36px !important;
+        width: 33px !important;
+        padding: 3px 1px !important;
+        font-size: 8px !important;
+    }
+
+    /* Minimize space for Follow Up columns (4th column onwards, excluding last 2) */
+    .team_activity_table th:nth-child(n+4):not(:nth-last-child(-n+2)),
+    .team_activity_table td:nth-child(n+4):not(:nth-last-child(-n+2)) {
+        min-width: 28px !important;
+        max-width: 34px !important;
+        width: 31px !important;
+        padding: 3px 1px !important;
+        font-size: 8px !important;
+    }
+
+    .total_table {
+        min-width: 450px;
+        table-layout: fixed;
+        width: 100%;
+    }
+
+    /* Minimize space for Prospect, Reservation, and Sold columns in total row (max 4 digits) */
+    .total_table tbody td:nth-child(3) {
+        min-width: 30px !important;
+        max-width: 36px !important;
+        width: 33px !important;
+        padding: 3px 1px !important;
+        font-size: 8px !important;
+    }
+
+    /* Minimize space for Follow Up columns in total row (4th column onwards, excluding last 2) */
+    .total_table tbody td:nth-child(n+4):not(:nth-last-child(-n+2)) {
+        min-width: 28px !important;
+        max-width: 34px !important;
+        width: 31px !important;
+        padding: 3px 1px !important;
+        font-size: 8px !important;
+    }
+
+    .total_table tbody td:nth-last-child(2) {
+        min-width: 30px !important;
+        max-width: 36px !important;
+        width: 33px !important;
+        padding: 3px 1px !important;
+        font-size: 8px !important;
+    }
+
+    .total_table tbody td:nth-last-child(1) {
+        min-width: 30px !important;
+        max-width: 36px !important;
+        width: 33px !important;
+        padding: 3px 1px !important;
+        font-size: 8px !important;
+    }
+
+    .total_table tbody td {
+        padding: 3px 1px;
+        font-size: 9px;
+    }
+
+    .total_table tbody td:first-child {
+        min-width: 45px;
+        max-width: 55px;
+        width: 50px;
+        padding: 3px 1px !important;
+        font-size: 8px !important;
+    }
+
+    .total_table tbody td:nth-child(2) {
+        min-width: 45px;
+        max-width: 55px;
+        width: 50px;
+        padding: 3px 1px !important;
+        font-size: 8px !important;
+    }
+
+    /* Reduce space for Prospect, Reservation, and Sold columns in total row */
+    .total_table tbody td:nth-child(3) {
+        min-width: 30px !important;
+        max-width: 36px !important;
+        width: 33px !important;
+        padding: 3px 1px !important;
+        font-size: 8px !important;
+    }
+
+    .total_table tbody td:nth-last-child(2) {
+        min-width: 30px !important;
+        max-width: 36px !important;
+        width: 33px !important;
+        padding: 3px 1px !important;
+        font-size: 8px !important;
+    }
+
+    .total_table tbody td:nth-last-child(1) {
+        min-width: 30px !important;
+        max-width: 36px !important;
+        width: 33px !important;
+        padding: 3px 1px !important;
+        font-size: 8px !important;
+    }
+
+    .total_row_container {
+        display: block !important;
+        visibility: visible !important;
+        overflow-x: auto !important;
+        overflow-y: visible !important;
+        background-color: #e8f4f8 !important;
+        flex: 0 0 auto !important;
+        flex-shrink: 0 !important;
+        z-index: 10 !important;
+        border-top: 2px solid #366092 !important;
+        /* Hide scrollbar but allow scrolling */
+        scrollbar-width: none !important; /* Firefox */
+        -ms-overflow-style: none !important; /* IE and Edge */
+    }
+    
+    .total_row_container::-webkit-scrollbar {
+        display: none !important; /* Chrome, Safari, Opera */
+    }
+}
+
+/* Landscape mobile orientation */
+@media screen and (max-width: 768px) and (orientation: landscape) {
+    .table_wrapper {
+        overflow: visible;
+        max-height: none;
+    }
+
+    .table_container {
+        overflow-x: auto;
+        overflow-y: visible;
+        max-height: none;
+    }
+
+    .team_activity_table {
+        font-size: 11px;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .filter_group input[type="date"],
+    .filter_group select,
+    .filter_group input[type="text"].search-input {
+        min-height: 44px;
+    }
+
+    .date_range_right .btn {
+        min-height: 44px;
+    }
+
+    .team_activity_table tbody tr {
+        min-height: 44px;
+        padding: 4px 0;
+    }
+}
+
+/* Improve scrolling on mobile */
+@media screen and (max-width: 768px) {
+    .table_container,
+    .total_row_container {
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+    }
+}
+

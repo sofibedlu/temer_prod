@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_lead_distribution_manager,lead.distribution.manager,model_lead_distribution,lead_distribution.group_lead_distribution_manager,1,0,0,0
+access_lead_distribution_admin,lead.distribution.admin,model_lead_distribution,sales_team.group_sale_manager,1,1,1,1

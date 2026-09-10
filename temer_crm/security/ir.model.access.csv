@@ -1,0 +1,16 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_temer_lead_user,temer.lead.user,model_temer_lead,base.group_user,1,1,1,1
+access_temer_lead_manager,temer.lead.manager,model_temer_lead,base.group_system,1,1,1,1
+access_temer_phone_user,temer.phone.user,model_temer_phone,base.group_user,1,1,1,1
+access_temer_phone_manager,temer.phone.manager,model_temer_phone,base.group_system,1,1,1,1
+access_crm_additional_number,crm.stage.additional.numbers,model_temer_lead_additional_numbers,base.group_system,1,1,1,1
+access_temer_lead_followup_user,temer.lead.followup user,model_temer_lead_followup,base.group_user,1,1,1,1
+access_temer_lead_followup_manager,temer.lead.followup manager,model_temer_lead_followup,base.group_system,1,1,1,1
+access_temer_lead_activity_wizard_user,temer.lead.activity.wizard user,model_temer_lead_activity_wizard,base.group_user,1,1,1,0
+access_temer_lead_activity_wizard_manager,temer.lead.activity.wizard manager,model_temer_lead_activity_wizard,base.group_system,1,1,1,0
+access_crm_stage_history,crm.stage.history.user,model_crm_stage_history,base.group_user,1,0,0,0
+access_crm_stage_history_manager,crm.stage.history.manager,model_crm_stage_history,base.group_system,1,1,1,1
+access_temer_lead_stage_history_user,temer.lead.stage.history.user,model_temer_lead_stage_history,base.group_user,1,1,1,1
+access_temer_lead_stage_history_manager,temer.lead.stage.history.manager,model_temer_lead_stage_history,base.group_system,1,1,1,1
+access_temer_lead_activity_analysis_user,temer.lead.activity.analysis.user,model_temer_lead_activity_analysis,base.group_user,1,1,1,1
+access_temer_lead_activity_analysis_manager,temer.lead.activity.analysis.manager,model_temer_lead_activity_analysis,base.group_system,1,1,1,1

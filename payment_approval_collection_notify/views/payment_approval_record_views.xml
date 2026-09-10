@@ -1,0 +1,12 @@
+<odoo>
+    <record id="payment_approval_record_form_inherit_initiated_by" model="ir.ui.view">
+        <field name="name">payment.approval.record.form.inherit.initiated.by</field>
+        <field name="model">payment.approval.record</field>
+        <field name="inherit_id" ref="payment_approval_new.view_payment_approval_record_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='approved_date']" position="after">
+                <field name="requested_by_id" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

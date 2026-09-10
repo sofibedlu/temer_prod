@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_collection_order_form_inherit_recon_button" model="ir.ui.view">
+        <field name="name">collection.order.form.inherit.recon.button</field>
+        <field name="model">collection.order</field>
+        <field name="inherit_id" ref="collection_management.view_collection_order_form"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="//header" position="inside">
+                <button name="%(action_collection_recon_wizard)d" 
+                        string="Reconcile Data" 
+                        type="action" 
+                        class="btn-warning"
+                        icon="fa-refresh"
+                        groups="collection_data_reconciliation.group_collection_data_reconciler"
+                        invisible="not sale_id"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

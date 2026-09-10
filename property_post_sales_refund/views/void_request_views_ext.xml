@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_void_request_form_inherit_property_details" model="ir.ui.view">
+        <field name="name">property.contract.void.request.form.inherit.details</field>
+        <field name="model">property.contract.void.request</field>
+        <field name="inherit_id" ref="property_contract_extension.view_void_request_form"/>
+        <field name="arch" type="xml">
+
+            <div name="button_box" position="inside">
+                <button name="action_view_refunds" 
+                        type="object" 
+                        class="oe_stat_button" 
+                        icon="fa-money" 
+                        invisible="refund_count == 0">
+                    <field name="refund_count" widget="statinfo" string="Refunds"/>
+                </button>
+            </div>
+
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="buyer_name" widget="html"/>
+            </xpath>
+            
+            <xpath expr="//field[@name='reason']" position="before">
+                <field name="site_name"/>
+                <field name="property_type_name"/>
+                <field name="floor_number"/>
+                <field name="house_number"/>
+            </xpath>
+            
+            <xpath expr="//field[@name='pay_date']/parent::group/parent::group" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='pay_date']" position="attributes">
+                <attribute name="required">0</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

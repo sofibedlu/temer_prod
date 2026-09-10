@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Add Site field to Tree View -->
+    <record id="view_payment_approval_record_tree_filter" model="ir.ui.view">
+        <field name="name">payment.approval.record.tree.filter</field>
+        <field name="model">payment.approval.record</field>
+        <field name="inherit_id" ref="payment_approval_new.view_payment_approval_record_tree"/>
+        <field name="arch" type="xml">
+            <field name="customer_name" position="after">
+                <field name="site_id" string="Site"/>
+            </field>
+        </field>
+    </record>
+    
+    <!-- Add Site field to Form View -->
+    <record id="view_payment_approval_record_form_filter" model="ir.ui.view">
+        <field name="name">payment.approval.record.form.filter</field>
+        <field name="model">payment.approval.record</field>
+        <field name="inherit_id" ref="payment_approval_new.view_payment_approval_record_form"/>
+        <field name="arch" type="xml">
+            <field name="customer_name" position="after">
+                <field name="site_id" readonly="1"/>
+            </field>
+        </field>
+    </record>
+    
+    <!-- Enhance Search View with Site search and Group By -->
+    <record id="view_payment_approval_record_search_filter" model="ir.ui.view">
+        <field name="name">payment.approval.record.search.filter</field>
+        <field name="model">payment.approval.record</field>
+        <field name="inherit_id" ref="payment_approval_new.view_payment_approval_record_search"/>
+        <field name="arch" type="xml">
+            <!-- Update customer_name field to search both customer and site -->
+            <field name="customer_name" position="attributes">
+                <attribute name="filter_domain">['|', ('customer_name', 'ilike', self), ('site_name', 'ilike', self)]</attribute>
+            </field>
+            <!-- Add site_name search field after customer_name -->
+            <field name="customer_name" position="after">
+                <field name="site_name" filter_domain="['|', ('customer_name', 'ilike', self), ('site_name', 'ilike', self)]"/>
+                <field name="site_id"/>
+            </field>
+            <!-- Add Group By Site filter -->
+            <filter name="group_customer" position="after">
+                <filter string="Site" name="group_site" context="{'group_by': 'site_id'}"/>
+            </filter>
+        </field>
+    </record>
+
+</odoo>
+

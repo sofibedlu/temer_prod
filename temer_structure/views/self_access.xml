@@ -1,0 +1,58 @@
+<odoo>
+    <data>
+
+        <!-- Action -->
+        <record id="action_my_customers" model="ir.actions.act_window">
+            <field name="name">My Customers</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('create_uid', '=', uid)]</field> <!-- Filter to show only the current user's customers -->
+            <field name="context">{}</field>
+        </record>
+
+        <!-- Menu Item -->
+        <!-- <menuitem id="menu_my_customers" 
+                  name="My Customers" 
+                  action="action_my_customers" 
+                  parent="advanced_property_management.customers_menu" 
+                  groups="temer_structure.access_property_sales_person_group"
+                  sequence="1"/> -->
+
+
+        <!-- my reservations -->
+        <record id="action_my_reservations" model="ir.actions.act_window">
+            <field name="name">My Reservations</field>
+            <field name="res_model">property.reservation</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">[('create_uid', '=', uid)]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">Create a new Reservation</p>
+            </field>
+        </record>
+
+        <menuitem id="menu_my_reservations" 
+                  name="My Reservations" 
+                  action="action_my_reservations" 
+                  parent="ahadubit_property_reservation.reservation_property_menu" 
+                  groups="temer_structure.access_property_sales_person_group"
+                  sequence="0"/>  
+         <!-- my transfer requests -->
+        <record id="action_my_transfer_requests" model="ir.actions.act_window">
+            <field name="name">My Transfer Requests</field>
+            <field name="res_model">property.reservation.transfer.history</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('create_uid', '=', uid)]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">Create a new Transfer Request</p>
+            </field>
+        </record>
+
+        <menuitem id="menu_my_transfer_requests" 
+                  name="My Transfer Requests" 
+                  action="action_my_transfer_requests" 
+                  parent="ahadubit_property_reservation.reservation_property_menu" 
+                  groups="temer_structure.access_property_sales_person_group"
+                  sequence="0"/>        
+
+    </data>
+</odoo>

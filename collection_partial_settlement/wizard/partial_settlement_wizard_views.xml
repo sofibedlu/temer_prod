@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partial_settlement_wizard_form" model="ir.ui.view">
+        <field name="name">partial.settlement.wizard.form</field>
+        <field name="model">partial.settlement.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Partial Settlement">
+                <sheet>
+                    <group>
+                        <field name="collection_id" readonly="1" force_save="1"/>
+                        <field name="custom_name" placeholder="e.g. Consolidated Payment 1"/>
+                    </group>
+                    
+                    <separator string="Due Date Configuration"/>
+                    <div class="alert alert-info" role="alert" style="margin-bottom:10px;">
+                        <strong>Instructions:</strong>
+                        <ul>
+                            <li><strong>Link to Installment:</strong> If selected, the new folded installment will automatically follow the due date of the selected installment (useful for progress-based payments).</li>
+                            <li><strong>New Due Date:</strong> If you set a specific date here, it will be used as the fixed due date.</li>
+                        </ul>
+                    </div>
+                    <br/>
+                    <group>
+                        <group>
+                            <field name="linked_installment_id" options="{'no_create': True, 'no_open': True}"/>
+                        </group>
+                        <group>
+                            <field name="new_due_date"/>
+                        </group>
+                    </group>
+                    <separator string="Installments to Merge"/>
+                    <field name="installment_ids" widget="many2many">
+                        <tree>
+                            <field name="name"/>
+                            <field name="due_date"/>
+                            <field name="amount_total"/>
+                            <field name="state"/>
+                        </tree>
+                    </field>
+                </sheet>
+                <footer>
+                    <button name="action_apply_partial_settlement" string="Apply Settlement" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

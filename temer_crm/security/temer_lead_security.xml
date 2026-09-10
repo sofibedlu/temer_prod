@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Groups -->
+        <record id="group_temer_lead_user" model="res.groups">
+            <field name="name">Temer Lead / User</field>
+            <field name="category_id" ref="base.module_category_sales_crm"/>
+        </record>
+        
+        <record id="group_temer_lead_manager" model="res.groups">
+            <field name="name">Temer Lead / Manager</field>
+            <field name="category_id" ref="base.module_category_sales_crm"/>
+        </record>
+        
+        <!-- Create a new group for call center users -->
+        <record id="group_call_center_temer_access" model="res.groups">
+            <field name="name">Call,Reception,Website,Referral</field>
+            <field name="category_id" ref="base.module_category_sales_crm"/>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <!-- Record Rules -->
+        <!-- User can only see their own leads -->
+        <record id="temer_lead_user_rule" model="ir.rule">
+            <field name="name">Temer Lead User: Only Own Leads</field>
+            <field name="model_id" ref="model_temer_lead"/>
+            <field name="domain_force">[('user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_temer_lead_user'))]"/>
+            <field name="perm_read">1</field>
+            <field name="perm_write">1</field>
+            <field name="perm_create">1</field>
+            <field name="perm_unlink">1</field>
+        </record>
+
+        <!-- Manager can see all leads -->
+        <record id="temer_lead_manager_rule" model="ir.rule">
+            <field name="name">Temer Lead Manager: All Leads</field>
+            <field name="model_id" ref="model_temer_lead"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_temer_lead_manager'))]"/>
+            <field name="perm_read">1</field>
+            <field name="perm_write">1</field>
+            <field name="perm_create">1</field>
+            <field name="perm_unlink">1</field>
+        </record>
+
+        <record id="temer_lead_additional_numbers_user" model="ir.model.access">
+            <field name="name">temer.lead.additional.numbers.user</field>
+            <field name="model_id" ref="model_temer_lead_additional_numbers"/>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="perm_read">1</field>
+            <field name="perm_write">1</field>
+            <field name="perm_create">1</field>
+            <field name="perm_unlink">1</field>
+        </record>
+
+        <record id="temer_lead_additional_numbers_manager" model="ir.model.access">
+            <field name="name">temer.lead.additional.numbers.manager</field>
+            <field name="model_id" ref="model_temer_lead_additional_numbers"/>
+            <field name="group_id" ref="base.group_system"/>
+            <field name="perm_read">1</field>
+            <field name="perm_write">1</field>
+            <field name="perm_create">1</field>
+            <field name="perm_unlink">1</field>
+        </record>
+        <record id="access_temer_lead_activity_analysis_user" model="ir.model.access">
+    <field name="name">temer.lead.activity.analysis.user</field>
+    <field name="model_id" ref="model_temer_lead_activity_analysis"/>
+    <field name="group_id" ref="base.group_user"/>
+    <field name="perm_read">1</field>
+    <field name="perm_write">1</field>
+    <field name="perm_create">1</field>
+    <field name="perm_unlink">1</field>
+</record>
+
+<record id="access_temer_lead_activity_analysis_manager" model="ir.model.access">
+    <field name="name">temer.lead.activity.analysis.manager</field>
+    <field name="model_id" ref="model_temer_lead_activity_analysis"/>
+    <field name="group_id" ref="base.group_system"/>
+    <field name="perm_read">1</field>
+    <field name="perm_write">1</field>
+    <field name="perm_create">1</field>
+    <field name="perm_unlink">1</field>
+</record>
+<record id="access_temer_lead_stage_history_user" model="ir.model.access">
+    <field name="name">temer.lead.stage.history.user</field>
+    <field name="model_id" ref="model_temer_lead_stage_history"/>
+    <field name="group_id" ref="base.group_user"/>
+    <field name="perm_read">1</field>
+    <field name="perm_write">1</field>
+    <field name="perm_create">1</field>
+    <field name="perm_unlink">1</field>
+</record>
+
+<record id="access_temer_lead_stage_history_manager" model="ir.model.access">
+    <field name="name">temer.lead.stage.history.manager</field>
+    <field name="model_id" ref="model_temer_lead_stage_history"/>
+    <field name="group_id" ref="base.group_system"/>
+    <field name="perm_read">1</field>
+    <field name="perm_write">1</field>
+    <field name="perm_create">1</field>
+    <field name="perm_unlink">1</field>
+</record>
+    </data>
+</odoo>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_payment_deny_handler_form" model="ir.ui.view">
+        <field name="name">payment.deny.handler.form</field>
+        <field name="model">payment.deny.handler</field>
+        <field name="arch" type="xml">
+            <form string="Deny Payment">
+                <group>
+                    <field name="payment_record_id" invisible="1"/>
+                    <field name="payment_record_ids" invisible="1"/>
+                    <field name="reason" placeholder="Enter reason for denying this payment..." required="1"/>
+                </group>
+                <footer>
+                    <button name="action_confirm_deny" string="Confirm Deny" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
+

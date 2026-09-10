@@ -1,0 +1,652 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+    <record id="contract_template_2" model="contract.template">
+        <field name="name">Standard Contract Template</field>
+        <field name="active">True</field>
+        <field name="description">This is a standard contract template used for demonstration purposes.</field>
+        <field name="sub_prefix">STD001</field>
+        <field name="sequence" ref="contract_sections.seq_contract_application"/>
+
+<!--        <field name="sequence">seq_contract_application</field>-->
+    </record>
+
+    <record id="contract_heading1" model="contract.template.content">
+        <field name="sequence">0</field>
+        <field name="main_title">First Page</field>
+        <field name="content">
+            <![CDATA[
+            <p>
+                <b>
+                    ቡራት ሪልእስቴት አክሲዮን ማህበር
+
+                    የሊሴ ሳይት የአፓርትመንት መኖሪያ
+                    ቤት ሽያጭ ውል
+
+                </b>
+                <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                
+            </p>
+            ]]>
+        </field>
+        <field name="section_id" ref="contract_template_2"/> <!-- Replace with the actual contract section ID -->
+        <field name="is_title_printed">False</field>
+        <field name="is_dynamic_content">False</field>
+    </record>
+
+
+    <record id="contract_content_sale_info1" model="contract.template.content">
+        <field name="sequence">1</field>
+        <field name="main_title">Sale Information</field>
+        <field name="content">
+            <![CDATA[
+            
+            ]]>
+        </field>
+        <field name="section_id" ref="contract_template_2"/> <!-- Replace with the actual contract section ID -->
+        <field name="is_title_printed">False</field>
+        <field name="is_dynamic_content">True</field>
+        <field name="dynamic_code">sale_info</field>
+    </record>
+
+
+    <record id="contract_content_break1" model="contract.template.content">
+        <field name="sequence">3</field>
+        <field name="main_title">break</field>
+        <field name="content">
+            <![CDATA[
+            ]]>
+        </field>
+        <field name="section_id" ref="contract_template_2"/> <!-- Replace with the actual contract section ID -->
+        <field name="is_title_printed">False</field>
+    </record>
+
+    <record id="contract_content_contract_number1" model="contract.template.content">
+        <field name="sequence">4</field>
+        <field name="main_title">የአፓርታማ ቤት/ ግንባታ/ ሽያጭ ውል ስምምነት</field>
+        <field name="content">
+            <![CDATA[
+            
+            ]]>
+        </field>
+        <field name="section_id" ref="contract_template_2"/> <!-- Replace with the actual contract section ID -->
+        <field name="is_title_printed">True</field>
+    </record>
+
+     <record id="contract_content_info1" model="contract.template.content">
+        <field name="sequence">5</field>
+        <field name="main_title">Contract Number</field>
+        <field name="content">
+            <![CDATA[
+            
+            ]]>
+        </field>
+        <field name="section_id" ref="contract_template_2"/> <!-- Replace with the actual contract section ID -->
+         <field name="is_title_printed">False</field>
+        <field name="is_dynamic_content">True</field>
+        <field name="dynamic_code">contract_number</field>
+    </record>
+
+     <record id="contract_pharase_11" model="contract.template.content">
+        <field name="sequence">6</field>
+        <field name="main_title">አንቀጽ 1</field>
+         <field name="subtitle">ተዋዋይ ወገኖች ስም እና አድራሻ</field>
+        <field name="content">
+            <![CDATA[
+            <p>ይህ የመኖርያ ቤት ሽያጭ ውል እና በአባሪነት የተያያዙ የዚህ ውል አካል የሆኑትን ሰነዶች ጨምሮ ከዚህ በኋላ
+“ውል” እየተባለ የሚጠቀሰው በኢትዮጵያ ፍትሐብሔር ህግ ቁጥር 2876 መሠረት ዛሬ --------- ቀን 2017
+ዓ.ም፤ በቡራትሪልእስቴትአድራሻ ፡-አዲስ አበባ ከተማ ፤ አራዳ ክፍለ ከተማ፣ ወረዳ 01 ፣የቤት አዲስ ፣ ሳር ቤት
+ወልደማርም ህንፃ ግራውንድ ሚዛን 1ኛ ፎቅ ፣ የስልክ ቁጥር 09 11 22 94 86 ኢሜይል፡
+temertrading@gmail.com በሆነው ከዚህ በኋላ “ሻጭ”/አልሚው/ እየተባለ በሚጠራው
+            </p>
+            ]]>
+        </field>
+        <field name="section_id" ref="contract_template_2"/> <!-- Replace with the actual contract section ID -->
+        <field name="is_title_printed">True</field>
+    </record>
+
+
+    <record id="contract_content_buyer_info1" model="contract.template.content">
+        <field name="sequence">7</field>
+        <field name="main_title">Buyer Information</field>
+        <field name="content">
+            <![CDATA[
+          
+            ]]>
+        </field>
+        <field name="section_id" ref="contract_template_2"/> <!-- Replace with the actual contract section ID -->
+        <field name="is_title_printed">False</field>
+        <field name="is_dynamic_content">True</field>
+        <field name="dynamic_code">buyer_info</field>
+    </record>
+     <record id="contract_content_contract_date" model="contract.template.content">
+        <field name="sequence">8</field>
+        <field name="main_title">contract_date</field>
+        <field name="content">
+            <![CDATA[
+          
+            ]]>
+        </field>
+        <field name="section_id" ref="contract_template_2"/> <!-- Replace with the actual contract section ID -->
+        <field name="is_title_printed">False</field>
+        <field name="is_dynamic_content">True</field>
+        <field name="dynamic_code">contract_date</field>
+    </record>
+    
+        
+ <record id="contract_pharase_21" model="contract.template.content">
+        <field name="sequence">9</field>
+        <field name="main_title">አንቀጽ 2</field>
+         <field name="subtitle">የውሉ ዓላማ</field>
+        <field name="content">
+            <![CDATA[
+            <p>
+            ሻጭ በአዲስ አበባ ከተማ አስተዳደር፣ በአራዳ ክ/ከተማ፣ ወረዳ 01 ውስጥ የካርታ ቁጥሩ
+አ/ሊዝ/01/01/50/04/01፣ የይዞታ ስፋቱ 1,685 ካሬ ሜትር በሆነ በሊዝ በተገኘ ቦታ ላይ በሚገነባው የመኖሪያ
+አገልግሎት የሚሰጥ ህንጻ ላይ የመኖርያ ቤቶችን ገንብቶ በሽያጭ የማስተላለፍ ሙሉ መብት ያለው በመሆኑና
+ገዥ በዚህ ህንጻ ውስጥ ከተገነቡ የመኖርያ ቤቶች መካከል መርጦ መግዛት ስለፈለገ ሻጭ እና ገዢ ከዚህ በታች
+በተዘረዘሩት ሁኔታዎች ተስማምተናል፡፡
+            </p>
+            ]]>
+        </field>
+        <field name="section_id" ref="contract_template_2"/> <!-- Replace with the actual contract section ID -->
+        <field name="is_title_printed">True</field>
+    </record>
+
+    <record id="contract_content_break2" model="contract.template.content">
+        <field name="sequence">10</field>
+        <field name="main_title">break</field>
+        <field name="content">
+            <![CDATA[
+            ]]>
+        </field>
+        <field name="section_id" ref="contract_template_2"/> <!-- Replace with the actual contract section ID -->
+        <field name="is_title_printed">False</field>
+    </record>
+
+   
+
+    <record id="contract_pharase_31" model="contract.template.content">
+        <field name="sequence">11</field>
+        <field name="main_title">አንቀጽ 3</field>
+         <field name="subtitle">የአፓረትማ ቤቱ መግለጫ</field>
+        <field name="content">
+            <![CDATA[
+            <p>
+
+            ሻጭ /አልሚው/ ለገዥ ገንብቶ የሚያስረክበው በከፊል የተጠናቀቀ የጋራ መኖሪያ ቤት (አፓርትመንት) አሰራርና
+አጠቃላይ ይዘት ከዚህ እንደሚከተለው ነው
+3.2. የመኖሪያ አፓርታማ ቤቱ የሚገኝበት ህንጻ ባለ 1B+G+24 ወለል ህንጻ ነው፡፡ ህንጻው የሚገኘበት አድራሻ፡- አዲስ አበባ ከተማ፣ አራዳ ክ/ከተማ፣ ወረዳ 01 በተለምዶ ሊሴ ተብሎ በሚታወቀው ስፍራ ነው፡፡
+
+
+            </p>
+            ]]>
+        </field>
+        <field name="section_id" ref="contract_template_2"/> <!-- Replace with the actual contract section ID -->
+        <field name="is_title_printed">True</field>
+    </record>
+
+      <record id="contract_content_property_info1" model="contract.template.content">
+        <field name="sequence">12</field>
+        <field name="main_title">property_info</field>
+        <field name="content">
+            <![CDATA[
+          
+            ]]>
+        </field>
+        <field name="section_id" ref="contract_template_2"/> <!-- Replace with the actual contract section ID -->
+        <field name="is_title_printed">False</field>
+        <field name="is_dynamic_content">True</field>
+        <field name="dynamic_code">property_info</field>
+    </record>
+
+     <record id="contract_content_property_property_description1" model="contract.template.content">
+        <field name="sequence">13</field>
+        <field name="main_title">property_property_description</field>
+        <field name="content">
+            <![CDATA[
+          
+            ]]>
+        </field>
+        <field name="section_id" ref="contract_template_2"/> <!-- Replace with the actual contract section ID -->
+        <field name="is_title_printed">False</field>
+        <field name="is_dynamic_content">True</field>
+        <field name="dynamic_code">property_property_description</field>
+    </record>
+
+<record id="contract_content_property_area" model="contract.template.content">
+        <field name="sequence">14</field>
+        <field name="main_title">property_area</field>
+        <field name="content">
+            <![CDATA[
+          
+            ]]>
+        </field>
+        <field name="section_id" ref="contract_template_2"/> <!-- Replace with the actual contract section ID -->
+        <field name="is_title_printed">False</field>
+        <field name="is_dynamic_content">True</field>
+        <field name="dynamic_code">property_area</field>
+    </record>
+
+
+<record id="contract_pharase_312" model="contract.template.content">
+        <field name="sequence">15</field>
+        <field name="main_title">አንቀጽ 3</field>
+         <field name="subtitle">የአፓረትማ ቤቱ መግለጫ</field>
+        <field name="content">
+            <![CDATA[
+            <p>
+
+
+3.6. የምድረ-ግቢው የጋራ መገልገያ አረንጋዴ ስፍራ በዚህ አንቀጽ ንዑስ አንቀጽ 3.5 ላይ ከተዘረዘሩት ውስጥ አይካተትም፡፡
+
+3.7. ገዥ የገዛው የመኖሪያ አፓርታማ ቤት የወለል ፕላን፣ የቤት ንድፍ፣ የቤቱ ስፋት፣ የክፍሎች ዝርዝር፣ አፓርትመንቱ የተሠራበት ማቴሪያል እና ሌሎች መግለጫዎች ከዚህ ውል ጋር አባሪ በተደረጉትና የዚህ ውል አካል በሆኑት ሰነዶች በተገለጸው መሠረት ይሆናል፡፡
+
+3.8. ሻጭ ለመኖሪያ አፓርታማ ቤቱ የኤሌክትሪክና የውሃ መስመሮችን ይዘረጋል፡፡ 
+
+3.9. ሻጭ ለጋራ መገልገያ የሚሆን የዉሃ ማጠራቀሚያ ጋን ከነፓምፑ እንዲሁም ሊፍቶች እና ጄኔሬተር ይገጥማል፡
+
+3.10 . ህንጻው ለመኪና ማቆሚያ የሚሆን 1 ቤዝመንት፣ ምድር ወለል ፣አንደኛ ወለል እና ሁለተኛ ወለል የተዘጋጀለት ሲሆን የመኪና መቆሚያ በሻጭ በኩል የሚተዳደር ይሆናል።
+
+3.11. ገዥ ስለመረጡት ቤት ፕላንና ስለሚገነባበት ቦታ ተረድተው በዚህ ውል የተለያዩ አንቀጾች በተቀመጡ ሁኔታዎች መሠረት ተስማምተው ዉል ገብተዋል፡፡
+3.12. ሻጭ አግባብነት ባላቸው የቦታ፣ የይዞታና የግንባታ ህግና ድንጋጌዎች እንዲሁም በዚህ ውል የተለያዩ አንቀጾች በተቀመጡ ሁኔታዎች ይህ ውል የተገባበትን የመኖሪያ ቤት ለገዢ ለማስረከብ ተስማምቶ ተዋውሏል፡
+           
+            </p>
+            ]]>
+        </field>
+        <field name="section_id" ref="contract_template_2"/> <!-- Replace with the actual contract section ID -->
+        <field name="is_title_printed">False</field>
+    </record>
+
+        <record id="contract_content_break31" model="contract.template.content">
+        <field name="sequence">16</field>
+        <field name="main_title">break</field>
+        <field name="content">
+            <![CDATA[
+            ]]>
+        </field>
+        <field name="section_id" ref="contract_template_2"/> <!-- Replace with the actual contract section ID -->
+        <field name="is_title_printed">False</field>
+    </record>
+
+    <record id="contract_pharase_41" model="contract.template.content">
+        <field name="sequence">17</field>
+        <field name="main_title">አንቀጽ 4</field>
+         <field name="subtitle">የጋራ መገልገያ ስፍራዎች</field>
+        <field name="content">
+            <![CDATA[
+            <p>
+            በጋራ የመኖሪያ ህንጻው ላይ የሚገኙ የጋራ መጠቀሚያና መገልገያዎች የሚባሉት ሊፍቶች፣ ደረጃዎች፣
+ሎቢ፣ ኮሪደሮች፣ የደረቅ ቆሻሻ መጣያዎች (Garbage Chute), የውሃ ታንከር፣ የውሃ ፓምፕ፣ ጀነሬተር፣
+3
+የጀነሬተር ማስቀመጫ ክፍል፣ በህንጻው ጣራ ላይ የሚገኝ ቴራስ፣ እና የጋራ ግቢ ናቸው፡፡
+4.2. የጋራ ህንጻው በውስጡ የአስተዳደር ቢሮ፣ የጥበቃ ቢሮና ማረፊያ፣ የጽዳት ሠራተኞች መቀየሪያና ዕቃ
+ማስቀመጫ፣ እና መጸዳጃ ቤት ይኖረዋል፣
+            </p>
+            ]]>
+        </field>
+        <field name="section_id" ref="contract_template_2"/> <!-- Replace with the actual contract section ID -->
+        <field name="is_title_printed">True</field>
+    </record>
+   
+   
+   <record id="contract_content_payment_payment_details1" model="contract.template.content">
+        <field name="sequence">18</field>
+        <field name="main_title">አንቀጽ 5</field>
+        <field name="subtitle">የአፓርታማ ቤቱ የመሸጫ ዋጋና የአከፋፈል ሁኔታ</field>
+        <field name="content">
+            <![CDATA[
+            <p>This section outlines the payment schedule.</p>
+            ]]>
+        </field>
+        <field name="section_id" ref="contract_template_2"/> <!-- Replace with the actual contract section ID -->
+        <field name="is_title_printed">True</field>
+        <field name="is_dynamic_content">True</field>
+        <field name="dynamic_code">payment_details</field>
+    </record>
+
+    <record id="contract_content_payment_schedule1" model="contract.template.content">
+        <field name="sequence">19</field>
+        <field name="main_title">Payment Schedule</field>
+        <field name="content">
+            <![CDATA[
+            <p>This section outlines the payment schedule.</p>
+            ]]>
+        </field>
+        <field name="section_id" ref="contract_template_2"/> <!-- Replace with the actual contract section ID -->
+        <field name="is_title_printed">False</field>
+        <field name="is_dynamic_content">True</field>
+        <field name="dynamic_code">payment_schedule</field>
+    </record>
+
+        <record id="contract_pharase_5_part_two" model="contract.template.content">
+        <field name="sequence">20</field>
+        <field name="main_title">አንቀጽ 5 - part two</field>
+         <field name="subtitle">የጋራ መገልገያ ስፍራዎች</field>
+        <field name="content">
+            <![CDATA[
+            <p>
+          5.4. ሻጭ ገዢ በሰጠው አድራሻ የክፍያ መጠየቂያ ይልካል፡፡ ገዥ የክፍያ መጠየቂያ ደብዳቤ በደረሰው በ30
+
+ቀናት ውስጥ የተጠየቀዉን ክፍያ አጠናቅቆ መክፈል ይኖርበታል፡፡
+
+5.5. ገዢ በአገሪቱ ባሉ የክፍያ መፈጸሚያ መንገዶች ክፍያውን ከፍሎ ሻጭ ቢሮ በመቅረብ ከድርጅቱ ህጋዊ
+
+ደረሰኝ ሲወስድ ብቻ ክፍያ እንደተፈጸመ ይቆጠራል፡፡
+
+5.6 የክፍያ መጠየቂያ ለገዢ ከደረሰ ከ30 ቀናት በኋላ በሚደረግ ክፍያ ላይ እስከ አንድ ወር ድረስ ባልተከፈለዉ
+
+ዉዝፍ ገንዘብ ላይ በወር 3% (ሶስት በመቶ) የሚታሰብ ቅጣት የሚያስከትል ሲሆን መጠየቂያው ከተላከ ከ60
+
+የሥራ ቀናት በኋላ ሻጭ ተጨማሪ ማስታወቂያ መላክ ሳያስፈልገው በነጠላ ውሳኔ ውሉን ሊያቋረጥ ይችላል፡፡
+
+ዉሉን ስለማቋረጡም የሚገልፅ ማስታወቂያ ዉሉ ላይ በተጠቀሰዉ አድራሻ ለገዢ ይልካል።
+
+5.7. በንዑስ አንቀጽ 5.3 ላይ የተመለከተው የክፍያ ጊዜ እንደተጠበቀ ሆኖ፣ ገዥ የቤቱን ጠቅላላ ዋጋ ሙሉ በሙሉ ወይም ግማሹን በቅድሚያ መክፈል ይችላል፡፡
+            </p>
+            ]]>
+        </field>
+        <field name="section_id" ref="contract_template_2"/> <!-- Replace with the actual contract section ID -->
+        <field name="is_title_printed">False</field>
+    </record>
+
+
+     <record id="contract_pharase_6" model="contract.template.content">
+        <field name="sequence">21</field>
+        <field name="main_title">አንቀጽ 6</field>
+         <field name="subtitle">የአፓርትማ ቤቱ ርክክብ</field>
+        <field name="content">
+            <![CDATA[
+        
+           6.1. ሻጭ በዚህ ውል መሠረት የመኖርያ ቤቱን በአንቀጽ 3 ላይ በተመለከተውና በግንባታ ዝርዝር መሠረት በመገንባት ሐምሌና ነሐሴን ሳይጨምር በ 36 ወራት ጊዜ ውስጥ ለገዢ ያስረክባል፡፡ ቀኑም መቆጠር የሚጀምረው ቅድሚያ-ክፍያ ተከፍሎ ውል ከተፈረመ ከሁለት ወራት በኋላ ነው፡፡
+           <br/>
+           6.2. በርክክብ ወቅት ለሚገኝ የልኬት ልዩነት/ ሥፋቱ ቢጨምር ወይም ቢቀንስ/ በልዩነቱ ላይ የዋጋ ማስተካከያይደረጋል፤፤
+           <br/>
+           6.3. ሻጭ የቤቱን የግንባታ እና የማጠናቀቂያ ሥራ በዝርዝሩ መሠረት እና ደረጃውን በጠበቀ ሙያዊ ክህሎት ስለመሠራቱ ኃላፊነት ይወስዳል፡፡ ለማናቸውም በአሠራር ጉድለት ለሚከሰቱ ጉዳቶች እንዲሁም ሻጭ ቤቱን ለደንበኛው ካስረከበበት ቀን ጀምሮ ለሚቆጠር የአንድ አመት ጊዜ ውስጥ ለሚከሰት ማናቸውም የግንባታ ችግር ተገቢውን ጥገና አድርጎ ማስረከብ አለበት፡፡
+           <br/>
+           6.4.ከሻጭ የተጓደለ አሰራር ውጪ ለሆኑና በገዥ በራሱ ወይም በሌላ ሦስተኛ ወገን ለሚደርሱ ወይም ለሚከሰቱ ጉድለቶች ገዥ ራሱ ወጪውን ይሸፍናል፡፡
+           <br/>
+           6.5. ሻጭ የመኖሪያ ቤቱን የጋራ መጠቀሚያዎችን ጨምሮ ጠቅላላ የቦታውን የሊዝ ዋጋ ከፍሎ ለገዢ ያስረክባል፡፡
+           <br/>
+           6.6. የውሃና የኤሌክትሪክ ቆጣሪ ስም የማዛወር ኃላፊነቱ የገዢው ነው፡፡
+          <br/>
+           6.7. ሻጭ የመኖሪያ ቤቱ ርክክብ ከተፈጸመ በኋላ ንብረቱ በገዥ ስም እንዲመዘገብ የሚስፈልጉትን ሰነዶች ሙሉ በሙሉ ያስረክባል፣ በሻጭ በኩል መፈጸም ያለባቸውን ተግባራት ያከናውናል፡፡
+           <br/>
+           6.8. የተሸጠው የመኖሪያ ቤት ባለቤትነት በገዥ ስም የሚዛወረው ገዥ የውልግዴታ ሲያሟላና የሚፈለግበትን ክፍያ ሙሉ በሙሉ አጠናቆ ሲጨርስ ይሆናል፡፡
+           <br/>
+           6.9. የባለቤትነት ስም በሚዛወርበት ጊዜ የስም ማዛወሪያ የአሹራ ታክስ እንዲሁም ማናቸውም በመንግስት የሚጠየቅ የስም ማዛወሪያ ወጪን በሙሉ ገዢ ይሸፍናል፡፡
+           <br/>
+           6.10. ገዥ የቤቱ ግንባታ ተጠናቆ ለርክክብ ዝግጁ ሲሆን የመኖሪያ ቤቱን የመረከብ እና የንብረቱን ርስተመዝገብ ወይም ካርታ በሚመለከተው አካል ፊት ቀርቦ የማዞር ግዴታና ኃላፊነት አለበት፡፡
+           <br/>
+           6.11. ገዢው ካርታውን በራሱ ስም ካዞረ በኋላ የህንፃዉን ስትራክቸር እና የአገልግሎት መስጫ መስመሮችን በሚያዉክ (በሚረብሽ) ሁኔታ ተጨማሪ ግንባታዎችን ማድረግ አይችልም፡፡ እንዲሁም የውጭ ኮሪደሮችን የተለየ ቀለም መቀባት ፈጽሞ አይፈቀድለትም፡፡ ሆኖም ለውጥ ለማድረግ ከፈለገ ወደፊት ለሚመሰረተው የጋራ ጥቅም ማኅበር (የነዋሪዎች ኮሚቴ) ጉዳዩን አቅርቦ ማስፈቀድ ይችላል፡፡
+           <br/>
+           6.12. ገዢ የጋራ መኖሪያ ቤት ተጠቃሚዎች ማህበር በሚያወጣው ደንብ መሠረት ለመተዳደርና ለመገዛት ይገደዳል፡ 
+           <br/>
+           6.13. ገዢ ቤቱን በተረከበ በ6 ወራት ጊዜ ውስጥ የፊኒሺንግ ሥራዎችን በማሠራት ቤቱን ለመኖሪያነት ዝግጁ ማድረግ አለበት፡፡ ይህ ባይሆን በጋራ ህንጻ ባለቤቶች አዋጅ ቁጥር 370/2003 መሠረት ተጠያቂ ይሆናል፡  ፡ ገዥ ውል እንዳቋረጠ ይቆጠራል፡፡
+
+            ]]>
+        </field>
+        <field name="section_id" ref="contract_template_2"/> <!-- Replace with the actual contract section ID -->
+        <field name="is_title_printed">True</field>
+    </record>
+
+    <record id="contract_pharase7" model="contract.template.content">
+        <field name="sequence">22</field>
+        <field name="main_title">አንቀጽ 7</field>
+         <field name="subtitle">ስለ ባለቤትነትና የጋራ ሃብትነት</field>
+        <field name="content">
+            <![CDATA[
+            <p>
+              7.1. ገዢ በዚህ ውል መሠረት በገዛው ቤትና በጋራ መገልገያዎች ላይ የሚኖረው መብት በሀገሪቱ የጋራ ህንጻ ባለቤትነት አዋጅ ቁጥር 370/2003 እና በሌሎች አግባብነት ባላቸው የሀገሪቱ ህጎች የሚገዛ ይሆናል፡፡ 
+            </p>
+            ]]>
+        </field>
+        <field name="section_id" ref="contract_template_2"/> <!-- Replace with the actual contract section ID -->
+        <field name="is_title_printed">True</field>
+    </record>
+
+<record id="contract_pharase_8" model="contract.template.content">
+        <field name="sequence">23</field>
+        <field name="main_title">አንቀጽ 8</field>
+         <field name="subtitle">ከርክክብ በኃላ ስለሚኖሩ ግዴታዎች</field>
+        <field name="content">
+            <![CDATA[
+            <p>
+             8.1. ገዥ የመኖሪያ ቤቱን አጠናቆ የስም ዝውውር ከተከናወነ በኋላ ቤቱ ውስጥ ማንኛውም የግንባታ ሥራ ማከናወን የሚችለው ሊሠራው ላሰበው የለውጥ ሥራ ከጋራ ጥቅም ማህበር ፈቃድ ካገኘ በኋላ ነው፡፡ 
+            8.2. ገዥ በንዑስ አንቀጽ 8.1 የተደነገጉትን በመጣስ ለሚከሰት ማንኛውም ችግር ተጠያቂ ይሆናል፡፡ 
+            8.3. ሻጭ የአፓርትማ ቤቱን ሙሉ ለሙሉ ለገዢዎች ካስረከበ በኃላ ለ1ዓመት የጋራ መኖሪያ ህንጻውን የሚያስተዳድር ሲሆን ከአንድ ዓመት በኋላ ከነዋሪዎች የሚውጣጣ የጋራ ማህበሩ እንዲቋቋም ያደርጋል፡፡ ማህበሩ እስኪቋቋም ድረስ ገዥ ሻጭ ያዘጋጀውን የህንጻውን ጊዜያዊ የመተዳደሪያ ደንብ ተግባራዊ እንዲሆን ተስማምቷል፡፡ ጊዜያዊ የመተዳደሪያ ደንቡም የውሉ አካል ይሆናል፡፡ 
+            8.4. ሻጭ ቤቱ ን በሚያስተዳድርበት ጊዜ የጋራ መኖሪያ ቤቱን ለማስተዳደር የሚወጡ ወጪዎች የሚሸፈኑት በገዥዎች ይሆናል፡፡ ገዥም አጠቃላይ ወጪው ተሰልቶ የሚደርስበትን መጠን ለመክፍል ተስማምቷል፡፡ 
+            
+            </p>
+            ]]>
+        </field>
+        <field name="section_id" ref="contract_template_2"/> <!-- Replace with the actual contract section ID -->
+        <field name="is_title_printed">True</field>
+    </record>
+
+<record id="contract_pharase_9" model="contract.template.content">
+        <field name="sequence">24</field>
+        <field name="main_title">አንቀጽ 9</field>
+         <field name="subtitle">ውልን ስለማቋረጥ</field>
+        <field name="content">
+            <![CDATA[
+            <p>
+           
+                9.1. በዚህ ውል አንቀጽ 5፣ በንዑስ አንቀጽ 5.6. ላይ በተመለከተው ምክንያት ውሉ የሚቋረጥ ከሆነ ሻጭ ከተከፈለው ገንዘብ ላይ የሚሰላ 10% የአስተዳደራዊ ወጪ ተቀናሽ አድርጎ ቀሪውን ገንዘብ ውሉን ላላከበረው ገዥ ተመላሽ ያደርጋል፡፡ ሆኖም ገንዘቡ ለገዥ ተመላሽ የሚሆነው የመኖርያ ቤቱ ለሌላ ገዥ በሽያጭ ከተላለፈ በኋላ ይሆናል፡፡ 
+
+                9.2 ከሻጭ ቁጥጥር ውጭ በሆኑ ምክንያቶች የግንባታ መዘግየት ከተፈጠረ ሻጭ ያጋጠመውን ምክንያት በፅሑፍ ለገዢው በ 30 (ሰላሳ) ቀናት ውስጥ በማሳወቅ የግንባታው ጊዜ ለተጨማሪ 3 (ሶስት) ወራት ሊያራዝም ይችላል፡፡ ከዚህ በኃላ ሻጭ በተራዘመው የጊዜ ገደብ ውስጥ ቤቱን አጠናቆ ማስረከብ ካልቻለ እና ገዠ በዉሉ ለመቀጠል ካልፈለገ ከከፈለዉ ገንዘብ ላይ 20% መቀጫን ጨምሮ በጅምር ላይ ያለዉን ቤት ለ3ኛ ወገን በመሸጥ የተቀበለዉን ገንዘብ ለገዢ ይመልሳል፡፡ 
+
+                9.3ገዢ ከአቅም በላይ በሆነ ምክንያት መዘግየቱን ተቀብሎ ቤቱን ለመረከብ ከወሰነ ከዉሉ ዉጪ ለዘገየበት ጊዜ ማካካሻ በቀን 0.01% ያህል ገንዘብ ለገዢ ይከፍላል፡፡ 
+
+                9.4. በውሉ መሠረት አልተፈጸመልኝም የሚል ወገን ውል በማቋረጥ የሚገባውን መብቱን መጠየቅ ይችላል፡፡ ይሁን እንጂ ውሉን ከማቋረጡ በፊት ተጎድቻለሁ የሚል ወገን ማስተካከያ እንዲደረግ የ30 ቀናት የጽሑፍ ማስጠንቀቂ መስጠት ይኖርበታል፡፡ በዚህ ጊዜ ውስጥ የተጠየቀው ማስተካከያ ካልተደረገ ውሉን በማቋረጥ መብቱን አግባብ ባለው መንገድ መጠየቅ ይችላል፡፡ 
+            </p>
+            ]]>
+        </field>
+        <field name="section_id" ref="contract_template_2"/> <!-- Replace with the actual contract section ID -->
+        <field name="is_title_printed">True</field>
+    </record>
+
+<record id="contract_pharase_10" model="contract.template.content">
+        <field name="sequence">25</field>
+        <field name="main_title">አንቀጽ 10</field>
+         <field name="subtitle">በውሉ መሠረት ለማስረከብ አስቻይ ያልሆኑ ሁኔታዎች</field>
+        <field name="content">
+            <![CDATA[
+            <p>
+                10.1. ከአቅም በላይ የሆኑ ጉዳዮች በሚባሉት በአገሪቱ የፍትሐብሄር ህግ ቁጥር 1793 ከ“ሀ” እስከ “ሠ” የተዘረዘሩት ጉዳዮች ሲያጋጥሙ፣ 
+
+                10.2. አስቀድሞ ባልታሰበ ሁኔታ የመኖርያ ቤቱን ለመገንባት ወሳኝ የሆኑ ግብዓቶች ከገበያ ላይ መጥፋት፣ የግንባታ ሠራተኞች ወደ ሥራ እንዳይገቡ የሚከለክል የበሽታ ወረርሽኝ መከሰት፣ የግንባታ ሂደትን 7 የሚስቆም የፍርድ ቤት ዕግድ የመሳሰሉት ሲጋጥሙ፣ 
+
+                10.3. ከተዋዋይ ወገኖች አንዱ ከአቅም በላይ ጉዳዮች ያጋጠመው መሆኑን ጉዳዩ እንደተከሰተ በ30 ቀናት ውስጥ ዝርዝር የጽሁፍ ማስታወሻ መቀያያር አለባቸው፡፡ ዝርዝር የጽሁፍ ማስታወሻው አማራጭ መፍትሄ ማመላከት አለበት 
+            </p>
+            ]]>
+        </field>
+        <field name="section_id" ref="contract_template_2"/> <!-- Replace with the actual contract section ID -->
+        <field name="is_title_printed">True</field>
+    </record>
+    <record id="contract_pharase_11" model="contract.template.content">
+        <field name="sequence">26</field>
+        <field name="main_title">አንቀጽ 11</field>
+         <field name="subtitle">የተዋዋይ ወገኖች አድራሻ</field>
+        <field name="content">
+            <![CDATA[
+            <p>
+                11.1. ገዥና ሻጭ ውል ከፈጸሙ በኃላ በየበኩላቸው ከውሉ አፈጻጸም ጋር ተያያዥነት የላቸው ጉዳዮች ሲያጋጥሟቸው በዚህ ውል አንቀጽ አንድ ላይ በተመለከቱት የገዢና የሻጭ አድራሻዎች መሰረት በጽሁፍ ወይም በስልክ፣ ወይም በኢ-ሜል የመልዕክት ልውውጥ ለማድረግ ተስማምተዋል፡፡
+
+                11.2. ከተዋዋይ ወገኖች አንዱ ለሌላው ማስተላለፍ የሚፈልገውን መልዕክት ከላይ በተቀመጡት አማራጭ መንገዶች በአንዱ እንዲደርስ ካደረገ መልእክቱ ለሌላኛው ወገን እንደደረሰው ይቆጠራል፡፡ 
+
+                11.3. ከተዋዋይ ወገኖች አንዱ የአድራሻ ለውጥ ሲያድርግ የአድራሻ ለውጥ ማድረጉን ለሌላኛው ወገን በ7 (ሰባት) ቀናት ውስጥ በጽሁፍ ማሳወቅ ግዴታ አለበት፡፡ 
+
+                11.4. ከተዋዋይ ወገኖች አንዱ ሌላውን ሳያሳውቅ የአድራሻ ለውጥ ቢያደርግ መልዕክቱ እንደደረሰ ከመቆጠር አያግደውም፡፡ 
+               
+            </p>
+            ]]>
+        </field>
+        <field name="section_id" ref="contract_template_2"/> <!-- Replace with the actual contract section ID -->
+        <field name="is_title_printed">True</field>
+    </record>
+
+
+    <record id="contract_pharase_11" model="contract.template.content">
+        <field name="sequence">26</field>
+        <field name="main_title">አንቀጽ 12</field>
+         <field name="subtitle">የተዋዋይ ወገኖች አድራሻ</field>
+        <field name="content">
+            <![CDATA[
+            <p>
+                12.1. ሻጭና ገዢ በመካከላቸው አለመግባባት ሲፈጠር በውይይት ለመፍታት አስፈላጊውን ሁሉ ጥረት ለማድረግ ተስማምተናል፡፡ 
+
+                12.2. አለመግባባቱ በውይይት ካልተፈታ ሁለቱም ወገኖች በየራሳቸው በመረጡት የግልግል ዳኞች እና በግልግል ዳኞች በሚመረጥ ሰብሳቢ አማካኝነት በሽምግልና እንዲታይ ተስማምተናል፡፡ 
+
+                12.3. የግልግል ዳኞች ተስማምተው የጋራ ሰብሳቢ መምረጥ የማይችሉ ከሆነ የአዲስ አበባ ንግድ ምክር ቤት በሚሰይመው ሰብሳቢ ዳኛ ይመራል፡፡ 
+
+                12.4. የግልግል ዳኞቹን አበልና ወጪ ተሸማጋይ ወገኖች በየራሳቸው ይሸፍናሉ፡፡ የሰብሳቢውን ዳኛ አበልና ወጪ ሁለቱም ተሸማጋይ ወገኖች በእኩል ድርሻ አዋጥተው ይከፍላሉ፡፡ 
+
+                12.5. በግልግል ዳኞቹ የሚሰጠው ውሳኔ በሁለቱም ተሸማጋይ ወገኖች ላይ ተፈጻሚ ይሆናል፡፡ 
+
+                12.6. አለመግባባቱ ወደ መደበኛ ፍርድ ቤት የሚያመራ ከሆነ የዳኝነት ቦታው አዲስ አበባ ከተማ እንዲሆን ተስማምተናል፡፡ የዳኝነት ቋንቋውም አማርኛ ይሆናል፡፡ 
+               
+            </p>
+            ]]>
+        </field>
+        <field name="section_id" ref="contract_template_2"/> <!-- Replace with the actual contract section ID -->
+        <field name="is_title_printed">True</field>
+    </record>
+
+    <record id="contract_pharase_13" model="contract.template.content">
+        <field name="sequence">27</field>
+        <field name="main_title">አንቀጽ 13</field>
+         <field name="subtitle"></field>
+        <field name="content">
+            <![CDATA[
+            <p>
+                
+                በውሉ ላይ በዋነኛነት ተፈጻሚ የሚሆኑ ሕጎች ገዢው የገዛው በጋራ መኖሪያ ሕንጻ ውስጥ የሚገኝ አንድ የመኖርያ ቤት በመሆኑ በዚህ ውል ምክንያት የሚነሱ አለመግባባቶችን በተመለከተ አግባብነት ያላቸው የሚከተሉት ሕግጋት አንቀጾች ተፈጻሚዎች ናቸው፡፡ 
+                    8 ሀ) በ1952 የወጣው የኢትዮጲያ ፍትሐብሄር ሕግ
+                    ለ) የኢትዮጵያ ፍትሐብሄር ሥነ ሥርዓት ሕግ 
+                    ሐ) የጋራ መኖሪያ ህንጻ አዋጅ ቁጥር 370/2003 
+                    መ) የሊዝ አዋጅ ቁጥር 29/2003፣ እና 3/1994
+                    ሠ) ከተማ የሊዝ ይዞታ እንደገና ለመደንገግ የወጣ አዋጅ ቁጥር 272/2002 
+                    ረ) ሌሎች ከዚህ ውል ጋር ተያያዥነት ያላቸው የአገሪቱ ህጎች፣ ደንቦች፣ መመሪያዎችና ማስታወቂዎች
+            </p>
+            ]]>
+        </field>
+        <field name="section_id" ref="contract_template_2"/> <!-- Replace with the actual contract section ID -->
+        <field name="is_title_printed">True</field>
+    </record>
+     <record id="contract_pharase_14" model="contract.template.content">
+        <field name="sequence">28</field>
+        <field name="main_title">አንቀጽ 14</field>
+         <field name="subtitle"> የዋናው ውል አካል ወይም ተያያዥ የሆኑ ሰነዶች </field>
+        <field name="content">
+            <![CDATA[
+            <p>
+                
+                14.1. የመኖርያ ቤቱ ንድፍ፤የክፍሎቹ ዝርዝር ሁኔታ ፤ግንባታው የሚከናወንበት ግብዓት እና ሌሎች ተጓዳኝ መግለጫዎች 
+
+                14.2. የባለቤትነት ማረጋገጫ ሰርተፍኬት (ካርታ ኮፒ) 
+
+                14.3. የመኖርያ ቤቱ ወለል ንድፍ 
+
+                14.4. የመኖርያ ቤቱ አሠራርና አጠቃላይ ይዘት 
+
+                14.5. የመኖርያ ቤት ግዥ ማመልከቻ ቅጽ 
+            ]]>
+        </field>
+        <field name="section_id" ref="contract_template_2"/> <!-- Replace with the actual contract section ID -->
+        <field name="is_title_printed">True</field>
+    </record>
+     <record id="contract_pharase_14" model="contract.template.content">
+        <field name="sequence">28</field>
+        <field name="main_title">አንቀጽ 15</field>
+         <field name="subtitle"> ስምምነቱ ሥራ ላይ የሚውልበት ጊዜ </field>
+        <field name="content">
+            <![CDATA[
+            <p>
+                
+              
+ ስምምነቱ ሥራ ላይ የሚውልበት ጊዜ 
+
+15.1. ይህ ውል ገዥ ቅድመ ክፍያ የከፈለበትን ሰነድ ይዞ በመቅረብ ከሻጭ ጋር ውሉን ከተፈራረመበት ዕለት ጀምሮ የጸና ይሆናል፡፡ 
+            ]]>
+        </field>
+        <field name="section_id" ref="contract_template_2"/> <!-- Replace with the actual contract section ID -->
+        <field name="is_title_printed">True</field>
+    </record>
+
+
+
+
+
+
+
+    <record id="contract_date_signature_dynamic" model="contract.template.content">
+        <field name="sequence">29</field>
+        <field name="main_title">Contract Date Signature dynamic</field>
+        <field name="content">
+            <![CDATA[
+          
+            ]]>
+        </field>
+        <field name="section_id" ref="contract_template_2"/> <!-- Replace with the actual contract section ID -->
+        <field name="is_title_printed">False</field>
+        <field name="is_dynamic_content">True</field>
+        <field name="dynamic_code">contract_date_signature</field>
+    </record>
+
+    <record id="contract_date_signature" model="contract.template.content">
+        <field name="sequence">30</field>
+        <field name="main_title">Contract Date Signature</field>
+        <field name="content">
+            <![CDATA[
+          ስለ ሻጭ 	​	​	​	​	​	​	​	​	​	​	​	​ስለ ገዥ 
+
+ስም ------------------------------- 	​	​	​	​	​	​	​ስም ------------------------------ 
+
+ኃላፊነት--------------------------- 	​	​	​	​	​	​	​ፊርማ---------------------------------- 
+
+ፊርማ------------------------------ 
+
+
+
+
+            ]]>
+        </field>
+        <field name="section_id" ref="contract_template_2"/> <!-- Replace with the actual contract section ID -->
+        <field name="is_title_printed">False</field>
+    </record>
+
+    <record id="contract_date_witness" model="contract.template.content">
+        <field name="sequence">31</field>
+        <field name="main_title">እማኞች</field>
+        <field name="content">
+            <![CDATA[
+          
+            ]]>
+        </field>
+        <field name="section_id" ref="contract_template_2"/> <!-- Replace with the actual contract section ID -->
+        <field name="is_title_printed">False</field>
+        <field name="is_dynamic_content">True</field>
+        <field name="dynamic_code">contract_witness</field>
+    </record>
+
+
+     <record id="paperformat_contract_agreement" model="report.paperformat">
+            <field name="name">Contract Agreement Paper Format</field>
+            <field name="default" eval="False" />
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">15</field>
+            <field name="margin_bottom">10</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">10</field>
+        </record>
+
+    
+    
+     
+    </data>
+
+</odoo>

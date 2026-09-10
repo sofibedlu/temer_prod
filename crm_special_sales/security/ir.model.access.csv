@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_temer_lead_type_lead_type,temer.lead.type.lead.type,model_temer_lead_type,crm_special_sales.group_lead_type,1,1,1,1
+access_temer_lead_type_special_sales_read,temer.lead.type.special.sales.read,model_temer_lead_type,crm_special_sales.group_special_sales,1,0,0,0
+access_temer_lead_type_user_read,temer.lead.type.user.read,model_temer_lead_type,base.group_user,1,0,0,0
+access_crm_special_sales_stub_special_sales,crm.special.sales.special.sales,model_crm_special_sales,crm_special_sales.group_special_sales,1,1,1,1
+access_crm_special_sales_company_special_sales,crm.special.sales.company.special.sales,model_crm_special_sales_company,crm_special_sales.group_special_sales,1,1,1,1
+access_crm_special_sales_freelance_special_sales,crm.special.sales.freelance.special.sales,model_crm_special_sales_freelance,crm_special_sales.group_special_sales,1,1,1,1
+access_crm_employee_ref_user,crm.employee.ref.user,model_crm_employee_ref,base.group_user,1,0,0,0
+access_crm_employee_ref_special_sales,crm.employee.ref.special.sales,model_crm_employee_ref,crm_special_sales.group_special_sales,1,1,1,1

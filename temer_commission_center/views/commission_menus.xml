@@ -1,0 +1,80 @@
+<odoo>
+    <!-- Root -->
+    <menuitem id="temer_commission_center_menu_root"
+              name="Commission Center"
+              groups="temer_commission_center.group_commission_manager"
+              sequence="10"/>
+
+    <!-- Operations -->
+    <menuitem id="temer_commission_center_menu_operations"
+              name="Operations"
+              parent="temer_commission_center_menu_root"
+              sequence="10"/>
+
+    <menuitem id="temer_commission_center_menu_configuration"
+              name="Configuration"
+              parent="temer_commission_center_menu_root"
+              sequence="90"/>
+
+    <!-- Actions -->
+    <record id="action_temer_commission_sheet" model="ir.actions.act_window">
+        <field name="name">Commission Sheets</field>
+        <field name="res_model">temer.commission.sheet</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_temer_commission_payment" model="ir.actions.act_window">
+        <field name="name">Commission Payments</field>
+        <field name="res_model">temer.commission.payment</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_temer_commission_policy" model="ir.actions.act_window">
+        <field name="name">Commission Policies</field>
+        <field name="res_model">temer.commission.policy</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_temer_commission_prepared_payment" model="ir.actions.act_window">
+        <field name="name">Prepared Payments</field>
+        <field name="res_model">temer.commission.payment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('approval_state', '=', 'prepared')]</field>
+    </record>
+
+    <!-- Menus -->
+    <menuitem id="temer_commission_center_menu_sheets"
+              name="Commission Sheets"
+              parent="temer_commission_center_menu_operations"
+              action="action_temer_commission_sheet"
+              sequence="10"/>
+
+    <menuitem id="temer_commission_center_menu_prepared_payments"
+              name="Prepared Payments"
+              parent="temer_commission_center_menu_root"
+              action="action_temer_commission_prepared_payment"
+              sequence="15"/>
+
+    <menuitem id="temer_commission_center_menu_payments"
+              name="Commission Payments"
+              parent="temer_commission_center_menu_operations"
+              action="action_temer_commission_payment"
+              sequence="20"/>
+
+    <menuitem id="temer_commission_center_menu_policies"
+              name="Commission Policies"
+              parent="temer_commission_center_menu_configuration"
+              action="action_temer_commission_policy"
+              sequence="10"/>
+
+    <menuitem id="temer_commission_center_menu_reporting"
+              name="Reporting"
+              parent="temer_commission_center_menu_root"
+              sequence="50"/>
+
+    <menuitem id="temer_commission_center_menu_report_xlsx"
+              name="Commission Report (Excel)"
+              parent="temer_commission_center_menu_reporting"
+              action="action_temer_commission_report_wizard"
+              sequence="10"/>
+</odoo>

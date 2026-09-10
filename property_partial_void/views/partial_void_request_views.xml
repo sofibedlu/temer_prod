@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_partial_void_request" model="ir.sequence">
+        <field name="name">Partial Void Request</field>
+        <field name="code">partial.void.request</field>
+        <field name="prefix">P-VOID/</field>
+        <field name="padding">4</field>
+    </record>
+
+    <record id="view_partial_void_request_form" model="ir.ui.view">
+        <field name="name">partial.void.request.form</field>
+        <field name="model">partial.void.request</field>
+        <field name="arch" type="xml">
+            <form string="Partial Void Request" create= "0" delete="0">
+                <header>
+                    <!-- Checker Button -->
+                    <button name="action_check" string="Check" type="object" class="btn-primary" 
+                            invisible="state != 'draft'" 
+                            groups="property_contract_extension.group_property_void_request_menu"/>
+                            
+                    <!-- Approver Button -->
+                    <button name="action_approve" string="Approve &amp; Restore Inventory" type="object" class="btn-success" 
+                            invisible="state != 'checked'" 
+                            groups="property_void_request_custom.group_property_void_request_approver"
+                            confirm="Are you sure? This will permanently restore the dropped units to inventory and shrink the contract."/>
+                            
+                    <!-- Reject Button (Available to both Checkers and Approvers) -->
+                    <button name="action_reject" string="Reject" type="object" class="btn-danger" 
+                            invisible="state in ['approved', 'rejected']" 
+                            groups="property_contract_extension.group_property_void_request_menu,property_void_request_custom.group_property_void_request_approver"/>
+                            
+                    <field name="state" widget="statusbar" statusbar_visible="draft,checked,approved,rejected"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="collection_id"/>
+                            <field name="sale_id"/>
+                            <field name="parent_property_id"/>
+                        </group>
+                        <group>
+                            <field name="reason" readonly="state != 'draft'"/>
+                            <field name="attachment_ids" widget="many2many_binary" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Units to Drop">
+                            <field name="line_ids" readonly="state != 'draft'">
+                                <tree editable="bottom" create="0">
+                                    <field name="unit_name"/>
+                                    <field name="unit_number"/>
+                                    <field name="gross_area"/>
+                                    <field name="unit_price"/>
+                                    <field name="currency_id" column_invisible="True"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_partial_void_request_tree" model="ir.ui.view">
+        <field name="name">partial.void.request.tree</field>
+        <field name="model">partial.void.request</field>
+        <field name="arch" type="xml">
+            <tree string="Partial Void Requests" 
+                  decoration-info="state == 'draft'" 
+                  decoration-warning="state == 'checked'" 
+                  decoration-success="state == 'approved'" 
+                  decoration-danger="state == 'rejected'"
+                  create= "0" delete="0">
+                <field name="name"/>
+                <field name="collection_id"/>
+                <field name="create_date"/>
+                <field name="create_uid" string="Requested By"/>
+                <field name="state" widget="badge" 
+                       decoration-info="state == 'draft'" 
+                       decoration-warning="state == 'checked'" 
+                       decoration-success="state == 'approved'" 
+                       decoration-danger="state == 'rejected'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- For the Root Partial Voids Menu (Shows all requests) -->
+    <record id="action_partial_void_request" model="ir.actions.act_window">
+        <field name="name">Partial Void Requests</field>
+        <field name="res_model">partial.void.request</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- For the Contract Team (Shows only Checked/Approved) -->
+    <record id="action_contract_team_partial_voids_checked" model="ir.actions.act_window">
+        <field name="name">Checked Partial Voids</field>
+        <field name="res_model">partial.void.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', 'in', ['checked', 'approved'])]</field>
+    </record>
+
+    <!-- Checker's Root Menu (Outside Collection) -->
+    <menuitem id="menu_root_partial_void" 
+              name="Partial Voids" 
+              groups="property_contract_extension.group_property_void_request_menu"
+              sequence="55"/>
+
+    <menuitem id="menu_partial_void_requests"
+              name="Void Requests"
+              parent="menu_root_partial_void"
+              action="action_partial_void_request"
+              sequence="10"/>
+
+    <!-- Approver's Menu (Under Contract Team Adjustments) -->
+    <menuitem id="menu_contract_team_checked_partial_voids"
+              name="Checked Partial Voids"
+              parent="property_void_request_custom.menu_contract_team_adjustments_root"
+              action="action_contract_team_partial_voids_checked"
+              groups="property_void_request_custom.group_property_void_request_approver"
+              sequence="25"/>
+</odoo>

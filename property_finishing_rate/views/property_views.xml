@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="property_property_view_form_finishing_rate" model="ir.ui.view">
+        <field name="name">property.property.form.finishing.rate</field>
+        <field name="model">property.property</field>
+        <field name="inherit_id" ref="advanced_property_management.property_property_view_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Rate-m² right after finishing field, no button -->
+            <xpath expr="//field[@name='finishing']" position="after">
+                <field name="rate_per_m2"
+                       string="Rate-m²"
+                       invisible="finishing != 'fully_finished'"/>
+            </xpath>
+
+            <!-- Commercial Amount right after property_type field -->
+            <xpath expr="//field[@name='property_type']" position="after">
+                <field name="commercial_amount"
+                       string="Commercial Amount"
+                       invisible="property_type != 'commercial'"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

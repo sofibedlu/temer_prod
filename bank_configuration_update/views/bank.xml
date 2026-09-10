@@ -1,0 +1,75 @@
+<odoo>
+    <!-- Bank Model List View -->
+    <record id="view_ethiopian_bank_tree" model="ir.ui.view">
+        <field name="name">ethiopian.bank.tree</field>
+        <field name="model">ethiopian.bank</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_ethiopian_bank_form" model="ir.ui.view">
+        <field name="name">ethiopian.bank.form</field>
+        <field name="model">ethiopian.bank</field>
+        <field name="arch" type="xml">
+            <form>
+                <field name="name"/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Bank Account List View -->
+    <record id="view_ethiopian_bank_account_tree" model="ir.ui.view">
+        <field name="name">ethiopian.bank.account.tree</field>
+        <field name="model">ethiopian.bank.account</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="bank_id"/>
+                <field name="account_number"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_ethiopian_bank_account_form" model="ir.ui.view">
+        <field name="name">ethiopian.bank.account.form</field>
+        <field name="model">ethiopian.bank.account</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="bank_id"/>
+                    <field name="account_number"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <!-- Actions and Menu -->
+    <record id="action_ethiopian_bank_account" model="ir.actions.act_window">
+        <field name="name">Ethiopian Bank Accounts</field>
+        <field name="res_model">ethiopian.bank.account</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <record id="action_ethiopian_bank" model="ir.actions.act_window">
+        <field name="name">Ethiopian Banks</field>
+        <field name="res_model">ethiopian.bank</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem id="menu_ethiopian_bank_root" parent="ahadubit_property_base.property_payment_menu" name="Bank Management"
+              sequence="10"/>
+    <menuitem id="menu_ethiopian_bank"
+              name="Ethiopian Banks"
+              parent="menu_ethiopian_bank_root"
+              action="action_ethiopian_bank"
+              sequence="20"/>
+    <!--    <menuitem id="menu_ethiopian_bank_account"-->
+    <!--              name="Company Bank Accounts"-->
+    <!--              parent="menu_ethiopian_bank_root"-->
+    <!--              action="action_ethiopian_bank_account"-->
+    <!--              sequence="30"/>-->
+    <menuitem id="ahadubit_property_reservation.bank_menu"
+              name="Company Bank Accounts"
+              parent="menu_ethiopian_bank_root"
+              action="ahadubit_property_reservation.bank_action"
+              sequence="24"/>
+
+</odoo>

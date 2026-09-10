@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Inherit the installment.update.log form view to add the
+        "Fix Missed Installment" button in the header.
+        The base form has create="0" edit="0" so we only add
+        a button that opens the standalone wizard.
+    -->
+    <record id="view_installment_update_log_form_inherit_fix" model="ir.ui.view">
+        <field name="name">installment.update.log.form.inherit.fix</field>
+        <field name="model">installment.update.log</field>
+        <field name="inherit_id" ref="installment_update.view_installment_update_log_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <button
+                        name="action_open_fix_wizard"
+                        type="object"
+                        string="Fix Missed Installment"
+                        class="oe_highlight"/>
+                </header>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

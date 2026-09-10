@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_property_sale_search_inherit_update_flag" model="ir.ui.view">
+        <field name="name">property.sale.search.inherit.update.flag</field>
+        <field name="model">property.sale</field>
+        <field name="inherit_id" ref="property_contract.view_property_contract_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <separator/>
+                <filter string="Needs Approval Review" 
+                        name="updated_pending_approval_filter" 
+                        domain="[('updated_pending_approval', '=', True), ('state', '=', 'confirm')]"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

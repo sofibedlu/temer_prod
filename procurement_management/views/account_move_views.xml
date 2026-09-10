@@ -1,0 +1,47 @@
+<odoo>
+    <!-- Update Fields & Button to Vendor Bill Form -->
+    <record id="view_move_form_inherit_payment_approval" model="ir.ui.view">
+        <field name="name">account.move.form.inherit.payment.approval</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_approve_for_payment" 
+                        string="Approve for Payment" 
+                        type="object" 
+                        class="btn-primary" 
+                        invisible="move_type != 'in_invoice' or state != 'posted' or payment_approval_state == 'approved' or payment_state in ('paid', 'in_payment')"/>
+            </xpath>
+            
+            <xpath expr="//field[@name='payment_reference']" position="after">
+                <field name="payment_approval_state" invisible="move_type != 'in_invoice'" readonly="1"/>
+                <field name="approved_by_id" invisible="move_type != 'in_invoice' or payment_approval_state != 'approved'" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Action & Menu for Approved Bills -->
+    <record id="action_approved_vendor_bills" model="ir.actions.act_window">
+        <field name="name">Approved Vendor Bills</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('move_type', '=', 'in_invoice'), ('payment_approval_state', '=', 'approved')]</field>
+        <field name="context">{'default_move_type': 'in_invoice'}</field>
+    </record>
+
+    <menuitem id="menu_approved_vendor_bills" 
+              name="Approved Vendor Bills" 
+              parent="procurement_management.menu_procurement_root" 
+              action="action_approved_vendor_bills" 
+              sequence="30"/>
+
+    <!-- Payment Receipt Report to show 'Approved By' -->
+    <template id="report_payment_receipt_document_inherit_approval" inherit_id="account.report_payment_receipt_document">
+        <xpath expr="//span[@t-field='o.date']/.." position="after">
+            <div class="col-6 mb-2" t-if="o.bill_approved_by_id">
+                <strong>Approved By:</strong>
+                <span t-field="o.bill_approved_by_id.name"/>
+            </div>
+        </xpath>
+    </template>
+</odoo>

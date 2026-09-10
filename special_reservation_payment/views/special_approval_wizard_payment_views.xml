@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_special_approval_wizard_payment_inherit" model="ir.ui.view">
+        <field name="name">special.approval.wizard.payment.inherit</field>
+        <field name="model">special.approval.wizard</field>
+        <field name="inherit_id" ref="special_reservation.view_special_approval_wizard_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='state_new']" position="after">
+                <field name="show_add_payment" invisible="1"/>
+                <field name="wizard_payment_total" invisible="1"/>
+                <field name="has_committed_lines" invisible="1"/>
+                <field name="show_committed_payment_lines" invisible="1"/>
+            </xpath>
+
+            <!--
+                Payment section between amount/duration row and Manager Response.
+                Visible when amount > 0 (show_add_payment).
+
+                - state == 'draft'     : temp_payment_line_ids (editable, NOT on reservation)
+                - state != 'draft'     : payment_line_ids (committed, read-only + verify toggle)
+            -->
+            <xpath expr="//field[@name='manager_response']/.." position="before">
+                <div invisible="not show_add_payment"
+                     style="background:linear-gradient(135deg,#f0fff4 40%,#e0f7fa 100%);
+                            border-radius:20px;
+                            padding:14px 16px;
+                            box-shadow:0 2px 10px #00c85310;
+                            margin-bottom:20px;
+                            max-width:100%;
+                            box-sizing:border-box;">
+
+                    <div style="display:flex;justify-content:space-between;align-items:center;
+                                margin-bottom:8px;flex-wrap:wrap;gap:8px;">
+                        <div style="font-size:1em;color:#1a7a4a;font-weight:700;">
+                            Payment
+                        </div>
+                        <button name="action_clear_temp_payment_lines"
+                                type="object"
+                                string="Clear Lines"
+                                class="btn btn-secondary btn-sm"
+                                invisible="state != 'draft' or not temp_payment_line_ids"/>
+                    </div>
+
+                    <!-- Draft: temp lines for new entry -->
+                    <field name="temp_payment_line_ids"
+                           nolabel="1"
+                           invisible="state != 'draft'"
+                           context="{'default_wizard_id': id}">
+                        <tree string="Payment Line" editable="bottom" delete="1">
+                            <control>
+                                <create name="add_product_control" string="Add a Line"/>
+                            </control>
+                            <field name="bank_id" create="0"/>
+                            <field name="document_type_id" create="0"/>
+                            <field name="ref_number"/>
+                            <field name="transaction_date"/>
+                            <field name="amount" sum="Total"/>
+                            <field name="payment_receipt" widget="binary_preview"/>
+                        </tree>
+                    </field>
+
+                    <!-- Committed lines: after submit, or in draft if already saved on reservation -->
+                    <field name="payment_line_ids"
+                           nolabel="1"
+                           invisible="not show_committed_payment_lines"
+                           widget="section_and_note_one2many"
+                           mode="tree,kanban,form"
+                           readonly="state == 'draft'"
+                           context="{'from_special_wizard': True}">
+                        <tree string="Payment Line" editable="bottom" delete="0">
+                            <field name="id_editable" column_invisible="True"/>
+                            <field name="is_new_line" column_invisible="True"/>
+                            <field name="bank_id" create="0" readonly="1"/>
+                            <field name="document_type_id" create="0" readonly="1"/>
+                            <field name="ref_number" readonly="1"/>
+                            <field name="transaction_date" readonly="1"/>
+                            <field name="amount" sum="Total" readonly="1"/>
+                            <field name="status" column_invisible="True"/>
+                            <field name="payment_receipt" widget="binary_preview" readonly="1"/>
+                            <button name="add_confirm" invisible="1" column_invisible="True"/>
+                            <field name="is_verifed" widget="boolean_toggle"
+                                   groups="ahadubit_property_reservation.finance_team_approval_group,special_reservation.group_supervisor,special_reservation.group_ceo"/>
+                        </tree>
+                        <kanban>
+                            <templates>
+                                <t t-name="kanban-box">
+                                    <div class="oe_kanban_card oe_kanban_global_click" t-attf-data-id="{{ record.id.raw_value }}">
+                                        <div class="oe_kanban_details">
+                                            <div>Bank: <span><field name="bank_id" options="{'no_open': True,'no_create': True,'no_edit': True}"/></span></div>
+                                            <div>Doc: <span><field name="document_type_id" options="{'no_open': True,'no_create': True,'no_edit': True}"/></span></div>
+                                            <div>Ref: <span><field name="ref_number"/></span></div>
+                                            <div>Date: <span><field name="transaction_date"/></span></div>
+                                            <div><strong>Amount:</strong> <field name="amount"/></div>
+                                            <div><field name="is_verifed" widget="boolean_toggle"
+                                                       groups="ahadubit_property_reservation.finance_team_approval_group,special_reservation.group_supervisor,special_reservation.group_ceo"/></div>
+                                        </div>
+                                    </div>
+                                </t>
+                            </templates>
+                        </kanban>
+                    </field>
+
+                    <div style="margin-top:10px;display:flex;justify-content:flex-end;
+                                align-items:center;gap:12px;flex-wrap:wrap;">
+                        <span style="font-size:0.95em;color:#1a7a4a;font-weight:600;">
+                            Payment Total:
+                        </span>
+                        <field name="wizard_payment_total" nolabel="1" readonly="1"
+                               style="display:inline;font-weight:700;color:#1a7a4a;min-width:60px;"/>
+                    </div>
+                </div>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- Extend is_verifed visibility to supervisor/CEO in the regular reservation Payment tab -->
+    <record id="view_reservation_payment_verify_supervisor" model="ir.ui.view">
+        <field name="name">property.reservation.payment.verify.supervisor</field>
+        <field name="model">property.reservation</field>
+        <field name="inherit_id" ref="temer_structure.property_reservation_history_view_form_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='payment_line_ids']//field[@name='is_verifed']" position="attributes">
+                <attribute name="groups">ahadubit_property_reservation.finance_team_approval_group,special_reservation.group_supervisor,special_reservation.group_ceo</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!--
+        Remove the view-level required constraint on request_letter.
+        The field is Binary (not a model required), so the required="is_special"
+        is only a view constraint. The special_reservation_final_approve module
+        already populates it from attachments when available. When no attachment
+        exists, the required constraint blocks final approve — this removes that block.
+    -->
+    <record id="view_reservation_request_letter_not_required" model="ir.ui.view">
+        <field name="name">property.reservation.request.letter.not.required</field>
+        <field name="model">property.reservation</field>
+        <field name="inherit_id" ref="ahadubit_property_reservation.property_reservation_history_view_form_id"/>
+        <field name="priority">100</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='request_letter']" position="attributes">
+                <attribute name="required">0</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!--
+        Show the Payment tab for special reservations even while they still use
+        the interim quick reservation type (is_payment_required=False).
+        Also keep the tab after final approval when amount = 0.
+    -->
+    <record id="view_reservation_payment_tab_show_after_approve" model="ir.ui.view">
+        <field name="name">property.reservation.payment.tab.show.after.approve</field>
+        <field name="model">property.reservation</field>
+        <field name="inherit_id" ref="temer_structure.property_reservation_history_view_form_inherit"/>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='is_payment_required']" position="after">
+                <field name="show_payment_tab" invisible="1"/>
+            </xpath>
+            <xpath expr="//page[field[@name='payment_line_ids']]" position="attributes">
+                <attribute name="invisible">not show_payment_tab</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Form view for temp payment line (hides wizard_id) -->
+    <record id="view_special_wizard_temp_payment_line_form" model="ir.ui.view">
+        <field name="name">special.wizard.temp.payment.line.form</field>
+        <field name="model">special.wizard.temp.payment.line</field>
+        <field name="arch" type="xml">
+            <form string="Create Payment Line">
+                <sheet>
+                    <group>
+                        <field name="wizard_id" invisible="1"/>
+                        <field name="bank_id" string="Bank" required="1"/>
+                        <field name="document_type_id" string="Document Type" required="1"/>
+                        <field name="transaction_date" string="Transaction Date" required="1"/>
+                        <field name="ref_number" string="Reference Number" required="1"/>
+                        <field name="amount" string="Amount" required="1"/>
+                    </group>
+                    <group>
+                        <field name="payment_receipt" widget="binary" string="Payment Receipt" required="1" filename="payment_receipt_filename"/>
+                        <field name="payment_receipt_filename" invisible="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

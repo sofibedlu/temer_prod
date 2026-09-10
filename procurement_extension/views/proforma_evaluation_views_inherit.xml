@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_proforma_evaluation_form_inherit_smart_button" model="ir.ui.view">
+        <field name="name">procurement.proforma.evaluation.form.inherit.smart.button</field>
+        <field name="model">procurement.proforma.evaluation</field>
+        <field name="inherit_id" ref="procurement_management.view_proforma_evaluation_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//header" position="inside">
+                <button name="action_approve" 
+                        string="Approve Analysis" 
+                        type="object" 
+                        class="btn-primary" 
+                        invisible="state != 'draft'" 
+                        groups="procurement_extension.group_procurement_request_approver"/>
+            </xpath>
+
+            <xpath expr="//button[@name='action_create_rfqs']" position="attributes">
+                <attribute name="invisible">state != 'approved'</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='state']" position="attributes">
+                <attribute name="statusbar_visible">draft,approved,done</attribute>
+            </xpath>
+
+            <xpath expr="//group" position="inside">
+                <group>
+                    <field name="approved_by_id" invisible="state == 'draft'"/>
+                    <field name="approved_date" invisible="state == 'draft'"/>
+                </group>
+            </xpath>
+
+            <xpath expr="//field[@name='line_ids']" position="attributes">
+                <attribute name="readonly">state in ['approved', 'done']</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='line_ids']/tree/field[@name='is_winner']" position="attributes">
+                <attribute name="readonly">parent.state in ['approved', 'done']</attribute>
+            </xpath>
+
+            <!-- Smart Button for Source Collection -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <field name="collection_id" invisible="1"/>
+                <button name="action_view_proforma_collection" 
+                        type="object" 
+                        class="oe_stat_button" 
+                        icon="fa-folder-open" 
+                        invisible="not collection_id">
+                    <span class="o_stat_text">Proforma Col.</span>
+                </button>
+            </xpath>
+        </field>
+    </record>
+</odoo>

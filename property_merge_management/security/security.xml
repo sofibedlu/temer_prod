@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="group_property_merge_user" model="res.groups">
+        <field name="name">Merge Property</field>
+        <field name="category_id" ref="ahadubit_property_base.property_res_groups_category"/>
+        <field name="implied_ids" eval="[(4, ref('advanced_property_management.group_property_manager'))]"/>
+    </record>
+</odoo>

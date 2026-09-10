@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_collection_order_form_inherit_advance" model="ir.ui.view">
+        <field name="name">collection.order.form.inherit.advance</field>
+        <field name="model">collection.order</field>
+        <field name="inherit_id" ref="collection_management.view_collection_order_form"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="//field[@name='installment_ids']/tree/field[@name='state']" position="before">
+                <field name="is_advance_remaining" optional="show" widget="boolean_toggle"/>
+            </xpath>
+            
+            <xpath expr="//field[@name='amount_remaining']" position="after">
+                <field name="advance_remaining_total" 
+                       widget="monetary" 
+                       decoration-info="advance_remaining_total > 0"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

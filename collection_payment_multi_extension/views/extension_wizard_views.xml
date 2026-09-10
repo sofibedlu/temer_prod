@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_property_payment_extension_wizard_form_multi" model="ir.ui.view">
+        <field name="name">property.payment.extension.wizard.form.multi</field>
+        <field name="model">property.payment.extension.wizard</field>
+        <field name="inherit_id" ref="collection_management.view_property_payment_extension_wizard_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="attributes">
+                <attribute name="class">o_form_full_width o_multi_extension_wizard</attribute>
+            </xpath>
+            <xpath expr="//form/group[1]" position="replace">
+                <group col="4">
+                    <field name="collection_id" invisible="1"/>
+                    <field name="line_ids" nolabel="1" colspan="4">
+                        <tree editable="bottom">
+                            <field name="sequence" widget="handle"/>
+                            <field name="collection_id" column_invisible="1"/>
+                            <field name="available_installment_ids" column_invisible="1"/>
+                            <field name="installment_id"
+                                   string="Installment"
+                                   width="45%"
+                                   options="{'no_create': True, 'no_open': True}"
+                                   domain="[('id', 'in', available_installment_ids)]"/>
+                            <field name="current_date" string="Current Due Date" width="180px" readonly="1" force_save="1"/>
+                            <field name="new_date" string="New Extended Date" width="180px"/>
+                        </tree>
+                    </field>
+                </group>
+            </xpath>
+            <xpath expr="//button[@name='action_confirm_extension']" position="attributes">
+                <attribute name="string">Submit Extension Request</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

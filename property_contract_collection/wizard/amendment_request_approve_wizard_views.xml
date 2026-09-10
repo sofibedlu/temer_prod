@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_amendment_request_approve_wizard_form" model="ir.ui.view">
+        <field name="name">amendment.request.approve.wizard.form</field>
+        <field name="model">amendment.request.approve.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Confirm Amendment Approval">
+                <group>
+                    <field name="request_id" invisible="1"/>
+                    <field name="is_schedule_change" invisible="1"/>
+                    <field name="new_partner_name" invisible="1"/>
+                    
+                    <div class="alert alert-info" role="alert" colspan="2">
+                        <strong>What happens next?</strong><br/>
+                        <ul style="margin-bottom: 0;">
+                            <li invisible="not is_schedule_change">The payment schedule will be <b>unlocked</b> so the contract team can update it.</li>
+                            <li invisible="not new_partner_name">The customer name will be <b>updated</b> by the contract team.</li>
+                            <li invisible="is_schedule_change or new_partner_name">The request will be approved and logged without unlocking the schedule.</li>
+                        </ul>
+                        <br/>
+                        Are you sure you want to approve this amendment request?
+                    </div>
+                </group>
+                <footer>
+                    <button name="action_confirm_approve" string="Confirm Approval" type="object" class="btn-success"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

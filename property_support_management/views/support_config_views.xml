@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Office Location Views -->
+    <record id="view_support_office_location_tree" model="ir.ui.view">
+        <field name="name">support.office.location.tree</field>
+        <field name="model">support.office.location</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_support_office_location" model="ir.actions.act_window">
+        <field name="name">Office Location Configuration</field>
+        <field name="res_model">support.office.location</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <menuitem id="menu_support_office_location"
+              name="Office Location Configuration"
+              parent="menu_support_management_config_root"
+              action="action_support_office_location"
+              sequence="25"
+              groups="property_support_management.group_support_manager"/>
+
+    <!-- Contact Views -->
+    <record id="view_support_contact_tree" model="ir.ui.view">
+        <field name="name">support.contact.tree</field>
+        <field name="model">support.contact</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+                <field name="phone"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_support_contact" model="ir.actions.act_window">
+        <field name="name">Person of Contact</field>
+        <field name="res_model">support.contact</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <menuitem id="menu_support_contact"
+              name="Person of Contact"
+              parent="menu_support_management_config_root"
+              action="action_support_contact"
+              sequence="30"
+              groups="property_support_management.group_support_manager"/>
+</odoo>

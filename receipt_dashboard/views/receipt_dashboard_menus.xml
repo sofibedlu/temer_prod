@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_receipt_dashboard_root"
+        name="Receipt Dashboard"
+        sequence="20"
+        groups="group_receipt_dashboard_user"/>
+    
+    <menuitem id="menu_receipt_dashboard"
+        name="Receipt Dashboard"
+        parent="menu_receipt_dashboard_root"
+        action="action_receipt_approval_record"
+        sequence="10"
+        groups="group_receipt_dashboard_user"/>
+    
+    <menuitem id="menu_receipt_denial_reasons"
+        name="Denial Reasons"
+        parent="menu_receipt_dashboard_root"
+        action="action_receipt_denial_reason"
+        sequence="20"
+        groups="group_receipt_dashboard_manager"/>
+    
+    <menuitem id="menu_receipt_denial_reason_types"
+        name="Denial Reason Types"
+        parent="menu_receipt_dashboard_root"
+        action="action_receipt_denial_reason_type"
+        sequence="30"
+        groups="group_receipt_dashboard_manager"/>
+</odoo>
+

@@ -1,0 +1,111 @@
+<odoo>
+    <data>
+        <!-- Construction Progress Form View -->
+        <record id="view_property_site_construction_progress_form" model="ir.ui.view">
+            <field name="name">property.site.construction.progress.form</field>
+            <field name="model">property.site.construction.progress</field>
+            <field name="arch" type="xml">
+                <form string="Construction Progress Entry">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" string="REF"/>
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="responsible_id" required="1" readonly="1"/>
+                                <field name="site_id" required="1"/>
+                                <field name="payment_term_id"/>
+                                <field name="payment_term_line_id" domain="[('payment_term_id','=',payment_term_id),('is_used_in_progress','=',False)]" required="1"/>
+                                <field name="date" required="1"/>
+                            </group>
+                            <group>
+                                <field name="image" widget="image" class="oe_avatar"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Details">
+                                <field name="description" placeholder="Enter progress details..."/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Construction Progress Tree View -->
+        <record id="view_property_site_construction_progress_tree" model="ir.ui.view">
+            <field name="name">property.site.construction.progress.tree</field>
+            <field name="model">property.site.construction.progress</field>
+            <field name="arch" type="xml">
+                <tree string="Construction Progress">
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="site_id" required="True"/>
+                    <field name="responsible_id" required="True"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Site Form View Extension -->
+        <record id="view_property_site_form_inherit_construction" model="ir.ui.view">
+            <field name="name">property.site.form.inherit.construction</field>
+            <field name="model">property.site</field>
+            <field name="inherit_id" ref="ahadubit_property_base.property_site_view_form_id"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page string="Construction Progress">
+                        <field name="construction_progress_ids">
+                            <tree>
+                                <field name="name"/>
+                                <field name="date"/>
+                                <field name="responsible_id" readonly="1"/>
+                                <field name="payment_term_id" readonly="1" invisible="1" column_invisible="1"/>
+                                <field name="payment_term_line_id" domain="[('payment_term_id','=',payment_term_id),('is_used_in_progress','=',False)]" required="1"/>
+
+                            </tree>
+                            <form>
+                                <sheet>
+                                    <group>
+                                        <field name="name"/>
+                                        <field name="responsible_id" readonly="1"/>
+                                        <field name="site_id" readonly="1"/>
+                                        <field name="payment_term_id" readonly="1" invisible="1"/>
+                                        <field name="date"/>
+                                        <field name="payment_term_line_id" domain="[('payment_term_id','=',payment_term_id),('is_used_in_progress','=',False)]" required="1"/>
+
+                                    </group>
+                                    <group>
+                                        <field name="description"/>
+                                        <field name="image" widget="image"/>
+                                    </group>
+                                </sheet>
+                            </form>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Action and Menu Items -->
+        <record id="action_property_site_construction_progress" model="ir.actions.act_window">
+            <field name="name">Construction Progress</field>
+            <field name="res_model">property.site.construction.progress</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'group_by': ['site_id']}</field>
+        </record>
+        <menuitem id="menu_property_construction_progress"
+                  name="Construction Progress"
+                  parent="ahadubit_property_base.property_config_menu"
+                  action="action_property_site_construction_progress"
+                  sequence="90"/>
+
+    </data>
+</odoo>

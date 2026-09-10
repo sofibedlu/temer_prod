@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Collection Plan Stage Tree View -->
+    <record id="view_collection_plan_stage_tree" model="ir.ui.view">
+        <field name="name">collection.plan.stage.tree</field>
+        <field name="model">collection.plan.stage</field>
+        <field name="arch" type="xml">
+            <tree string="Collection Plan Stage" decoration-muted="active == False">
+                <field name="name"/>
+                <field name="planner_id"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="plan_customers"/>
+                <field name="plan_amount_birr" sum="Plan - Total Birr"/>
+                <field name="total_customers" sum="Total Customers"/>
+                <field name="total_amount_birr" sum="Total Birr"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Collection Plan Stage Form View -->
+    <record id="view_collection_plan_stage_form" model="ir.ui.view">
+        <field name="name">collection.plan.stage.form</field>
+        <field name="model">collection.plan.stage</field>
+        <field name="arch" type="xml">
+            <form string="Collection Plan Stage">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    
+                    <!-- Top Section -->
+                    <group>
+                        <group string="Plan Information">
+                            <field name="planner_id" required="1"/>
+                            <field name="active"/>
+                        </group>
+                        <group string="Date Range">
+                            <field name="date_from" required="1"/>
+                            <field name="date_to" required="1"/>
+                        </group>
+                    </group>
+                    
+                    <!-- Plan: No of clients, Collected amount | Plan | Remark -->
+                    <div class="mt32">
+                        <h3>Collection Plan Targets</h3>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th width="40%">Category</th>
+                                    <th width="25%">Plan</th>
+                                    <th width="35%">Remark</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>No of clients</strong></td>
+                                    <td><field name="plan_customers" nolabel="1"/></td>
+                                    <td><field name="plan_customers_remark" nolabel="1" placeholder="Remark"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Collected amount</strong></td>
+                                    <td><field name="plan_amount_birr" nolabel="1"/></td>
+                                    <td><field name="plan_amount_remark" nolabel="1" placeholder="Remark"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Collection Plan Stage Search View -->
+    <record id="view_collection_plan_stage_search" model="ir.ui.view">
+        <field name="name">collection.plan.stage.search</field>
+        <field name="model">collection.plan.stage</field>
+        <field name="arch" type="xml">
+            <search string="Collection Plan Stage">
+                <field name="name"/>
+                <field name="planner_id"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <filter string="Active" name="active" domain="[('active', '=', True)]"/>
+                <filter string="Inactive" name="inactive" domain="[('active', '=', False)]"/>
+                <separator/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Collection Plan Stage Action -->
+    <record id="action_collection_plan_stage" model="ir.actions.act_window">
+        <field name="name">Collection Plan Stage</field>
+        <field name="res_model">collection.plan.stage</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_collection_plan_stage_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Collection Plan
+            </p>
+            <p>
+                Individual collection planning. Enter the plan for <strong>Collected amount</strong> and <strong>Collected from no. of clients</strong>.
+                Plan name is auto-generated from the selected date range and planner.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Item for Collection Plan -->
+    <menuitem id="menu_collection_plan_stage"
+              name="Collection Plan"
+              parent="menu_collection_reports"
+              action="action_collection_plan_stage"
+              groups="collection_reports.group_collection_plan_stage_model"
+              sequence="5"/>
+
+</odoo>
+

@@ -1,0 +1,23 @@
+<t t-name="abd_record_play_widget.AudioRecorder" owl="1">
+    <div class="o_audio_recorder">
+        <t t-if="!props.readonly">
+            <button t-if="!recording" 
+                    class="btn btn-primary" 
+                    t-on-click="startRecording">
+                🎤 Start Recording
+            </button>
+            <button t-else="" 
+                    class="btn btn-danger" 
+                    t-on-click="stopRecording">
+                ⏹️ Stop Recording
+            </button>
+        </t>
+        
+        <t t-if="props.record.data[props.name]">
+            <audio controls="">
+                <source t-att-src="getAudioSrc()" type="audio/webm"/>
+                Your browser does not support audio.
+            </audio>
+        </t>
+    </div>
+</t>

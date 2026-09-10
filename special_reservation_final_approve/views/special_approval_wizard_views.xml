@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Make amount, duration, duration_in editable for CEO (state == 'ceo') -->
+    <!-- Also make attachment field support multiple files and visible to supervisor + CEO -->
+    <!-- Also fix request_letter required constraint for special reservations in approval flow -->
+    <record id="view_special_approval_wizard_form_ceo_edit" model="ir.ui.view">
+        <field name="name">special.approval.wizard.form.ceo.edit</field>
+        <field name="model">special.approval.wizard</field>
+        <field name="inherit_id" ref="special_reservation.view_special_approval_wizard_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Amount: editable when draft OR ceo -->
+            <xpath expr="//field[@name='amount']" position="attributes">
+                <attribute name="readonly">state not in ('draft', 'ceo')</attribute>
+            </xpath>
+
+            <!-- Duration: editable when draft OR ceo -->
+            <xpath expr="//field[@name='duration']" position="attributes">
+                <attribute name="readonly">state not in ('draft', 'ceo')</attribute>
+            </xpath>
+
+            <!-- Duration In: editable when draft OR ceo -->
+            <xpath expr="//field[@name='duration_in']" position="attributes">
+                <attribute name="readonly">state not in ('draft', 'ceo')</attribute>
+            </xpath>
+
+            <!-- Replace single attachment field with many2many_binary for multiple files
+                 visible to both supervisor (submitted state) and CEO (ceo state) -->
+            <xpath expr="//field[@name='attachment']" position="replace">
+                <field name="attachment_ids"
+                       widget="many2many_binary"
+                       string="Attachments"
+                       readonly="state not in ('draft', 'submitted', 'supervisor', 'manager', 'ceo')"
+                       groups="special_reservation.group_supervisor,special_reservation.group_ceo"/>
+            </xpath>
+
+        </field>
+    </record>
+
+
+</odoo>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_property_payment_extension_wizard_form" model="ir.ui.view">
+        <field name="name">property.payment.extension.wizard.form</field>
+        <field name="model">property.payment.extension.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Extend Payment Date">
+                <group>
+                    <field name="collection_id" invisible="1"/>
+                    <group>
+                        <field name="installment_id" options="{'no_create': True, 'no_open': True}"/>
+                        <field name="current_date" readonly="1" force_save="1"/>
+                        <field name="new_date"/>
+                    </group>
+                </group>
+                <field name="reason" placeholder="Enter the reason for this extension..." />
+                <footer>
+                    <button name="action_confirm_extension" string="Confirm Extension" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_payment_extension_wizard" model="ir.actions.act_window">
+        <field name="name">Extend Payment Date</field>
+        <field name="res_model">property.payment.extension.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" eval="False"/>
+        <field name="context">{'default_collection_id': active_id}</field>
+    </record>
+</odoo>

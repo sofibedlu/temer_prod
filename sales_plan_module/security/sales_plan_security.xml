@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Record rule: Supervisors, Sales Managers (Team Managers), and Wing Managers (filtering by wing is done in search method) -->
+    <record id="sales_plan_supervisor_rule" model="ir.rule">
+        <field name="name">Supervisor/Sales Manager/Wing Manager: sales plans (filtered by wing)</field>
+        <field name="model_id" ref="model_sales_plan"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <!-- Record rule for admins/system users to see all plans -->
+    <record id="sales_plan_admin_rule" model="ir.rule">
+        <field name="name">Admin: all sales plans</field>
+        <field name="model_id" ref="model_sales_plan"/>
+        <field name="global" eval="True"/>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+    </record>
+
+    <!-- Security Groups for Menu Visibility -->
+    <!-- These groups are automatically assigned via post-init hook to control menu visibility -->
+    
+    <!-- Group for managers (Sales Managers/Team Managers or Wing Managers) -->
+    <!-- This group is assigned to users who are managers - they see "Plan Document" menu -->
+    <!-- Note: CRM Admin (Sales Manager Admin) also has access to Plan Document menu via direct group assignment -->
+    <!-- IMPORTANT: These groups are automatically assigned based on role - DO NOT manually assign them -->
+    <record id="group_sales_plan_manager" model="res.groups">
+        <field name="name">Sales Plan / Manager (Team or Wing)</field>
+        <field name="category_id" ref="base.module_category_sales"/>
+        <field name="comment">Automatically assigned to users who are Sales Managers (Team Managers) or Wing Managers. Used for menu visibility - they see Plan Document menu. CRM Admin (Sales Manager Admin) also has access. DO NOT manually assign - assignment is automatic based on role.</field>
+    </record>
+    
+    <!-- Group for supervisors who are NOT managers -->
+    <!-- This group is assigned to supervisors who are NOT managers - they see "Sales Plan" menu -->
+    <!-- IMPORTANT: These groups are automatically assigned based on role - DO NOT manually assign them -->
+    <record id="group_sales_plan_supervisor_only" model="res.groups">
+        <field name="name">Sales Plan / Supervisor Only (Not Manager)</field>
+        <field name="category_id" ref="base.module_category_sales"/>
+        <field name="comment">Automatically assigned to supervisors who are NOT managers. Used for menu visibility - they see Sales Plan menu. DO NOT manually assign - assignment is automatic based on role.</field>
+    </record>
+    
+    <!-- Note: Sales plan groups are automatically assigned/removed by post_init_hook based on user roles -->
+    <!-- Users should NOT manually assign these groups - they will be automatically managed -->
+    <!-- The write() method in res_users.py prevents manual changes to these groups -->
+    <!-- If users manually assign them, the post_init_hook will correct the assignment on next module upgrade/restart -->
+    <!-- Note: Groups may be visible in the user form, but manual changes are prevented by the write() override -->
+</odoo>

@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id,perm_read,perm_write,perm_create,perm_unlink
+access_property_set_due_date_wizard,property.set.due.date.wizard access,model_property_set_due_date_wizard,,1,1,1,0

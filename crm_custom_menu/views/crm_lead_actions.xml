@@ -1,0 +1,25 @@
+<odoo>
+    <record id="action_crm_reception" model="ir.actions.act_window">
+        <field name="name">CRM Reception</field>
+        <field name="res_model">crm.reception</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_crm_callcenter" model="ir.actions.act_window">
+        <field name="name">CRM callcenter</field>
+        <field name="res_model">crm.callcenter</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+     <record id="action_crm_website" model="ir.actions.act_window">
+        <field name="name">CRM Website</field>
+        <field name="res_model">crm.website</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_crm_affilater" model="ir.actions.act_window">
+        <field name="name">CRM Affilater</field>
+        <field name="res_model">crm.affilater</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

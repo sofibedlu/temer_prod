@@ -1,0 +1,27 @@
+{
+    'name': 'Biometric Attendance (Odoo 17)',
+    'version': '17.0.1.0.0',
+    'summary': 'Biometric Device Integration with HR Attendance',
+    'author': 'Technaureus Info Solutions Pvt. Ltd.',
+    'category': 'Human Resources/Attendance',
+    'depends': ['base', 'hr_attendance', 'hr'],
+    'data': [
+        'security/ir.model.access.csv',
+        'security/security.xml',
+        'data/biometric_data.xml',
+        'wizard/attendance_calc_wizard_view.xml',
+        'wizard/attendance_report_wizard_view.xml',
+        'wizard/biometric_device_view.xml',
+        'wizard/excel_report.xml',
+        'views/biometric_device_config_view.xml',
+        'views/biometric_attnd_log_view.xml',
+        'views/hr_attendance_view.xml',
+        'views/hr_employee_view.xml',
+    ],
+    'external_dependencies': {
+        'python': ['xlsxwriter', 'xlwt'],
+    },
+    'installable': True,
+    'application': False,
+    'license': 'OPL-1',
+}

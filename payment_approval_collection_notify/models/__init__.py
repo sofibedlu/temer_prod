@@ -1,0 +1,1 @@
+from . import payment_approval_record_inherit

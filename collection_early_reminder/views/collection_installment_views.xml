@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_collection_installment_reminder_tree" model="ir.ui.view">
+        <field name="name">collection.installment.reminder.tree</field>
+        <field name="model">collection.installment</field>
+        <field name="arch" type="xml">
+            <tree string="Early Reminder Installments" default_order="payment_request_letter_date asc" create="0" delete="0">
+                <field name="collection_id"/>
+                <field name="name" string="Installment Name"/>
+                <field name="partner_id" string="Customer"/>
+                
+                <field name="amount_total" sum="Total" widget="monetary" optional="hide"/>
+                <field name="amount_residual" sum="Remaining" widget="monetary" decoration-danger="amount_residual > 0"/>
+                
+                <field name="due_date"/>
+                <field name="payment_request_letter_date" decoration-bf="1" decoration-info="1"/>
+                
+                <field name="request_letter_status" 
+                       decoration-danger="request_letter_status == 'Not Requested'" 
+                       decoration-success="request_letter_status != 'Not Requested'" 
+                       widget="badge"/>
+                       
+                <field name="state" widget="badge" 
+                       decoration-success="state == 'paid'" 
+                       decoration-danger="state == 'overdue'" 
+                       decoration-warning="state == 'partial'"/>
+
+                <button name="action_open_collection_order_from_line" 
+                        type="object" 
+                        string="Open Order" 
+                        icon="fa-arrow-right" 
+                        class="btn-secondary"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_early_reminder_installments" model="ir.actions.act_window">
+        <field name="name">Early Reminder Installments</field>
+        <field name="res_model">collection.installment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[
+            ('collection_id.requires_early_reminder', '=', True),
+            ('due_date', '!=', False),
+            ('collection_id.state', 'not in', ['void', 'terminated']),
+            ('state', '!=', 'paid')
+        ]</field>
+        <field name="view_id" ref="view_collection_installment_reminder_tree"/>
+    </record>
+
+    <menuitem id="menu_early_reminder_installments"
+              name="Early Reminders"
+              parent="collection_management.menu_collection_root" 
+              action="action_early_reminder_installments"
+              groups="collection_management.group_collection_user"
+              sequence="15"/>
+</odoo>

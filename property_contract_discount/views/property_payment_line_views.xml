@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_property_payment_line_tree_discount" model="ir.ui.view">
+        <field name="name">property.payment.line.tree.discount</field>
+        <field name="model">property.payment.line</field>
+        <field name="arch" type="xml">
+            <tree string="Installments">
+                <field name="payment_term_id"/>
+                <field name="expected_amount" sum="Total"/>
+                <field name="paid_amount"/>
+                <field name="discount"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+</odoo>

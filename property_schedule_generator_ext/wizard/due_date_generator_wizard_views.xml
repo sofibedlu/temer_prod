@@ -1,0 +1,28 @@
+<odoo>
+    <record id="view_due_date_generator_wizard_form" model="ir.ui.view">
+        <field name="name">property.due.date.generator.wizard.form</field>
+        <field name="model">property.due.date.generator.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Generate Due Dates">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="sale_id" invisible="1"/>
+                            <field name="start_payment_line_id" options="{'no_create': True}"/>
+                            <field name="start_date"/>
+                            <field name="interval_type"/>
+                        </group>
+                        <group>
+                            <field name="interval_duration" invisible="interval_type != 'month'" required="interval_type == 'month'"/>
+                        </group>
+                    </group>
+                    <field name="summary_html" nolabel="1" readonly="1"/>
+                </sheet>
+                <footer>
+                    <button name="action_confirm" type="object" string="Generate Dates" class="btn-primary"/>
+                    <button special="cancel" string="Cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

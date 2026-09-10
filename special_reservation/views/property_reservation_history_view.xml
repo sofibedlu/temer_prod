@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="inherit_property_reservation_history_view_form" model="ir.ui.view">
+        <field name="name">property.reservation.history.form.inherit</field>
+        <field name="model">property.reservation</field>
+        <field name="inherit_id" ref="ahadubit_property_reservation.property_reservation_history_view_form_id"/>
+        <field name="arch" type="xml">
+            <!-- insert the field so invisible modifier can reference it -->
+
+            <xpath expr="//field[@name='expire_date']" position="after">
+                <field name="make_special_reservation" invisible="1"/>
+                <field name="is_special_reservation_invisible" invisible="1"/>
+                <field name="is_special_reservation" readonly="make_special_reservation or is_special_reservation_invisible or status != 'draft'"/>
+
+            </xpath>
+
+            <xpath expr="//button[@name='action_convert_to_regular']" position="attributes">
+                <attribute name="invisible">(not show_convert_to_regular) or is_special_reservation</attribute>
+            </xpath>
+
+
+            <xpath expr="//field[@name='expire_date']" position="after">
+    <field name="special_reason" invisible="1"/>
+    <field name="special_amount" invisible="1"/>
+    <field name="special_duration" invisible="1"/>
+    <field name="special_voice_recording" invisible="1"/>
+    <field name="special_attachment" invisible="1"/>
+    <field name="state" invisible="1"/>
+</xpath>
+
+
+
+
+<xpath expr="//header" position="inside">
+    <button name="action_request_special_approval"
+            type="object"
+            string="Request Special Form"
+            class="btn-primary"
+            invisible="not is_special_reservation or state != 'draft'"/>
+    <button name="action_view_special_approval"
+            type="object"
+            string="View Special Form"
+            class="btn-secondary"
+            invisible="state == 'draft'"/>
+</xpath>
+        </field>
+    </record>
+
+
+
+    <record id="view_special_approval_wizard_form" model="ir.ui.view">
+        <field name="name">special.approval.wizard.form</field>
+        <field name="model">special.approval.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Special Approval Request" class="oe_form_custom_doc">
+                <field name="state_new" invisible="1"/>
+                
+                         <!-- Status Bar -->
+                <div style="margin-bottom:18px;display:flex;justify-content:center;">
+                    <div style="background:#f4f7ff;border-radius:14px;padding:10px 28px;box-shadow:0 2px 8px #b3c6e820;display:flex;align-items:center;gap:18px;">
+                        <span style="font-weight:600;color:#3b3663;font-size:1.1em;">Status:</span>
+                        <!-- <field name="state_new" widget="statusbar" options="{'clickable': True}"/> -->
+                        <field name="state" widget="statusbar" options="{'clickable': True}"/>
+                    </div>
+                </div>
+
+                <div style="background:linear-gradient(135deg,#faf6f8 0%,#d0e6fd 100%);
+                            border-radius:28px;
+                            box-shadow:0 2px 16px 0 #0002;
+                            padding:32px 24px;
+                            max-width:900px;
+                            margin:auto;">
+                    <!-- Header Card -->
+                    <div class="special-approval-header" style="display:flex;justify-content:space-between;align-items:center;
+                                border-radius:20px;
+                                background:linear-gradient(120deg,#fff 60%,#e9e3fa 100%);
+                                box-shadow:0 2px 8px 0 #9ddcf540;
+                                padding:18px 28px 18px 14px;
+                                margin-bottom:28px;">
+                        <div style="display:flex;align-items:center;">
+                            <img src="/special_reservation/static/src/img/temer.jpg"
+                                 style="border-radius:20px;
+                                        border:3px solid #99bbfa;
+                                        width:90px;height:90px;
+                                        box-shadow:0 1px 4px #5bbfff20;"/>
+                            <div style="margin-left:18px;">
+                                <div style="font-size:1.6em;font-weight:700;color:#3b3663;letter-spacing:1px;">
+                                    Temer Properties
+                                </div>
+                                <div style="font-size:1em;color:#818aac;margin-top:2px;">
+                                    Special Approval Request Form
+                                </div>
+                            </div>
+                        </div>
+                        <div style="font-size:1em;text-align:right;color:#62639b;">
+                            <div><b>Issue No:</b> 1</div>
+                            <div><b>Page:</b> 1 of 1</div>
+                            <div><b>Effective Date:</b> 01/07/2024</div>
+                        </div>
+                    </div>
+
+                    <!-- Info Cards -->
+                    <div style="display:flex;gap:18px;flex-wrap:wrap;margin-bottom:18px;">
+                        <div style="flex:1 1 180px;
+                                    background:#fff; border-radius:18px; box-shadow:0 2px 10px #69c6fc0e;
+                                    padding:18px;">
+                            <div style="font-size:0.9em;color:#4c5b6e;font-weight:600;margin-bottom:4px;">Reservation No.</div>
+                            <field name="reservation_id" readonly="1"/>
+                        </div>
+       
+       
+                        <div style="flex:1 1 120px;
+                                    background:#fff; border-radius:18px; box-shadow:0 2px 10px #e8cf660d;
+                                    padding:18px;">
+                            <div style="font-size:0.9em;color:#4c5b6e;font-weight:600;margin-bottom:4px;">Date</div>
+                            <field name="date" readonly="1"/>
+                        </div>
+       
+                    </div>
+
+                    <!-- Request Description Card -->
+                    <div style="background:linear-gradient(135deg,#fffbf8 50%,#e0eeff 100%);
+                                border-radius:20px;
+                                padding:18px 22px;
+                                box-shadow:0 2px 10px #ffb17010;
+                                margin-bottom:20px;">
+                        <div style="font-size:1em;color:#344d77;font-weight:700;margin-bottom:7px;">
+                            Request Details
+                        </div>
+                        <field name="reason" placeholder="Describe the special request in detail..." nolabel="1" readonly="state != 'draft'" style="min-height:60px"/>
+                    </div>
+
+                    <!-- Special Approval Cards Row -->
+                    <div style="display:flex;gap:18px;flex-wrap:wrap;margin-bottom:18px;">
+                        <div style="flex:1 1 120px;
+                                    background:#f7fafd; border-radius:16px; box-shadow:0 2px 10px #a6f4ff0d;
+                                    padding:16px;">
+                            <div style="font-size:0.9em;color:#409eff;font-weight:600;margin-bottom:4px;">Amount in Birr</div>
+                            <field name="amount" readonly="state != 'draft'"/>
+                        </div>
+                        <div style="flex:1 1 120px;
+                                    background:#f7fafd; border-radius:16px; box-shadow:0 2px 10px #a6f4ff0d;
+                                    padding:16px;">
+                            <div style="font-size:0.9em;color:#409eff;font-weight:600;margin-bottom:4px;">Duration</div>
+                            <field name="duration" readonly="state != 'draft'"/>
+                             <field name="duration_in" readonly="state != 'draft'" options="{'no_open': True}" style="margin-top:8px;"/>
+                        </div>
+                        <div style="flex:1 1 180px;
+                                    background:#fff5fa; border-radius:16px; box-shadow:0 2px 10px #f0a6ff0d;
+                                    padding:16px;">
+                            <div style="font-size:0.9em;color:#ce5dbb;font-weight:600;margin-bottom:4px;">Voice Recording</div>
+                            <field name="audio_file" readonly="state != 'draft'" widget="audio_record_widget"/>
+                        </div>
+                        <div style="flex:1 1 180px;
+                                    background:#fffaf6; border-radius:16px; box-shadow:0 2px 10px #ffdeab0c;
+                                    padding:16px;">
+                            <div style="font-size:0.9em;color:#ff9a23;font-weight:600;margin-bottom:4px;">Attachment</div>
+                            <field name="attachment" readonly="state != 'draft'" widget="binary"/>
+                        </div>
+                    </div>
+
+  
+        
+               
+        
+                    <div style="height:24px;"></div>
+
+
+<div style="background:linear-gradient(135deg,#f8fbff 40%,#efeaff 100%);
+            border-radius:20px;
+            padding:18px 22px;
+            box-shadow:0 2px 10px #ceacff10;
+            margin-bottom:24px;">
+    <div style="font-size:1em;color:#6753be;font-weight:700;margin-bottom:7px;">
+        Manager Response
+    </div>
+    <field name="manager_response" readonly="state != 'ceo'" style="min-height:40px;" placeholder="Manager comment" groups="special_reservation.group_ceo"/>
+    <div style="display:flex;gap:18px;margin-top:8px;">
+        <div style="flex:1;">
+            <div style="font-size:0.9em;color:#ce5dbb;font-weight:600;margin-bottom:4px;">Voice Response</div>
+            <field name="manager_response_recording" readonly="state != 'ceo'" widget="audio_record_widget" filename="manager_response_recording_filename"/>
+        </div>
+  
+    </div>
+
+</div>
+
+<!-- <div style="
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 1000;
+    background: #f4f7ff;
+    color: #3b3663;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px #b3c6e820;
+    padding: 10px 22px;
+    font-size: 1em;
+    font-weight: 600;
+    opacity: 0.92;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+">
+    <span style="font-family: cursive; font-size: 2em; color: #7c5dfa;">D</span>
+    <span>
+        Developed by <span style="font-style: italic;">Daniel Tibebu</span>
+    </span>
+</div> -->
+
+                    <!-- Buttons -->
+                    <div style="display:flex;gap:18px;justify-content:flex-end;">
+                        <!-- <button string="Save Signature" type="object" name="action_save_signatures" class="btn btn-info"/> -->
+                        <button string="Submit" type="object" name="action_submit" class="btn btn-primary" invisible="state != 'draft'"/>
+                        <!-- <button string="Supervisor Approve" type="object" name="action_supervisor_approve" class="btn btn-info" invisible="state != 'submitted'" groups="special_reservation.group_supervisor"/> -->
+                        <button string="Supervisor Approve" type="object" name="action_manager_approve" class="btn btn-warning" invisible="state != 'submitted'" groups="special_reservation.group_supervisor"/>
+                        <!-- <button string="Manager Approve" type="object" name="action_ceo_approve" class="btn btn-success" invisible="state != 'manager'" groups="special_reservation.group_manager"/> -->
+                        <button string="Return to Draft" type="object" name="action_return_to_draft" class="btn btn-secondary" invisible="state != 'ceo'" groups="special_reservation.group_ceo"/>
+                        <button string="Final Approve" type="object" name="action_final_approve" class="btn btn-success" invisible="state != 'ceo'" groups="special_reservation.group_ceo"/>
+                        <button string="Reject" type="object" name="action_reject" class="btn btn-danger" invisible="state in ('approved','rejected')"/>
+                        <button string="Cancel" special="cancel" class="btn btn-secondary"/>
+
+                        <!-- <button string="Download PDF" type="object" name="action_download_pdf" class="btn btn-secondary fa fa-download" invisible="not state in ('approved','ceo','manager','supervisor','submitted')"/> -->
+                    </div>
+                </div>
+<!-- <div style="
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 1000;
+    background: #f4f7ff;
+    color: #3b3663;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px #b3c6e820;
+    padding: 10px 22px;
+    font-size: 1em;
+    font-weight: 600;
+    opacity: 0.92;
+">
+    <span style="font-style: italic;">Developed by</span> Daniel Tibebu
+</div> -->
+
+<!-- <style>
+@media (max-width: 700px) {
+    .dev-signature-card {
+        position: static !important;
+        margin-top: 18px !important;
+        width: 100%;
+        justify-content: center;
+        display: flex !important;
+    }
+}
+</style>
+<div class="dev-signature-card" style="
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 1000;
+    background: #f4f7ff;
+    color: #3b3663;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px #b3c6e820;
+    padding: 10px 22px;
+    font-size: 1em;
+    font-weight: 600;
+    opacity: 0.92;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+">
+    <span style="font-family: cursive; font-size: 2em; color: #7c5dfa;">D</span>
+    <span>
+        <span style="font-style: italic;">Developed by</span> Daniel Tibebu
+    </span>
+</div> -->
+
+
+<!-- 
+<style>
+@media (max-width: 700px) {
+    .dev-signature-card {
+        position: fixed !important;
+        right: 8px !important;
+        bottom: 8px !important;
+        width: auto !important;
+        padding: 6px 12px !important;
+        font-size: 0.85em !important;
+        border-radius: 8px !important;
+        gap: 8px !important;
+    }
+    .dev-signature-card span[style*="font-size: 2em"] {
+        font-size: 1.3em !important;
+    }
+}
+</style>
+<div class="dev-signature-card" style="
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 1000;
+    background: #f4f7ff;
+    color: #3b3663;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px #b3c6e820;
+    padding: 10px 22px;
+    font-size: 1em;
+    font-weight: 600;
+    opacity: 0.92;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+">
+    <span style="font-family: cursive; font-size: 2em; color: #7c5dfa;">D</span>
+    <span>
+        <span style="font-style: italic;">Developed by</span> Daniel Tibebu
+    </span>
+</div> -->
+<!-- 
+<style>
+@media (max-width: 700px) {
+    .dev-signature-card {
+        display: none !important;
+    }
+}
+</style>
+<div class="dev-signature-card" style="
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 1000;
+    background: #f4f7ff;
+    color: #3b3663;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px #b3c6e820;
+    padding: 10px 22px;
+    font-size: 1em;
+    font-weight: 600;
+    opacity: 0.92;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+">
+    <span style="font-family: cursive; font-size: 2em; color: #7c5dfa;">D</span>
+    <span>
+        <span style="font-style: italic;">Developed by</span> Daniel Tibebu
+    </span>
+</div> -->
+            </form>
+        </field>
+    </record>
+
+<!-- <style>
+                @media (max-width: 700px) {
+                    .special-approval-header {
+                        flex-direction: column !important;
+                        align-items: flex-start !important;
+                    }
+                    .special-approval-signatures {
+                        flex-direction: column !important;
+                        gap: 12px !important;
+                    }
+                }
+                </style> -->
+
+
+
+
+<record id="action_special_approval_submitted_requests" model="ir.actions.act_window">
+    <field name="name">Submitted Requests</field>
+    <field name="res_model">property.reservation</field>
+    <field name="view_mode">tree,form</field>
+    <field name="domain">[('state', '=', 'submitted')]</field>
+</record>
+
+<record id="action_special_approval_supervisor_requests" model="ir.actions.act_window">
+    <field name="name">Supervisor Requests</field>
+    <field name="res_model">property.reservation</field>
+    <field name="view_mode">tree,form</field>
+    <field name="domain">[('state', '=', 'supervisor')]</field>
+</record>
+<record id="action_special_approval_manager_requests" model="ir.actions.act_window">
+    <field name="name">Manager Requests</field>
+    <field name="res_model">property.reservation</field>
+    <field name="view_mode">tree,form</field>
+    <field name="domain">[('state', '=', 'manager')]</field>
+</record>
+
+<record id="action_special_approval_ceo_requests" model="ir.actions.act_window">
+    <field name="name">CEO Requests</field>
+    <field name="res_model">property.reservation</field>
+    <field name="view_mode">tree,form</field>
+    <field name="domain">[('state', '=', 'ceo')]</field>
+</record>
+<record id="action_special_approval_ceo_approved_requests" model="ir.actions.act_window">
+    <field name="name">Approved Requests</field>
+    <field name="res_model">property.reservation</field>
+    <field name="view_mode">tree,form</field>
+    <field name="domain">[('state', '=', 'approved')]</field>
+</record>
+<record id="action_special_approval_ceo_rejected_requests" model="ir.actions.act_window">
+    <field name="name">Rejected Requests</field>
+    <field name="res_model">property.reservation</field>
+    <field name="view_mode">tree,form</field>
+    <field name="domain">[('state', '=', 'rejected')]</field>
+</record>
+
+<menuitem id="menu_special_approval_supervisor_requests_action"
+          name="Special Reservation  Requests"
+          action="action_special_approval_submitted_requests"
+          groups="special_reservation.group_supervisor"
+          sequence="-100"/>
+
+<menuitem id="menu_special_approval_ceo_requests_action"
+          name="Special Reservation  Requests"
+          groups="special_reservation.group_ceo"
+          sequence="-100"/>
+
+<menuitem id="menu_special_approval_ceo_requests_action_first_one"
+           name="Special Reservation Requests"
+          parent="menu_special_approval_ceo_requests_action"
+          action="action_special_approval_ceo_requests" 
+          groups="special_reservation.group_ceo"
+          sequence="-50"/>
+
+<menuitem id="menu_special_approval_ceo_approved_requests_action"
+          name="Approved Requests"
+          parent="menu_special_approval_ceo_requests_action"
+          action="action_special_approval_ceo_approved_requests"
+          groups="special_reservation.group_ceo"/>
+
+<menuitem id="menu_special_approval_ceo_rejected_requests_action"
+          name="Rejected Requests"
+          parent="menu_special_approval_ceo_requests_action"
+          action="action_special_approval_ceo_rejected_requests"
+          groups="special_reservation.group_ceo"/>
+
+
+</odoo>
+
+
+
+
+

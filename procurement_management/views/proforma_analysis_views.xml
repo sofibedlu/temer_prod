@@ -1,0 +1,173 @@
+<odoo>
+    <record id="view_procurement_proforma_tree" model="ir.ui.view">
+        <field name="name">procurement.proforma.analysis.tree</field>
+        <field name="model">procurement.proforma.analysis</field>
+        <field name="arch" type="xml">
+            <tree string="Proforma Analysis">
+                <field name="name"/>
+                <field name="state" widget="badge" decoration-success="state == 'done'" decoration-info="state == 'draft'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- form view for the specific quote line -->
+    <record id="view_procurement_proforma_line_form" model="ir.ui.view">
+        <field name="name">procurement.proforma.line.form</field>
+        <field name="model">procurement.proforma.line</field>
+        <field name="arch" type="xml">
+            <form string="Vendor Quotation Detail" create="false" edit="false">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="display_name" class="oe_edit_only"/>
+                        <h1><field name="display_name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Quote Details">
+                            <field name="vendor_id" readonly="1"/>
+                            <field name="product_id" readonly="1"/>
+                            <field name="product_uom_id" readonly="1"/>
+                            <field name="quantity" readonly="1"/>
+                            <field name="price" readonly="1"/>
+                        </group>
+                        <group string="Requirements (from Request)">
+                            <field name="req_technical" string="Technical Weight (%)" widget="progressbar"/>
+                            <field name="req_financial" string="Financial Weight (%)" widget="progressbar"/>
+                        </group>
+                    </group>
+                    <group string="Attachments">
+                        <field name="attachment_file" widget="binary" filename="attachment_name" readonly="1"/>
+                        <field name="attachment_name" invisible="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_procurement_proforma_form" model="ir.ui.view">
+        <field name="name">procurement.proforma.analysis.form</field>
+        <field name="model">procurement.proforma.analysis</field>
+        <field name="arch" type="xml">
+            <form string="Proforma Analysis">
+                <header>
+                    <button name="action_generate_analysis" string="Generate Analysis" type="object" class="oe_highlight" invisible="state == 'done'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <field name="state" invisible="1"/>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_analysis" type="object" class="oe_stat_button" icon="fa-balance-scale" invisible="evaluation_count == 0">
+                            <field name="evaluation_count" widget="statinfo" string="Analyses"/>
+                        </button>
+                    </div>
+                    <group>
+                        <label for="procurement_ids"/>
+                        <div>
+                            <field name="procurement_ids" 
+                                widget="many2many_tags" 
+                                domain="[('state', '=', 'approved')]"
+                                readonly="state == 'done'"/>
+                            <div invisible="not procurement_summary">
+                                <field name="procurement_summary" nolabel="1" readonly="1"/>
+                            </div>
+                        </div>
+                    </group>
+
+                    <div class="oe_edit_only">
+                        <button name="action_launch_add_vendor_wizard" 
+                                string="Add Vendor Quote" 
+                                type="object" 
+                                class="btn-secondary" 
+                                invisible="state == 'done' or not procurement_ids"/>
+                    </div>
+
+                    <notebook>
+                        <page string="Quotations Analysis">
+                            <field name="line_ids" readonly="state == 'done'">
+                                <tree editable="bottom">
+                                    <field name="vendor_id"/>
+                                    <field name="product_id"/>
+                                    <field name="quantity"/> 
+                                    <field name="product_uom_category_id" column_invisible="True"/>
+                                    <field name="product_uom_id" 
+                                        domain="[('category_id', '=', product_uom_category_id)]"
+                                        options="{'no_create': True, 'no_open': True}"/>                
+                                    <field name="price"/>
+                                    <field name="attachment_file" widget="binary" filename="attachment_name" string="Proforma PDF"/>
+                                    <field name="attachment_name" column_invisible="True"/>
+                                </tree>
+                            </field>
+                        </page>
+                        
+                        <page string="Specifications" name="specifications">
+                            <field name="spec_line_ids">
+                                <tree create="0" delete="0">
+                                    <field name="product_id" readonly="1"/>
+                                    <field name="specifications" widget="html"/>
+                                </tree>
+                                <form>
+                                    <sheet>
+                                        <group>
+                                            <field name="product_id" readonly="1"/>
+                                        </group>
+                                        <separator string="Specifications"/>
+                                        <field name="specifications" widget="html" nolabel="1"/>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_purchase_order_form_inherit_specs" model="ir.ui.view">
+        <field name="name">purchase.order.form.inherit.specs</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook/page[@name='products']" position="after">
+                <field name="custom_evaluation_id" invisible="1"/>
+                <page string="Specifications" name="specifications" invisible="not custom_evaluation_id">
+                    <field name="order_line" readonly="state in ['cancel', 'done', 'purchase']">
+                        <tree create="0" delete="0">
+                            <field name="product_id" readonly="1"/>
+                            <field name="name" string="Description" readonly="1"/>
+                            <field name="specifications" widget="html"/>
+                        </tree>
+                        <form>
+                            <sheet>
+                                <group>
+                                    <field name="product_id" readonly="1"/>
+                                </group>
+                                <separator string="Specifications"/>
+                                <field name="specifications" widget="html" nolabel="1"/>
+                            </sheet>
+                        </form>
+                    </field>
+                </page>
+            </xpath>
+
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <field name="custom_evaluation_id" invisible="1"/>
+                <button name="action_view_custom_evaluation" type="object" class="oe_stat_button" icon="fa-balance-scale" invisible="not custom_evaluation_id" string="Proforma Analysis"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_proforma_analysis" model="ir.actions.act_window">
+        <field name="name">Proforma Collection</field>
+        <field name="res_model">procurement.proforma.analysis</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_proforma_analysis" name="Proforma Collection" parent="menu_purchase_department" action="action_proforma_analysis" sequence="20"/>
+</odoo>

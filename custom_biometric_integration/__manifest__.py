@@ -1,0 +1,21 @@
+{
+    'name': 'Custom Biometric Integration',
+    'version': '17.0.1.0.0',
+    'summary': 'Source of Truth Data Lake for Raw Biometric Logs',
+    'author': 'Your Company',
+    'category': 'Human Resources/Attendance',
+    'depends': ['base', 'hr', 'hr_attendance', 'tis_hr_biometric_attendance'],
+    'data': [
+        'security/ir.model.access.csv',
+        'data/cron_data.xml',
+        'wizard/manual_read_wizard_views.xml',
+        'views/biometric_config_inherit_views.xml',
+        'views/hr_attendance_period_views.xml',
+        'views/attendance_identification_views.xml',
+        'views/attendance_log_analysis_views.xml',
+        'views/menu_views.xml',
+    ],
+    'installable': True,
+    'application': False,
+    'license': 'OPL-1',
+}

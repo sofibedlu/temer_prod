@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_collection_extension_request_form_multi" model="ir.ui.view">
+        <field name="name">collection.payment.extension.request.form.multi</field>
+        <field name="model">collection.payment.extension.request</field>
+        <field name="inherit_id" ref="collection_payment_extension.view_collection_extension_request_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="attributes">
+                <attribute name="class">o_form_full_width o_multi_extension_request</attribute>
+            </xpath>
+            <xpath expr="//div[@class='oe_title']" position="after">
+                <field name="is_multi_extension" invisible="1"/>
+            </xpath>
+            <field name="installment_id" position="attributes">
+                <attribute name="invisible">is_multi_extension</attribute>
+            </field>
+            <field name="current_date" position="attributes">
+                <attribute name="invisible">is_multi_extension</attribute>
+            </field>
+            <field name="new_date" position="attributes">
+                <attribute name="invisible">is_multi_extension</attribute>
+                <attribute name="readonly">state != 'pending'</attribute>
+            </field>
+            <xpath expr="//group[field[@name='reason']]" position="after">
+                <separator string="Installments" colspan="4" invisible="not is_multi_extension"/>
+                <field name="line_ids" nolabel="1" readonly="state != 'pending'" colspan="4" invisible="not is_multi_extension">
+                    <tree editable="bottom" create="false" delete="false">
+                        <field name="sequence" widget="handle"/>
+                        <field name="installment_id" string="Installment" width="45%"/>
+                        <field name="current_date" string="Current Due Date" width="180px"/>
+                        <field name="state" column_invisible="1"/>
+                        <field name="new_date" string="New Extended Date" width="180px" readonly="state != 'pending'"/>
+                    </tree>
+                </field>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_collection_extension_request_tree_multi" model="ir.ui.view">
+        <field name="name">collection.payment.extension.request.tree.multi</field>
+        <field name="model">collection.payment.extension.request</field>
+        <field name="inherit_id" ref="collection_payment_extension.view_collection_extension_request_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="class">o_multi_extension_request_tree</attribute>
+            </xpath>
+            <field name="installment_id" position="replace">
+                <field name="installment_summary" string="Installments" optional="show"/>
+                <field name="installment_count" string="Count" optional="show"/>
+            </field>
+            <field name="current_date" position="replace">
+                <field name="current_date_summary" string="Current Due Date" optional="show"/>
+            </field>
+            <field name="new_date" position="replace">
+                <field name="new_date_summary" string="Requested Date" optional="show"/>
+            </field>
+        </field>
+    </record>
+</odoo>

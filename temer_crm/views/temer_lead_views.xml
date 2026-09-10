@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- My Leads Tree View (for regular users) -->
+    <record id="view_temer_lead_tree_my" model="ir.ui.view">
+        <field name="name">temer.lead.tree.my</field>
+        <field name="model">temer.lead</field>
+        <field name="arch" type="xml">
+            <tree string="My Leads">
+                <field name="name"/>
+                <field name="phone_ids" widget="many2many_tags"/>
+                <field name="user_id"/>
+                <field name="source_ids"/>
+                <field name="create_date"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- All Leads Tree View (for managers) -->
+    <record id="view_temer_lead_tree_all" model="ir.ui.view">
+        <field name="name">temer.lead.tree.all</field>
+        <field name="model">temer.lead</field>
+        <field name="arch" type="xml">
+            <tree string="All Leads">
+                <field name="name"/>
+                <field name="phone_ids" widget="many2many_tags"/>
+                <field name="user_id"/>
+                <field name="create_date"/>
+                <field name="state"/>
+                <field name="create_uid" string="Created By"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_temer_lead_form" model="ir.ui.view">
+        <field name="name">temer.lead.form</field>
+        <field name="model">temer.lead</field>
+        <field name="arch" type="xml">
+            <form string="Lead" create="false">
+                <header>
+                    <button name="action_log_activity"
+                            string="Log Activity"
+                            type="object"
+                            class="btn-secondary"
+                            invisible="state in ['lost', 'expired']"/>
+                    <button name="action_reserve"
+                            string="Create Reservation"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state in ['lost', 'expired']"/>
+                    <button name="action_mark_lost"
+                            string="Mark Lost"
+                            type="object"
+                            class="btn-danger"
+                            invisible="state == 'lost'"/>
+                    <button 
+                            name="action_print_activity_report" 
+                            string="Print Activity Report" 
+                            type="object" 
+                            class="btn-primary"
+                        />
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                <div class="oe_button_box" name="button_box">
+                <button
+                    name="action_reserve_list"
+                    type="object"
+                    class="oe_stat_button"
+                    icon="fa-bar-chart"
+                    >
+                    <field name="counted_reservation" widget="statinfo" string="Reservation"/>
+                </button>
+              </div>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="customer_name"/>
+                            <field name="country_id" required="1"/>
+                            <field name="phone_code" readonly="1" string="Country Code"/>
+                            <field name="phone_no" placeholder="Enter phone number (without country code)"/>
+                            <button name="action_save_crm_records" string="Save" type="object" class="btn-primary"/>
+                        </group>
+                        <group>
+                            <field name="site_ids" widget="many2many_tags" options="{'no_open':True,'no_create': True, 'no_unlink': True}" class="no-remove-tags"/>
+                            <field name="source_ids" options="{'no_open':True,'no_create': True}"/>
+                            <field name="user_id" readonly="1"/>
+                            <field name="create_date" readonly="1" invisible="1"/>
+                            <!-- <field name="phone_ids" widget="many2many_tags"/> -->
+                        </group>
+                    </group>
+
+                    <!-- Follow-up Activities Section -->
+                    <notebook>
+                       <page string="Follow-up Activities" invisible="not state in ['follow_up', 'reservation', 'won']" >
+                        <field name="followup_line_ids" nolabel="1" readonly="1">
+                            <tree string="Follow-up Activities">
+                                <field name="activity_type"/>
+                                <field name="description"/>
+                                <field name="activity_date"/>
+                                <field name="user_id"/>
+                            </tree>
+                        </field>
+                    </page>
+
+                    <page string="Customer Phone">
+                       <field name="phone_ids" 
+                           context="{'default_lead_id': active_id}"
+                           mode="tree,form"
+                           nolabel="1">
+                        <tree string="Phone Numbers" 
+                              editable="bottom" 
+                              create="false" 
+                              delete="true">
+                            <field name="country_id" required="1"/>
+                            <field name="phone" required="1"/>
+                            <field name="phone_datetime"/>
+                        </tree>
+                        <form>
+                            <sheet>
+                                <group>
+                                    <field name="country_id" required="1"/>
+                                    <field name="phone" required="1"/>
+                                    <field name="phone_datetime"/>
+                                    <field name="lead_id" invisible="1"/>
+                                </group>
+                            </sheet>
+                        </form>
+                    </field>
+                    </page>
+                    <page string="Phone Number History">
+                            <field name="additional_numbers_ids" nolabel="1" readonly="1">
+                                <tree string="Phone numbers">
+                                    <field name="number"/>
+                                    <field name="created_date"/>
+                                </tree>
+                            </field>
+                        </page>
+                        
+                    </notebook>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_temer_lead_kanban" model="ir.ui.view">
+    <field name="name">temer.lead.kanban</field>
+    <field name="model">temer.lead</field>
+    <field name="arch" type="xml">
+        <kanban default_group_by="state" default_order="state_sequence">
+            <field name="name"/>
+            <field name="state"/>
+            <field name="state_sequence"/>
+            <field name="phone_no"/>
+            <field name="country_id"/>
+            <!-- <field name="is_duplicate_phone"/> -->
+            <field name="from_callcenter"/>
+            <field name="from_website"/>
+            <field name="from_affilater"/>
+            <field name="create_date"/>
+            
+            <progressbar 
+                field="state" 
+                colors='{
+                    "prospect": "success",
+                    "follow_up": "warning", 
+                    "reservation": "info",
+                    "won": "primary",
+                    "lost": "danger",
+                    "expired": "secondary"
+                }'
+                sum="1"/>
+
+            <templates>
+                <t t-name="kanban-box">
+                    <div class="oe_kanban_global_click" t-attf-class="oe_kanban_global_click kanban_lead_state_{{record.state.raw_value}}">
+                        <!-- Header with name and state -->
+                        <div class="o_kanban_record_top">
+                            <div class="o_kanban_record_title">
+                                <field name="name"/>
+                            </div>
+                            <div>
+                                <field name="state" widget="selection_badge"/>
+                            </div>
+                        </div>
+                        
+                        <!-- Phone Information -->
+                        <div class="o_kanban_record_body">
+                            <div class="row mb-2">
+                                <div class="col-12">
+                                    <i class="fa fa-phone me-1"/>
+                                    <field name="phone_no"/>
+                                    <t t-if="record.country_id.raw_value">
+                                        <small class="text-muted">(<field name="country_id"/>)</small>
+                                    </t>
+                                </div>
+                            </div>
+                            
+                            <!-- Source Indicators -->
+                            <div class="row mb-2">
+                                <div class="col-12">
+                                    <t t-if="record.from_callcenter.raw_value">
+                                        <span class="badge badge-warning me-1">Call Center</span>
+                                    </t>
+                                    <t t-if="record.from_website.raw_value">
+                                        <span class="badge badge-info me-1">Website</span>
+                                    </t>
+                                    <t t-if="record.from_affilater.raw_value">
+                                        <span class="badge badge-success me-1">Affiliate</span>
+                                    </t>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <!-- Footer with creation date -->
+                        <div class="o_kanban_record_bottom">
+                            <div class="oe_kanban_bottom_left">
+                                <small class="text-muted">
+                                    <i class="fa fa-calendar me-1"/>
+                                    <field name="create_date" widget="datetime"/>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </templates>
+        </kanban>
+    </field>
+</record>            
+
+    <!-- Wizard Form View -->
+    <record id="view_temer_lead_activity_wizard_form" model="ir.ui.view">
+        <field name="name">temer.lead.activity.wizard.form</field>
+        <field name="model">temer.lead.activity.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Log Activity">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="lead_id" invisible="1"/>
+                            <field name="activity_type" required="1" string="Activity Type"/>
+                                <field name="description" required="1" placeholder="Enter activity description..."/>
+
+                        </group>
+
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_log_activity" string="Save" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_temer_lead_search" model="ir.ui.view">
+    <field name="name">temer.lead.search</field>
+    <field name="model">temer.lead</field>
+    <field name="arch" type="xml">
+        <search string="Search Leads">
+            <!-- ONE search bar that searches everything -->
+            <field name="customer_name" string="Search"
+                   filter_domain="['|', '|', '|', '|', '|',
+                         ('customer_name', 'ilike', self),
+                         ('phone_no', 'ilike', self),
+                         ('additional_numbers_ids.number', 'ilike', self),
+                         ('phone_ids.phone', 'ilike', self),
+                         ('site_ids.name', 'ilike', self),
+                         ('user_id.name', 'ilike', self)]"/>
+
+            <!-- Quick Filters -->
+            <filter string="My Leads" name="my_leads" domain="[('user_id', '=', uid)]"/>
+            <filter string="Prospect" name="prospect" domain="[('state', '=', 'prospect')]"/>
+            <filter string="Follow Up" name="follow_up" domain="[('state', '=', 'follow_up')]"/>
+
+            <!-- Additional filters -->
+            <filter string="From Call Center" name="from_callcenter" domain="[('from_callcenter', '=', True)]"/>
+            <filter string="From Website" name="from_website" domain="[('from_website', '=', True)]"/>
+            <filter string="From Affiliate" name="from_affilater" domain="[('from_affilater', '=', True)]"/>
+
+            <!-- Time-based Filters -->
+            <filter string="Today" name="today" domain="[('create_date', '>=', context_today())]"/>
+            <filter string="Last 7 Days" name="last_7_days" domain="[('create_date', '>=', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+
+            <!-- Group By Options -->
+            <group expand="0" string="Group By">
+                <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                <filter string="Salesperson" name="group_by_user_id" context="{'group_by': 'user_id'}"/>
+                <filter string="Source" name="group_by_source_ids" context="{'group_by': 'source_ids'}"/>
+                <filter string="Country" name="group_by_country_id" context="{'group_by': 'country_id'}"/>
+            </group>
+        </search>
+    </field>
+</record>
+
+
+    <record id="view_temer_lead_search_all" model="ir.ui.view">
+        <field name="name">temer.lead.search.all</field>
+    <field name="model">temer.lead</field>
+    <field name="arch" type="xml">
+        <search string="Search All Leads">
+            <!-- ONE search bar that searches everything -->
+            <field name="customer_name" string="Search"
+                   filter_domain="['|', '|', '|', '|', '|',
+                         ('customer_name', 'ilike', self),
+                         ('phone_no', 'ilike', self),
+                         ('additional_numbers_ids.number', 'ilike', self),
+                         ('phone_ids.phone', 'ilike', self),
+                         ('site_ids.name', 'ilike', self),
+                         ('user_id.name', 'ilike', self)]"/>
+
+            <!-- Quick Filters -->
+            <filter string="My Leads" name="my_leads" domain="[('user_id', '=', uid)]"/>
+            <filter string="Prospect" name="prospect" domain="[('state', '=', 'prospect')]"/>
+            <filter string="Follow Up" name="follow_up" domain="[('state', '=', 'follow_up')]"/>
+
+            <!-- Group By Options -->
+            <group expand="0" string="Group By">
+                <filter string="Sources" name="group_by_source_ids" context="{'group_by': 'source_ids'}"/>
+                <filter string="Salesperson" name="group_by_user_id" context="{'group_by': 'user_id'}"/>
+                <filter string="Creator" name="group_by_create_uid" context="{'group_by': 'create_uid'}"/>
+                <filter string="Country" name="group_by_country_id" context="{'group_by': 'country_id'}"/>
+            </group>
+        </search>
+    </field>
+
+    </record>
+
+    <!-- Actions -->
+    <!-- Action for My Leads (uses the record rule automatically) -->
+    <record id="action_temer_lead_my" model="ir.actions.act_window">
+        <field name="name">My Leads</field>
+        <field name="res_model">temer.lead</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="view_id" ref="view_temer_lead_kanban"/>
+        <!-- <field name="view_id" ref="view_temer_lead_tree_my"/> -->
+        <field name="search_view_id" ref="view_temer_lead_search"/>
+        <field name="context">{'search_default_my_leads': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first lead!
+            </p>
+        </field>
+    </record>
+
+    <!-- Action for All Leads (managers only) -->
+    <record id="action_temer_lead_all" model="ir.actions.act_window">
+        <field name="name">All Leads</field>
+        <field name="res_model">temer.lead</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="view_id" ref="view_temer_lead_kanban"/>
+        <field name="view_id" ref="view_temer_lead_tree_all"/>
+        <field name="search_view_id" ref="view_temer_lead_search_all"/>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first lead!
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Structure -->
+    <menuitem id="menu_temer_leads_root" name="TEMER CRM" sequence="10" web_icon="temer_crm,static/img/temer_crm.png" groups="temer_crm.group_temer_lead_user,temer_crm.group_call_center_temer_access,temer_crm.group_temer_lead_manager"/>
+    
+    <!-- My Leads Menu - for all users -->
+    <menuitem id="menu_temer_leads_my" name="My Leads" parent="menu_temer_leads_root" action="action_temer_lead_my" sequence="10" groups="temer_crm.group_temer_lead_user,temer_crm.group_temer_lead_manager"/>
+    
+    <!-- All Leads Menu - for managers only -->
+    <menuitem id="menu_temer_leads_all" name="All Leads" parent="menu_temer_leads_root" action="action_temer_lead_all" sequence="15" groups="temer_crm.group_temer_lead_manager"/>
+
+    
+    
+</odoo>

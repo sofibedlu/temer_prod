@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- <odoo>
+    <record id="sh_bundle_product_res_config_settings" model="ir.ui.view">
+        <field name="name">Enable Automatic leave Summary Configuration</field>
+        <field name="model">res.config.settings</field>
+        <field name="arch" type="xml">
+            <form string="Leave Settings">
+                <sheet>
+                    <group string="Automatic Leave Summary" groups="sh_all_in_one_hrms.group_enable_emp_leave_notification">
+                        <field name="sh_enable_automatic_leave"/>
+                        <field name="sh_automatic_leave" widget="radio" options="{'horizontal': True}" 
+                               invisible="not sh_enable_automatic_leave"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo> -->
+
+<odoo>
+
+    <record id="sh_bundle_product_res_config_settings" model="ir.ui.view">
+        <field name="name">automatic.leave.summary.config</field>
+        <!-- TODO: Enable Automatic Leave Summary Config : Was the Title of Above -->
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="hr.res_config_settings_view_form"/>
+
+        <field name="arch" type="xml">
+
+            <!-- Insert into HR Settings block -->
+            <xpath expr="//app[@name='hr']" position="inside">
+
+                <block title="Automatic Leave Summary"
+                       groups="sh_all_in_one_hrms.group_enable_emp_leave_notification">
+
+                    <setting id="automatic_leave_summary_enable_setting"
+                            string="Automatic Leave Summary">
+
+                        <div class="row mt16 o_settings_container">
+
+                            <div class="col-lg-6 col-12 o_setting_box">
+
+                                <div class="o_setting_left_pane">
+                                    <field name="sh_enable_automatic_leave"/>
+                                </div>
+
+                                <div class="o_setting_right_pane">
+                                    <label for="sh_enable_automatic_leave"/>
+                                    <div class="text-muted">Enable Automatic Leave Summary</div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </setting>
+
+
+                    <!-- Second setting (visible only when enabled) -->
+                    <setting id="automatic_leave_summary_options_setting"
+                             invisible="not sh_enable_automatic_leave">
+
+                        <div class="row mt16 o_settings_container">
+
+                            <div class="col-lg-6 col-12 o_setting_box">
+
+                                <div class="o_setting_left_pane"></div>
+
+                                <div class="o_setting_right_pane">
+                                    <label for="sh_automatic_leave"/>
+                                    <div class="text-muted">Automatic Leave Summary</div>
+
+                                    <div class="mt16">
+                                        <field name="sh_automatic_leave"
+                                               widget="radio"
+                                               options="{'horizontal': True}"/>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </setting>
+
+                </block>
+
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

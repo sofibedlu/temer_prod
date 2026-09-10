@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_collection_sms_reminder_wizard_form" model="ir.ui.view">
+        <field name="name">collection.sms.reminder.wizard.form</field>
+        <field name="model">collection.sms.reminder.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Send Batch SMS Reminders">
+                <div class="alert alert-info" role="alert">
+                    Select a date range. The system will automatically fetch all <b>UNPAID</b> installments in this range. Select your template and click Send.
+                </div>
+                <group>
+                    <group>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                    <group>
+                        <field name="template_id" options="{'no_create': True}"/>
+                    </group>
+                </group>
+                <notebook>
+                    <page string="Target Installments">
+                        <field name="line_ids">
+                            <tree editable="bottom" create="0">
+                                <field name="is_selected" widget="boolean_toggle"/>
+                                <field name="partner_id"/>
+                                <field name="phone"/>
+                                <field name="installment_id"/>
+                                <field name="due_date"/>
+                                <field name="amount_residual"/>
+                                <field name="currency_id" column_invisible="1"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+                <footer>
+                    <button name="action_send_reminders" type="object" string="Send SMS" class="btn-primary" icon="fa-paper-plane"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_collection_sms_reminder_wizard" model="ir.actions.act_window">
+        <field name="name">Send Batch SMS</field>
+        <field name="res_model">collection.sms.reminder.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    
+</odoo>

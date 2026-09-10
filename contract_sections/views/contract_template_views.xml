@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="view_contract_section_tree" model="ir.ui.view">
+        <field name="name">contract.template.tree</field>
+        <field name="model">contract.template</field>
+        <field name="arch" type="xml">
+            <tree string="Contract Sections">
+                <field name="name" />
+                <field name="site_id" />
+                <field name="description" />
+                <field name="active" />
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_contract_section_form" model="ir.ui.view">
+        <field name="name">contract.template.form</field>
+        <field name="model">contract.template</field>
+        <field name="arch" type="xml">
+            <form string="Contract Section">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <!-- REMOVED: <widget name="web_ribbon" ... /> from here -->
+                        <button name="toggle_active" type="object" class="oe_stat_button"
+                            icon="fa-archive">
+                            <field name="active" widget="boolean_button" />
+                        </button>
+                    </div>
+                    <!-- MOVED HERE: Ribbon must be a direct child of sheet -->
+                    <widget name="web_ribbon" title="Archived" invisible="active" />
+                    
+                    <group>
+                        <group>
+                            <field name="name" />
+                            <!-- <field name="site_id" /> -->
+                            <field name="developer_id" />
+                            <field name="prefix" />
+                            <field name="sub_prefix" />
+                        </group>
+                        <group>
+                            <!-- <field name="code" /> -->
+
+                            <field name="description" />
+                             <field name="sequence" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Section Contents">
+                            <field name="section_content_ids" limit="80">
+                                <tree limit="80" limit_page_by_page="True">
+                                    <field name="sequence" widget="handle"  />
+                                    <field name="main_title" />
+                                    <field name="subtitle" />
+                                    <field name="content" />
+                                    <field name="is_title_printed" />
+                                    <field name="is_dynamic_content" />
+                                    <field name="dynamic_code" invisible="not is_dynamic_content" />
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" />
+                    <field name="activity_ids" />
+                    <field name="message_ids" />
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_contract_section_search" model="ir.ui.view">
+        <field name="name">contract.template.search</field>
+        <field name="model">contract.template</field>
+        <field name="arch" type="xml">
+            <search string="Contract Sections">
+                <field name="name" />
+                <field name="site_id" />
+                <field name="description" />
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]" />
+                <group expand="0" string="Group By">
+                    <filter string="Site" name="group_by_site" context="{'group_by': 'site_id'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_contract_section" model="ir.actions.act_window">
+        <field name="name">Contract Templates</field>
+        <field name="res_model">contract.template</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_contract_section_search" />
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first contract template
+            </p>
+        </field>
+    </record>
+    
+    <record id="view_contract_section_content_form" model="ir.ui.view">
+        <field name="name">contract.template.content.form</field>
+        <field name="model">contract.template.content</field>
+        <field name="arch" type="xml">
+            <form string="Contract Section Content">
+                <sheet>
+                    <group> 
+                        <group> 
+                            <field name="main_title" />
+                            <field name="subtitle" />
+                        </group>
+                        <group> 
+                            <field name="is_title_printed" />   
+                            <field name="is_dynamic_content" />
+                            <field name="dynamic_code" invisible="not is_dynamic_content" />
+                        </group>
+                    </group>
+                    <group>
+                        <field name="content" readonly="is_dynamic_content" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_contract_section_root"
+        name="Contract Sections"
+        sequence="10" />
+
+    <menuitem id="menu_contract_section"
+        name="Contract Template"
+        sequence="60"
+        parent="advanced_property_management.property_configuration_menu"
+        action="action_contract_section"
+    />
+</odoo>

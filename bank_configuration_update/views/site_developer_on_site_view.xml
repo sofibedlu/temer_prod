@@ -1,0 +1,33 @@
+<odoo>
+    <record id="view_property_site_inherit" model="ir.ui.view">
+        <field name="name">property.site.inherit</field>
+        <field name="model">property.site</field>
+        <field name="inherit_id" ref="ahadubit_property_base.property_site_view_form_id"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='finishing']" position="after">
+                <field name="developer_id"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_bank_inherit" model="ir.ui.view">
+        <field name="name">bank.configuration.inherit</field>
+        <field name="model">bank.configuration</field>
+        <field name="inherit_id" ref="ahadubit_property_reservation.bank_tree_id"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='bank']" position="before">
+                <field name="bank_ethiopian"/>
+            </xpath>
+            <xpath expr="//field[@name='bank']" position="after">
+                <field name="developer_id_bank"/>
+                <!-- <field name="document_types" /> -->
+            </xpath>
+
+        </field>
+    </record>
+    <record id="ahadubit_property_reservation.bank_action" model="ir.actions.act_window">
+        <field name="domain">[('bank_type', '=', 'none')]</field>
+    </record>
+
+
+</odoo>
+

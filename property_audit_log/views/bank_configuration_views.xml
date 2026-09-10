@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="bank_configuration_view_search" model="ir.ui.view">
+        <field name="name">bank.configuration.search</field>
+        <field name="model">bank.configuration</field>
+        <field name="arch" type="xml">
+            <search string="Banks">
+                <field name="bank" string="Bank Name"
+                       filter_domain="['|', '|', ('bank', 'ilike', self), ('bank_ethiopian.name', 'ilike', self), ('account_number', 'ilike', self)]"/>
+                <field name="bank_ethiopian" string="Ethiopian Bank"/>
+                <field name="account_number" string="Account Number"/>
+                <field name="developer_id_bank" string="Developer"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="ahadubit_property_reservation.bank_action" model="ir.actions.act_window">
+        <field name="search_view_id" ref="bank_configuration_view_search"/>
+    </record>
+
+</odoo>

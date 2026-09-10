@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_dynamic_collection_letter" model="ir.actions.report">
+        <field name="name">Dynamic Collection Letter</field>
+        <field name="model">collection.installment</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">collection_letter_template.report_dynamic_letter_template</field>
+        <field name="report_file">collection_letter_template.report_dynamic_letter_template</field>
+        <field name="print_report_name">'Letter - %s' % object.collection_id.partner_id.name</field>
+        <field name="paperformat_id" ref="collection_management.paperformat_collection_letter"/>
+    </record>
+
+    <template id="report_dynamic_letter_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.basic_layout">
+                    <t t-set="res_company" t-value="doc.collection_id.company_id or doc.env.company"/>
+                    <t t-set="ctx_letterhead_id" t-value="doc.env.context.get('letterhead_id')"/>
+                    <t t-set="letterhead" t-value="(ctx_letterhead_id and doc.env['collection.letterhead'].browse(ctx_letterhead_id))"/>
+                    
+                    <t t-set="ctx_template_id" t-value="doc.env.context.get('custom_template_id')"/>
+                    <t t-set="letter_template" t-value="(ctx_template_id and doc.env['collection.letter.template'].browse(ctx_template_id))"/>
+
+                    <!-- Call the Shared Style from base module -->
+                    <t t-call="collection_management.collection_layout_styles"/>
+
+                    <div class="page custom-page">
+                        <!-- HEADER -->
+                        <table class="layout-table">
+                            <tr>
+                                <td style="width: 25%; text-align: left; vertical-align: middle;">
+                                    <img t-if="res_company.logo" t-att-src="image_data_uri(res_company.logo)" style="max-height:100px;" alt="Logo" />
+                                </td>
+                                <td style="width: 50%; text-align: center; vertical-align: middle;">
+                                    <t t-if="letterhead and letterhead.header_title">
+                                        <h3 style="margin: 0; white-space: nowrap;" t-out="letterhead.header_title"/>
+                                    </t>
+                                </td>
+                                <td style="width: 25%;"></td>
+                            </tr>
+                        </table>
+
+                        <!-- DATE & NUMBER -->
+                        <table class="layout-table" style="margin-bottom: 1.5rem;">
+                            <tr>
+                                <td style="width: 60%;"></td>
+                                <td style="width: 40%; text-align: right;">
+                                    <p style="margin:0;">
+                                        <strong>ቀን፡</strong> <span t-esc="doc.env.context.get('letter_date')"/><br />
+                                        <strong>ቁጥር፡</strong> <span t-esc="doc.env.context.get('letter_number')"/>
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- DYNAMIC RECEIVER -->
+                        <div>
+                            <t t-out="letter_template._render_field('receiver_html', doc.ids, engine='qweb')[doc.id]"/>
+                        </div>
+                        <br />
+
+                        <!-- DYNAMIC SUBJECT (Centered) -->
+                        <p style="text-decoration: underline; font-weight: bold; text-align: center;">
+                            <t t-out="letter_template._render_field('subject', doc.ids)[doc.id]"/>
+                        </p>
+                        <br />
+
+                        <!-- DYNAMIC BODY CONTENT -->
+                        <div>
+                            <t t-out="letter_template._render_field('body_html', doc.ids, engine='qweb')[doc.id]"/>
+                        </div>
+                        <br />
+
+                        <!-- SIGNATURE & STAMP -->
+                        <table class="layout-table" style="margin-top: 2rem;">
+                            <tr>
+                                <td style="width: 50%; text-align: center; vertical-align: bottom;">
+                                    <img t-if="letterhead and letterhead.stamp_image" t-att-src="letterhead.get_stamp_data_uri()" style="max-height: 140px; width: auto;" alt="Company Stamp"/>
+                                </td>
+                                <td style="width: 50%; text-align: right; vertical-align: bottom;">
+                                    <p style="margin: 0 0 10px 0;">ከሰላምታ ጋር</p>
+                                    <p style="margin: 0;"><strong>አህመድ ነስሩ</strong></p>
+                                    <p style="margin: 0;">የኮሌክሽን ክፍል ስራ አስኪያጅ</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- FOOTER -->
+                    <div class="footer">
+                        <div style="text-align: center; font-size: 13px; border-top: 1px solid #ccc; padding-top: 10px; margin-left: 40px; margin-right: 40px;"> 
+                            temerrealestate@gmail.com / 0118547115 , 0118722424 , 0909667733 <br /> 
+                            Address: Sarbet on the road to Kera next to Salvatore Woldemariam Building
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

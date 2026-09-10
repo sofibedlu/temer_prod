@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Collection Monitoring Tree View (read-only) -->
+    <record id="view_payment_approval_record_collection_monitoring_tree" model="ir.ui.view">
+        <field name="name">payment.approval.record.collection.monitoring.tree</field>
+        <field name="model">payment.approval.record</field>
+        <field name="arch" type="xml">
+            <tree string="Collection Monitoring"
+                  create="0"
+                  edit="0"
+                  delete="0"
+                  decoration-muted="state == 'draft'"
+                  decoration-success="state == 'approved'"
+                  decoration-danger="state == 'denied'">
+                <field name="collection_id" string="Collection Order"/>
+                <field name="partner_id" string="Customer"/>
+                <field name="installment_price" string="Price" widget="monetary"/>
+                <field name="amount" string="Amount" widget="monetary" sum="Total"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="property_id" string="Property"/>
+                <field name="installment_name" string="Installment Name"/>
+                <field name="display_status" string="Status" widget="badge"
+                       decoration-success="state == 'approved'"
+                       decoration-danger="state == 'denied'"
+                       decoration-muted="state == 'draft'"/>
+                <field name="deny_reason" string="Reason" optional="show"/>
+                <field name="state" column_invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Collection Monitoring Search View -->
+    <record id="view_payment_approval_record_collection_monitoring_search" model="ir.ui.view">
+        <field name="name">payment.approval.record.collection.monitoring.search</field>
+        <field name="model">payment.approval.record</field>
+        <field name="arch" type="xml">
+            <search string="Collection Monitoring">
+                <field name="collection_id" string="Collection Order"/>
+                <field name="partner_id" string="Customer"/>
+                <field name="property_id" string="Property"/>
+                <field name="site_id" string="Site"/>
+                <field name="installment_name" string="Installment Name"/>
+                <field name="amount"/>
+                <separator/>
+                <filter string="Pending" name="filter_pending" domain="[('state', '=', 'draft')]"/>
+                <filter string="Paid" name="filter_paid" domain="[('state', '=', 'approved')]"/>
+                <filter string="Denied" name="filter_denied" domain="[('state', '=', 'denied')]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_status" context="{'group_by': 'display_status'}"/>
+                    <filter string="Customer" name="group_customer" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Property" name="group_property" context="{'group_by': 'property_id'}"/>
+                    <filter string="Site" name="group_site" context="{'group_by': 'site_id'}"/>
+                    <filter string="Collection Order" name="group_collection" context="{'group_by': 'collection_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Collection Monitoring Action -->
+    <record id="action_collection_monitoring" model="ir.actions.act_window">
+        <field name="name">Collection Monitoring</field>
+        <field name="res_model">payment.approval.record</field>
+        <field name="view_mode">tree</field>
+        <field name="view_ids" eval="[(5, 0, 0), (0, 0, {'view_mode': 'tree', 'view_id': ref('view_payment_approval_record_collection_monitoring_tree')})]"/>
+        <field name="search_view_id" ref="view_payment_approval_record_collection_monitoring_search"/>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No payment records found
+            </p>
+            <p>
+                Payments appear here when they are registered from collection orders and sent to the Payment Dashboard.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu: Collection Monitoring at end of Collection menus -->
+    <menuitem id="menu_collection_monitoring"
+              name="Collection Monitoring"
+              parent="collection_management.menu_collection_root"
+              action="action_collection_monitoring"
+              groups="collection_monitoring.group_collection_monitoring"
+              sequence="99"/>
+
+</odoo>

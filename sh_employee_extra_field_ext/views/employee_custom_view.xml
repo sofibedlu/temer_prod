@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id='sh_employee_extra_field_ext_form_view_inherit' model='ir.ui.view'>
+        <field name='name'>hr.employee.form.custom</field>
+        <field name='model'>hr.employee</field>
+        <field name='inherit_id' ref='sh_all_in_one_hrms.sh_employee_extra_field_form_view_inherit' />
+        <field name='arch' type='xml'>
+            <xpath expr="//page[@name='other_details']//group[@name='others']" position='inside'>
+                <field name='account_number' />
+                <field name='tax_id' />
+            </xpath>
+        </field>
+    </record>
+</odoo>

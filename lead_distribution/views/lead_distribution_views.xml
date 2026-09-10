@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lead_distribution_search" model="ir.ui.view">
+        <field name="name">lead.distribution.search</field>
+        <field name="model">lead.distribution</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="customer_name"/>
+                <field name="assigned_salesperson_id"/>
+                <field name="assigned_wing_id"/>
+                
+                <separator/>
+                <filter string="This Week" name="this_week" domain="[('is_current_week', '=', True)]"/>
+                
+                <separator/>
+                <filter string="Mon" name="mon" domain="[('day_of_week', '=', '1')]"/>
+                <filter string="Tue" name="tue" domain="[('day_of_week', '=', '2')]"/>
+                <filter string="Wed" name="wed" domain="[('day_of_week', '=', '3')]"/>
+                <filter string="Thu" name="thu" domain="[('day_of_week', '=', '4')]"/>
+                <filter string="Fri" name="fri" domain="[('day_of_week', '=', '5')]"/>
+                <filter string="Sat" name="sat" domain="[('day_of_week', '=', '6')]"/>
+                <filter string="Sun" name="sun" domain="[('day_of_week', '=', '0')]"/>
+
+                <separator/>
+                <filter string="Affiliate" name="src_aff" domain="[('lead_type', '=', 'affiliate')]"/>
+                <filter string="Website" name="src_web" domain="[('lead_type', '=', 'website')]"/>
+                <filter string="Call Center" name="src_call" domain="[('lead_type', '=', 'callcenter')]"/>
+                <filter string="Reception" name="src_rec" domain="[('lead_type', '=', 'reception')]"/>
+
+                <group expand="0" string="Group By">
+                    <filter string="Salesperson" name="group_by_salesperson" context="{'group_by': 'assigned_salesperson_id'}"/>
+                    <filter string="Lead Type" name="group_by_type" context="{'group_by': 'lead_type'}"/>
+                    <filter string="Wing" name="group_by_wing" context="{'group_by': 'assigned_wing_id'}"/>
+                    <filter string="Day of Week" name="group_by_day" context="{'group_by': 'day_of_week'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_lead_distribution_tree" model="ir.ui.view">
+        <field name="name">lead.distribution.tree</field>
+        <field name="model">lead.distribution</field>
+        <field name="arch" type="xml">
+            <tree string="Lead Distribution" create="0" edit="0" delete="0" decoration-muted="is_current_week == False">
+                
+                <field name="customer_name"/>
+                <field name="lead_type" widget="badge" 
+                       decoration-info="lead_type == 'website'" 
+                       decoration-success="lead_type == 'affiliate'"
+                       decoration-warning="lead_type == 'callcenter'"/>
+                <field name="assigned_salesperson_id" widget="many2one_avatar_user"/>
+                <field name="assigned_wing_id"/> 
+                <field name="is_current_week" column_invisible="1"/>
+                <field name="assign_date" widget="datetime"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_lead_distribution_pivot" model="ir.ui.view">
+        <field name="name">lead.distribution.pivot</field>
+        <field name="model">lead.distribution</field>
+        <field name="arch" type="xml">
+            <pivot string="Distribution Analysis" sample="1">
+                <field name="assigned_salesperson_id" type="row"/>
+                <field name="lead_type" type="col"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_lead_distribution" model="ir.actions.act_window">
+        <field name="name">Lead Distribution</field>
+        <field name="res_model">lead.distribution</field>
+        <field name="view_mode">tree,pivot</field>
+        <field name="context">{'search_default_this_week': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No lead distribution data found.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_lead_distribution_root" 
+              name="Lead Distribution" 
+              groups="lead_distribution.group_lead_distribution_manager"
+              sequence="25"/>
+              
+    <menuitem id="menu_lead_distribution_list" 
+              name="Distributions Report" 
+              parent="menu_lead_distribution_root" 
+              action="action_lead_distribution" 
+              sequence="10"/>
+</odoo>

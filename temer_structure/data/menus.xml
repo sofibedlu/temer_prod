@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+      
+    <!-- Super Admin Menu -->
+    <record id="sale.sale_menu_root" model="ir.ui.menu"> 
+        <field name="groups_id" eval="[(6, 0, [ref('temer_structure.access_property_dev_admin_group1')])]"/>
+    </record>
+    <record id="crm.sales_team_menu_team_pipeline" model="ir.ui.menu"> 
+        <field name="groups_id" eval="[(6, 0, [ref('temer_structure.access_property_dev_admin_group1')])]"/>
+    </record>
+
+    <record id="calendar.mail_menu_calendar" model="ir.ui.menu"> 
+        <field name="groups_id" eval="[(6, 0, [ref('temer_structure.access_property_dev_admin_group1')])]"/>
+    </record>
+    
+    <record id="contacts.menu_contacts" model="ir.ui.menu"> 
+        <field name="groups_id" eval="[(6, 0, [ref('temer_structure.access_property_dev_admin_group1')])]"/>
+    </record>
+    <record id="base.menu_management" model="ir.ui.menu"> 
+        <field name="groups_id" eval="[(6, 0, [ref('temer_structure.access_property_dev_admin_group1')])]"/>
+    </record>
+    <record id="spreadsheet_dashboard.spreadsheet_dashboard_menu_root" model="ir.ui.menu"> 
+        <field name="groups_id" eval="[(6, 0, [ref('temer_structure.access_property_dev_admin_group1')])]"/>
+    </record>
+    <record id="website.menu_website_configuration" model="ir.ui.menu"> 
+        <field name="groups_id" eval="[(6, 0, [ref('temer_structure.access_property_dev_admin_group1')])]"/>
+    </record>
+
+<!--    <record id="advanced_property_management.property_customers_menu" model="ir.ui.menu">-->
+<!--        <field name="groups_id" eval="[(6, 0, [ref('temer_structure.access_property_dev_admin_group1')])]"/>-->
+<!--    </record>-->
+<!--    <record id="advanced_property_management.property_customers_blacklisted_menu" model="ir.ui.menu">-->
+<!--        <field name="groups_id" eval="[(6, 0, [ref('temer_structure.access_property_dev_admin_group1')])]"/>-->
+<!--    </record>-->
+    <!-- <record id="crm.crm_lead_menu_my_activities" model="ir.ui.menu"> 
+        <field name="groups_id" eval="[(6, 0, [ref('temer_structure.access_property_dev_admin_group1')])]"/>
+    </record> -->
+
+    <record id="sale_crm.sale_order_menu_quotations_crm" model="ir.ui.menu"> 
+        <field name="groups_id" eval="[(6, 0, [ref('temer_structure.access_property_dev_admin_group1')])]"/>
+    </record>
+    <record id="account.menu_finance" model="ir.ui.menu"> 
+        <field name="groups_id" eval="[(6, 0, [ref('temer_structure.access_property_dev_admin_group1')])]"/>
+    </record>
+
+    <!-- Sales Person Menu -->
+    <record id="advanced_property_management.property_root_menu" model="ir.ui.menu"> 
+        <field name="groups_id" eval="[(6, 0, [ref('temer_structure.access_property_sales_person_group')])]"/>
+    </record>
+
+    <record id="crm.crm_menu_root" model="ir.ui.menu"> 
+        <field name="groups_id" eval="[(6, 0, [ref('temer_structure.access_property_sales_person_group')])]"/>
+    </record>
+    <record id="crm.menu_crm_opportunities" model="ir.ui.menu"> 
+        <field name="groups_id" eval="[(6, 0, [ref('temer_structure.access_property_sales_person_group')])]"/>
+    </record>
+    
+    <record id="ahadubit_property_reservation.reservation_property_menu" model="ir.ui.menu"> 
+        <field name="groups_id" eval="[(6, 0, [ref('temer_structure.access_property_sales_person_group')])]"/>
+    </record>
+    <!-- <record id="ahadubit_crm.menu_my_activities" model="ir.ui.menu"> 
+        <field name="groups_id" eval="[(6, 0, [ref('temer_structure.access_property_sales_person_group')])]"/>
+    </record>
+     -->
+    
+
+    <!-- CRM Admin Menu -->
+    <record id="crm.crm_menu_config" model="ir.ui.menu"> 
+        <field name="groups_id" eval="[(6, 0, [ref('temer_structure.access_property_crm_admin_group')])]"/>
+    </record>
+    <!-- <record id="crm.sales_team_menu_team_pipeline" model="ir.ui.menu"> 
+        <field name="groups_id" eval="[(6, 0, [ref('temer_structure.access_property_crm_admin_group')])]"/>
+    </record> -->
+    <record id="crm.res_partner_menu_customer" model="ir.ui.menu"> 
+        <field name="groups_id" eval="[(6, 0, [ref('temer_structure.access_property_crm_admin_group')])]"/>
+    </record>
+    <record id="crm.crm_menu_report" model="ir.ui.menu"> 
+        <field name="groups_id" eval="[(6, 0, [ref('temer_structure.access_property_crm_admin_group')])]"/>
+    </record>
+
+  
+    <!-- Contract Admin Menu  -->
+    <!-- -->
+    <record id="ahadubit_property_reservation.property_site_reservation_history_menu_id" model="ir.ui.menu"> 
+        <field name="groups_id" eval="[(6, 0, [ref('temer_structure.access_property_contract_admin_group')])]"/>
+    </record>
+    <!-- <record id="ahadubit_property_reservation.menu_property_reservation_payment" model="ir.ui.menu"> 
+        <field name="groups_id" eval="[(6, 0, [ref('temer_structure.access_property_contract_admin_group')])]"/>
+    </record> -->
+    <record id="ahadubit_property_reservation.menu_property_reservation_payment" model="ir.ui.menu">
+    <field name="groups_id" eval="[(4, ref('temer_structure.access_property_contract_admin_group'))]"/>
+</record>
+
+    <record id="ahadubit_property_reservation.menu_property_transfer" model="ir.ui.menu"> 
+        <field name="groups_id" eval="[(6, 0, [ref('temer_structure.access_property_contract_admin_group')])]"/>
+    </record>
+    <record id="temer_structure.menu_commission_configuration" model="ir.ui.menu"> 
+        <field name="groups_id" eval="[(6, 0, [ref('temer_structure.access_property_contract_admin_group')])]"/>
+    </record>
+
+
+
+    <!-- Reservation Manager Menu -->
+    <record id="ahadubit_property_reservation.property_site_reservation_history_menu_id" model="ir.ui.menu"> 
+        <field name="groups_id" eval="[(6, 0, [ref('temer_structure.access_property_reservation_manager_group'),
+            ref('temer_structure.access_property_contract_admin_group')
+        ])]"/>
+    </record>
+    <!-- <record id="ahadubit_property_reservation.menu_property_reservation_payment" model="ir.ui.menu"> 
+        <field name="groups_id" eval="[(6, 0, [ref('temer_structure.access_property_reservation_manager_group')])]"/>
+    </record> -->
+    <record id="ahadubit_property_reservation.menu_property_reservation_payment" model="ir.ui.menu">
+    <field name="groups_id" eval="[(4, ref('temer_structure.access_property_reservation_manager_group'))]"/>
+</record>
+
+     <record id="ahadubit_property_reservation.menu_property_transfer" model="ir.ui.menu"> 
+        <field name="groups_id" eval="[(6, 0, [ref('temer_structure.access_property_reservation_manager_group')])]"/>
+    </record>
+    <record id="ahadubit_property_base.property_payment_menu" model="ir.ui.menu"> 
+        <field name="groups_id" eval="[(6, 0, [ref('temer_structure.access_property_reservation_manager_group')])]"/>
+    </record>
+    
+    <!-- mulit group menus -->
+    <record id="advanced_property_management.property_configuration_menu" model="ir.ui.menu"> 
+        <field name="groups_id" eval="[(6, 0, [
+            ref('temer_structure.access_property_reservation_manager_group'),
+            ref('temer_structure.access_property_stock_manager_group'),
+            ref('temer_structure.access_property_contract_admin_group')
+        ])]"/>
+    </record>
+
+
+    <record id="advanced_property_management.property_report_menu" model="ir.ui.menu">
+        <field name="groups_id" eval="[(6, 0, [
+            ref('temer_structure.access_property_managment_group'),
+        ])]"/>
+    </record>
+
+    <!-- <record id="ahadubit_property_reservation.menu_property_reservation_payment" model="ir.ui.menu">
+        <field name="groups_id" eval="[(6, 0, [
+            ref('ahadubit_property_reservation.finance_team_approval_group'),
+        ])]"/>
+    </record> -->
+     <record id="ahadubit_property_reservation.menu_property_reservation_payment" model="ir.ui.menu">
+    <field name="groups_id" eval="[(4, ref('ahadubit_property_reservation.finance_team_approval_group'))]"/>
+</record>
+    
+    <record id="advanced_property_management.property_property_menu" model="ir.ui.menu">
+        <field name="groups_id" eval="[(6, 0, [
+            ref('temer_structure.access_property_stock_manager_group'),
+        ])]"/>
+    </record>
+
+    <record id="ahadubit_property_reservation.menu_property_reservation_extension_menu_id" model="ir.ui.menu">
+        <field name="groups_id" eval="[(6, 0, [
+            ref('temer_structure.access_property_system_admin_group'),
+        ])]"/>
+    </record>
+
+
+
+
+
+    
+
+</odoo>

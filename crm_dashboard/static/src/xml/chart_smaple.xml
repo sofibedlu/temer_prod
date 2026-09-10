@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="crm_dashboard.dashboard" owl="1">
+        <div class="container-fluid p-3 h-100 d-flex flex-column" style="overflow: hidden;">
+            <!-- Header and Filters -->
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">Property Site Status Dashboard</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3 d-flex align-items-end">
+                                    <button class="btn btn-primary" t-on-click="fetchSiteData">
+                                        <i class="fa fa-refresh"/> Refresh Data
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main content area with scroll -->
+            <div class="row flex-grow-1" style="overflow-y: auto;">
+                <!-- Charts Section -->
+                <div class="col-12 mb-4">
+                    <div class="row">
+                        <!-- Bar Chart - Status Distribution by Site -->
+                        <div class="col-md-8">
+                            <div class="card h-150">
+                                <div class="card-header">
+                                    <h5>Status Distribution by Property Site</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas t-ref="canvas" height="150"/>
+                                </div>
+                                <div class="card-footer text-muted">
+                                    <small>Click on bars to view site details</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pie Chart - Overall Status Distribution -->
+                        <div class="col-md-4">
+                            <div class="card h-50">
+                                <div class="card-header">
+                                    <h5>Overall Status Distribution</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas t-ref="canvastwo" height="50"/>
+                                </div>
+                                <div class="card-footer text-muted">
+                                    <small>Hover for percentage breakdown</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Summary Cards -->
+                <div class="col-12">
+                    <div class="row">
+                        <!-- Total Sites Card -->
+                        <div class="col-md-3 mb-3">
+                            <div class="card h-100">
+                                <div class="card-header bg-info text-white">
+                                    <h5 class="card-title mb-0">Total Sites</h5>
+                                </div>
+                                <div class="card-body text-center">
+                                    <h1 t-esc="siteData.length" class="display-4"/>
+                                    <small class="text-muted">Properties tracked</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Total Customers Card -->
+                        <div class="col-md-3 mb-3">
+                            <div class="card h-100">
+                                <div class="card-header bg-success text-white">
+                                    <h5 class="card-title mb-0">Total Customers</h5>
+                                </div>
+                                <div class="card-body text-center">
+                                    <h1 t-esc="siteData.reduce((sum, site) => sum + site.total_customers, 0)" class="display-4"/>
+                                    <small class="text-muted">Unique customers</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Reserved Properties Card -->
+                        <div class="col-md-3 mb-3">
+                            <div class="card h-100">
+                                <div class="card-header bg-warning text-dark">
+                                    <h5 class="card-title mb-0">Reserved</h5>
+                                </div>
+                                <div class="card-body text-center">
+                                    <h1 t-esc="siteData.reduce((sum, site) => sum + site.reserved_count, 0)" class="display-4"/>
+                                    <small class="text-muted">Currently reserved</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sold Properties Card -->
+                        <div class="col-md-3 mb-3">
+                            <div class="card h-100">
+                                <div class="card-header bg-danger text-white">
+                                    <h5 class="card-title mb-0">Sold</h5>
+                                </div>
+                                <div class="card-body text-center">
+                                    <h1 t-esc="siteData.reduce((sum, site) => sum + site.sold_count, 0)" class="display-4"/>
+                                    <small class="text-muted">Properties sold</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

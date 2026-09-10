@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Update the Installment Form View -->
+    <record id="view_collection_installment_form_inherit_multiple_receipts" model="ir.ui.view">
+        <field name="name">collection.installment.form.multiple.receipts</field>
+        <field name="model">collection.installment</field>
+        <field name="inherit_id" ref="collection_management.view_collection_installment_form"/>
+        <field name="arch" type="xml">
+            <field name="amount_residual" position="after">
+                <field name="pending_approval_amount" widget="monetary"/>
+            </field>
+
+            <button name="action_open_payment_wizard" position="attributes">
+                <attribute name="invisible">state == 'paid' or amount_residual &lt;= pending_approval_amount or collection_state in ['void', 'terminated']</attribute>
+            </button>
+        </field>
+    </record>
+
+    <!-- Update the inline Installment Tree View -->
+    <record id="view_collection_order_form_inherit_multiple_receipts" model="ir.ui.view">
+        <field name="name">collection.order.form.multiple.receipts</field>
+        <field name="model">collection.order</field>
+        <field name="inherit_id" ref="collection_management.view_collection_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='installment_ids']/tree/field[@name='amount_residual']" position="after">
+                <field name="pending_approval_amount" optional="show" widget="monetary"/>
+            </xpath>
+
+            <xpath expr="//field[@name='installment_ids']/tree/button[@name='action_open_payment_wizard']" position="attributes">
+                <attribute name="invisible">state == 'paid' or amount_residual &lt;= pending_approval_amount or parent.state in ['void', 'terminated']</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

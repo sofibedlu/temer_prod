@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="property_property_view_form_merge_flag" model="ir.ui.view">
+        <field name="name">property.property.view.form.merge.flag</field>
+        <field name="model">property.property</field>
+        <field name="inherit_id" ref="advanced_property_management.property_property_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='property_tags']" position="after">
+                <field name="is_merge" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="child_property_merge_wizard_view_form" model="ir.ui.view">
+        <field name="name">child.property.merge.wizard.view.form</field>
+        <field name="model">child.property.merge.wizard</field>
+        <field name="arch" type="xml">
+            <form create="1" edit="1">
+                <header>
+                    <button name="action_merge_properties"
+                            string="Merge"
+                            type="object"
+                            class="btn-primary"
+                            groups="property_merge_management.group_property_merge_user"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+
+                    <field name="currency_id" invisible="1"/>
+                    <field name="property_slot_count" invisible="1"/>
+
+                    <group>
+                        <group>
+                            <field name="site_id" options="{'no_create': True}"/>
+                            <field name="target_state" widget="radio" options="{'horizontal': True}"/>
+                            <field name="selected_property_count" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="preview_property_id" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <div class="o_row">
+                        <button name="action_add_property"
+                                string="Add Property"
+                                type="object"
+                                class="btn-secondary"
+                                invisible="not site_id"/>
+                        <button name="action_merge_properties"
+                                string="Merge"
+                                type="object"
+                                class="btn-primary"
+                                groups="property_merge_management.group_property_merge_user"/>
+                    </div>
+
+                    <group string="Select Properties">
+                        <group>
+                            <field name="property_1_id" options="{'no_create': True}"/>
+                            <field name="property_2_id" invisible="property_slot_count &lt; 2" options="{'no_create': True}"/>
+                            <field name="property_3_id" invisible="property_slot_count &lt; 3" options="{'no_create': True}"/>
+                            <field name="property_4_id" invisible="property_slot_count &lt; 4" options="{'no_create': True}"/>
+                            <field name="property_5_id" invisible="property_slot_count &lt; 5" options="{'no_create': True}"/>
+                            <field name="property_6_id" invisible="property_slot_count &lt; 6" options="{'no_create': True}"/>
+                            <field name="property_7_id" invisible="property_slot_count &lt; 7" options="{'no_create': True}"/>
+                            <field name="property_8_id" invisible="property_slot_count &lt; 8" options="{'no_create': True}"/>
+                            <field name="property_9_id" invisible="property_slot_count &lt; 9" options="{'no_create': True}"/>
+                            <field name="property_10_id" invisible="property_slot_count &lt; 10" options="{'no_create': True}"/>
+                            <field name="property_11_id" invisible="property_slot_count &lt; 11" options="{'no_create': True}"/>
+                            <field name="property_12_id" invisible="property_slot_count &lt; 12" options="{'no_create': True}"/>
+                            <field name="property_13_id" invisible="property_slot_count &lt; 13" options="{'no_create': True}"/>
+                            <field name="property_14_id" invisible="property_slot_count &lt; 14" options="{'no_create': True}"/>
+                            <field name="property_15_id" invisible="property_slot_count &lt; 15" options="{'no_create': True}"/>
+                            <field name="property_16_id" invisible="property_slot_count &lt; 16" options="{'no_create': True}"/>
+                            <field name="property_17_id" invisible="property_slot_count &lt; 17" options="{'no_create': True}"/>
+                            <field name="property_18_id" invisible="property_slot_count &lt; 18" options="{'no_create': True}"/>
+                            <field name="property_19_id" invisible="property_slot_count &lt; 19" options="{'no_create': True}"/>
+                            <field name="property_20_id" invisible="property_slot_count &lt; 20" options="{'no_create': True}"/>
+                            <field name="property_21_id" invisible="property_slot_count &lt; 21" options="{'no_create': True}"/>
+                            <field name="property_22_id" invisible="property_slot_count &lt; 22" options="{'no_create': True}"/>
+                            <field name="property_23_id" invisible="property_slot_count &lt; 23" options="{'no_create': True}"/>
+                            <field name="property_24_id" invisible="property_slot_count &lt; 24" options="{'no_create': True}"/>
+                            <field name="property_25_id" invisible="property_slot_count &lt; 25" options="{'no_create': True}"/>
+                            <field name="property_26_id" invisible="property_slot_count &lt; 26" options="{'no_create': True}"/>
+                            <field name="property_27_id" invisible="property_slot_count &lt; 27" options="{'no_create': True}"/>
+                            <field name="property_28_id" invisible="property_slot_count &lt; 28" options="{'no_create': True}"/>
+                            <field name="property_29_id" invisible="property_slot_count &lt; 29" options="{'no_create': True}"/>
+                            <field name="property_30_id" invisible="property_slot_count &lt; 30" options="{'no_create': True}"/>
+                            <field name="property_31_id" invisible="property_slot_count &lt; 31" options="{'no_create': True}"/>
+                            <field name="property_32_id" invisible="property_slot_count &lt; 32" options="{'no_create': True}"/>
+                            <field name="property_33_id" invisible="property_slot_count &lt; 33" options="{'no_create': True}"/>
+                            <field name="property_34_id" invisible="property_slot_count &lt; 34" options="{'no_create': True}"/>
+                            <field name="property_35_id" invisible="property_slot_count &lt; 35" options="{'no_create': True}"/>
+                            <field name="property_36_id" invisible="property_slot_count &lt; 36" options="{'no_create': True}"/>
+                            <field name="property_37_id" invisible="property_slot_count &lt; 37" options="{'no_create': True}"/>
+                            <field name="property_38_id" invisible="property_slot_count &lt; 38" options="{'no_create': True}"/>
+                            <field name="property_39_id" invisible="property_slot_count &lt; 39" options="{'no_create': True}"/>
+                            <field name="property_40_id" invisible="property_slot_count &lt; 40" options="{'no_create': True}"/>
+                            <field name="property_41_id" invisible="property_slot_count &lt; 41" options="{'no_create': True}"/>
+                            <field name="property_42_id" invisible="property_slot_count &lt; 42" options="{'no_create': True}"/>
+                            <field name="property_43_id" invisible="property_slot_count &lt; 43" options="{'no_create': True}"/>
+                            <field name="property_44_id" invisible="property_slot_count &lt; 44" options="{'no_create': True}"/>
+                            <field name="property_45_id" invisible="property_slot_count &lt; 45" options="{'no_create': True}"/>
+                            <field name="property_46_id" invisible="property_slot_count &lt; 46" options="{'no_create': True}"/>
+                            <field name="property_47_id" invisible="property_slot_count &lt; 47" options="{'no_create': True}"/>
+                            <field name="property_48_id" invisible="property_slot_count &lt; 48" options="{'no_create': True}"/>
+                            <field name="property_49_id" invisible="property_slot_count &lt; 49" options="{'no_create': True}"/>
+                            <field name="property_50_id" invisible="property_slot_count &lt; 50" options="{'no_create': True}"/>
+                        </group>
+                    </group>
+
+                    <group string="New Property Details">
+                        <group>
+                            <field name="preview_name" readonly="1"/>
+                            <field name="preview_reference" readonly="1"/>
+                            <field name="preview_state" readonly="1"/>
+                            <field name="preview_property_type" readonly="1"/>
+                            <field name="commercial_rate_range" readonly="1" invisible="preview_property_type != 'commercial'"/>
+                            <field name="commercial_amount" readonly="1" invisible="preview_property_type != 'commercial'"/>
+                            <field name="commercial_location" readonly="1" invisible="preview_property_type != 'commercial'"/>
+                        </group>
+                        <group>
+                            <field name="site_id" string="Site" readonly="1"/>
+                            <field name="preview_block_id" readonly="1"/>
+                            <field name="preview_floor_id" readonly="1"/>
+                            <field name="preview_unit_number" readonly="1"/>
+                            <field name="preview_site_property_type_id" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <group string="Property Type Details">
+                        <group>
+                            <field name="bedroom" readonly="1"/>
+                            <field name="bathroom" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="gross_area" readonly="1"/>
+                            <field name="net_area" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <group string="Price Details">
+                        <group>
+                            <field name="price" readonly="1"/>
+                            <field name="rate_per_m2" readonly="1"/>
+                            <field name="unit_price" readonly="1"/>
+                            <field name="rent_month" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="payment_structure_id" readonly="1"/>
+                            <field name="site_payment_structure_id" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <group string="Property Details">
+                        <group>
+                            <field name="finishing" readonly="1"/>
+                            <field name="furnishing" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="preview_floor_id" readonly="1"/>
+                            <field name="bedroom" readonly="1"/>
+                            <field name="bathroom" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="child_property_view_tree" model="ir.ui.view">
+        <field name="name">child.property.view.tree</field>
+        <field name="model">child.property</field>
+        <field name="arch" type="xml">
+            <tree create="0" edit="1" delete="0">
+                <field name="parent_property_id" readonly="1"/>
+                <field name="name" readonly="1"/>
+                <field name="original_property_database_id" readonly="1"/>
+                <field name="computed_reference" readonly="1"/>
+                <field name="site_id" readonly="1"/>
+                <field name="block_id" readonly="1"/>
+                <field name="floor_id" readonly="1"/>
+                <field name="unit_number" readonly="1"/>
+                <field name="gross_area" readonly="1"/>
+                <field name="net_area" readonly="1"/>
+                <field name="unit_price" readonly="1"/>
+                <field name="state" readonly="1"/>
+                <field name="salesperson_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="child_property_view_form" model="ir.ui.view">
+        <field name="name">child.property.view.form</field>
+        <field name="model">child.property</field>
+        <field name="arch" type="xml">
+            <form create="0" edit="1" delete="0">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="parent_property_id" readonly="1"/>
+                            <field name="original_property_id" readonly="1"/>
+                            <field name="original_property_database_id" readonly="1"/>
+                            <field name="code" readonly="1"/>
+                            <field name="computed_reference" readonly="1"/>
+                            <field name="state" readonly="1"/>
+                            <field name="salesperson_id"/>
+                        </group>
+                        <group>
+                            <field name="site_id" readonly="1"/>
+                            <field name="block_id" readonly="1"/>
+                            <field name="floor_id" readonly="1"/>
+                            <field name="unit_number" readonly="1"/>
+                            <field name="site_property_type_id" readonly="1"/>
+                            <field name="property_type_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Copied Values">
+                        <group>
+                            <field name="property_kind" readonly="1"/>
+                            <field name="gross_area" readonly="1"/>
+                            <field name="net_area" readonly="1"/>
+                            <field name="bedroom" readonly="1"/>
+                            <field name="bathroom" readonly="1"/>
+                            <field name="price" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="unit_price" readonly="1"/>
+                            <field name="rent_month" readonly="1"/>
+                            <field name="payment_structure_id" readonly="1"/>
+                            <field name="site_payment_structure_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Extra Property Values">
+                        <group>
+                            <field name="commercial_location" readonly="1"/>
+                            <field name="commercial_rate_range" readonly="1"/>
+                            <field name="commercial_amount" readonly="1"/>
+                            <field name="rate_per_m2" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="finishing" readonly="1"/>
+                            <field name="furnishing" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Full Copy">
+                        <field name="snapshot_json" nolabel="1" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="property_reservation_view_tree_merge_child" model="ir.ui.view">
+        <field name="name">property.reservation.tree.merge.child</field>
+        <field name="model">property.reservation</field>
+        <field name="inherit_id" ref="ahadubit_property_reservation.property_reservation_history_view_tree_id"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='property_id']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='property_id']" position="after">
+                <field name="property_display_name" string="Property"/>
+                <field name="child_property_id" column_invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="property_reservation_view_form_merge_child" model="ir.ui.view">
+        <field name="name">property.reservation.form.merge.child</field>
+        <field name="model">property.reservation</field>
+        <field name="inherit_id" ref="ahadubit_property_reservation.property_reservation_history_view_form_id"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='property_id']" position="before">
+                <field name="child_property_id"
+                         string="Property"
+                         readonly="1"
+                         invisible="not child_property_id"
+                         options="{'no_create': True, 'no_open': False}"/>
+            </xpath>
+            <xpath expr="//field[@name='property_id']" position="attributes">
+                <attribute name="invisible">child_property_id</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="child_property_merge_confirm_wizard_view_form" model="ir.ui.view">
+        <field name="name">child.property.merge.confirm.wizard.view.form</field>
+        <field name="model">child.property.merge.confirm.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Warning: Reservations will be canceled">
+                <div class="alert alert-warning" role="alert">
+                    <p>
+                        <strong>Warning:</strong>
+                        The selected properties have active reservations.
+                        Merging will <strong>cancel</strong> these reservations
+                        and keep them linked on the child property records.
+                    </p>
+                    <p>
+                        Reservations to cancel:
+                        <field name="reservation_count" readonly="1" class="oe_inline"/>
+                    </p>
+                </div>
+                <field name="merge_wizard_id" invisible="1"/>
+                <field name="line_ids" readonly="1">
+                    <tree create="0" delete="0" edit="0">
+                        <field name="reservation_id"/>
+                        <field name="property_name"/>
+                        <field name="status"/>
+                        <field name="customer_name"/>
+                        <field name="salesperson_name"/>
+                        <field name="created_by_name"/>
+                    </tree>
+                </field>
+                <footer>
+                    <button name="action_confirm_merge"
+                            string="Cancel Reservations and Merge"
+                            type="object"
+                            class="btn-primary"
+                            confirm="Are you sure you want to cancel these reservations and merge?"/>
+                    <button string="Back" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="child_property_merge_action" model="ir.actions.act_window">
+        <field name="name">Merge Property</field>
+        <field name="res_model">child.property.merge.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Select properties and merge them into one parent property.
+            </p>
+        </field>
+    </record>
+
+    <record id="child_property_action" model="ir.actions.act_window">
+        <field name="name">Child Properties</field>
+        <field name="res_model">child.property</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="property_merge_menu"
+              name="Merge Property"
+              parent="advanced_property_management.property_menu"
+              action="child_property_merge_action"
+              sequence="4"
+              groups="property_merge_management.group_property_merge_user"/>
+</odoo>

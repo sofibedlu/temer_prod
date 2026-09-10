@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_picking_form_inherit_technical_check" model="ir.ui.view">
+        <field name="name">stock.picking.form.inherit.technical.check</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//header" position="inside">
+                <button name="action_technical_approve" 
+                        string="Verify Technical Specs" 
+                        type="object" 
+                        class="btn-success" 
+                        invisible="not is_custom_procurement or technical_approved or state not in ['assigned', 'draft', 'confirmed']"
+                        groups="purchase.group_purchase_manager" /> 
+            </xpath>
+
+            <!-- Approval Information inside the picking -->
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="is_custom_procurement" invisible="1"/>
+                <field name="technical_approved" invisible="not is_custom_procurement" readonly="1" widget="boolean_toggle"/>
+                <field name="technical_approved_by" invisible="not technical_approved"/>
+            </xpath>
+            
+        </field>
+    </record>
+</odoo>

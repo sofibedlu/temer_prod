@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_site_company_form_inherit_amharic_name" model="ir.ui.view">
+        <field name="name">site.company.form.inherit.amharic.name</field>
+        <field name="model">site.company</field>
+        <field name="inherit_id" ref="ahadubit_property_base_custom.site_company_view_tree_id"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="name_amharic" placeholder="e.g. ቴምር ሪል እስቴት ኃ/የተ/የግ/ማህበር"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

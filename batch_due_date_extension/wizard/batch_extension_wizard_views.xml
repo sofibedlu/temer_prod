@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_batch_extension_wizard_form" model="ir.ui.view">
+        <field name="name">batch.extension.wizard.form</field>
+        <field name="model">batch.extension.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Request Batch Due Date Extension">
+                <sheet>
+                    <notebook>
+                        <page string="Installments">
+                            <field name="line_ids">
+                                <tree editable="bottom">
+                                    <field name="collection_id"/>
+                                    <field name="partner_id"/>
+                                    <field name="buyers_name"/>
+                                    <field name="installment_id"/>
+                                    <field name="current_due_date"/>
+                                    <field name="new_due_date"/>
+                                    <field name="new_due_date_ethiopian" placeholder="DD/MM/YYYY"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Details &amp; Attachments">
+                            <group>
+                                <field name="reason"/>
+                                <field name="attachment_ids" widget="many2many_binary" string="Attach Documents"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <footer>
+                    <button name="action_create_request" type="object" string="Create Request" class="btn-primary" icon="fa-paper-plane"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_batch_extension_wizard" model="ir.actions.act_window">
+        <field name="name">Batch Due Date Extension</field>
+        <field name="res_model">batch.extension.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_batch_due_date_extension"
+              name="Batch Due Date Extension"
+              parent="collection_management.menu_batch_operations"
+              action="action_batch_extension_wizard"
+              groups="group_batch_extension_requester"
+              sequence="10"/>
+</odoo>

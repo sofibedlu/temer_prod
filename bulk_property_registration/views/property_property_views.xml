@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Add bulk registration link on property form (optional) -->
+    <record id="property_property_view_form_bulk_ref" model="ir.ui.view">
+        <field name="name">property.property.form.bulk.ref</field>
+        <field name="model">property.property</field>
+        <field name="inherit_id" ref="ahadubit_property_base.property_property_view_form_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='site']" position="before">
+                <field name="bulk_registration_id" readonly="1" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

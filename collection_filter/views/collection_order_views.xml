@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Enhanced Collection Order Search View -->
+    <record id="view_collection_order_search_enhanced" model="ir.ui.view">
+        <field name="name">collection.order.search.enhanced</field>
+        <field name="model">collection.order</field>
+        <field name="arch" type="xml">
+            <search string="Collection Orders">
+                <!-- Main search field - searches across collection reference, customer name, property name, and site name -->
+                <field name="name" 
+                       filter_domain="['|', '|', '|', ('name', 'ilike', self), ('customer_name', 'ilike', self), ('property_name', 'ilike', self), ('site_name', 'ilike', self)]"/>
+                
+                <!-- Individual search fields -->
+                <field name="customer_name" string="Customer"/>
+                <field name="property_name" string="Property"/>
+                <field name="site_name" string="Site"/>
+                
+                <filter string="Active" name="active" domain="[('state', '=', 'active')]"/>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Completed" name="completed" domain="[('state', '=', 'completed')]"/>
+                <filter string="Terminated" name="terminated" domain="[('state', '=', 'terminated')]"/>
+                
+                <separator/>
+                <filter string="Group By Property" name="group_by_property" context="{'group_by': 'property_id'}"/>
+                <filter string="Group By Site" name="group_by_site" context="{'group_by': 'site_id'}"/>
+                <filter string="Group By Customer" name="group_by_customer" context="{'group_by': 'partner_id'}"/>
+                <filter string="Group By Status" name="group_by_status" context="{'group_by': 'state'}"/>
+            </search>
+        </field>
+    </record>
+    
+    <!-- Update the action to use the enhanced search view -->
+    <record id="collection_management.action_collection_order" model="ir.actions.act_window">
+        <field name="search_view_id" ref="view_collection_order_search_enhanced"/>
+    </record>
+
+</odoo>
+

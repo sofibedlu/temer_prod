@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Same search as base (customer_name, phone, site, user) + notes + partner. No replace: only add filters. Amharic works (ilike/UTF-8). -->
+
+        <!-- My Leads: add search-by options (Customer, Site, Phone, Sales Person) + source/time filters and Group By -->
+        <record id="view_temer_lead_search_filters" model="ir.ui.view">
+            <field name="name">temer.lead.search.filters</field>
+            <field name="model">temer.lead</field>
+            <field name="inherit_id" ref="temer_crm.view_temer_lead_search"/>
+            <field name="arch" type="xml">
+                <!-- Add search-by options so dropdown shows: Search Customer for: x, Search Site for: x, etc. -->
+                <xpath expr="//filter[@name='my_leads']" position="before">
+                    <field name="customer_name" string="Customer" filter_domain="[('customer_name', 'ilike', self)]"/>
+                    <field name="customer_name" string="Site" filter_domain="[('site_ids.name', 'ilike', self)]"/>
+                    <field name="customer_name" string="Phone" filter_domain="['|', '|', ('phone_no', 'ilike', self), ('phone_ids.phone', 'ilike', self), ('additional_numbers_ids.number', 'ilike', self)]"/>
+                    <field name="customer_name" string="Sales Person" filter_domain="[('user_id.name', 'ilike', self)]"/>
+                </xpath>
+                <xpath expr="//filter[@name='follow_up']" position="after">
+                    <filter string="From Call Center" name="from_callcenter" domain="[('from_callcenter', '=', True)]"/>
+                    <filter string="From Website" name="from_website" domain="[('from_website', '=', True)]"/>
+                    <filter string="From Affiliate" name="from_affilater" domain="[('from_affilater', '=', True)]"/>
+                    <filter string="Today" name="today" domain="[('create_date', '>=', context_today())]"/>
+                    <filter string="Last 7 Days" name="last_7_days" domain="[('create_date', '>=', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                        <filter string="Salesperson" name="group_by_user_id" context="{'group_by': 'user_id'}"/>
+                        <filter string="Source" name="group_by_source_ids" context="{'group_by': 'source_ids'}"/>
+                        <filter string="Country" name="group_by_country_id" context="{'group_by': 'country_id'}"/>
+                        <filter string="Creator" name="group_by_create_uid" context="{'group_by': 'create_uid'}"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- All Leads: add search-by options + source and time-based filters -->
+        <record id="view_temer_lead_search_all_filters" model="ir.ui.view">
+            <field name="name">temer.lead.search.all.filters</field>
+            <field name="model">temer.lead</field>
+            <field name="inherit_id" ref="temer_crm.view_temer_lead_search_all"/>
+            <field name="arch" type="xml">
+                <!-- Use a stable xpath: parent view structure may change -->
+                <xpath expr="//search" position="inside">
+                    <field name="customer_name" string="Customer" filter_domain="[('customer_name', 'ilike', self)]"/>
+                    <field name="customer_name" string="Site" filter_domain="[('site_ids.name', 'ilike', self)]"/>
+                    <field name="customer_name" string="Phone" filter_domain="['|', '|', ('phone_no', 'ilike', self), ('phone_ids.phone', 'ilike', self), ('additional_numbers_ids.number', 'ilike', self)]"/>
+                    <field name="customer_name" string="Sales Person" filter_domain="[('user_id.name', 'ilike', self)]"/>
+                    <filter string="From Call Center" name="from_callcenter" domain="[('from_callcenter', '=', True)]"/>
+                    <filter string="From Website" name="from_website" domain="[('from_website', '=', True)]"/>
+                    <filter string="From Affiliate" name="from_affilater" domain="[('from_affilater', '=', True)]"/>
+                    <filter string="Today" name="today" domain="[('create_date', '>=', context_today())]"/>
+                    <filter string="Last 7 Days" name="last_7_days" domain="[('create_date', '>=', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
+

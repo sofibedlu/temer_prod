@@ -1,0 +1,43 @@
+<odoo>
+    <record id="view_property_reservation_form_cancel_extend" model="ir.ui.view">
+        <field name="name">property.reservation.form.cancel.extend</field>
+        <field name="model">property.reservation</field>
+        <field name="inherit_id" ref="ahadubit_property_reservation.property_reservation_history_view_form_id"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_cancel_active_reservation"
+                        type="object"
+                        string="Cancel Reservations"
+                        class="btn-primary"
+                        invisible="status in ['draft','requested','canceled','expired','pending_sales','sold']"
+                        groups="property_reservation_cancel_extend.group_property_reservation_cancel"
+                />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_property_property_form_inherit_test_field" model="ir.ui.view">
+        <field name="name">property.property.view.form.inherit.test.field</field>
+        <field name="model">property.property</field>
+        <field name="inherit_id" ref="advanced_property_management.property_property_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='sale_rent']" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="inherit_view_property_search_add_property_type_group" model="ir.ui.view">
+        <field name="name">property.property.search.inherit.property_type_group</field>
+        <field name="model">property.property</field>
+        <field name="inherit_id" ref="contract_sections.view_property_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='group_site']" position="after">
+                <filter string="Property Type" name="property_type_group" context="{'group_by': 'property_type'}"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
+
+

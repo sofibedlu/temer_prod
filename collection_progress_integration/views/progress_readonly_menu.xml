@@ -1,0 +1,16 @@
+<odoo>
+    <record id="action_collection_construction_progress_full" model="ir.actions.act_window">
+        <field name="name">Construction Progress</field>
+        <field name="res_model">property.site.construction.progress</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="groups_id" eval="[(6, 0, [ref('collection_progress_integration.group_collection_construction_progress_manager')])]"/>
+    </record>
+
+    <menuitem id="menu_collection_construction_progress_full"
+              name="Construction Progress"
+              parent="collection_management.menu_collection_root"
+              action="action_collection_construction_progress_full"
+              sequence="30"
+              groups="collection_progress_integration.group_collection_construction_progress_manager"/>
+</odoo>

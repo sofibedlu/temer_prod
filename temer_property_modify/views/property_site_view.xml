@@ -1,0 +1,29 @@
+<odoo>
+    <data>
+        <record id="property_site_view_form_inheritted2" model="ir.ui.view">
+            <field name="name">property.site.form.inheritted2</field>
+            <field name="model">property.site</field>
+            <field name="inherit_id" ref="ahadubit_property_base.property_site_view_form_id"/>
+            <field name="arch" type="xml">
+                <xpath expr="//header" position="inside">
+                    <button name="action_view_properties" type="object" class="oe_stat_button">
+                        <field name="stock_number" widget="statinfo" string=" Properties"/>
+                    </button>
+                </xpath>
+                <xpath expr="//sheet/group/group[2]/field[@name='title_deed_no']" position="before">
+                    <field name="floor_id" string="Floor number per site"/>
+                    <field name="block_number" string="Block"/>
+                    <field name="house_number_floor" string="House Per Floor"/>
+                    <field name="stock_number" string="Site Stock"/>
+                </xpath>
+                <xpath expr="//notebook/page[last()]" position="after">
+                    <page string="Descriptions" name="site_description">
+                        <field name="description_content" string="Site Descriptions"
+                               placeholder="Enter detailed description of the site..."
+                               class="oe_inline" help="Fill in the site description if there is any."/>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

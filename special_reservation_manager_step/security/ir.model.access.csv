@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_special_approval_wizard_manager_step,special.approval.wizard.manager_step,special_reservation.model_special_approval_wizard,special_reservation.group_manager,1,1,1,0

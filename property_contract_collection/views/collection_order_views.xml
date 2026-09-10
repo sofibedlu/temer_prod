@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_collection_order_form_inherit_termination" model="ir.ui.view">
+        <field name="name">collection.order.form.termination</field>
+        <field name="model">collection.order</field>
+        <field name="inherit_id" ref="collection_management.view_collection_order_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_reactivate" 
+                        string="Reactivate" 
+                        type="object" 
+                        class="btn-primary" 
+                        invisible="state != 'terminated'"
+                        groups="collection_management.group_collection_manager"/>
+
+                <button name="action_open_amendment_request_wizard" 
+                        string="Request Amendment" 
+                        type="object" 
+                        class="btn-warning" 
+                        invisible="state not in ['active'] or has_pending_amendment_request"
+                        groups="property_contract_collection.group_collection_amend_void_requests"/>
+                
+                <button name="action_open_void_wizard" 
+                        string="Request Void" 
+                        type="object" 
+                        class="btn-warning" 
+                        invisible="state not in ['active', 'terminated'] or has_pending_void_request"
+                        groups="property_contract_collection.group_collection_amend_void_requests"/>
+            </header>
+
+            <xpath expr="//field[@name='state']" position="after">
+                <field name="has_pending_void_request" invisible="1"/>
+                <field name="has_pending_amendment_request" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Terminated Orders Action -->
+    <record id="action_collection_order_terminated" model="ir.actions.act_window">
+        <field name="name">Terminated Orders</field>
+        <field name="res_model">collection.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', '=', 'terminated')]</field>
+        <field name="context">{'create': False}</field>
+    </record>
+
+    <!-- Terminated Orders Menu -->
+    <menuitem id="menu_collection_order_terminated"
+              name="Terminated Orders"
+              parent="collection_management.menu_collection_root"
+              action="action_collection_order_terminated"
+              sequence="30"/>
+</odoo>

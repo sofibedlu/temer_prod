@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Form View -->
+        <record id="view_support_management_form" model="ir.ui.view">
+            <field name="name">support.management.form</field>
+            <field name="model">support.management</field>
+            <field name="arch" type="xml">
+                <form string="Job Order Form">
+                    <header>
+                        <button name="action_open_report_wizard" string="Task Report" type="object" class="btn-primary" invisible="not id or status in ['completed', 'not_completed']"/>
+                        <button name="action_open_additional_task_wizard" string="Additional Task" type="object" class="btn-secondary" invisible="not id or status in ['completed', 'not_completed']"/>
+                        <field name="status" widget="statusbar" statusbar_visible="assigned,on_progress,completed,not_completed"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="is_manager" invisible="1"/>
+                                <field name="is_overdue" invisible="1"/>
+                                <field name="date" readonly="not is_manager and id" required="1"/>
+                                <field name="due_date" readonly="not is_manager and id" required="1"/>
+                                <field name="priority" widget="priority" readonly="not is_manager"/>
+                                <field name="created_by"/>
+                                <field name="location_ids" widget="many2many_tags" readonly="not is_manager and id" options="{'no_create': True}" required="1"/>
+                                <field name="department_ids" widget="many2many_tags" readonly="not is_manager and id" options="{'no_create': True, 'no_open': True}" required="1"/>
+                                <field name="category_ids" widget="many2many_tags" readonly="not is_manager and id" options="{'no_create': True, 'no_open': True}" required="1"/>
+                                <field name="task_count" readonly="not is_manager and id" required="1"/>
+                                <field name="contact_ids" widget="many2many_tags" readonly="not is_manager and id" required="1"/>
+                                <field name="assigned_to" widget="many2many_tags" readonly="not is_manager and id" options="{'no_create': True, 'no_open': True}" required="1"/>
+                            </group>
+                            <group invisible="not id">
+                                <field name="is_assignee" invisible="1"/>
+                                <field name="is_completed" invisible="is_manager and not is_assignee" readonly="status in ['completed', 'not_completed'] or not is_assignee" force_save="1"/>
+                                <field name="is_not_completed" readonly="not is_manager and (status in ['completed', 'not_completed'] or not is_assignee)" force_save="1"/>
+                                <field name="assigned_date" readonly="1"/>
+                                <field name="completion_date" readonly="1"/>
+                                <field name="time_taken" readonly="1"/>
+                            </group>
+                        </group>
+                        
+                        <separator string="Description"/>
+                        <field name="description" placeholder="Description of what the assignee should do..." readonly="not is_manager and id" style="width: 100%" required="1"/>
+
+                        <!-- Main Achievements: bold bullet-style HTML, full width -->
+                        <separator string="Main Achievements" invisible="not id"/>
+                        <field name="achievement_summary" nolabel="1" invisible="not id" readonly="1" widget="html" style="width: 100%; min-height: 40px;"/>
+
+                        <!-- Work Updates: full width kanban -->
+                        <separator string="Work Updates" invisible="not id"/>
+                        <field name="update_ids" readonly="1" nolabel="1" invisible="not id">
+                            <kanban>
+                                <field name="user_id"/>
+                                <field name="date"/>
+                                <field name="description"/>
+                                <templates>
+                                    <t t-name="kanban-box">
+                                        <div style="margin-bottom: 6px; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                                            <div style="border-bottom: 1px solid #eee; padding-bottom: 5px; margin-bottom: 5px;">
+                                                <strong class="text-primary"><field name="user_id"/></strong>
+                                                <span class="text-muted float-end" style="font-size: 0.85em;"><field name="date"/></span>
+                                            </div>
+                                            <div style="white-space: pre-wrap; font-size: 0.95em;"><field name="description"/></div>
+                                        </div>
+                                    </t>
+                                </templates>
+                            </kanban>
+                        </field>
+
+                        <!-- Additional Tasks: bold, full-width list below Work Updates -->
+                        <separator string="Additional Tasks" invisible="not id" style="margin-top: 18px;"/>
+                        <field name="additional_task_ids" nolabel="1" invisible="not id">
+                            <tree string="Additional Tasks" create="0" delete="0" editable="bottom" decoration-info="True">
+                                <field name="date" string="Date" readonly="1"/>
+                                <field name="user_id" string="Done By" readonly="1"/>
+                                <field name="location_ids" widget="many2many_tags" readonly="1"/>
+                                <field name="department_ids" widget="many2many_tags" readonly="1"/>
+                                <field name="category_ids" widget="many2many_tags" readonly="1"/>
+                                <field name="task_count" readonly="1"/>
+                                <field name="description" string="Task Description" readonly="1"/>
+                                <field name="is_confirmed" widget="boolean_toggle" readonly="not parent.is_manager"/>
+                            </tree>
+                        </field>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Main Tree View (Original Columns) -->
+        <record id="view_support_management_tree" model="ir.ui.view">
+            <field name="name">support.management_tree</field>
+            <field name="model">support.management</field>
+            <field name="arch" type="xml">
+                <tree string="Job Orders" decoration-danger="is_overdue">
+                    <field name="name"/>
+                    <field name="is_manager" column_invisible="True"/>
+                    <field name="priority" widget="priority" readonly="1"/>
+                    <field name="department_ids" widget="many2many_tags"/>
+                    <field name="category_ids" widget="many2many_tags"/>
+                    <field name="task_count"/>
+                    <field name="location_ids" widget="many2many_tags"/>
+                    <field name="date"/>
+                    <field name="due_date"/>
+                    <field name="description"/>
+                    <field name="assigned_to" widget="many2many_tags"/>
+                    <field name="is_overdue" column_invisible="True"/>
+                    <field name="status" widget="badge" decoration-info="status == 'assigned'" decoration-warning="status == 'on_progress'" decoration-success="status == 'completed'" decoration-danger="status == 'not_completed'"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Reports Tree View (Audit View) -->
+        <record id="view_support_management_report_tree" model="ir.ui.view">
+            <field name="name">support.management.report.tree</field>
+            <field name="model">support.management</field>
+            <field name="arch" type="xml">
+                <tree string="Support Reports" create="0" delete="0" edit="0" decoration-danger="is_overdue">
+                    <field name="name" string="Task"/>
+                    <field name="is_manager" column_invisible="True"/>
+                    <field name="priority" widget="priority" readonly="1"/>
+                    <field name="department_ids" widget="many2many_tags" string="Department"/>
+                    <field name="category_ids" widget="many2many_tags" string="Category"/>
+                    <field name="task_count" string="Task #"/>
+                    <field name="assigned_to" widget="many2many_tags" string="Assignee"/>
+                    <field name="date" string="Created Date"/>
+                    <field name="assigned_date" string="Assignment Date"/>
+                    <field name="due_date" string="Due Date"/>
+                    <field name="completion_date" string="Completion Date"/>
+                    <field name="time_taken"/>
+                    <field name="is_overdue" column_invisible="True"/>
+                    <field name="status" widget="badge" decoration-info="status == 'assigned'" decoration-warning="status == 'on_progress'" decoration-success="status == 'completed'" decoration-danger="status == 'not_completed'"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Search View -->
+        <record id="view_support_management_search" model="ir.ui.view">
+            <field name="name">support.management.search</field>
+            <field name="model">support.management</field>
+            <field name="arch" type="xml">
+                <search string="Search Job Orders">
+                    <field name="name"/>
+                    <field name="department_ids"/>
+                    <field name="category_ids"/>
+                    <field name="task_count"/>
+                    <field name="location_ids"/>
+                    <field name="assigned_to"/>
+                    <field name="status"/>
+                    <filter string="Assigned" name="status_assigned" domain="[('status', '=', 'assigned')]"/>
+                    <filter string="On Progress" name="status_on_progress" domain="[('status', '=', 'on_progress')]"/>
+                    <filter string="Completed" name="status_completed" domain="[('status', '=', 'completed')]"/>
+                    <filter string="Not Completed" name="status_not_completed" domain="[('status', '=', 'not_completed')]"/>
+                    <separator/>
+                    <filter string="Overdue" name="overdue" domain="[('is_overdue', '=', True)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Assignee" name="group_by_assignee" context="{'group_by': 'assigned_to'}"/>
+                        <filter string="Department" name="group_by_department" context="{'group_by': 'department_ids'}"/>
+                        <filter string="Category" name="group_by_category" context="{'group_by': 'category_ids'}"/>
+                        <filter string="Status" name="group_by_status" context="{'group_by': 'status'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Kanban View for Job Orders -->
+        <record id="view_support_management_kanban" model="ir.ui.view">
+            <field name="name">support.management.kanban</field>
+            <field name="model">support.management</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="status" class="o_kanban_small_column" sample="1">
+                    <field name="name"/>
+                    <field name="priority"/>
+                    <field name="assigned_to"/>
+                    <field name="due_date"/>
+                    <field name="is_overdue"/>
+                    <field name="status"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_global_click {{ record.is_overdue.raw_value ? 'border-danger' : '' }}" style="border-radius: 5px; position: relative;">
+                                <div class="o_kanban_record_top mb-2">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <field name="name"/>
+                                        </strong>
+                                    </div>
+                                    <div class="o_dropdown_kanban dropdown">
+                                        <field name="priority" widget="priority"/>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <div t-if="record.due_date.value" t-attf-class="{{ record.is_overdue.raw_value ? 'text-danger fw-bold' : '' }}">
+                                        <i class="fa fa-clock-o" aria-label="Due Date" role="img" title="Due Date"></i>
+                                        <field name="due_date"/>
+                                        <span t-if="record.is_overdue.raw_value" class="badge rounded-pill text-bg-danger ms-1">Overdue</span>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_bottom mt-2">
+                                    <div class="oe_kanban_bottom_left">
+                                        <field name="department_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right">
+                                        <field name="assigned_to" widget="many2many_avatar_user"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Action for Job Orders (Standard) -->
+        <record id="action_support_management" model="ir.actions.act_window">
+            <field name="name">Job Orders</field>
+            <field name="res_model">support.management</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="view_id" ref="view_support_management_tree"/>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create a new Job Order
+              </p>
+            </field>
+        </record>
+
+        <!-- Action for Reports (Manager Only View) -->
+        <record id="action_support_management_report" model="ir.actions.act_window">
+            <field name="name">Support Reports</field>
+            <field name="res_model">support.management</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_support_management_report_tree"/>
+        </record>
+
+        <!-- "Task Report" Button in Tree View Actions (Cog menu) -->
+        <record id="action_server_task_report" model="ir.actions.server">
+            <field name="name">Task Report</field>
+            <field name="model_id" ref="model_support_management"/>
+            <field name="binding_model_id" ref="model_support_management"/>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                    action = records.action_open_report_wizard()
+            </field>
+        </record>
+
+        <!-- Menu Mapping -->
+        <menuitem id="menu_support_management_root" name="Support Management" sequence="50" groups="property_support_management.group_support_manager,property_support_management.group_support_user"/>
+        
+        <menuitem id="menu_support_management_orders" name="Job Orders" parent="menu_support_management_root" action="action_support_management" sequence="10"/>
+
+        <!-- Manager Only Reports Menu -->
+        <menuitem id="menu_support_management_reports" name="Reports" parent="menu_support_management_root" action="action_support_management_report" sequence="20" groups="property_support_management.group_support_manager"/>
+
+        <menuitem id="menu_support_management_config_root" name="Configuration" parent="menu_support_management_root" sequence="90" groups="property_support_management.group_support_manager"/>
+
+    </data>
+</odoo>

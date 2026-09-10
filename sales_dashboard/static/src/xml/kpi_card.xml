@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="kpi_card_template">
+        <!-- Existing KPI Card Content -->
+
+        <!-- Commission by Salesperson Table -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered bg-light">
+                        <thead class="table-dark">
+                            <tr><th>Salesperson</th><th>Paid</th><th>Deviation %</th></tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="stats.salesCommission.bySalesperson" t-as="sp" t-key="sp.user_id">
+                                <tr t-on-click="goToSalespersonDetails(sp.user_id)" style="cursor:pointer">
+                                    <td t-esc="sp.user_name"/>
+                                    <td t-esc="sp.paid"/>
+                                    <td><t t-esc="sp.deviationPerc"/>%</td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Existing KPI Card Content -->
+    </template>
+</odoo>

@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="crm_dashboard.SupervisorDashboard" owl="1">
+        <div class="container-fluid p-3" style="overflow-y:auto; max-height:90vh;">
+            <!-- Loading State -->
+            <t t-if="state.loading">
+                <div class="text-center p-5">
+                    <i class="fa fa-refresh fa-spin fa-3x"/>
+                    <p>Loading dashboard data...</p>
+                </div>
+            </t>
+            
+            <!-- Dashboard Content -->
+            <t t-else="">
+                <!-- Dashboard Cards -->
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <div class="card text-center shadow-sm mb-2 dashboard-card">
+                            <div class="card-body total-leads-card-bg">
+                                <h6 class="card-title">Total Leads</h6>
+                                <h3 class="fw-bold"><t t-esc="state.totalLeads"/></h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center shadow-sm mb-2 dashboard-card">
+                            <div class="card-body key-events-card-bg">
+                                <h6 class="card-title">Key Events</h6>
+                                <h3 class="fw-bold">
+                                    <t t-esc="state.totalKeyEvents"/>
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center shadow-sm mb-2 dashboard-card">
+                            <div class="card-body sales-persons-card-bg">
+                                <h6 class="card-title">Sales Persons</h6>
+                                <h3 class="fw-bold">
+                                    <t t-esc="state.uniqueSalesPersons.length"/>
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center shadow-sm mb-2 dashboard-card">
+                            <div class="card-body supervisors-card-bg">
+                                <h6 class="card-title">Supervisors</h6>
+                                <h3 class="fw-bold">
+                                    <t t-esc="state.uniqueSupervisors.length"/>
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Filters -->
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5>Filters</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>Date Range</label>
+                                <select class="form-control" t-model="state.filters.dateRange" t-on-change="() => setDateFilter(state.filters.dateRange)">
+                                    <option value="30days">Last 30 Days</option>
+                                    <option value="90days">Last 90 Days</option>
+                                    <option value="alltime">All Time</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Wing</label>
+                                <select class="form-control" t-model="state.filters.wing" t-on-change="setWingFilter">
+                                    <option value="">All Wings</option>
+                                    <t t-foreach="state.wingSummary" t-as="wing" t-key="wing.name">
+                                        <option t-att-value="wing.name" t-esc="wing.name"/>
+                                    </t>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Supervisor</label>
+                                <select class="form-control" t-model="state.filters.supervisor" t-on-change="setSupervisorFilter">
+                                    <option value="">All Supervisors</option>
+                                    <t t-foreach="state.supervisorSummary" t-as="supervisor" t-key="supervisor.name">
+                                        <t t-if="!state.filters.wing || supervisor.wing === state.filters.wing">
+                                            <option t-att-value="supervisor.name" t-esc="supervisor.name"/>
+                                        </t>
+                                    </t>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Wing Summary -->
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5>Wing Performance Summary</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Wing</th>
+                                        <th>Total Leads</th>
+                                        <th>Key Events</th>
+                                        <th>Supervisors</th>
+                                        <th>Sales Persons</th>
+                                        <th>Conversion Rate</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="state.wingSummary" t-as="wing" t-key="wing.name">
+                                        <tr t-on-click="() => setWingFilter({target: {value: wing.name}})" style="cursor: pointer;">
+                                            <td t-esc="wing.name"/>
+                                            <td t-esc="wing.totalLeads"/>
+                                            <td t-esc="wing.keyEvents"/>
+                                            <td t-esc="wing.supervisors"/>
+                                            <td t-esc="wing.salesPersons"/>
+                                            <td>
+                                                <span t-esc="wing.totalLeads ? Math.round((wing.keyEvents / wing.totalLeads) * 100) + '%' : '0%'"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Supervisor Summary -->
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5>Supervisor Team Performance</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive" style="overflow-x:auto;">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Wing</th>
+                                        <th>Supervisor</th>
+                                        <th>Total Leads</th>
+                                        <th>Key Events</th>
+                                        <th>Sales Persons</th>
+                                        <th>Conversion Rate</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="state.supervisorSummary" t-as="supervisor" t-key="supervisor.name">
+                                        <t t-if="!state.filters.wing || supervisor.wing === state.filters.wing">
+                                            <tr>
+                                                <td t-esc="supervisor.wing"/>
+                                                <td t-esc="supervisor.name"/>
+                                                <td t-esc="supervisor.totalLeads"/>
+                                                <td t-esc="supervisor.keyEvents"/>
+                                                <td t-esc="supervisor.salesPersons"/>
+                                                <td>
+                                                    <span t-esc="supervisor.totalLeads ? Math.round((supervisor.keyEvents / supervisor.totalLeads) * 100) + '%' : '0%'"/>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-primary" t-on-click="() => viewSupervisorDetails(supervisor.name)">
+                                                        View Team
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Detailed Sales Person Data -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Detailed Sales Performance</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Wing</th>
+                                        <th>Supervisor</th>
+                                        <th>Sales Person</th>
+                                        <th>Event Type</th>
+                                        <th>Count</th>
+                                        <th>Total Key Events</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="state.salesPersonData" t-as="row" t-key="row.wing_name + row.supervisor_name + row.sales_person + row.event_type">
+                                        <tr>
+                                            <td t-esc="row.wing_name"/>
+                                            <td t-esc="row.supervisor_name"/>
+                                            <td t-esc="row.sales_person"/>
+                                            <td>
+                                                <span t-att-class="'badge bg-' + getEventColor(row.event_type)" t-esc="row.event_type"/>
+                                            </td>
+                                            <td t-esc="row.count"/>
+                                            <td t-esc="row.total_key_events"/>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </div>
+        <style>
+            .dashboard-card {
+                height: 80px;
+            }
+            .total-leads-card-bg {
+                background: #d1fae5 !important;
+                border-radius: 0 0 0.375rem 0.375rem;
+            }
+            .key-events-card-bg {
+                background: #ecfccb !important;
+                border-radius: 0 0 0.375rem 0.375rem;
+            }
+            .sales-persons-card-bg {
+                background: #ffedd5 !important;
+                border-radius: 0 0 0.375rem 0.375rem;
+            }
+            .supervisors-card-bg {
+                background: #e0e7ff !important;
+                border-radius: 0 0 0.375rem 0.375rem;
+            }
+            .table-responsive {
+                overflow-x: auto;
+                overflow-y: auto;
+                max-height: 60vh;
+            }
+        </style>
+    </t>
+</templates>

@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_collection_extension_request_line_manager,extension.request.line.manager,model_collection_payment_extension_request_line,,1,1,1,1
+access_property_payment_extension_wizard_line,property.payment.extension.wizard.line,model_property_payment_extension_wizard_line,collection_management.group_collection_due_date_editor,1,1,1,1

@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+<t t-name="crm_dashboard.annual">
+    <div class="o_annual_production_dashboard_container" style="overflow-y:auto; max-height: 95vh; padding: 32px;">
+        <div class="o_control_panel mb-4">
+            <div class="o_cp_left mb-4">
+                <div class="o_cp_buttons">
+                    <button class="btn btn-primary btn-lg fw-bold shadow" t-on-click="goToProductionPlans">
+                        View Production Plans
+                    </button>
+                    <button class="btn btn-warning btn-lg fw-bold shadow ms-2" t-on-click="goToManufacturingOrders">
+                        View Manufacturing Orders
+                    </button>
+                </div>
+            </div>
+            <div class="o_cp_right">
+                <div class="o_cp_pager">
+                    <div class="input-group">
+                        <span class="input-group-text bg-info text-white fw-bold">Product</span>
+                        <select class="form-select" t-on-change="onProductChange" style="font-weight:600;">
+                            <option value="">All Products</option>
+                            <t t-if="productList">
+                                <t t-foreach="productList" t-as="product" t-key="product.id">
+                                    <option t-att-value="product.id" t-att-selected="selectedProductId.value === product.id">
+                                        <t t-esc="product.name"/>
+                                    </option>
+                                </t>
+                            </t>
+                        </select>
+                        <span class="input-group-text bg-success text-white fw-bold">From</span>
+                        <input type="date" class="form-control" t-model="dateFilters.startDate"/>
+                        <span class="input-group-text bg-danger text-white fw-bold">To</span>
+                        <input type="date" class="form-control" t-model="dateFilters.endDate"/>
+                        <button class="btn btn-success fw-bold" t-on-click="applyDateFilter">
+                            Apply
+                        </button>
+                        <button class="btn btn-secondary fw-bold" t-on-click="resetDateFilter">
+                            Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Big Colorful Summary Card -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow-lg p-4 big-summary-card" style="background: linear-gradient(90deg, #43cea2 0%, #185a9d 100%); color: #fff; border-radius:2rem;">
+                    <div class="row text-center">
+                        <div class="col-md-4 mb-2 mb-md-0">
+                            <div style="font-size:1.4rem;">Total Planned</div>
+                            <div style="font-size:2.6rem; font-weight:900;">
+                                <t t-esc="stats.totalPlanned"/>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-2 mb-md-0">
+                            <div style="font-size:1.4rem;">Total Produced</div>
+                            <div style="font-size:2.6rem; font-weight:900;">
+                                <t t-esc="stats.totalProduced"/>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div style="font-size:1.4rem;">Total Difference</div>
+                            <div style="font-size:2.6rem; font-weight:900;">
+                                <t t-esc="stats.totalDifference"/>
+                            </div>
+                        </div>
+                    </div>
+                    <t t-if="stats.selectedProductStats">
+                        <div class="row mt-4 text-center">
+                            <div class="col-md-4 mb-2 mb-md-0">
+                                <div style="font-size:1.2rem;">Planned for <span style="font-weight:700;"><t t-esc="stats.selectedProductStats.name"/></span></div>
+                                <div style="font-size:2rem; font-weight:700;">
+                                    <t t-esc="stats.selectedProductStats.planned"/>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-2 mb-md-0">
+                                <div style="font-size:1.2rem;">Produced for <span style="font-weight:700;"><t t-esc="stats.selectedProductStats.name"/></span></div>
+                                <div style="font-size:2rem; font-weight:700;">
+                                    <t t-esc="stats.selectedProductStats.produced"/>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div style="font-size:1.2rem;">Difference for <span style="font-weight:700;"><t t-esc="stats.selectedProductStats.name"/></span></div>
+                                <div style="font-size:2rem; font-weight:700;">
+                                    <t t-esc="stats.selectedProductStats.difference"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Charts -->
+        <div class="row mb-4" style="overflow-x:auto;">
+            <div class="col-md-6 mb-4">
+                <div class="card shadow border-0" style="background:#fceabb;">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title">Planned vs Produced vs Difference</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="chart-container" style="position: relative; height:300px;">
+                            <canvas t-ref="barChart"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card shadow border-0" style="background:#b6fbff;">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="card-title">Production Distribution</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="chart-container" style="position: relative; height:300px;">
+                            <canvas t-ref="pieChart"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Charts -->
+        <div class="row mb-4" style="overflow-x:auto;">
+            <div class="col-md-6 mb-4">
+                <div class="card shadow border-0" style="background:#f7e8ff;">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="card-title">Monthly Production Trend</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="chart-container" style="position: relative; height:300px;">
+                            <canvas t-ref="lineChart"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card shadow border-0" style="background:#e8f5e9;">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="card-title">Product Comparison</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="chart-container" style="position: relative; height:300px;">
+                            <canvas t-ref="productChart"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Comparison Table -->
+        <div class="row mb-4" style="overflow-x:auto;">
+            <div class="col-md-12">
+                <div class="card shadow border-0" style="background:#fff;">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title">Product Comparison Table</h5>
+                    </div>
+                    <div class="card-body p-4" style="overflow-x:auto;">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered align-middle text-center">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Planned</th>
+                                        <th>Produced</th>
+                                        <th>Difference</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-if="stats.productData">
+                                        <t t-if="stats.productData.length">
+                                            <t t-foreach="stats.productData" t-as="product" t-key="product.name">
+                                                <tr>
+                                                    <td style="font-weight:600;"><t t-esc="product.name"/></td>
+                                                    <td class="text-info" style="font-size:1.1rem;"><t t-esc="product.planned"/></td>
+                                                    <td class="text-success" style="font-size:1.1rem;"><t t-esc="product.produced"/></td>
+                                                    <td class="text-danger" style="font-size:1.1rem;"><t t-esc="product.difference"/></td>
+                                                </tr>
+                                            </t>
+                                        </t>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- III. Sales Section -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow-lg p-4" style="background:#fff7e6; border-radius:1rem;">
+                    <div class="card-header bg-dark text-white">
+                        <h5 class="card-title">III. Sales Overview</h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Sales Revenue -->
+                        <h6>Sales Revenue: Target vs Actual</h6>
+                        <div class="d-flex justify-content-between mb-3">
+                            <div>Target: <strong t-esc="stats.salesRevenue.target"/></div>
+                            <div>Actual: <strong t-esc="stats.salesRevenue.actual"/></div>
+                            <div>Deviation: <strong t-esc="stats.salesRevenue.deviation"/></div>
+                            <div>Deviation %: <strong t-esc="stats.salesRevenue.deviationPerc"/>%</div>
+                        </div>
+                        <!-- Breakdown by product -->
+                        <h6>Revenue by Product</h6>
+                        <t t-foreach="stats.salesRevenue.byProduct" t-as="r" t-key="r.product_id">
+                            <div class="small">• <t t-esc="r.product_name"/>: <t t-esc="r.amount"/></div>
+                        </t>
+                        <!-- Breakdown by category -->
+                        <h6 class="mt-3">Revenue by Category</h6>
+                        <t t-foreach="stats.salesRevenue.byCategory" t-as="c" t-key="c.category_id">
+                            <div class="small">• <t t-esc="c.category_name"/>: <t t-esc="c.amount"/></div>
+                        </t>
+
+                        <!-- Sales Quantity -->
+                        <h6 class="mt-4">Sales Quantity: Target vs Actual</h6>
+                        <div class="d-flex justify-content-between mb-3">
+                            <div>Target: <strong t-esc="stats.salesQty.target"/></div>
+                            <div>Actual: <strong t-esc="stats.salesQty.actual"/></div>
+                            <div>Deviation: <strong t-esc="stats.salesQty.deviation"/></div>
+                        </div>
+
+                        <!-- Sales Commission -->
+                        <h6 class="mt-4">Sales Commission: Sold vs Paid</h6>
+                        <div class="d-flex justify-content-between mb-3">
+                            <div>Sold: <strong t-esc="stats.salesCommission.sold"/></div>
+                            <div>Paid: <strong t-esc="stats.salesCommission.paid"/></div>
+                            <div>Deviation: <strong t-esc="stats.salesCommission.deviation"/></div>
+                            <div>Deviation %: <strong t-esc="stats.salesCommission.deviationPerc"/>%</div>
+                        </div>
+                        <h6>Commission by Salesperson</h6>
+                        <t t-foreach="stats.salesCommission.bySalesperson" t-as="sp" t-key="sp.user_id">
+                            <div class="small">• <t t-esc="sp.user_name"/>: <t t-esc="sp.paid"/></div>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- III. Sales Overview Cards -->
+        <div class="row mb-4">
+            <div class="col-md-4 mb-3">
+                <div class="card text-white bg-primary h-100">
+                    <div class="card-header">Sales Revenue</div>
+                    <div class="card-body">
+                        <p>Target: <strong t-esc="stats.salesRevenue.target"/></p>
+                        <p>Actual: <strong t-esc="stats.salesRevenue.actual"/></p>
+                        <p>Deviation: <strong t-esc="stats.salesRevenue.deviation"/> (<t t-esc="stats.salesRevenue.deviationPerc"/>%)</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card text-white bg-success h-100">
+                    <div class="card-header">Sales Quantity</div>
+                    <div class="card-body">
+                        <p>Target: <strong t-esc="stats.salesQty.target"/></p>
+                        <p>Actual: <strong t-esc="stats.salesQty.actual"/></p>
+                        <p>Deviation: <strong t-esc="stats.salesQty.deviation"/></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card text-white bg-warning h-100">
+                    <div class="card-header">Sales Commission</div>
+                    <div class="card-body">
+                        <p>Sold: <strong t-esc="stats.salesCommission.sold"/></p>
+                        <p>Paid: <strong t-esc="stats.salesCommission.paid"/></p>
+                        <p>Deviation: <strong t-esc="stats.salesCommission.deviation"/> (<t t-esc="stats.salesCommission.deviationPerc"/>%)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Revenue by Product Table -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered bg-light">
+                        <thead class="table-dark">
+                            <tr><th>Product</th><th>Revenue</th><th>Category</th></tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="stats.salesRevenue.byProduct" t-as="r" t-key="r.product_id">
+                                <tr>
+                                    <td t-esc="r.product_name"/>
+                                    <td t-esc="r.amount"/>
+                                    <td t-esc="r.category_name"/>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Commission by Salesperson Table -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered bg-light">
+                        <thead class="table-dark">
+                            <tr><th>Salesperson</th><th>Paid</th><th>Deviation %</th></tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="stats.salesCommission.bySalesperson" t-as="sp" t-key="sp.user_id">
+                                <tr>
+                                    <td t-esc="sp.user_name"/>
+                                    <td t-esc="sp.paid"/>
+                                    <td>
+                                        <t t-esc="sp.deviationPerc"/>%
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Extra Styling -->
+    <style>
+        .big-summary-card {
+            min-height: 170px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            padding: 2.5rem !important;
+        }
+        .card {
+            border-radius: 1.25rem !important;
+        }
+        .card-header {
+            border-radius: 1.25rem 1.25rem 0 0 !important;
+        }
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: .01em;
+        }
+        .card-body {
+            padding: 2rem !important;
+        }
+        .table > :not(:first-child) {
+            border-top: 2px solid #e9ecef;
+        }
+        .chart-container {
+            min-height: 200px;
+        }
+        /* Responsive fix for smaller screens */
+        @media (max-width: 768px) {
+            .big-summary-card .row > div {
+                margin-bottom: 1.5rem;
+            }
+            .o_annual_production_dashboard_container {
+                padding: 1rem !important;
+            }
+        }
+    </style>
+</t>
+</templates>

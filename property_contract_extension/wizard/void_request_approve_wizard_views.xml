@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_void_request_approve_wizard_form" model="ir.ui.view">
+        <field name="name">void.request.approve.wizard.form</field>
+        <field name="model">void.request.approve.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Confirm Void Approval">
+                <group>
+                    <field name="request_id" invisible="1"/>
+                    <div class="alert alert-warning" role="alert" colspan="2">
+                        <strong>Warning!</strong> <br/>
+                        Approving this request will:<br/>
+                        <ul style="margin-bottom: 0;">
+                            <li>Void the associated Contract and Collection Order.</li>
+                            <li>Restock the Property (change state to 'Available').</li>
+                        </ul>
+                        <br/>
+                        Are you sure you want to proceed?
+                    </div>
+                </group>
+                <footer>
+                    <button name="action_confirm_approve" string="Confirm Approval" type="object" class="btn-success"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
