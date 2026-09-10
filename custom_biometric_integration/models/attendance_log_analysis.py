@@ -21,7 +21,8 @@ class AttendanceLogAnalysis(models.Model):
     @api.model
     def _cron_fetch_raw_logs(self):
         """ Automated Cronjob to fetch logs after the last_read_time """
-        machines = self.env['biometric.config'].search([])
+        #machines = self.env['biometric.config'].search([])
+        machines = self.env['biometric.config'].search([('connection_type', '=', 'tcp')])
         bot_user = self.env.ref('base.user_root')
 
         for machine in machines:

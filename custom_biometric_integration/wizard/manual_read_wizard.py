@@ -13,6 +13,9 @@ class ManualReadWizard(models.TransientModel):
     override = fields.Boolean(string='Override Existing Logs', default=False)
 
     def action_read_manual(self):
+        if self.machine_id.connection_type == 'adms':
+            raise ValidationError(_("This machine is configured as ADMS (Cloud). Data is pushed automatically in real-time. Manual pulling is disabled for ADMS devices."))
+        
         log_model = self.env['attendance.log.analysis']
         period_start = self.hr_period_id.start_date
         period_end = self.hr_period_id.end_date
