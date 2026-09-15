@@ -10,6 +10,7 @@
         'property_advance_remaining'
     ],
     'data': [
+        'security/security.xml',
         'security/ir.model.access.csv',
         'views/segmentation_report_views.xml',
     ],

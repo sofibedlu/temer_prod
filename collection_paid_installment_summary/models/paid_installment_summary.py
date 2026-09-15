@@ -39,7 +39,10 @@ class CollectionPaidInstallmentSummary(models.TransientModel):
     @api.depends('site_id', 'payment_term_line_id')
     def _compute_installments_and_total(self):
         for rec in self:
-            domain = [('state', '=', 'paid')]
+            domain = [
+                ('state', '=', 'paid'),
+                ('collection_id.state', '!=', 'void'),
+            ]
 
             if rec.site_id:
                 domain.append(('site_id', '=', rec.site_id.id))

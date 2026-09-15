@@ -5,11 +5,7 @@ class AttendanceIdentification(models.Model):
     _description = 'Attendance Identification'
 
     employee_id = fields.Many2one('hr.employee', string='Employee', required=True)
-    
-    # Automatically pulls the linked partner from the employee's related user
     partner_id = fields.Many2one('res.partner', related='employee_id.user_id.partner_id', string='Partner', store=True)
-    
-    # Automatically pulls the Badge ID (barcode) from the HR Settings tab
     badge_id = fields.Char(related='employee_id.barcode', string='Badge ID', store=True)
     
     bio_id = fields.Char(string='Biometric ID', required=True)
@@ -20,14 +16,14 @@ class AttendanceIdentification(models.Model):
 class BiometricAttendanceDevices(models.Model):
     _inherit = 'biometric.attendance.devices'
 
-    # Hidden field to keep track of the linked identification record
+    # to keep track of the linked identification record
     ident_id = fields.Many2one('attendance.identification', string="Linked Identification", ondelete="set null")
 
     @api.model_create_multi
     def create(self, vals_list):
         records = super().create(vals_list)
         for rec in records:
-            # Automatically create the corresponding record in attendance.identification
+            # create the corresponding record in attendance.identification
             ident = self.env['attendance.identification'].create({
                 'employee_id': rec.employee_id.id,
                 'bio_id': rec.biometric_attendance_id,
@@ -41,7 +37,6 @@ class BiometricAttendanceDevices(models.Model):
         res = super().write(vals)
         for rec in self:
             if rec.ident_id:
-                # If the user updates the employee tab, update the identification table automatically
                 update_vals = {}
                 if 'employee_id' in vals: 
                     update_vals['employee_id'] = rec.employee_id.id
@@ -58,7 +53,7 @@ class BiometricAttendanceDevices(models.Model):
         # Find the linked identification records before deleting
         ident_records = self.mapped('ident_id')
         res = super().unlink()
-        # Automatically delete them from attendance.identification
+        # delete them from attendance.identification
         if ident_records:
             ident_records.unlink()
         return res

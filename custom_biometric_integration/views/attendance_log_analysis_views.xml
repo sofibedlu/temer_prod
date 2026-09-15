@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Tree View: No Create, No Edit, No Delete -->
+    <!-- Tree View -->
     <record id="view_attendance_log_analysis_tree" model="ir.ui.view">
         <field name="name">attendance.log.analysis.tree</field>
         <field name="model">attendance.log.analysis</field>
@@ -23,7 +23,7 @@
         </field>
     </record>
 
-    <!-- Form View: No Create, No Edit, No Delete -->
+    <!-- Form View -->
     <record id="view_attendance_log_analysis_form" model="ir.ui.view">
         <field name="name">attendance.log.analysis.form</field>
         <field name="model">attendance.log.analysis</field>

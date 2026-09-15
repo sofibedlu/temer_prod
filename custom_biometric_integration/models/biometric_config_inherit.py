@@ -1,7 +1,6 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 from odoo.addons.tis_hr_biometric_attendance.zk.base import ZK
-#from odoo.addons.tis_hr_biometric_attendance.zk.mock import ZK
 
 class BiometricDeviceConfig(models.Model):
     _inherit = 'biometric.config'

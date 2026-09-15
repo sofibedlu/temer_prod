@@ -28,7 +28,6 @@ class CollectionSegmentationReport(models.Model):
 
     # --- 4. Periodical Segmentation ---
     contract_date = fields.Char(related='collection_id.sale_id.contract_id.contract_date_char', string="Contract Date", readonly=True)
-    # 🌟 These are now fetched dynamically from the SQL View
     payment_round_number = fields.Integer(string="Last Paid Round", readonly=True)
     paid_date = fields.Date(string="Last Paid Date", readonly=True)
 
@@ -63,7 +62,6 @@ class CollectionSegmentationReport(models.Model):
         for rec in self:
             prop = rec.collection_id.property_id
             if prop:
-                # If the new field is greater than 0, use it. Otherwise, use the legacy field!
                 rec.gross_area = prop.property_type_gross_area if prop.property_type_gross_area else prop.gross_area
                 rec.net_area = prop.property_type_net_area if prop.property_type_net_area else prop.net_area
             else:
@@ -104,7 +102,7 @@ class CollectionSegmentationReport(models.Model):
     def init(self):
         tools.drop_view_if_exists(self.env.cr, self._table)
         
-        # 🌟 MAGIC SQL: Finds the absolute latest paid installment for each collection order
+        # Finds the absolute latest paid installment for each collection order
         self.env.cr.execute("""
             CREATE OR REPLACE VIEW %s AS (
                 WITH ranked_installments AS (

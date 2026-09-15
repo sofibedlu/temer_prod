@@ -48,7 +48,7 @@
     <!-- 4. Periodical Segmentation Tree -->
     <record id="view_collection_report_periodical_tree" model="ir.ui.view">
         <field name="name">collection.report.periodical.tree</field>
-        <field name="model">collection.segmentation.report</field> <!-- 🌟 Pointed back to main model -->
+        <field name="model">collection.segmentation.report</field>
         <field name="arch" type="xml">
             <tree string="Periodical Segmentation" create="0" edit="0" delete="0">
                 <field name="collection_id" string="Collection Order"/>
@@ -59,26 +59,41 @@
         </field>
     </record>
 
-    <!-- 5. Metrics Tree (Effort, Result, Quality) -->
-    <record id="view_collection_report_metrics_tree" model="ir.ui.view">
-        <field name="name">collection.report.metrics.tree</field>
+    <!-- 5. Result Metrics Tree -->
+    <record id="view_collection_report_result_metrics_tree" model="ir.ui.view">
+        <field name="name">collection.report.result.metrics.tree</field>
         <field name="model">collection.segmentation.report</field>
         <field name="arch" type="xml">
-            <tree string="Effort &amp; Quality Metrics" create="0" edit="0" delete="0">
+            <tree string="Result Metrics" create="0" edit="0" delete="0">
                 <field name="collection_id" string="Collection Order"/>
-                <field name="call_follow_up"/>
-                <field name="text_follow_up"/>
-                <field name="letter_follow_up"/>
-                <field name="services"/>
                 <field name="reg_collection"/>
                 <field name="penalty_recovery"/>
                 <field name="termination_recovery"/>
-                <field name="collection_rec_rate"/>
+                <field name="other_collection"/>
             </tree>
         </field>
     </record>
 
-    <!-- ============================================== -->
+    <!-- 6. Quality Metrics Tree -->
+    <record id="view_collection_report_quality_metrics_tree" model="ir.ui.view">
+        <field name="name">collection.report.quality.metrics.tree</field>
+        <field name="model">collection.segmentation.report</field>
+        <field name="arch" type="xml">
+            <tree string="Quality Metrics" create="0" edit="0" delete="0">
+                <field name="collection_id" string="Collection Order"/>
+                <field name="collection_rec_rate"/>
+                <field name="due_rec_rate"/>
+                <field name="payment_extensions"/>
+                <field name="advance_remaining"/>
+                <field name="void_customers"/>
+                <field name="term_customers"/>
+                <field name="fully_paid"/>
+                <field name="installments_paid"/>
+            </tree>
+        </field>
+    </record>
+
+
     <!-- Window Actions -->
     
     <record id="action_report_product" model="ir.actions.act_window">
@@ -104,25 +119,45 @@
 
     <record id="action_report_periodical" model="ir.actions.act_window">
         <field name="name">Periodical Segmentation</field>
-        <field name="res_model">collection.segmentation.report</field> <!-- 🌟 Pointed back to main model -->
+        <field name="res_model">collection.segmentation.report</field>
         <field name="view_mode">tree</field>
         <field name="view_id" ref="view_collection_report_periodical_tree"/>
     </record>
 
-    <record id="action_report_metrics" model="ir.actions.act_window">
-        <field name="name">Effort &amp; Result Metrics</field>
+    <record id="action_report_result_metrics" model="ir.actions.act_window">
+        <field name="name">Result Metrics</field>
         <field name="res_model">collection.segmentation.report</field>
         <field name="view_mode">tree</field>
-        <field name="view_id" ref="view_collection_report_metrics_tree"/>
+        <field name="view_id" ref="view_collection_report_result_metrics_tree"/>
     </record>
 
-    <!-- ============================================== -->
+    <record id="action_report_quality_metrics" model="ir.actions.act_window">
+        <field name="name">Quality Metrics</field>
+        <field name="res_model">collection.segmentation.report</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_collection_report_quality_metrics_tree"/>
+    </record>
+
     <!-- Menu Hierarchy -->
-    <menuitem id="menu_collection_reporting_root" name="Reporting" parent="collection_management.menu_collection_root" sequence="90"/>
+    <menuitem id="menu_collection_reporting_root"
+              name="Collection Reports"
+              web_icon="fa fa-bar-chart,#ffffff,#1E88E5"
+              groups="collection_segmentation_report.group_collection_reporting_access"
+              sequence="85"/>
 
     <menuitem id="menu_report_product" name="Product Segmentation" parent="menu_collection_reporting_root" action="action_report_product" sequence="10"/>
     <menuitem id="menu_report_sales" name="Sales-force Segmentation" parent="menu_collection_reporting_root" action="action_report_sales" sequence="20"/>
     <menuitem id="menu_report_customer" name="Customer Segmentation" parent="menu_collection_reporting_root" action="action_report_customer" sequence="30"/>
     <menuitem id="menu_report_periodical" name="Periodical Segmentation" parent="menu_collection_reporting_root" action="action_report_periodical" sequence="40"/>
-    <menuitem id="menu_report_metrics" name="Metrics" parent="menu_collection_reporting_root" action="action_report_metrics" sequence="50"/>
+    <menuitem id="menu_report_result_metrics" 
+              name="Result Metrics" 
+              parent="menu_collection_reporting_root" 
+              action="action_report_result_metrics" 
+              sequence="50"/>
+
+    <menuitem id="menu_report_quality_metrics" 
+              name="Quality Metrics" 
+              parent="menu_collection_reporting_root" 
+              action="action_report_quality_metrics" 
+              sequence="60"/>
 </odoo>

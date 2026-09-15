@@ -20,28 +20,50 @@ class CollectionInstallment(models.Model):
         ('3', 'Third Reminder Sent')
     ], string="Reminder Stage", default='0', readonly=True, copy=False)
 
+    # 🌟 Safety Guard: Permanently tracks if the thank-you SMS was already fired
+    thank_you_sms_sent = fields.Boolean(
+        string="Thank You SMS Sent", 
+        default=False, 
+        copy=False, 
+        readonly=True
+    )
+
     def write(self, vals):
+        if self.env.context.get('skip_thank_you_sms'):
+            return super(CollectionInstallment, self).write(vals)
+
+        # 1. 🌟 CAPTURE PRE-WRITE STATE:
+        # Only consider installments that are currently NOT paid
+        unpaid_installments = self.filtered(lambda r: r.state != 'paid' and not r.thank_you_sms_sent)
+
+        # 2. Execute standard write
         res = super(CollectionInstallment, self).write(vals)
 
-        if self.env.context.get('skip_thank_you_sms'):
-            return res
+        # 3. 🌟 CAPTURE POST-WRITE TRANSITION:
+        # Which of those previously UNPAID installments have NOW transitioned to 'paid'?
+        newly_paid_installments = unpaid_installments.filtered(lambda r: r.state == 'paid')
 
-        # Check if any installment in this write is in the 'paid' state
-        if vals.get('state') == 'paid' or any(rec.state == 'paid' for rec in self):
-            for rec in self:
-                if rec.state == 'paid':
-                    
+        if newly_paid_installments:
+            template = self.env['collection.sms.template'].search([('template_type', '=', 'thank_you')], limit=1)
+            
+            if template:
+                for rec in newly_paid_installments:
+                    # Double-check database log just in case
                     already_sent = self.env['collection.sms.log'].sudo().search_count([
                         ('installment_id', '=', rec.id),
                         ('message_stage', '=', 'thank_you'),
                         ('status', 'in', ['sent', 'delivered'])
                     ])
-                    
+
                     if not already_sent:
-                        template = self.env['collection.sms.template'].search([('template_type', '=', 'thank_you')], limit=1)
-                        if template:
-                            # context flag to prevent recursive loops
-                            rec.with_context(skip_thank_you_sms=True)._send_sms_from_template(rec, template)
+                        # Send SMS using context to prevent recursion
+                        success = rec.with_context(skip_thank_you_sms=True)._send_sms_from_template(rec, template)
+                        if success:
+                            # Lock the installment so it can never trigger again
+                            rec.with_context(skip_thank_you_sms=True).write({'thank_you_sms_sent': True})
+
+        return res
+
 
     def _send_sms_api(self, mobile, message):
         """ Send SMS via AfroMessage API """
@@ -94,8 +116,17 @@ class CollectionInstallment(models.Model):
             except Exception:
                 pass
 
+        # 🌟 NEW: Dynamic Customer Name Logic
+        b_text = installment.collection_id.buyers_name_text
+        if b_text and b_text.strip() != 'No buyers found':
+            customer_name = b_text
+        else:
+            customer_name = installment.partner_id.name or "Customer"
+
+
         # Inject the variables into the HTML template
         raw_html_message = template.body.format(
+            customer_name=customer_name,  # 🌟 Updated Variable
             company_name=company_name,
             company_name_amharic=company_name_amharic,
             amount=amount_str,

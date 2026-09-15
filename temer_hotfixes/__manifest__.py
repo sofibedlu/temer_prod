@@ -21,7 +21,7 @@
         "views/property_block_fix.xml",
     ],
     'external_dependencies': {
-        'python': ['ethiopian_date'],
+        'python': ['ethiopian_date', 'ethioqen'],
     },
     "installable": True,
     "application": False,

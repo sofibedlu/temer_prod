@@ -2,7 +2,6 @@ import pytz
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 from odoo.addons.tis_hr_biometric_attendance.zk.base import ZK
-#from odoo.addons.tis_hr_biometric_attendance.zk.mock import ZK
 
 class ManualReadWizard(models.TransientModel):
     _name = 'manual.read.wizard'
@@ -35,7 +34,7 @@ class ManualReadWizard(models.TransientModel):
             if any(log.is_locked or log.is_archived for log in existing_logs):
                 raise ValidationError(_("Cannot override! Locked or archived records exist in this HR Period."))
             
-            # Safe to unlink (override)
+            # override
             existing_logs.unlink()
 
         # Connect and Fetch

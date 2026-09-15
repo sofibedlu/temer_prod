@@ -1,4 +1,4 @@
-from odoo import models, fields
+from odoo import models, fields, api
 
 class CollectionSmsLog(models.Model):
     _name = 'collection.sms.log'
@@ -31,3 +31,16 @@ class CollectionSmsLog(models.Model):
         ('sent', 'Message Sent'),
         ('failed', 'Failed')
     ], string="Status", default='not_sent')
+
+
+    # 🌟 NEW: Dynamic Customer Name
+    customer_name = fields.Char(string="Customer Name", compute="_compute_customer_name", store=True)
+
+    @api.depends('installment_id.collection_id.buyers_name_text', 'installment_id.partner_id.name')
+    def _compute_customer_name(self):
+        for rec in self:
+            b_text = rec.installment_id.collection_id.buyers_name_text
+            if b_text and b_text.strip() != 'No buyers found':
+                rec.customer_name = b_text
+            else:
+                rec.customer_name = rec.installment_id.partner_id.name

@@ -70,3 +70,14 @@ class SmsReminderWizardLine(models.TransientModel):
     amount_residual = fields.Monetary(related='installment_id.amount_residual', string="Remaining", currency_field='currency_id')
     currency_id = fields.Many2one(related='installment_id.currency_id')
     phone = fields.Char(related='partner_id.mobile', string="Phone")
+    # 🌟 NEW: Dynamic Customer Name
+    customer_name = fields.Char(string="Customer Name", compute="_compute_customer_name")
+
+    @api.depends('installment_id.collection_id.buyers_name_text', 'installment_id.partner_id.name')
+    def _compute_customer_name(self):
+        for rec in self:
+            b_text = rec.installment_id.collection_id.buyers_name_text
+            if b_text and b_text.strip() != 'No buyers found':
+                rec.customer_name = b_text
+            else:
+                rec.customer_name = rec.installment_id.partner_id.name

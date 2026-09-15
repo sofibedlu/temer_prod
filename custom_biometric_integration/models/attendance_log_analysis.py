@@ -2,7 +2,6 @@ import pytz
 import logging
 from odoo import api, fields, models
 from odoo.addons.tis_hr_biometric_attendance.zk.base import ZK
-#from odoo.addons.tis_hr_biometric_attendance.zk.mock import ZK
 
 _logger = logging.getLogger(__name__)
 
@@ -21,7 +20,6 @@ class AttendanceLogAnalysis(models.Model):
     @api.model
     def _cron_fetch_raw_logs(self):
         """ Automated Cronjob to fetch logs after the last_read_time """
-        #machines = self.env['biometric.config'].search([])
         machines = self.env['biometric.config'].search([('connection_type', '=', 'tcp')])
         bot_user = self.env.ref('base.user_root')
 

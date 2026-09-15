@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     
-    <!-- ========================================== -->
     <!-- 1. HIDE OLD MENUS FROM ATTENDANCES APP     -->
-    <!-- ========================================== -->
     
     <!-- Hide old "Biometric Attendance Log" menu -->
     <menuitem id="tis_hr_biometric_attendance.menu_biometric_attnd_log" active="False"/>
@@ -15,9 +13,7 @@
     <menuitem id="tis_hr_biometric_attendance.menu_biometric_device_config" active="False"/>
 
 
-    <!-- ========================================== -->
     <!-- 2. HIDE OLD ACTION BUTTONS IN EMPLOYEE APP -->
-    <!-- ========================================== -->
     
     <!-- Remove binding for "Scan with Biometric" -->
     <record id="tis_hr_biometric_attendance.action_view_biometric_device_wizard_form1" model="ir.actions.act_window">
@@ -35,9 +31,7 @@
     </record>
 
 
-    <!-- ========================================== -->
     <!-- 3. NEW CUSTOM MODULE MENUS                 -->
-    <!-- ========================================== -->
     
     <!-- Employee Configuration Menus -->
     <menuitem id="menu_machine_registration"
@@ -58,7 +52,7 @@
               action="action_attendance_identification"
               sequence="102"/>
 
-    <!-- New Top Level Root Menu for Data Lake -->
+    <!-- New Top Level Root Menu for Data -->
     <menuitem id="menu_attendance_log_root"
               name="Attendance Log"
               web_icon="hr_attendance,static/description/icon.png"

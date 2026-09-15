@@ -1,8 +1,8 @@
 {
     'name': 'Custom Biometric Integration',
     'version': '17.0.1.0.0',
-    'summary': 'Source of Truth Data Lake for Raw Biometric Logs',
-    'author': 'Your Company',
+    'summary': 'Extend the base module to handle Raw Biometric Logs and add ADMS integration',
+    'author': 'Sofonias B/Temerproperties',
     'category': 'Human Resources/Attendance',
     'depends': ['base', 'hr', 'hr_attendance', 'tis_hr_biometric_attendance'],
     'data': [
