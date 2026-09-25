@@ -1,2 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_collection_segmentation_report,Collection Segmentation Report,model_collection_segmentation_report,collection_segmentation_report.group_collection_reporting_access,1,0,0,0
+access_collection_salesforce_report,Collection Salesforce Report,model_collection_salesforce_report,collection_segmentation_report.group_collection_reporting_access,1,0,0,0

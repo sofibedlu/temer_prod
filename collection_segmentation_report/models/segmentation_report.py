@@ -11,15 +11,15 @@ class CollectionSegmentationReport(models.Model):
     # --- 1. Product Segmentation ---
     property_type = fields.Selection(related='collection_id.property_id.property_type', string="Property Type", readonly=True)
     site_id = fields.Many2one('property.site', related='collection_id.property_id.site', string="Site", readonly=True)
-    unit_type = fields.Char(string="Unit Type", compute='_compute_blank_strings')
+    unit_type = fields.Integer(related='collection_id.property_id.property_type_bedroom', string="Unit Type (Bedrooms)", readonly=True)
     floor_number = fields.Char(related='collection_id.property_id.floor_id.name', string="Floor Number", readonly=True)
     unit_number = fields.Char(related='collection_id.property_id.unit_number', string="Unit Number", readonly=True)
     gross_area = fields.Float(string="Gross Area", compute="_compute_property_areas")
     net_area = fields.Float(string="Net Area", compute="_compute_property_areas")
 
     # --- 2. Sales-force Segmentation ---
-    officer_id = fields.Many2one('res.users', related='collection_id.sale_id.sales_person', string="Officer", readonly=True)
-    supervisor_id = fields.Many2one('property.sales.supervisor', related='collection_id.sale_id.reservation_id.supervisor_id', string="Supervisor", readonly=True)
+    officer_id = fields.Many2one('res.users', string="Officer", compute='_compute_sales_force')
+    supervisor_id = fields.Many2one('res.users', string="Supervisor", compute='_compute_sales_force', search='_search_supervisor_id')
 
     # --- 3. Customer Segmentation ---
     customer_name = fields.Char(string="Customer Name", compute='_compute_customer_name')
@@ -76,10 +76,47 @@ class CollectionSegmentationReport(models.Model):
                 rec.customer_name = b_text
             else:
                 rec.customer_name = rec.collection_id.partner_id.name
+    
+    @api.depends('collection_id.property_id.site')
+    def _compute_sales_force(self):
+        """ Dynamically finds the Officer and Supervisor based on the Site mapping """
+        for rec in self:
+            site = rec.collection_id.property_id.site
+            if site:
+                # Find the first access rule that maps an officer to this site
+                access = self.env['collection.site.access'].sudo().search([
+                    ('site_ids', 'in', site.id),
+                    ('supervisor_id', '!=', False)
+                ], limit=1)
+                
+                if access:
+                    rec.officer_id = access.user_id.id
+                    rec.supervisor_id = access.supervisor_id.id
+                    continue
+            
+            rec.officer_id = False
+            rec.supervisor_id = False
+
+    def _search_supervisor_id(self, operator, value):
+        """ 
+        Allows Odoo to filter this SQL view dynamically based on the Computed Supervisor.
+        Example: [('supervisor_id', '!=', False)]
+        """
+        # 1. Find all Site Access records that match the supervisor filter
+        access_records = self.env['collection.site.access'].sudo().search([('supervisor_id', operator, value)])
+        
+        # 2. Extract all the Sites linked to those access records
+        site_ids = access_records.mapped('site_ids').ids
+        
+        # 3. Return a domain that filters the Collection Orders belonging to those Sites!
+        if site_ids:
+            return [('collection_id.property_id.site', 'in', site_ids)]
+        else:
+            # If no sites matched, return a domain that guarantees no results
+            return [('id', '=', -1)]
 
     def _compute_blank_strings(self):
         for rec in self:
-            rec.unit_type = ""
             rec.contact_number = ""
             rec.call_follow_up = ""
             rec.services = ""
@@ -136,5 +173,30 @@ class CollectionSegmentationReport(models.Model):
                     lpi.last_paid_date AS paid_date
                 FROM collection_order co
                 LEFT JOIN latest_paid_installment lpi ON co.id = lpi.collection_id
+            )
+        """ % (self._table,))
+
+
+class CollectionSalesforceReport(models.Model):
+    _name = 'collection.salesforce.report'
+    _description = 'Sales-force Segmentation Report'
+    _auto = False
+
+    supervisor_id = fields.Many2one('res.users', string="Supervisor", readonly=True)
+    officer_id = fields.Many2one('res.users', string="Officer", readonly=True)
+
+    def init(self):
+        tools.drop_view_if_exists(self.env.cr, self._table)
+        # 🌟 MAGIC SQL: We use GROUP BY to extract a distinct list of personnel,
+        # completely detached from the 10,000 collection orders!
+        self.env.cr.execute("""
+            CREATE OR REPLACE VIEW %s AS (
+                SELECT
+                    MIN(id) AS id,
+                    supervisor_id,
+                    user_id AS officer_id
+                FROM collection_site_access
+                WHERE supervisor_id IS NOT NULL
+                GROUP BY supervisor_id, user_id
             )
         """ % (self._table,))

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_collection_site_access_form_inherit_supervisor" model="ir.ui.view">
+        <field name="name">collection.site.access.inherit.supervisor</field>
+        <field name="model">collection.site.access</field>
+        <!-- NOTE: Replace with the actual View ID of your collection.site.access tree/form -->
+        <field name="inherit_id" ref="collection_management.view_collection_site_access_tree"/> 
+        <field name="arch" type="xml">
+            
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="supervisor_id" options="{'no_create': True}"/>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="view_collection_site_access_form_view_inherit_supervisor" model="ir.ui.view">
+        <field name="name">collection.site.access.inherit.supervisor</field>
+        <field name="model">collection.site.access</field>
+        <!-- NOTE: Replace with the actual View ID of your collection.site.access tree/form -->
+        <field name="inherit_id" ref="collection_management.view_collection_site_access_form"/> 
+        <field name="arch" type="xml">
+            
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="supervisor_id" options="{'no_create': True}"/>
+            </xpath>
+
+        </field>
+    </record>
+    
+</odoo>

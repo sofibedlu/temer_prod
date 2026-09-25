@@ -13,6 +13,7 @@
         'security/security.xml',
         'security/ir.model.access.csv',
         'views/segmentation_report_views.xml',
+        'views/collection_site_access_views.xml',
     ],
     'installable': True,
     'application': False,

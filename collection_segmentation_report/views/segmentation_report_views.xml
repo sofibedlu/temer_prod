@@ -22,10 +22,10 @@
     <!-- 2. Sales-force Segmentation Tree -->
     <record id="view_collection_report_sales_tree" model="ir.ui.view">
         <field name="name">collection.report.sales.tree</field>
-        <field name="model">collection.segmentation.report</field>
+        <field name="model">collection.salesforce.report</field>
         <field name="arch" type="xml">
             <tree string="Sales-force Segmentation" create="0" edit="0" delete="0">
-                <field name="collection_id" string="Collection Order"/>
+                <!-- <field name="collection_id" string="Collection Order"/> -->
                 <field name="supervisor_id"/>
                 <field name="officer_id"/>
             </tree>
@@ -105,8 +105,9 @@
     
     <record id="action_report_sales" model="ir.actions.act_window">
         <field name="name">Sales-force Segmentation</field>
-        <field name="res_model">collection.segmentation.report</field>
+        <field name="res_model">collection.salesforce.report</field>
         <field name="view_mode">tree</field>
+        <!-- <field name="domain">[('supervisor_id', '!=', False)]</field> -->
         <field name="view_id" ref="view_collection_report_sales_tree"/>
     </record>
 
