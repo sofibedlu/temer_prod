@@ -39,6 +39,7 @@
                                     <field name="currency_id" column_invisible="1"/>
                                     <field name="name" string="Installment"/>
                                     <!-- <field name="state" widget="badge" decoration-success="state == 'paid'"/> -->
+                                    <field name="state" widget="badge"/>
                                     <field name="amount_paid" string="Amount" widget="monetary" sum="Page Subtotal"/>
                                 </tree>
                             </field>

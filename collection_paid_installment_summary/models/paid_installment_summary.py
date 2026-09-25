@@ -40,7 +40,7 @@ class CollectionPaidInstallmentSummary(models.TransientModel):
     def _compute_installments_and_total(self):
         for rec in self:
             domain = [
-                ('state', '=', 'paid'),
+                ('state', 'in', ['paid', 'partial']),
                 ('collection_id.state', '!=', 'void'),
             ]
 
