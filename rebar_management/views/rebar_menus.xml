@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Root Menu -->
+    <menuitem id="menu_rebar_root" 
+              name="Rebar Management" 
+              web_icon="rebar_management,static/description/icon.png"
+              sequence="25"/>
+
+    <!-- Operations Menu -->
+    <menuitem id="menu_rebar_operations" 
+              name="Operations" 
+              parent="menu_rebar_root" 
+              sequence="10"/>
+
+    <menuitem id="menu_rebar_production_request" 
+              name="Production Requests" 
+              parent="menu_rebar_operations" 
+              action="action_rebar_production_request" 
+              sequence="10"/>
+
+    <!-- Configuration Menu -->
+    <menuitem id="menu_rebar_configuration" 
+              name="Configuration" 
+              parent="menu_rebar_root" 
+              sequence="90"/>
+
+    <menuitem id="menu_rebar_site" 
+              name="Site Definition" 
+              parent="menu_rebar_configuration" 
+              action="action_rebar_site" 
+              sequence="10"/>
+
+    <menuitem id="menu_rebar_department" 
+              name="Departments" 
+              parent="menu_rebar_configuration" 
+              action="action_rebar_department" 
+              sequence="20"/>
+
+    <menuitem id="menu_rebar_bar_mark" 
+              name="Bar Marks" 
+              parent="menu_rebar_configuration" 
+              action="action_rebar_bar_mark" 
+              sequence="30"/>
+</odoo>

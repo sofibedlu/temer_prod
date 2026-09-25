@@ -640,15 +640,3 @@ ul.nav li.dropdown:hover ul.dropdown-menu{ display: block; }
         padding-right: 5px;
     }
 }
-/* ks_dashboard_ninja: keep the "+ Add" item-type dropdown fully usable */
-#ks_add_item_selection {
-    max-height: calc(100vh - 140px);
-    overflow-y: auto;
-    overflow-x: hidden;
-    z-index: 2000;
-    /* the button sits on the right side of the header: align the menu's
-       right edge to it so the list grows leftward and never leaves the screen */
-    right: 0;
-    left: auto;
-    min-width: 14rem;
-}

@@ -1,23 +1,14 @@
-/** @odoo-module **/
-/*
- * ks_dashboard_ninja - Odoo 15 -> 17 conversion of ks_domain_fix.js
- *
- * Odoo 15: this file patched core classes (BasicModel / FieldDomain) so that
- * the domain pickers in the item-creation wizards could resolve the %UID and
- * %MYCOMPANY tokens client side.  Odoo 17 deleted those web client classes
- * (BasicModel, web.basic_fields, web.view_dialogs), so the include() calls are
- * preserved verbatim below but target inert placeholders and never run.
- * The token resolution itself is fully handled server side in Odoo 17:
- * models/ks_dashboard_filters.py replaces "%UID"/"%MYCOMPANY" when the item
- * domain is applied, so no functionality is lost.
- */
-import { BasicModel } from "./ks_legacy_compat.js";
-import { BasicFields } from "./ks_legacy_compat.js";
-import { core } from "./ks_legacy_compat.js";
-import { Dialog } from "./ks_legacy_compat.js";
+odoo.define('ks_dashboard_ninja.domain_fix', function(require) {
 
-var view_dialogs = { SelectCreateDialog: Dialog };
-var _t = core._t;
+    "use strict";
+
+    var BasicModel = require('web.BasicModel');
+    var BasicFields = require('web.basic_fields');
+    var view_dialogs = require('web.view_dialogs');
+    var core = require("web.core");
+    var Domain = require('web.Domain');
+
+    var _t = core._t;
 
     // Whole Point of this file is to enable users to use %UID to calculate domain dynamically.
     BasicModel.include({
@@ -79,4 +70,4 @@ var _t = core._t;
         },
     });
 
-export default {};
+});

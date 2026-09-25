@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherit Payment Request Form View -->
+    <record id="view_payment_request_form_inherit_employee" model="ir.ui.view">
+        <field name="name">payment.request.form.inherit.employee</field>
+        <field name="model">payment.request</field>
+        <field name="inherit_id" ref="temer_payment_request.view_payment_request_form"/>
+        <field name="arch" type="xml">
+            <!-- Isolate existing vendor/customer fields -->
+            <xpath expr="//field[@name='partner_id'][@invisible=&quot;pay_to == 'customer'&quot;]" position="attributes">
+                <attribute name="invisible">pay_to != 'vendor'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='partner_id'][@invisible=&quot;pay_to == 'vendor'&quot;]" position="attributes">
+                <attribute name="invisible">pay_to != 'customer'</attribute>
+            </xpath>
+            
+            <!-- 🌟 Add Employee Payee field -->
+            <xpath expr="//field[@name='partner_id'][last()]" position="after">
+                <field name="partner_id" 
+                       string="Employee Contact"
+                       options="{'no_create_edit': False, 'no_quick_create': False}"
+                       readonly="state not in ('draft', 'checked')"
+                       invisible="pay_to != 'employee'"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Inherit Payment Order Form View -->
+    <record id="view_payment_order_form_inherit_employee" model="ir.ui.view">
+        <field name="name">payment.order.form.inherit.employee</field>
+        <field name="model">payment.order</field>
+        <field name="inherit_id" ref="temer_payment_request.view_payment_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Isolate existing vendor/customer fields -->
+            <xpath expr="//field[@name='partner_id'][@invisible=&quot;pay_to == 'customer'&quot;]" position="attributes">
+                <attribute name="invisible">pay_to != 'vendor'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='partner_id'][@invisible=&quot;pay_to == 'vendor'&quot;]" position="attributes">
+                <attribute name="invisible">pay_to != 'customer'</attribute>
+            </xpath>
+
+            <!-- 🌟 Add Employee Payee field -->
+            <xpath expr="//field[@name='partner_id'][last()]" position="after">
+                <field name="partner_id" 
+                       string="Employee Contact"
+                       readonly="state != 'draft'"
+                       invisible="pay_to != 'employee'"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

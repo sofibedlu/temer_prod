@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from datetime import datetime, timedelta
+from odoo.fields import datetime
 from odoo import _
 from odoo.exceptions import ValidationError
-from dateutil import rrule
-from dateutil.relativedelta import relativedelta
+from datetime import timedelta
 import pytz
 import os
 import os.path
+from dateutil import rrule
+from dateutil.relativedelta import relativedelta
+
 
 
 def ks_get_date(ks_date_filter_selection, self, type):
@@ -28,13 +30,32 @@ def ks_get_date(ks_date_filter_selection, self, type):
         else:
             raise ValidationError(_("Please set the local timezone."))
 
+    # Dispatch to the appropriate series handler without using eval
     series = ks_date_filter_selection
-    if ks_date_filter_selection in ['t_fiscal_year', 'n_fiscal_year', 'ls_fiscal_year']:
-        return eval("ks_date_series_" + series.split("_")[0])(series.split("_")[1], timezone, type,self)
-    else:
-        return eval("ks_date_series_" + series.split("_")[0])(series.split("_")[1], timezone, type, self)
+    prefix, _, suffix = series.partition('_')
+    handler_map = {
+        't': ks_date_series_t,
+        'n': ks_date_series_n,
+        'ls': ks_date_series_ls,
+        'td': ks_date_series_td,
+        'l': ks_date_series_l,
+    }
+    handler = handler_map.get(prefix)
+    if not handler:
+        raise ValidationError(_("Unknown date filter selection: %s") % ks_date_filter_selection)
+    return handler(suffix, timezone, type, self)
 def ks_date_series_td(ks_date_selection, timezone, type, self=None):
-    return eval("ks_get_date_range_from_td_" + ks_date_selection)(timezone, type, self)
+    # Map to concrete td handlers without eval
+    handler_map = {
+        'year': ks_get_date_range_from_td_year,
+        'month': ks_get_date_range_from_td_month,
+        'week': ks_get_date_range_from_td_week,
+        'quarter': ks_get_date_range_from_td_quarter,
+    }
+    handler = handler_map.get(ks_date_selection)
+    if not handler:
+        raise ValidationError(_("Unknown td date selection: %s") % ks_date_selection)
+    return handler(timezone, type, self)
 
 def ks_get_date_range_from_td_year(timezone, type,self):
     ks_date_data = {}
@@ -125,17 +146,51 @@ def ks_date_series_l(ks_date_selection, timezone, type,self):
 
 # Current Date Ranges : Week, Month, Quarter, year
 def ks_date_series_t(ks_date_selection, timezone, type, self=None):
-    return eval("ks_get_date_range_from_" + ks_date_selection)("current", timezone, type,self)
+    handler_map = {
+        'day': ks_get_date_range_from_day,
+        'week': ks_get_date_range_from_week,
+        'month': ks_get_date_range_from_month,
+        'quarter': ks_get_date_range_from_quarter,
+        'year': ks_get_date_range_from_year,
+        'past': ks_get_date_range_from_past,
+        'pastwithout': ks_get_date_range_from_pastwithout,
+        'future': ks_get_date_range_from_future,
+        'futurestarting': ks_get_date_range_from_futurestarting,
+    }
+    handler = handler_map.get(ks_date_selection)
+    if not handler:
+        raise ValidationError(_("Unknown t date selection: %s") % ks_date_selection)
+    return handler("current", timezone, type, self)
 
 
 # Previous Date Ranges : Week, Month, Quarter, year
 def ks_date_series_ls(ks_date_selection, timezone, type,self=None):
-    return eval("ks_get_date_range_from_" + ks_date_selection)("previous", timezone, type,self)
+    handler_map = {
+        'day': ks_get_date_range_from_day,
+        'week': ks_get_date_range_from_week,
+        'month': ks_get_date_range_from_month,
+        'quarter': ks_get_date_range_from_quarter,
+        'year': ks_get_date_range_from_year,
+    }
+    handler = handler_map.get(ks_date_selection)
+    if not handler:
+        raise ValidationError(_("Unknown ls date selection: %s") % ks_date_selection)
+    return handler("previous", timezone, type,self)
 
 
 # Next Date Ranges : Day, Week, Month, Quarter, year
 def ks_date_series_n(ks_date_selection, timezone, type,self=None):
-    return eval("ks_get_date_range_from_" + ks_date_selection)("next", timezone, type, self)
+    handler_map = {
+        'day': ks_get_date_range_from_day,
+        'week': ks_get_date_range_from_week,
+        'month': ks_get_date_range_from_month,
+        'quarter': ks_get_date_range_from_quarter,
+        'year': ks_get_date_range_from_year,
+    }
+    handler = handler_map.get(ks_date_selection)
+    if not handler:
+        raise ValidationError(_("Unknown n date selection: %s") % ks_date_selection)
+    return handler("next", timezone, type, self)
 
 
 def ks_get_date_range_from_day(date_state, timezone, type,self):

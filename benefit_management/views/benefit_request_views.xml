@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_benefit_request_tree" model="ir.ui.view">
+        <field name="name">benefit.request.tree</field>
+        <field name="model">benefit.request</field>
+        <field name="arch" type="xml">
+            <tree string="Benefit Requests" 
+                  decoration-info="state == 'draft'" 
+                  decoration-warning="state == 'checked'" 
+                  decoration-success="state == 'approved'" 
+                  decoration-danger="state == 'rejected'">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <field name="benefit_type_id"/>
+                <field name="amount" widget="monetary"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="create_date" string="Requested On"/>
+                <field name="payment_request_id"/>
+                <field name="state" widget="badge" 
+                       decoration-info="state == 'draft'" 
+                       decoration-warning="state == 'checked'" 
+                       decoration-success="state == 'approved'" 
+                       decoration-danger="state == 'rejected'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_benefit_request_form" model="ir.ui.view">
+        <field name="name">benefit.request.form</field>
+        <field name="model">benefit.request</field>
+        <field name="arch" type="xml">
+            <form string="Benefit Request">
+                <header>
+                    <button name="action_check" string="Check" type="object" class="btn-primary" 
+                            invisible="state != 'draft'" groups="benefit_management.group_benefit_checker"/>
+                    <button name="action_approve" string="Approve" type="object" class="btn-success" 
+                            invisible="state != 'checked'" groups="benefit_management.group_benefit_manager"/>
+                    <button name="action_reject" string="Reject" type="object" class="btn-danger" 
+                            invisible="state in ['approved', 'rejected']" groups="benefit_management.group_benefit_checker,benefit_management.group_benefit_manager"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,checked,approved"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_payment_request" 
+                                type="object" 
+                                class="oe_stat_button" 
+                                icon="fa-money" 
+                                invisible="not payment_request_id">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Payment Request</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+
+                    <field name="eligible_employee_ids" invisible="1"/>
+                    
+                    <group>
+                        <group string="Beneficiary">
+                            <field name="employee_id" options="{'no_create': True}" readonly="state != 'draft'"/>
+                            <field name="department_id"/>
+                            <field name="benefit_definition_id" options="{'no_create': True}" readonly="state != 'draft'"/>
+                            <field name="benefit_type_id"/>
+                        </group>
+                        <group string="Payment Data">
+                            <field name="amount" widget="monetary" readonly="state != 'draft'"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="company_id" invisible="1"/>
+                            <field name="payment_request_id" invisible="not payment_request_id"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Notes &amp; Attachments">
+                            <group>
+                                <field name="note" placeholder="Provide request notes or justifications..." readonly="state != 'draft'"/>
+                                <field name="attachment_ids" widget="many2many_binary" string="Attach Documents" readonly="state != 'draft'"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_benefit_request" model="ir.actions.act_window">
+        <field name="name">Benefit Requests</field>
+        <field name="res_model">benefit.request</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

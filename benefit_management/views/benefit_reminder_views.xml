@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Dedicated Tree View for Reminders -->
+    <record id="view_benefit_recurring_reminder_tree" model="ir.ui.view">
+        <field name="name">benefit.definition.reminder.tree</field>
+        <field name="model">benefit.definition</field>
+        <field name="arch" type="xml">
+            <tree string="Recurring Due Reminders" create="0" delete="0" decoration-danger="next_due_date &lt; current_date" decoration-warning="next_due_date &gt;= current_date">
+                <field name="department_id"/>
+                <field name="employee_id"/>
+                <field name="benefit_type_id"/>
+                <field name="amount" widget="monetary"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="last_recurring_date"/>
+                <field name="next_due_date" string="Expiry Date" decoration-bf="1"/>
+                
+                <!-- 🌟 One-Click Action Button to open pre-filled request -->
+                <button name="action_initiate_request" 
+                        string="Initiate Request" 
+                        type="object" 
+                        class="btn-primary" 
+                        icon="fa-paper-plane"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Action for Reminders Window -->
+    <record id="action_benefit_recurring_reminders" model="ir.actions.act_window">
+        <field name="name">Recurring Due Reminders</field>
+        <field name="res_model">benefit.definition</field>
+        <field name="view_mode">tree</field>
+        <field name="domain">[('is_reminder_due', '=', True)]</field>
+        <field name="view_id" ref="view_benefit_recurring_reminder_tree"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No recurring benefits are currently due for renewal!
+            </p>
+        </field>
+    </record>
+</odoo>

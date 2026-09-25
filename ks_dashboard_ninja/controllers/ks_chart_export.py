@@ -1,22 +1,49 @@
+
+import re
+import datetime
 import io
 import json
 import operator
-import csv
+import traceback
 
-from odoo.addons.web.controllers.export import ExportXlsxWriter
-from odoo.http import content_disposition, request
+# `serialize_exception` location changed across Odoo versions; import if available
+try:
+    from odoo.addons.web.controllers.main import (
+        ExportFormat,
+        serialize_exception,
+        ExportXlsxWriter,
+    )
+except Exception:
+    # Fallback: provide a minimal serialize_exception decorator that returns
+    # a 500 response with the traceback. This preserves behavior during installs
+    # when Odoo's helper is unavailable.
+    from odoo.addons.web.controllers.main import ExportFormat, ExportXlsxWriter  # type: ignore
+    from odoo.http import request
+
+    def serialize_exception(func):
+        def wrapper(*args, **kwargs):
+            try:
+                return func(*args, **kwargs)
+            except Exception:
+                tb = traceback.format_exc()
+                return request.make_response(tb, status=500)
+
+        return wrapper
 from odoo.tools.translate import _
 from odoo import http
+from odoo.http import content_disposition, request
+# xlwt removed; ExportXlsxWriter is used
 from odoo.exceptions import UserError
+from odoo.tools import pycompat
 
 
 class KsChartExport(http.Controller):
 
     def base(self, data):
         params = json.loads(data)
-        header, chart_data = operator.itemgetter('header', 'chart_data')(params)
+        header,chart_data = operator.itemgetter('header','chart_data')(params)
         chart_data = json.loads(chart_data)
-        chart_data['labels'].insert(0, 'Measure')
+        chart_data['labels'].insert(0,'Measure')
         columns_headers = chart_data['labels']
         import_data = []
 
@@ -24,13 +51,14 @@ class KsChartExport(http.Controller):
             dataset['data'].insert(0, dataset['label'])
             import_data.append(dataset['data'])
 
-        return request.make_response(
-            self.from_data(columns_headers, import_data),
-            headers=[
-                ('Content-Disposition', content_disposition(self.filename(header))),
-                ('Content-Type', self.content_type),
-            ],
-        )
+        return request.make_response(self.from_data(columns_headers, import_data),
+            headers=[('Content-Disposition',
+                            content_disposition(self.filename(header))),
+                     ('Content-Type', self.content_type)],
+            # cookies={'fileToken': token}
+                                     )
+
+
 
 
 class KsChartExcelExport(KsChartExport, http.Controller):
@@ -39,6 +67,7 @@ class KsChartExcelExport(KsChartExport, http.Controller):
     raw_data = True
 
     @http.route('/ks_dashboard_ninja/export/chart_xls', type='http', auth="user")
+    @serialize_exception
     def index(self, data):
         return self.base(data)
 
@@ -61,6 +90,7 @@ class KsChartExcelExport(KsChartExport, http.Controller):
 class KsChartCsvExport(KsChartExport, http.Controller):
 
     @http.route('/ks_dashboard_ninja/export/chart_csv', type='http', auth="user")
+    @serialize_exception
     def index(self, data):
         return self.base(data)
 
@@ -72,8 +102,8 @@ class KsChartCsvExport(KsChartExport, http.Controller):
         return base + '.csv'
 
     def from_data(self, fields, rows):
-        fp = io.StringIO()
-        writer = csv.writer(fp, quoting=csv.QUOTE_ALL)
+        fp = io.BytesIO()
+        writer = pycompat.csv_writer(fp, quoting=1)
 
         writer.writerow(fields)
 
@@ -81,9 +111,10 @@ class KsChartCsvExport(KsChartExport, http.Controller):
             row = []
             for d in data:
                 # Spreadsheet apps tend to detect formulas on leading =, + and -
-                if isinstance(d, str) and d.startswith(('=', '-', '+')):
+                if isinstance(d, str)    and d.startswith(('=', '-', '+')):
                     d = "'" + d
-                row.append(str(d))
+
+                row.append(pycompat.to_text(d))
             writer.writerow(row)
 
-        return fp.getvalue().encode('utf-8')
+        return fp.getvalue()

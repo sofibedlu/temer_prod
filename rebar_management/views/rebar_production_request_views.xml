@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_rebar_production_request_tree" model="ir.ui.view">
+        <field name="name">rebar.production.request.tree</field>
+        <field name="model">rebar.production.request</field>
+        <field name="arch" type="xml">
+            <tree string="Production Requests">
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="site_id"/>
+                <field name="requested_by_id"/>
+                <field name="request_date"/>
+                <field name="required_date"/>
+                <field name="priority" widget="priority"/>
+                <field name="state" widget="badge" 
+                       decoration-info="state == 'draft'" 
+                       decoration-warning="state == 'requested'" 
+                       decoration-success="state == 'approved'" 
+                       decoration-danger="state == 'rejected'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_rebar_production_request_form" model="ir.ui.view">
+        <field name="name">rebar.production.request.form</field>
+        <field name="model">rebar.production.request</field>
+        <field name="arch" type="xml">
+            <form string="Rebar Production Request">
+                <header>
+                    <button name="action_submit" string="Submit Request" type="object" 
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_approve" string="Approve" type="object" 
+                            class="oe_highlight" invisible="state != 'requested'"/>
+                    <button name="action_reject" string="Reject" type="object" 
+                            invisible="state != 'requested'"/>
+                    <button name="action_reset_to_draft" string="Reset to Draft" type="object" 
+                            invisible="state not in ('rejected', 'requested')"/>
+                    
+                    <field name="state" widget="statusbar" statusbar_visible="draft,requested,approved"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Request Number"/>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="General Information">
+                            <field name="project_id" readonly="state != 'draft'"/>
+                            <field name="site_id" readonly="state != 'draft'"/>
+                            <field name="department_id" readonly="state != 'draft'"/>
+                            <field name="priority" widget="priority" readonly="state != 'draft'"/>
+                        </group>
+                        <group string="Schedule &amp; Requester">
+                            <field name="requested_by_id" readonly="state != 'draft'"/>
+                            <field name="request_date" readonly="state != 'draft'"/>
+                            <field name="required_date" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+
+                    <group string="Drawing Information">
+                        <group>
+                            <field name="drawing_number" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="drawing_version" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Request Lines" name="request_lines">
+                            <field name="line_ids" readonly="state != 'draft'">
+                                <tree editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="bar_mark_id"/>
+                                    <field name="diameter"/>
+                                    <field name="shape"/>
+                                    <field name="length"/>
+                                    <field name="quantity"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Description / Instructions" name="description">
+                            <field name="description" widget="html" placeholder="Enter notes or fabrication instructions here..."/>
+                        </page>
+                        <page string="Attachments" name="attachments">
+                            <field name="attachment_ids" widget="many2many_binary"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <!-- Chatter Integration -->
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_rebar_production_request" model="ir.actions.act_window">
+        <field name="name">Production Requests</field>
+        <field name="res_model">rebar.production.request</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="module_category_benefit_management" model="ir.module.category">
+        <field name="name">Benefit Management</field>
+        <field name="description">Access rights for Benefit Definitions and Requests</field>
+        <field name="sequence">50</field>
+    </record>
+
+    <!-- User / Requester -->
+    <record id="group_benefit_user" model="res.groups">
+        <field name="name">User / Requester</field>
+        <field name="category_id" ref="module_category_benefit_management"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <!-- Checker -->
+    <record id="group_benefit_checker" model="res.groups">
+        <field name="name">Checker</field>
+        <field name="category_id" ref="module_category_benefit_management"/>
+        <field name="implied_ids" eval="[(4, ref('group_benefit_user'))]"/>
+    </record>
+
+    <!-- Manager / Approver -->
+    <record id="group_benefit_manager" model="res.groups">
+        <field name="name">Manager / Approver</field>
+        <field name="category_id" ref="module_category_benefit_management"/>
+        <field name="implied_ids" eval="[(4, ref('group_benefit_checker'))]"/>
+    </record>
+</odoo>

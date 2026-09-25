@@ -3,17 +3,6 @@
 <templates>
 
     <!--Basic Field Image replace view for icon set-->
-    <!-- Odoo 17 conversion: FieldBinaryImage-img was an Odoo 15 core web
-         template.  Odoo 17's web module no longer defines it, so it is
-         re-declared here (same markup) for ks_image_widget's empty state. -->
-    <t t-name="FieldBinaryImage-img">
-        <img class="img img-fluid"
-            alt="Binary file"
-            t-att-src="url"
-            t-att-border="widget.readonly ? 0 : 1"
-            t-att-name="widget.name"/>
-    </t>
-
     <t t-name="KsFieldBinaryImage">
         <div class="o_field_image" aria-atomic="true">
             <t t-if="widget.mode !== 'readonly'">
@@ -61,7 +50,7 @@
                             </section>
                         </div>
                         <div class="ks_icon_container_grid_view">
-                            <t t-foreach="ks_fa_icons_set" t-as="fa_icon" t-key="fa_icon">
+                            <t t-foreach="ks_fa_icons_set" t-as="fa_icon">
                                 <div class="ks_icon_container_list" id="icon1">
                                     <span t-att-id="'ks.'+fa_icon" t-att-class="'fa fa-' + fa_icon + ' fa-4x'"/>
                                 </div>
@@ -69,9 +58,9 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-primary ks_icon_container_open_button"
-                                data-bs-dismiss="modal">Select
+                                data-dismiss="modal">Select
                         </button>
                     </div>
                 </div>

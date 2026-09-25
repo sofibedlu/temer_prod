@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_rebar_site_user,rebar.site.user,model_rebar_site,base.group_user,1,1,1,1
+access_rebar_department_user,rebar.department.user,model_rebar_department,base.group_user,1,1,1,1
+access_rebar_bar_mark_user,rebar.bar.mark.user,model_rebar_bar_mark,base.group_user,1,1,1,1
+access_rebar_production_request_user,rebar.production.request.user,model_rebar_production_request,base.group_user,1,1,1,1
+access_rebar_production_request_line_user,rebar.production.request.line.user,model_rebar_production_request_line,base.group_user,1,1,1,1

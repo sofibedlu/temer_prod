@@ -9,8 +9,8 @@ class KSCreateDashboardWizard(models.TransientModel):
 
     ks_top_menu_id = fields.Many2one('ir.ui.menu', string="Show Under Menu", required=True,
                                      domain="['|',('action','=',False),('parent_id','=',False)]",
-                                     default=lambda self: self.env.ref('board.menu_board_my_dash', False) or self.env[
-                                         'ir.ui.menu'].search([('name', '=', 'My Dashboard')]))
+                                     default=lambda self: self.env['ir.ui.menu'].search(
+                                         [('name', '=', 'My Dashboard')]))
 
     def DuplicateDashBoard(self):
         '''this function returns acion id of ks.dashboard.duplicate.wizard'''
@@ -54,8 +54,7 @@ class KSDeleteDashboardWizard(models.TransientModel):
         '''this function creats record of ks_dashboard_ninja.board and return dashboard action_id'''
         dashboard_id = self._context.get('dashboard_id')
         self.env['ks_dashboard_ninja.board'].browse(dashboard_id).unlink()
-        context = {'ks_reload_menu': True, 'ks_menu_id': (self.env.ref('board.menu_board_my_dash', False) or self.env[
-            'ir.ui.menu'].search([('name', '=', 'My Dashboard')], limit=1)).id}
+        context = {'ks_reload_menu': True, 'ks_menu_id': self.env['ir.ui.menu'].search([('name', '=', 'My Dashboard')])[0].id}
         return {
             'type': 'ir.actions.client',
             'name': "Dashboard Ninja",

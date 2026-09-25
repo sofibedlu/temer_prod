@@ -1,13 +1,15 @@
-/** @odoo-module **/
-import KsFilterProps from "./ks_dashboard_ninja.js";
-import { core } from "./ks_legacy_compat.js";
-import { datepicker } from "./ks_legacy_compat.js";
-import { FIELD_OPERATORS, FIELD_TYPES } from "./ks_legacy_compat.js";
-import { field_utils } from "./ks_legacy_compat.js";
+odoo.define('ks_dashboard_ninja.ks_dashboard_filter', function (require) {
+"use strict";
 
+var KsFilterProps = require('ks_dashboard_ninja.ks_dashboard');
+var core = require('web.core');
 var QWeb = core.qweb;
+var datepicker = require("web.datepicker");
+const { FIELD_OPERATORS, FIELD_TYPES } = require('web.searchUtils');
+const field_utils = require('web.field_utils');
 
-KsFilterProps.include({
+
+return KsFilterProps.include({
 
     events: _.extend({}, KsFilterProps.prototype.events, {
         'hide.bs.dropdown .ks_dn_selection_box > div': 'onKsDnFilterBoxContainerHide',
@@ -532,6 +534,6 @@ KsFilterProps.include({
             self.state['domain_data']=self.ks_dashboard_data.ks_dashboard_domain_data;
         }
     },
-});
+})
 
-export default KsFilterProps;
+});

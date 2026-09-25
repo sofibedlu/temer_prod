@@ -11,7 +11,7 @@
                     <div class="ks_dn_selection_box">
                         <div class="btn-group ">
                             <button class="o_dropdown_toggler_btn btn btn-secondary dropdown-toggle ks_date_filter_dropdown"
-                                    data-bs-toggle="dropdown"
+                                    data-toggle="dropdown"
                                     aria-expanded="false">
                                 <span class="fa fa-lg fa-filter"/>
                                 <span class="ks_dn_filter_selection">Filter</span>
@@ -23,7 +23,7 @@
                                         class="ks_dn_pre_filter_menu"
                                         role="menu">
                                         <t t-foreach="ks_dn_pre_defined_filters"
-                                           t-as="pre_filter" t-key="pre_filter">
+                                           t-as="pre_filter">
                                             <t t-if="pre_filter['type']==='filter'">
                                                 <li t-att-class="pre_filter['active'] ? 'dn_dynamic_filter_selected dn_filter_click_event_selector': 'dn_filter_click_event_selector' "
                                                     t-att-data-ks-categ="pre_filter['categ']"
@@ -64,7 +64,7 @@
                                     </div>
                                 </div>
                                 <div t-att-class="_(ks_dashboard_data.ks_dashboard_domain_data).keys().length ? 'ks_dn_filter_applied_container': 'ks_dn_filter_applied_container ks_hide'">
-                                    <t t-foreach="_(ks_dashboard_data.ks_dashboard_domain_data).keys()" t-as="data_key" t-key="data_key">
+                                    <t t-foreach="_(ks_dashboard_data.ks_dashboard_domain_data).keys()" t-as="data_key">
                                         <t t-call="ks_dn_filter_section_container_template">
                                             <t t-set="ks_domain_data"
                                                t-value="ks_dashboard_data.ks_dashboard_domain_data[data_key]"/>
@@ -89,7 +89,7 @@
                 <div class="o_searchview">
                     <div class="o_searchview_input_container">
                         <t t-foreach="ks_domain_data.ks_domain_index_data"
-                           t-as="domain_index_data" t-key="domain_index_data">
+                           t-as="domain_index_data">
                             <div class="o_searchview_facet" t-att-data-ks-model="ks_model"
                                  t-att-data-ks-model-name="ks_domain_data.model_name"
                                  t-att-data-ks-categ="domain_index_data.categ || '0'">
@@ -115,7 +115,7 @@
                 <span class="o_or_filter">or</span>
             </t>
             <select class="o_input o_generator_menu_field ks_custom_filter_field_selector">
-                <t t-foreach="ks_dashboard_custom_domain_filter" t-as="custom_domain" t-key="custom_domain">
+                <t t-foreach="ks_dashboard_custom_domain_filter" t-as="custom_domain">
                     <option t-att-value="custom_domain['id']">
                         <t t-esc="custom_domain['name']"/>
                         <span class="ks_dn_pre_model_text">
@@ -133,7 +133,7 @@
 
     <t t-name="ks_dn_custom_domain_input_operator">
         <select class="o_input o_generator_menu_operator ks_operator_option_selector">
-            <t t-foreach="operators" t-as="operator" t-key="operator">
+            <t t-foreach="operators" t-as="operator">
                 <option t-att-value="operator['symbol']">
                     <t t-esc="operator['description']"/>
                 </option>
@@ -153,7 +153,7 @@
 
     <t t-name="ks_dn_custom_domain_input_selection">
         <select class="o_input o_generator_menu_value">
-            <t t-foreach="selection_input" t-as="selection_data" t-key="selection_data">
+            <t t-foreach="selection_input" t-as="selection_data">
                 <option t-att-value="selection_data[0]">
                     <t t-esc="selection_data[1]"/>
                 </option>

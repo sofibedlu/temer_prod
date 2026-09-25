@@ -1,13 +1,14 @@
-/** @odoo-module **/
-import KsDashboard from "./ks_dashboard_ninja.js";
-import { core } from "./ks_legacy_compat.js";
-import { Dialog } from "./ks_legacy_compat.js";
-import { config } from "./ks_legacy_compat.js";
+odoo.define('ks_dashboard_ninja.ks_to_do_dashboard_filter', function (require) {
+"use strict";
 
+var KsDashboard = require('ks_dashboard_ninja.ks_dashboard');
+var core = require('web.core');
 var _t = core._t;
 var QWeb = core.qweb;
+var Dialog = require('web.Dialog');
+var config = require('web.config');
 
-KsDashboard.include({
+return KsDashboard.include({
          events: _.extend({}, KsDashboard.prototype.events, {
         'click .ks_edit_content': '_onKsEditTask',
         'click .ks_delete_content': '_onKsDeleteContent',
@@ -303,6 +304,6 @@ KsDashboard.include({
                     });
                 });
         }
-});
+})
 
-export default KsDashboard;
+});

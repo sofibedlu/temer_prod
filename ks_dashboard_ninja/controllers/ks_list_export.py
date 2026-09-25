@@ -1,19 +1,40 @@
+
+import re
 import io
 import json
 import operator
 import logging
-import csv
-import os
-import datetime
+import traceback
 
-from odoo.addons.web.controllers.export import ExportXlsxWriter
-from odoo.http import content_disposition, request
-from odoo.tools.misc import DEFAULT_SERVER_DATETIME_FORMAT, DEFAULT_SERVER_DATE_FORMAT
+# `serialize_exception` location changed across Odoo versions; import if available
+try:
+    from odoo.addons.web.controllers.main import (
+        ExportFormat,
+        serialize_exception,
+        ExportXlsxWriter,
+    )
+except Exception:
+    # Fallback decorator: returns a 500 response with traceback on exception
+    from odoo.addons.web.controllers.main import ExportFormat, ExportXlsxWriter  # type: ignore
+    from odoo.http import request
+
+    def serialize_exception(func):
+        def wrapper(*args, **kwargs):
+            try:
+                return func(*args, **kwargs)
+            except Exception:
+                tb = traceback.format_exc()
+                return request.make_response(tb, status=500)
+
+        return wrapper
+from odoo import fields
+import datetime
 from odoo import http
+from odoo.http import content_disposition, request
 from odoo.tools import pycompat
 from ..common_lib.ks_date_filter_selections import ks_get_date, ks_convert_into_utc, ks_convert_into_local
+import os
 import pytz
-
 _logger = logging.getLogger(__name__)
 
 
@@ -21,9 +42,12 @@ class KsListExport(http.Controller):
 
     def base(self, data):
         params = json.loads(data)
-        header, list_data, item_id, ks_export_boolean, context, params = operator.itemgetter(
-            'header', 'chart_data', 'ks_item_id', 'ks_export_boolean', 'context', 'params'
-        )(params)
+        # header,list_data = operator.itemgetter('header','chart_data')(params)
+        header, list_data, item_id, ks_export_boolean, context, params = operator.itemgetter('header', 'chart_data',
+                                                                                             'ks_item_id',
+                                                                                             'ks_export_boolean',
+                                                                                             'context', 'params')(
+            params)
         list_data = json.loads(list_data)
         item = request.env['ks_dashboard_ninja.item'].browse(int(item_id))
         if ks_export_boolean:
@@ -36,9 +60,10 @@ class KsListExport(http.Controller):
                     ks_tzone = open('/etc/timezone').read()
                     ks_timezone = ks_tzone[0:-1]
                     try:
-                        datetime.datetime.now(pytz.timezone(ks_timezone))
+                        datetime.now(pytz.timezone(ks_timezone))
                     except Exception as e:
                         _logger.info('Please set the local timezone')
+
                 else:
                     _logger.info('Please set the local timezone')
             orderby = item.ks_sort_by_field.id
@@ -53,8 +78,8 @@ class KsListExport(http.Controller):
                 query_end_date = item.ks_query_end_date
                 ks_query = str(item.ks_custom_query)
             if ks_start_date and ks_end_date:
-                ks_start_date = datetime.datetime.strptime(ks_start_date, DEFAULT_SERVER_DATETIME_FORMAT)
-                ks_end_date = datetime.datetime.strptime(ks_end_date, DEFAULT_SERVER_DATETIME_FORMAT)
+                ks_start_date = fields.Datetime.to_datetime(ks_start_date)
+                ks_end_date = fields.Datetime.to_datetime(ks_end_date)
             item = item.with_context(ksDateFilterStartDate=ks_start_date)
             item = item.with_context(ksDateFilterEndDate=ks_end_date)
             item = item.with_context(ksDateFilterSelection=ksDateFilterSelection)
@@ -65,6 +90,7 @@ class KsListExport(http.Controller):
                     item = item.with_context(ksDateFilterStartDate=ks_start_date)
                     item = item.with_context(ksDateFilterEndDate=ks_end_date)
                     item = item.with_context(ksIsDefultCustomDateFilter=False)
+
             else:
                 ks_date_filter_selection = item.ks_dashboard_ninja_board_id.ks_date_filter_selection
                 item = item.with_context(ksDateFilterStartDate=item.ks_dashboard_ninja_board_id.ks_dashboard_start_date)
@@ -78,7 +104,8 @@ class KsListExport(http.Controller):
                 item = item.with_context(ksDateFilterEndDate=ks_date_data["selected_end_date"])
 
             item_domain = params.get('ks_domain_1', [])
-            ks_chart_domain = item.ks_convert_into_proper_domain(item.ks_domain, item, item_domain)
+            ks_chart_domain = item.ks_convert_into_proper_domain(item.ks_domain, item,item_domain)
+            # list_data = item.ks_fetch_list_view_data(item,ks_chart_domain, ks_export_all=
             if list_data['type'] == 'ungrouped':
                 list_data = item.ks_fetch_list_view_data(item, ks_chart_domain, ks_export_all=True)
             elif list_data['type'] == 'grouped':
@@ -87,11 +114,11 @@ class KsListExport(http.Controller):
                 if ks_start_date or ks_end_date:
                     query_start_date = ks_start_date
                     query_end_date = ks_end_date
-                ks_query_result = item.ks_get_list_query_result(
-                    ks_query, query_start_date, query_end_date, ks_offset=0, ks_export_all=True
-                )
+                ks_query_result = item.ks_get_list_query_result(ks_query, query_start_date, query_end_date, ks_offset=0,
+                                                                ks_export_all=True)
                 list_data = item.ks_format_query_result(ks_query_result)
 
+        # chart_data['labels'].insert(0,'Measure')
         columns_headers = list_data['label']
         import_data = []
 
@@ -102,10 +129,7 @@ class KsListExport(http.Controller):
                         ks_converted_date = False
                         date_string = dataset['data'][count]
                         if dataset['data'][count]:
-                            ks_converted_date = ks_convert_into_local(
-                                datetime.datetime.strptime(date_string, '%m/%d/%y %H:%M:%S'),
-                                ks_timezone
-                            )
+                            ks_converted_date = ks_convert_into_local(datetime.datetime.strptime(date_string, '%m/%d/%y %H:%M:%S'),ks_timezone)
                         dataset['data'][count] = ks_converted_date
             for ks_count, val in enumerate(dataset['data']):
                 if isinstance(val, (float, int)):
@@ -114,18 +138,16 @@ class KsListExport(http.Controller):
                             ks_precision = item.sudo().env.ref('ks_dashboard_ninja.ks_dashboard_ninja_precision').digits
                         except Exception as e:
                             ks_precision = 2
-                        dataset['data'][ks_count] = item.env['ir.qweb.field.float'].sudo().value_to_html(
-                            val, {'precision': ks_precision}
-                        )
+                        dataset['data'][ks_count] = item.env['ir.qweb.field.float'].sudo().value_to_html(val,
+                                                                             {'precision': ks_precision})
             import_data.append(dataset['data'])
 
-        return request.make_response(
-            self.from_data(columns_headers, import_data),
-            headers=[
-                ('Content-Disposition', content_disposition(self.filename(header))),
-                ('Content-Type', self.content_type),
-            ],
-        )
+        return request.make_response(self.from_data(columns_headers, import_data),
+            headers=[('Content-Disposition',
+                            content_disposition(self.filename(header))),
+                     ('Content-Type', self.content_type)],
+            # cookies={'fileToken': token}
+                                     )
 
 
 class KsListExcelExport(KsListExport, http.Controller):
@@ -134,6 +156,7 @@ class KsListExcelExport(KsListExport, http.Controller):
     raw_data = True
 
     @http.route('/ks_dashboard_ninja/export/list_xls', type='http', auth="user")
+    @serialize_exception
     def index(self, data):
         return self.base(data)
 
@@ -156,6 +179,7 @@ class KsListExcelExport(KsListExport, http.Controller):
 class KsListCsvExport(KsListExport, http.Controller):
 
     @http.route('/ks_dashboard_ninja/export/list_csv', type='http', auth="user")
+    @serialize_exception
     def index(self, data):
         return self.base(data)
 
@@ -167,8 +191,8 @@ class KsListCsvExport(KsListExport, http.Controller):
         return base + '.csv'
 
     def from_data(self, fields, rows):
-        fp = io.StringIO()
-        writer = csv.writer(fp, quoting=csv.QUOTE_ALL)
+        fp = io.BytesIO()
+        writer = pycompat.csv_writer(fp, quoting=1)
 
         writer.writerow(fields)
 
@@ -176,9 +200,10 @@ class KsListCsvExport(KsListExport, http.Controller):
             row = []
             for d in data:
                 # Spreadsheet apps tend to detect formulas on leading =, + and -
-                if isinstance(d, str) and d.startswith(('=', '-', '+')):
+                if isinstance(d, str)    and d.startswith(('=', '-', '+')):
                     d = "'" + d
-                row.append(str(d))
+
+                row.append(pycompat.to_text(d))
             writer.writerow(row)
 
-        return fp.getvalue().encode('utf-8')
+        return fp.getvalue()

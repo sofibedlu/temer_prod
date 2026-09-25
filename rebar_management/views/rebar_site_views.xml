@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_rebar_site_tree" model="ir.ui.view">
+        <field name="name">rebar.site.tree</field>
+        <field name="model">rebar.site</field>
+        <field name="arch" type="xml">
+            <tree string="Sites">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="site_company_id"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_rebar_site_form" model="ir.ui.view">
+        <field name="name">rebar.site.form</field>
+        <field name="model">rebar.site</field>
+        <field name="arch" type="xml">
+            <form string="Site Definition">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                        </group>
+                        <group>
+                            <field name="site_company_id"/>
+                            <field name="active" widget="boolean_toggle"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_rebar_site" model="ir.actions.act_window">
+        <field name="name">Sites</field>
+        <field name="res_model">rebar.site</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

@@ -1,14 +1,16 @@
-/** @odoo-module **/
-import { fieldRegistry as registry } from "./ks_legacy_compat.js";
-import { AbstractField } from "./ks_legacy_compat.js";
-import { core } from "./ks_legacy_compat.js";
-import { field_utils } from "./ks_legacy_compat.js";
-import { ksSession as session } from "./ks_legacy_compat.js";
-import { utils } from "./ks_legacy_compat.js";
+odoo.define('ks_dashboard_ninja_list.ks_dashboard_item_preview', function(require) {
+    "use strict";
 
-var QWeb = core.qweb;
+    var registry = require('web.field_registry');
+    var AbstractField = require('web.AbstractField');
+    var core = require('web.core');
+    var field_utils = require('web.field_utils');
+    var session = require('web.session');
+    var utils = require('web.utils');
 
-var KsItemPreview = AbstractField.extend({
+    var QWeb = core.qweb;
+
+    var KsItemPreview = AbstractField.extend({
 
         supportedFieldTypes: ['integer'],
         resetOnAnyFieldChange: true,
@@ -191,24 +193,22 @@ var KsItemPreview = AbstractField.extend({
 
         _render: function() {
             var self = this;
-            var field = self.recordData || {};
+            var field = self.recordData;
             var $val;
             var item_info;
             var ks_rgba_background_color, ks_rgba_font_color, ks_rgba_icon_color;
-            var ks_count = Number(field.ks_record_count);
-            if (!(ks_count >= 0)) ks_count = 0;
             self.$el.empty();
-            ks_rgba_background_color = self._get_rgba_format(field.ks_background_color, '#ffffff,0.99')
-            ks_rgba_font_color = self._get_rgba_format(field.ks_font_color, '#000000,0.99')
-            ks_rgba_icon_color = self._get_rgba_format(field.ks_default_icon_color, '#ffffff,0.99')
+            ks_rgba_background_color = self._get_rgba_format(field.ks_background_color)
+            ks_rgba_font_color = self._get_rgba_format(field.ks_font_color)
+            ks_rgba_icon_color = self._get_rgba_format(field.ks_default_icon_color)
             item_info = {
                 name: field.name,
                 //                    count: self.record.specialData.ks_domain.nbRecords.toLocaleString('en', {useGrouping:true}),
-                count: self.ksNumFormatter(ks_count, 1),
+                count: self.ksNumFormatter(field.ks_record_count, 1),
                 icon_select: field.ks_icon_select,
                 default_icon: field.ks_default_icon,
                 icon_color: ks_rgba_icon_color,
-                count_tooltip: field_utils.format.float(ks_count, Float64Array, {digits: [0, field.ks_precision_digits || 0]}),
+                count_tooltip: field_utils.format.float(field.ks_record_count, Float64Array, {digits: [0, field.ks_precision_digits]}),
             }
 
             if (field.ks_icon) {
@@ -228,28 +228,19 @@ var KsItemPreview = AbstractField.extend({
 
             }
             if (!field.name) {
-                // model may be a many2one tuple [id, display_name] (Odoo >=16
-                // record.data), or the legacy object with a .data attr.
-                var ks_model = field.ks_model_id;
-                var ks_display = null;
-                if (ks_model) {
-                    if (ks_model.data && ks_model.data.display_name) {
-                        ks_display = ks_model.data.display_name;
-                    } else if (Array.isArray(ks_model)) {
-                        ks_display = ks_model[1];
-                    } else if (ks_model.display_name) {
-                        ks_display = ks_model.display_name;
-                    }
+                if (field.ks_model_name) {
+                    item_info['name'] = field.ks_model_id.data.display_name;
+                } else {
+                    item_info['name'] = "Name";
                 }
-                item_info['name'] = ks_display || field.ks_model_name || "Name";
             }
 
             if (field.ks_multiplier_active){
-                var ks_record_count = ks_count * field.ks_multiplier
+                var ks_record_count = field.ks_record_count * field.ks_multiplier
                 item_info['count'] = self._onKsGlobalFormatter(ks_record_count, field.ks_data_format, field.ks_precision_digits);
                 item_info['count_tooltip'] = ks_record_count;
             }else{
-                item_info['count'] = self._onKsGlobalFormatter(ks_count, field.ks_data_format, field.ks_precision_digits);
+                item_info['count'] = self._onKsGlobalFormatter(field.ks_record_count, field.ks_data_format, field.ks_precision_digits);
             }
 
 //            count_tooltip
@@ -359,27 +350,20 @@ var KsItemPreview = AbstractField.extend({
         },
 
 
-        _get_rgba_format: function(val, fallback) {
-            val = val || fallback || '#ffffff,0.99';
-            var parts = String(val).split(',');
-            var rgba = (parts[0] || '').match(/[A-Za-z0-9]{2}/g);
-            if (!rgba || rgba.length < 3) {
-                val = '#ffffff,0.99';
-                parts = val.split(',');
-                rgba = parts[0].match(/[A-Za-z0-9]{2}/g);
-            }
-            var alpha = parts[1];
-            if (alpha === undefined || alpha === '') alpha = '0.99';
+        _get_rgba_format: function(val) {
+            var rgba = val.split(',')[0].match(/[A-Za-z0-9]{2}/g);
             rgba = rgba.map(function(v) {
                 return parseInt(v, 16)
             }).join(",");
-            return "rgba(" + rgba + "," + alpha + ")";
+            return "rgba(" + rgba + "," + val.split(',')[1] + ")";
         }
 
 
-});
-registry.add('ks_dashboard_item_preview', KsItemPreview);
+    });
+    registry.add('ks_dashboard_item_preview', KsItemPreview);
 
-export default {
-    KsItemPreview: KsItemPreview
-};
+    return {
+        KsItemPreview: KsItemPreview
+    };
+
+});

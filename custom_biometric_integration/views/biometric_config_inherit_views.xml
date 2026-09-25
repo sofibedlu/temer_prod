@@ -86,6 +86,7 @@
             <!-- Hide TCP fields if ADMS is selected -->
             <xpath expr="//field[@name='device_ip']" position="attributes">
                 <attribute name="invisible">connection_type == 'adms'</attribute>
+                <attribute name="required">connection_type != 'adms'</attribute>
             </xpath>
             <xpath expr="//field[@name='port']" position="attributes">
                 <attribute name="invisible">connection_type == 'adms'</attribute>

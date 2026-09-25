@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Root Menu -->
+    <menuitem id="menu_benefit_management_root"
+              name="Benefit Management"
+              web_icon="fa fa-gift,#ffffff,#008784"
+              sequence="45"/>
+
+    <!-- 1. First Window: Benefit Definitions -->
+    <menuitem id="menu_benefit_definition_main"
+              name="Benefit Definitions"
+              parent="menu_benefit_management_root"
+              action="action_benefit_definition"
+              sequence="10"/>
+    
+     <menuitem id="menu_benefit_recurring_reminders"
+              name="Recurring Due Reminders"
+              parent="menu_benefit_management_root"
+              action="action_benefit_recurring_reminders"
+              sequence="15"/>
+
+    <!-- 2. Second Window: Benefit Requests -->
+    <menuitem id="menu_benefit_request_main"
+              name="Benefit Requests"
+              parent="menu_benefit_management_root"
+              action="action_benefit_request"
+              sequence="20"/>
+
+    <!-- 3. Third Window: Configuration -->
+    <menuitem id="menu_benefit_configuration_root"
+              name="Configuration"
+              parent="menu_benefit_management_root"
+              sequence="100"
+              groups="benefit_management.group_benefit_manager"/>
+
+    <menuitem id="menu_benefit_type_config"
+              name="Benefit Types"
+              parent="menu_benefit_configuration_root"
+              action="action_benefit_type"
+              sequence="10"/>
+</odoo>

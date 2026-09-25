@@ -65,7 +65,7 @@ Dashboard Ninja v15.0,
 
 	'author': 'Ksolves India Ltd.',
 
-	'license': 'LGPL-3',
+	'license': 'OPL-1',
 
 	'currency': 'EUR',
 
@@ -77,21 +77,22 @@ Dashboard Ninja v15.0,
 
 	'live_test_url': 'https://dn15demo.kappso.com/web#cids=1&menu_id=599&ks_dashboard_id=1&action=835',
 
-	'category': 'Tools',
+        'category': 'Tools',
 
-	'version': '17.0.1.0.0',
+        # Manifest version bumped for Odoo 17 migration
+        'version': '17.0.1.0.0',
 
 	'support': 'sales@ksolves.com',
 
 	'images': ['static/description/DN Discount price.gif'],
 
-	'depends': ['base', 'web', 'base_setup', 'bus', 'board'],
+	'depends': ['base', 'web', 'base_setup', 'bus'],
 
 	'data': ['security/ir.model.access.csv', 'security/ks_security_groups.xml', 'data/ks_default_data.xml', 'views/ks_dashboard_ninja_view.xml', 'views/ks_dashboard_ninja_item_view.xml', 'views/ks_dashboard_action.xml', 'views/ks_import_dashboard_view.xml', 'wizard/ks_create_dashboard_wiz_view.xml', 'wizard/ks_duplicate_dashboard_wiz_view.xml'],
 
 	'demo': ['demo/ks_dashboard_ninja_demo.xml'],
 
-	'assets': {'web.assets_backend': ['ks_dashboard_ninja/static/src/css/ks_dashboard_ninja.scss', 'ks_dashboard_ninja/static/src/css/ks_dashboard_ninja_item.css', 'ks_dashboard_ninja/static/src/css/ks_icon_container_modal.css', 'ks_dashboard_ninja/static/src/css/ks_dashboard_item_theme.css', 'ks_dashboard_ninja/static/src/css/ks_dn_filter.css', 'ks_dashboard_ninja/static/src/css/ks_toggle_icon.css', 'ks_dashboard_ninja/static/src/css/ks_dashboard_options.css', 'ks_dashboard_ninja/static/lib/js/underscore.js', 'ks_dashboard_ninja/static/lib/js/moment.js', 'ks_dashboard_ninja/static/src/js/ks_legacy_compat.js', 'ks_dashboard_ninja/static/src/js/ks_global_functions.js', 'ks_dashboard_ninja/static/src/js/ks_dashboard_ninja.js', 'ks_dashboard_ninja/static/src/js/ks_to_do_dashboard.js', 'ks_dashboard_ninja/static/src/js/ks_filter_props.js', 'ks_dashboard_ninja/static/src/js/ks_color_picker.js', 'ks_dashboard_ninja/static/src/js/ks_dashboard_ninja_item_preview.js', 'ks_dashboard_ninja/static/src/js/ks_image_basic_widget.js', 'ks_dashboard_ninja/static/src/js/ks_dashboard_item_theme.js', 'ks_dashboard_ninja/static/src/js/ks_widget_toggle.js', 'ks_dashboard_ninja/static/src/js/ks_import_dashboard.js', 'ks_dashboard_ninja/static/src/js/ks_domain_fix.js', 'ks_dashboard_ninja/static/src/js/ks_quick_edit_view.js', 'ks_dashboard_ninja/static/src/js/ks_dashboard_ninja_kpi_preview.js', 'ks_dashboard_ninja/static/src/js/ks_date_picker.js', 'ks_dashboard_ninja/static/lib/css/gridstack.min.css', 'ks_dashboard_ninja/static/lib/css/spectrum.css', 'ks_dashboard_ninja/static/lib/js/gridstack-h5.js', 'ks_dashboard_ninja/static/lib/js/Chart.js', 'ks_dashboard_ninja/static/lib/js/spectrum.js', 'ks_dashboard_ninja/static/src/css/ks_dashboard_ninja_pro.css', 'ks_dashboard_ninja/static/src/css/ks_to_do_item.css', 'ks_dashboard_ninja/static/src/js/ks_dashboard_ninja_graph_preview.js', 'ks_dashboard_ninja/static/src/js/ks_dashboard_ninja_list_view_preview.js', 'ks_dashboard_ninja/static/src/js/ks_to_do_preview.js', 'ks_dashboard_ninja/static/src/xml/**/*']},
+	'assets': {'web.assets_backend': ['ks_dashboard_ninja/static/src/css/ks_dashboard_ninja.scss', 'ks_dashboard_ninja/static/src/css/ks_dashboard_ninja_item.css', 'ks_dashboard_ninja/static/src/css/ks_icon_container_modal.css', 'ks_dashboard_ninja/static/src/css/ks_dashboard_item_theme.css', 'ks_dashboard_ninja/static/src/css/ks_dn_filter.css', 'ks_dashboard_ninja/static/src/css/ks_toggle_icon.css', 'ks_dashboard_ninja/static/src/css/ks_dashboard_options.css', 'ks_dashboard_ninja/static/src/js/ks_global_functions.js', 'ks_dashboard_ninja/static/src/js/ks_dashboard_ninja.js', 'ks_dashboard_ninja/static/src/js/ks_to_do_dashboard.js', 'ks_dashboard_ninja/static/src/js/ks_filter_props.js', 'ks_dashboard_ninja/static/src/js/ks_color_picker.js', 'ks_dashboard_ninja/static/src/js/ks_dashboard_ninja_item_preview.js', 'ks_dashboard_ninja/static/src/js/ks_image_basic_widget.js', 'ks_dashboard_ninja/static/src/js/ks_dashboard_item_theme.js', 'ks_dashboard_ninja/static/src/js/ks_widget_toggle.js', 'ks_dashboard_ninja/static/src/js/ks_import_dashboard.js', 'ks_dashboard_ninja/static/src/js/ks_domain_fix.js', 'ks_dashboard_ninja/static/src/js/ks_quick_edit_view.js', 'ks_dashboard_ninja/static/src/js/ks_dashboard_ninja_kpi_preview.js', 'ks_dashboard_ninja/static/src/js/ks_date_picker.js', 'ks_dashboard_ninja/static/lib/css/gridstack.min.css', 'ks_dashboard_ninja/static/lib/js/gridstack-h5.js', 'ks_dashboard_ninja/static/lib/js/Chart.bundle.min.js', 'ks_dashboard_ninja/static/src/css/ks_dashboard_ninja_pro.css', 'ks_dashboard_ninja/static/src/css/ks_to_do_item.css', 'ks_dashboard_ninja/static/src/js/ks_dashboard_ninja_graph_preview.js', 'ks_dashboard_ninja/static/src/js/ks_dashboard_ninja_list_view_preview.js', 'ks_dashboard_ninja/static/src/js/ks_to_do_preview.js'], 'web.assets_qweb': ['ks_dashboard_ninja/static/src/xml/**/*']},
 
 	'uninstall_hook': 'uninstall_hook',
 }

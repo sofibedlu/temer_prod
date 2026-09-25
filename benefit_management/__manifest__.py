@@ -1,0 +1,28 @@
+{
+    'name': 'Employee Benefit Management',
+    'version': '17.0.1.0.0',
+    'category': 'Human Resources',
+    'summary': 'Manage employee benefit definitions, recurring schedules, requests, and payment request creation.',
+    'author': 'Sofonias B/TemerProperties',
+    'license': 'LGPL-3',
+    'depends': [
+        'base',
+        'hr',
+        'mail',
+        'temer_payment_request',
+    ],
+    'data': [
+        'security/security.xml',
+        'security/ir.model.access.csv',
+        'data/ir_sequence_data.xml',
+        'views/payment_request_inherit_views.xml',
+        'views/benefit_type_views.xml',
+        'views/benefit_definition_views.xml',
+        'views/benefit_reminder_views.xml', 
+        'views/benefit_request_views.xml',
+        'views/menu_views.xml',
+    ],
+    'installable': True,
+    'application': True,
+    'auto_install': False,
+}

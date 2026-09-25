@@ -14,23 +14,6 @@
     width: 280px;
 }
 
-/* Form with preview side-by-side layout */
-.ks_dn_item_form {
-    position: relative;
-    min-height: 600px;
-}
-
-/* Preview column - positioned on the right side of the form */
-.ks_dn_item_preview_col {
-    position: absolute;
-    right: 16px;
-    top: 0;
-    width: calc(50% - 30px);
-    max-height: 100%;
-    overflow: auto;
-    z-index: 1;
-}
-
 .ks_not_click{
     pointer-events: none;
 }

@@ -1,16 +1,17 @@
-/** @odoo-module **/
-import { fieldRegistry as registry } from "./ks_legacy_compat.js";
-import { AbstractField } from "./ks_legacy_compat.js";
-import { core } from "./ks_legacy_compat.js";
-import { field_utils } from "./ks_legacy_compat.js";
-import { ksSession as session } from "./ks_legacy_compat.js";
-import { ksModelDisplayName } from "./ks_legacy_compat.js";
-import { utils } from "./ks_legacy_compat.js";
-import KsGlobalFunction from "./ks_global_functions.js";
+odoo.define('ks_dashboard_ninja_list.ks_dashboard_kpi_preview', function(require) {
+    "use strict";
 
-var Qweb = core.qweb;
+    var registry = require('web.field_registry');
+    var AbstractField = require('web.AbstractField');
+    var core = require('web.core');
+    var field_utils = require('web.field_utils');
+    var session = require('web.session');
+    var utils = require('web.utils');
+    var KsGlobalFunction = require('ks_dashboard_ninja.KsGlobalFunction');
 
-var KsKpiPreview = AbstractField.extend({
+    var Qweb = core.qweb;
+
+    var KsKpiPreview = AbstractField.extend({
 
         supportedFieldTypes: ['char'],
 
@@ -283,7 +284,7 @@ var KsKpiPreview = AbstractField.extend({
                 count_1: self.ksNumFormatter(kpi_data[0]['record_data'], 1),
                 count_1_tooltip: kpi_data[0]['record_data'],
                 count_2: kpi_data[1] ? String(kpi_data[1]['record_data']) : false,
-                name: ksModelDisplayName(field),
+                name: field.name ? field.name : field.ks_model_id.data.display_name,
                 target_progress_deviation:target_progress_deviation,
                 icon_select: field.ks_icon_select,
                 default_icon: field.ks_default_icon,
@@ -432,8 +433,10 @@ var KsKpiPreview = AbstractField.extend({
             return "rgba(" + rgba + "," + val.split(',')[1] + ")";
         }
 
+    });
+    registry.add('ks_dashboard_kpi_preview', KsKpiPreview);
+    return {
+        KsKpiPreview: KsKpiPreview
+    };
+
 });
-registry.add('ks_dashboard_kpi_preview', KsKpiPreview);
-export default {
-    KsKpiPreview: KsKpiPreview
-};

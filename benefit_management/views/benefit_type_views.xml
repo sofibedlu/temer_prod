@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_benefit_type_tree" model="ir.ui.view">
+        <field name="name">benefit.type.tree</field>
+        <field name="model">benefit.type</field>
+        <field name="arch" type="xml">
+            <tree string="Benefit Types" editable="bottom">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="description"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_benefit_type" model="ir.actions.act_window">
+        <field name="name">Benefit Types</field>
+        <field name="res_model">benefit.type</field>
+        <field name="view_mode">tree</field>
+    </record>
+</odoo>

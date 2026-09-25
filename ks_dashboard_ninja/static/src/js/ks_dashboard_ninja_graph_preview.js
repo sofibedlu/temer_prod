@@ -1,24 +1,29 @@
-/** @odoo-module **/
-import { fieldRegistry as registry } from "./ks_legacy_compat.js";
-import { AbstractField } from "./ks_legacy_compat.js";
-import { core } from "./ks_legacy_compat.js";
-import { field_utils } from "./ks_legacy_compat.js";
-import { ksModelDisplayName } from "./ks_legacy_compat.js";
-import { config } from "./ks_legacy_compat.js";
-import KsGlobalFunction from "./ks_global_functions.js";
+odoo.define('ks_dashboard_ninja_list.ks_dashboard_graph_preview', function(require) {
+    "use strict";
 
-var QWeb = core.qweb;
+    var registry = require('web.field_registry');
+    var AbstractField = require('web.AbstractField');
+    var core = require('web.core');
+    var rpc = require('web.rpc');
+    var field_utils = require('web.field_utils');
+    var session = require('web.session');
+    var utils = require('web.utils');
+    var config = require('web.config');
+    var field_utils = require('web.field_utils');
+    var KsGlobalFunction = require('ks_dashboard_ninja.KsGlobalFunction');
 
-var MAX_LEGEND_LENGTH = 25 * (Math.max(1, config.device.size_class));
+    var QWeb = core.qweb;
 
-var KsGraphPreview = AbstractField.extend({
+    var MAX_LEGEND_LENGTH = 25 * (Math.max(1, config.device.size_class));
+
+    var KsGraphPreview = AbstractField.extend({
         supportedFieldTypes: ['char'],
 
         resetOnAnyFieldChange: true,
 
         jsLibs: [
-            '/ks_dashboard_ninja/static/lib/js/Chart.js',
-            '/ks_dashboard_ninja/static/lib/js/chartjs-plugin-datalabels-v2.js'
+            '/ks_dashboard_ninja/static/lib/js/Chart.bundle.min.js',
+            '/ks_dashboard_ninja/static/lib/js/chartjs-plugin-datalabels.js'
         ],
         cssLibs: [
             '/ks_dashboard_ninja/static/lib/css/Chart.min.css'
@@ -34,26 +39,18 @@ var KsGraphPreview = AbstractField.extend({
             core.bus.on("DOM_updated", this, function() {
                 if (self.shouldRenderChart && $.find('#ksMyChart').length > 0) self.renderChart();
             });
-            // chartjs-plugin-datalabels v2 (for Chart.js v4) is attached per
-            // chart through the `plugins:` array of `new Chart(...)`, so there
-            // is nothing to unregister globally. Keep a safe no-op.
-            if (typeof window.ChartDataLabels !== 'undefined' && Chart.unregister) {
-                try {
-                    Chart.unregister(window.ChartDataLabels);
-                } catch (err) { /* noop */ }
-            }
+            Chart.plugins.unregister(ChartDataLabels);
             return this._super();
         },
 
         ks_set_default_chart_view: function() {
-            Chart.register({
-                id: 'ks_no_data_message',
+            Chart.plugins.register({
                 afterDraw: function(chart) {
-                    if (chart.data.labels && chart.data.labels.length === 0) {
+                    if (chart.data.labels.length === 0) {
                         // No data is present
-                        var ctx = chart.ctx;
-                        var width = chart.width;
-                        var height = chart.height;
+                        var ctx = chart.chart.ctx;
+                        var width = chart.chart.width;
+                        var height = chart.chart.height
                         chart.clear();
 
                         ctx.save();
@@ -65,6 +62,15 @@ var KsGraphPreview = AbstractField.extend({
                     }
                 }
             });
+
+            Chart.Legend.prototype.afterFit = function() {
+                var chart_type = this.chart.config.type;
+                if (chart_type === "pie" || chart_type === "doughnut") {
+                    this.height = this.height;
+                } else {
+                    this.height = this.height + 20;
+                };
+            }
         },
 
         _render: function() {
@@ -96,7 +102,7 @@ var KsGraphPreview = AbstractField.extend({
             var field = this.recordData;
             var ks_chart_name;
             if (field.name) ks_chart_name = field.name;
-            else if (field.ks_model_name) ks_chart_name = ksModelDisplayName(field);
+            else if (field.ks_model_name) ks_chart_name = field.ks_model_id.data.display_name;
             else ks_chart_name = "Name";
 
             this.chart_type = this.recordData.ks_dashboard_item_type.split('_')[1];
@@ -182,7 +188,12 @@ var KsGraphPreview = AbstractField.extend({
                     break;
             }
 
-            // Record limit removed for v17 — charts render with any number of records
+            if (this.chart_family === "circle") {
+                if (this.chart_data && this.chart_data['labels'].length > 30) {
+                    this.$el.find(".card-body").empty().append($("<div style='font-size:20px;'>Too many records for selected Chart Type. Consider using <strong>Domain</strong> to filter records or <strong>Record Limit</strong> to limit the no of records under <strong>30.</strong>"));
+                    return;
+                }
+            }
             if ($.find('#ksMyChart').length > 0) {
                 this.renderChart();
             }
@@ -192,30 +203,26 @@ var KsGraphPreview = AbstractField.extend({
             var self = this;
             if (this.recordData.ks_chart_measure_field_2.count && this.recordData.ks_dashboard_item_type === 'ks_bar_chart') {
                 var self = this;
-                // Chart.js v4: cartesian axes are an object keyed by scale id.
-                // Keep the default "y" id for the main value axis and "y-axis-1"
-                // for the secondary one (used by the server-side dataset data).
-                var scales = {
-                    x: {
-                        display: true,
-                        grid: {
-                            display: false
-                        }
-                    },
-                    y: {
+                var scales = {}
+                scales.yAxes = [{
                         type: "linear",
                         display: true,
                         position: "left",
-                        grid: {
+                        id: "y-axis-0",
+                        gridLines: {
                             display: true
+                        },
+                        labels: {
+                            show: true,
                         }
                     },
-                    'y-axis-1': {
+                    {
                         type: "linear",
                         display: true,
                         position: "right",
-                        grid: {
-                            display: true
+                        id: "y-axis-1",
+                        labels: {
+                            show: true,
                         },
                         ticks: {
                             beginAtZero: true,
@@ -235,7 +242,7 @@ var KsGraphPreview = AbstractField.extend({
                             },
                         }
                     }
-                }
+                ]
 
             }
             var chart_plugin = [];
@@ -243,8 +250,7 @@ var KsGraphPreview = AbstractField.extend({
                 chart_plugin.push(ChartDataLabels);
             }
             this.ksMyChart = new Chart($.find('#ksMyChart')[0], {
-                // Chart.js v4 dropped the "horizontalBar" type (use indexAxis)
-                type: this.chart_type === "area" ? "line" : this.chart_type === "horizontalBar" ? "bar" : this.chart_type,
+                type: this.chart_type === "area" ? "line" : this.chart_type,
                 plugins: chart_plugin,
                 data: {
                     labels: this.chart_data['labels'],
@@ -252,10 +258,12 @@ var KsGraphPreview = AbstractField.extend({
                 },
                 options: {
                     maintainAspectRatio: false,
-                    indexAxis: this.chart_type === "horizontalBar" ? 'y' : undefined,
                     animation: {
                         easing: 'easeInQuad',
                     },
+                    legend: {
+                            display: this.recordData.ks_hide_legend
+                        },
                     layout: {
                         padding: {
                             bottom: 0,
@@ -263,9 +271,6 @@ var KsGraphPreview = AbstractField.extend({
                     },
                     scales: scales,
                     plugins: {
-                        legend: {
-                            display: this.recordData.ks_hide_legend
-                        },
                         datalabels: {
                             backgroundColor: function(context) {
                                 return context.dataset.backgroundColor;
@@ -427,17 +432,14 @@ var KsGraphPreview = AbstractField.extend({
             var datasets = ksMyChart.config.data.datasets;
             var options = ksMyChart.config.options;
 
-            options.plugins = options.plugins || {};
-            options.plugins.legend = options.plugins.legend || {};
-            options.plugins.legend.labels = options.plugins.legend.labels || {};
-            options.plugins.legend.labels.usePointStyle = true;
+            options.legend.labels.usePointStyle = true;
             if (ksChartFamily == "circle") {
                 if (ks_show_data_value) {
-                    options.plugins.legend.position = 'top';
+                    options.legend.position = 'top';
                     options.layout.padding.top = 10;
                     options.layout.padding.bottom = 20;
                 } else {
-                    options.plugins.legend.position = 'bottom';
+                    options.legend.position = 'bottom';
                 }
 
                 options = this.ksHideFunction(options, this.recordData, ksChartFamily, chartType);
@@ -448,30 +450,27 @@ var KsGraphPreview = AbstractField.extend({
                 options.plugins.datalabels.borderWidth = 2;
                 options.plugins.datalabels.clamp = true;
                 options.plugins.datalabels.clip = false;
-                options.plugins.tooltip = options.plugins.tooltip || {};
-                options.plugins.tooltip.callbacks = {
-                    title: function(items) {
-                        if (!items || !items.length) return '';
-                        var tooltipItem = items[0];
-                        var data = tooltipItem.chart.data;
+                options.tooltips.callbacks = {
+                    title: function(tooltipItem, data) {
                         var ks_self = self;
-                        var k_amount = data.datasets[tooltipItem.datasetIndex]['data'][tooltipItem.dataIndex];
+                        var k_amount = data.datasets[tooltipItem[0].datasetIndex]['data'][tooltipItem[0].index];
                         var ks_selection = ks_self.chart_data.ks_selection;
                         if (ks_selection === 'monetary') {
                             var ks_currency_id = ks_self.chart_data.ks_currency;
                             k_amount = KsGlobalFunction.ks_monetary(k_amount, ks_currency_id);
-                            return data.datasets[tooltipItem.datasetIndex]['label'] + " : " + k_amount
+                            return data.datasets[tooltipItem[0].datasetIndex]['label'] + " : " + k_amount
                         } else if (ks_selection === 'custom') {
                             var ks_field = ks_self.chart_data.ks_field;
+                            //                                                        ks_type = field_utils.format.char(ks_field);
                             k_amount = field_utils.format.float(k_amount, Float64Array, {digits: [0, self.recordData.ks_precision_digits]});
-                            return data.datasets[tooltipItem.datasetIndex]['label'] + " : " + k_amount + " " + ks_field;
+                            return data.datasets[tooltipItem[0].datasetIndex]['label'] + " : " + k_amount + " " + ks_field;
                         } else {
                             k_amount = field_utils.format.float(k_amount, Float64Array, {digits: [0, self.recordData.ks_precision_digits]});
-                            return data.datasets[tooltipItem.datasetIndex]['label'] + " : " + k_amount
+                            return data.datasets[tooltipItem[0].datasetIndex]['label'] + " : " + k_amount
                         }
                     },
-                    label: function(context) {
-                        return context.label;
+                    label: function(tooltipItem, data) {
+                        return data.labels[tooltipItem.index];
                     },
 
                 }
@@ -480,25 +479,14 @@ var KsGraphPreview = AbstractField.extend({
                     datasets[i].borderColor = "rgba(255,255,255,1)";
                 }
                 if (this.recordData.ks_semi_circle_chart && (chartType === "pie" || chartType === "doughnut")) {
-                    // Chart.js v4: rotation/circumference live on the dataset/arc
-                    for (var si = 0; si < datasets.length; si++) {
-                        datasets[si].rotation = 1 * Math.PI;
-                        datasets[si].circumference = 1 * Math.PI;
-                    }
+                    options.rotation = 1 * Math.PI;
+                    options.circumference = 1 * Math.PI;
                 }
             } else if (ksChartFamily == "square") {
                 options = this.ksHideFunction(options, this.recordData, ksChartFamily, chartType);
 
-                // Chart.js v4 keeps the raw user config, so single-axis charts
-                // have no scales yet at this point - create the x/y defaults
-                // the same way v4 would resolve them.
-                options.scales = options.scales || {};
-                options.scales.x = options.scales.x || { type: "category" };
-                options.scales.y = options.scales.y || { type: "linear" };
-                options.scales.x.grid = options.scales.x.grid || {};
-                options.scales.x.grid.display = false;
-                options.scales.y.ticks = options.scales.y.ticks || {};
-                options.scales.y.ticks.beginAtZero = true;
+                options.scales.xAxes[0].gridLines.display = false;
+                options.scales.yAxes[0].ticks.beginAtZero = true;
                 options.plugins.datalabels.align = 'end';
 
                 options.plugins.datalabels.formatter = function(value, ctx) {
@@ -525,8 +513,7 @@ var KsGraphPreview = AbstractField.extend({
 
 
                 if (chartType === "horizontalBar") {
-                    options.scales.x.ticks = options.scales.x.ticks || {};
-                    options.scales.x.ticks.callback = function(value, index, values) {
+                    options.scales.xAxes[0].ticks.callback = function(value, index, values) {
                         var ks_self = self;
                         var ks_selection = self.chart_data.ks_selection;
                         if (ks_selection === 'monetary') {
@@ -541,10 +528,9 @@ var KsGraphPreview = AbstractField.extend({
                             return KsGlobalFunction._onKsGlobalFormatter(value, self.recordData.ks_data_format, self.recordData.ks_precision_digits);
                         }
                     }
-                    options.scales.x.ticks.beginAtZero = true;
+                    options.scales.xAxes[0].ticks.beginAtZero = true;
                 } else {
-                    options.scales.y.ticks = options.scales.y.ticks || {};
-                    options.scales.y.ticks.callback = function(value, index, values) {
+                    options.scales.yAxes[0].ticks.callback = function(value, index, values) {
                         var ks_self = self;
                         var ks_selection = ks_self.chart_data.ks_selection;
                         var ks_selection = self.chart_data.ks_selection;
@@ -561,13 +547,10 @@ var KsGraphPreview = AbstractField.extend({
                         }
                     }
                 }
-                options.plugins.tooltip = options.plugins.tooltip || {};
-                options.plugins.tooltip.callbacks = {
-                    label: function(context) {
-                        var data = context.chart.data;
-                        var tooltipItem = context;
+                options.tooltips.callbacks = {
+                    label: function(tooltipItem, data) {
                         var ks_self = self;
-                        var k_amount = data.datasets[tooltipItem.datasetIndex]['data'][tooltipItem.dataIndex];
+                        var k_amount = data.datasets[tooltipItem.datasetIndex]['data'][tooltipItem.index];
                         var ks_selection = ks_self.chart_data.ks_selection;
                         if (ks_selection === 'monetary') {
                             var ks_currency_id = ks_self.chart_data.ks_currency;
@@ -575,6 +558,7 @@ var KsGraphPreview = AbstractField.extend({
                             return data.datasets[tooltipItem.datasetIndex]['label'] + " : " + k_amount
                         } else if (ks_selection === 'custom') {
                             var ks_field = ks_self.chart_data.ks_field;
+                            // ks_type = field_utils.format.char(ks_field);
                             k_amount = field_utils.format.float(k_amount, Float64Array, {digits: [0, self.recordData.ks_precision_digits]});
                             return data.datasets[tooltipItem.datasetIndex]['label'] + " : " + k_amount + " " + ks_field;
                         } else {
@@ -598,8 +582,8 @@ var KsGraphPreview = AbstractField.extend({
                             } else {
                                 datasets[i].backgroundColor = chartColors[i];
                                 datasets[i].borderColor = "rgba(255,255,255,0)";
-                                options.scales.x.stacked = this.recordData.ks_bar_chart_stacked;
-                                options.scales.y.stacked = this.recordData.ks_bar_chart_stacked;
+                                options.scales.xAxes[0].stacked = this.recordData.ks_bar_chart_stacked;
+                                options.scales.yAxes[0].stacked = this.recordData.ks_bar_chart_stacked;
                             }
                             break;
                         case "line":
@@ -619,9 +603,11 @@ var KsGraphPreview = AbstractField.extend({
             }
         },
 
-});
-registry.add('ks_dashboard_graph_preview', KsGraphPreview);
+    });
+    registry.add('ks_dashboard_graph_preview', KsGraphPreview);
 
-export default {
-    KsGraphPreview: KsGraphPreview,
-};
+    return {
+        KsGraphPreview: KsGraphPreview,
+    };
+
+});

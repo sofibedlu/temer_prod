@@ -1,12 +1,14 @@
-/** @odoo-module **/
-import { fieldRegistry as registry } from "./ks_legacy_compat.js";
-import { AbstractField } from "./ks_legacy_compat.js";
-import { core } from "./ks_legacy_compat.js";
-import { field_utils } from "./ks_legacy_compat.js";
+odoo.define('ks_dashboard_ninja_list.ks_to_do_preview', function(require) {
+    "use strict";
 
-var QWeb = core.qweb;
+    var registry = require('web.field_registry');
+    var AbstractField = require('web.AbstractField');
+    var core = require('web.core');
 
-var KsToDOViewPreview = AbstractField.extend({
+    var QWeb = core.qweb;
+    var field_utils = require('web.field_utils');
+
+    var KsToDOViewPreview = AbstractField.extend({
         supportedFieldTypes: ['char'],
 
         resetOnAnyFieldChange: true,
@@ -57,8 +59,10 @@ var KsToDOViewPreview = AbstractField.extend({
 
 
     });
-registry.add('ks_dashboard_to_do_preview', KsToDOViewPreview);
+    registry.add('ks_dashboard_to_do_preview', KsToDOViewPreview);
 
-export default {
-    KsToDOViewPreview: KsToDOViewPreview,
-};
+    return {
+        KsToDOViewPreview: KsToDOViewPreview,
+    };
+
+});

@@ -12,8 +12,8 @@ class KSCreateDashboardWizard(models.TransientModel):
     ks_top_menu_id = fields.Many2one('ir.ui.menu',
                                      domain="['|',('action','=',False),('parent_id','=',False)]",
                                      string="Show Under Menu", required=True,
-                                     default=lambda self: (self.env.ref('board.menu_board_my_dash', False) or self.env[
-                                         'ir.ui.menu'].search([('name', '=', 'My Dashboard')], limit=1)).id)
+                                     default=lambda self: self.env['ir.ui.menu'].search(
+                                         [('name', '=', 'My Dashboard')])[0])
     ks_sequence = fields.Integer(string="Sequence")
     ks_template = fields.Many2one('ks_dashboard_ninja.board_template',
                                   default=lambda self: self.env.ref('ks_dashboard_ninja.ks_blank',

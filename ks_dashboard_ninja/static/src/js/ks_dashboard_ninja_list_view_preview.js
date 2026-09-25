@@ -1,15 +1,16 @@
-/** @odoo-module **/
-import { fieldRegistry as registry } from "./ks_legacy_compat.js";
-import { AbstractField } from "./ks_legacy_compat.js";
-import { core } from "./ks_legacy_compat.js";
-import { field_utils } from "./ks_legacy_compat.js";
-import { ksModelDisplayName } from "./ks_legacy_compat.js";
-import { time } from "./ks_legacy_compat.js";
+odoo.define('ks_dashboard_ninja_list.ks_dashboard_ninja_list_view_preview', function(require) {
+    "use strict";
 
-var QWeb = core.qweb;
-var _t = core._t;
+    var registry = require('web.field_registry');
+    var AbstractField = require('web.AbstractField');
+    var core = require('web.core');
 
-var KsListViewPreview = AbstractField.extend({
+    var QWeb = core.qweb;
+    var field_utils = require('web.field_utils');
+    var time = require('web.time');
+    var _t = core._t;
+
+    var KsListViewPreview = AbstractField.extend({
         supportedFieldTypes: ['char'],
 
         resetOnAnyFieldChange: true,
@@ -56,7 +57,7 @@ var KsListViewPreview = AbstractField.extend({
             var list_view_data = JSON.parse(field.ks_list_view_data);
             var count = field.ks_record_count;
             if (field.name) ks_list_view_name = field.name;
-            else if (field.ks_model_name) ks_list_view_name = ksModelDisplayName(field);
+            else if (field.ks_model_name) ks_list_view_name = field.ks_model_id.data.display_name;
             else ks_list_view_name = "Name";
             if (field.ks_list_view_type === "ungrouped" && list_view_data) {
                 var index_data = list_view_data.date_index;
@@ -112,8 +113,10 @@ var KsListViewPreview = AbstractField.extend({
 
 
     });
-registry.add('ks_dashboard_list_view_preview', KsListViewPreview);
+    registry.add('ks_dashboard_list_view_preview', KsListViewPreview);
 
-export default {
-    KsListViewPreview: KsListViewPreview,
-};
+    return {
+        KsListViewPreview: KsListViewPreview,
+    };
+
+});

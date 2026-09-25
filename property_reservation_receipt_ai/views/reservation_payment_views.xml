@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_property_reservation_payment_form_ai" model="ir.ui.view">
+        <field name="name">property.reservation.payment.form.ai</field>
+        <field name="model">property.reservation.payment</field>
+        <field name="inherit_id" ref="ahadubit_property_reservation.view_property_reservation_payment_form"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="//header" position="inside">
+                <!-- Button to trigger AI extraction -->
+                <button name="action_extract_data_from_slip" 
+                        string="🪄 Auto-Extract from Slip" 
+                        type="object" 
+                        class="btn-primary"
+                        invisible="not payment_receipt"/>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- Adds the magic button INLINE to the Reservation Form's Payment Tab -->
+    <record id="view_property_reservation_form_inherit_payment_ai" model="ir.ui.view">
+        <field name="name">property.reservation.form.inherit.payment.ai</field>
+        <field name="model">property.reservation</field>
+        <field name="inherit_id" ref="ahadubit_property_reservation.property_reservation_history_view_form_id"/>
+        <field name="arch" type="xml">
+            
+            <!-- Target the payment_receipt field inside the One2many Tree view -->
+            <xpath expr="//tree//field[@name='payment_receipt']" position="after">
+                
+                <!-- A compact button with a Magic Wand icon for the list view -->
+                <button name="action_extract_data_from_slip" 
+                        type="object" 
+                        icon="fa-magic" 
+                        class="btn-success"
+                        title="Auto-Extract Data from Slip"
+                        invisible="not payment_receipt"/>
+                        
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

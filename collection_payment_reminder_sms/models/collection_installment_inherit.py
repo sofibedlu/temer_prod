@@ -20,51 +20,6 @@ class CollectionInstallment(models.Model):
         ('3', 'Third Reminder Sent')
     ], string="Reminder Stage", default='0', readonly=True, copy=False)
 
-    # 🌟 Safety Guard: Permanently tracks if the thank-you SMS was already fired
-    thank_you_sms_sent = fields.Boolean(
-        string="Thank You SMS Sent", 
-        default=False, 
-        copy=False, 
-        readonly=True
-    )
-
-    def write(self, vals):
-        if self.env.context.get('skip_thank_you_sms'):
-            return super(CollectionInstallment, self).write(vals)
-
-        # 1. 🌟 CAPTURE PRE-WRITE STATE:
-        # Only consider installments that are currently NOT paid
-        unpaid_installments = self.filtered(lambda r: r.state != 'paid' and not r.thank_you_sms_sent)
-
-        # 2. Execute standard write
-        res = super(CollectionInstallment, self).write(vals)
-
-        # 3. 🌟 CAPTURE POST-WRITE TRANSITION:
-        # Which of those previously UNPAID installments have NOW transitioned to 'paid'?
-        newly_paid_installments = unpaid_installments.filtered(lambda r: r.state == 'paid')
-
-        if newly_paid_installments:
-            template = self.env['collection.sms.template'].search([('template_type', '=', 'thank_you')], limit=1)
-            
-            if template:
-                for rec in newly_paid_installments:
-                    # Double-check database log just in case
-                    already_sent = self.env['collection.sms.log'].sudo().search_count([
-                        ('installment_id', '=', rec.id),
-                        ('message_stage', '=', 'thank_you'),
-                        ('status', 'in', ['sent', 'delivered'])
-                    ])
-
-                    if not already_sent:
-                        # Send SMS using context to prevent recursion
-                        success = rec.with_context(skip_thank_you_sms=True)._send_sms_from_template(rec, template)
-                        if success:
-                            # Lock the installment so it can never trigger again
-                            rec.with_context(skip_thank_you_sms=True).write({'thank_you_sms_sent': True})
-
-        return res
-
-
     def _send_sms_api(self, mobile, message):
         """ Send SMS via AfroMessage API """
         if not mobile:

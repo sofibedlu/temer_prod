@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_rebar_bar_mark_tree" model="ir.ui.view">
+        <field name="name">rebar.bar.mark.tree</field>
+        <field name="model">rebar.bar.mark</field>
+        <field name="arch" type="xml">
+            <tree string="Bar Marks" editable="bottom">
+                <field name="name"/>
+                <field name="description"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_rebar_bar_mark" model="ir.actions.act_window">
+        <field name="name">Bar Marks</field>
+        <field name="res_model">rebar.bar.mark</field>
+        <field name="view_mode">tree</field>
+    </record>
+</odoo>

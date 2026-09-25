@@ -1,23 +1,16 @@
-/** @odoo-module **/
-/*
- * ks_dashboard_ninja - Odoo 15 -> 17 conversion of ks_import_dashboard.js
- *
- * Odoo 15: this file patched the generic list controller's action menu to add
- * a bulk "Export Dashboard" entry on the dashboard board list view, and
- * registered a client action of the same module name.
- * Odoo 17: the list controller it patched (web.ListController) no longer
- * exists in the web client; the include() body below is preserved verbatim on
- * an inert placeholder class.  Bulk dashboard export remains available from
- * the dashboard itself (top-right Export button) and via the board form.
- */
-import { core } from "./ks_legacy_compat.js";
-import { ListController } from "./ks_legacy_compat.js";
-import { framework } from "./ks_legacy_compat.js";
-import { Dialog } from "./ks_legacy_compat.js";
+odoo.define('ks_dashboard_ninja.import_button', function(require) {
 
-var _t = core._t;
+    "use strict";
 
-ListController.include({
+    var core = require('web.core');
+    var _t = core._t;
+//    var Sidebar = require('web.Sidebar');
+    var ListController = require('web.ListController');
+    var framework = require('web.framework');
+    var Dialog = require('web.Dialog');
+
+
+    ListController.include({
 
 
 
@@ -119,6 +112,7 @@ ListController.include({
         },
 
 
+    });
+    core.action_registry.add('ks_dashboard_ninja.import_button', ListController);
+    return ListController;
 });
-core.action_registry.add('ks_dashboard_ninja.import_button', ListController);
-export default ListController;

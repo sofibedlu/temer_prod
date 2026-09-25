@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
-from odoo.tools.misc import DEFAULT_SERVER_DATETIME_FORMAT
+from odoo import fields
 from odoo.exceptions import ValidationError
 import datetime
 import json
@@ -23,8 +23,8 @@ class KsDashboardNinjaBoard(models.Model):
     ks_dashboard_top_menu_id = fields.Many2one('ir.ui.menu',
                                                domain="['|',('action','=',False),('parent_id','=',False)]",
                                                string="Show Under Menu",
-                                               default=lambda self: self.env.ref('board.menu_board_my_dash', False) or self.env[
-                                                   'ir.ui.menu'].search([('name', '=', 'My Dashboard')]))
+                                               default=lambda self: self.env['ir.ui.menu'].search(
+                                                   [('name', '=', 'My Dashboard')]))
     ks_dashboard_client_action_id = fields.Many2one('ir.actions.client')
     ks_dashboard_menu_id = fields.Many2one('ir.ui.menu')
     ks_dashboard_state = fields.Char()
@@ -333,9 +333,14 @@ class KsDashboardNinjaBoard(models.Model):
         if rec.ks_actions:
             context = {}
             try:
-                context = eval(rec.ks_actions.context)
+                context = safe_eval(rec.ks_actions.context) if rec.ks_actions.context else {}
             except Exception:
-                context = {}
+                # Fallback to literal eval for JSON-like strings, otherwise empty dict
+                try:
+                    import ast
+                    context = ast.literal_eval(rec.ks_actions.context) if rec.ks_actions.context else {}
+                except Exception:
+                    context = {}
 
                 # Managing those views that have the access rights
             ks_actions = rec.ks_actions.sudo()
@@ -366,8 +371,8 @@ class KsDashboardNinjaBoard(models.Model):
         ks_currency_position = False
         if rec.ks_unit and rec.ks_unit_selection == 'monetary':
             try:
-                ks_currency_symbol = self.env.company.currency_id.symbol
-                ks_currency_position = self.env.company.currency_id.position
+                ks_currency_symbol = self.env.user.company_id.currency_id.symbol
+                ks_currency_position = self.env.user.company_id.currency_id.position
             except Exception as E:
                 ks_currency_symbol = False
                 ks_currency_position = False
@@ -454,12 +459,11 @@ class KsDashboardNinjaBoard(models.Model):
             if ks_date_filter_selection == 'l_custom':
                 ks_start_dt_parse = parse(self._context['ksDateFilterStartDate'])
                 ks_end_dt_parse = parse(self._context['ksDateFilterEndDate'])
+                # parse returns aware/unaware datetime; normalize using fields.Datetime
                 self = self.with_context(
-                    ksDateFilterStartDate=fields.datetime.strptime(ks_start_dt_parse.strftime("%Y-%m-%d %H:%M:%S"),
-                                                                   "%Y-%m-%d %H:%M:%S"))
+                    ksDateFilterStartDate=fields.Datetime.to_datetime(ks_start_dt_parse))
                 self = self.with_context(
-                    ksDateFilterEndDate=fields.datetime.strptime(ks_end_dt_parse.strftime("%Y-%m-%d %H:%M:%S"),
-                                                                 "%Y-%m-%d %H:%M:%S"))
+                    ksDateFilterEndDate=fields.Datetime.to_datetime(ks_end_dt_parse))
                 self = self.with_context(ksIsDefultCustomDateFilter=False)
 
         else:
@@ -669,15 +673,11 @@ class KsDashboardNinjaBoard(models.Model):
             'ks_standard_goal_value': rec.ks_standard_goal_value,
             'ks_goal_liness': ks_goal_lines,
             'ks_date_filter_selection': rec.ks_date_filter_selection,
-            'ks_item_start_date': rec.ks_item_start_date.strftime(
-                DEFAULT_SERVER_DATETIME_FORMAT) if rec.ks_item_start_date else False,
-            'ks_item_end_date': rec.ks_item_end_date.strftime(
-                DEFAULT_SERVER_DATETIME_FORMAT) if rec.ks_item_end_date else False,
+            'ks_item_start_date': fields.Datetime.to_string(rec.ks_item_start_date) if rec.ks_item_start_date else False,
+            'ks_item_end_date': fields.Datetime.to_string(rec.ks_item_end_date) if rec.ks_item_end_date else False,
             'ks_date_filter_selection_2': rec.ks_date_filter_selection_2,
-            'ks_item_start_date_2': rec.ks_item_start_date_2.strftime(
-                DEFAULT_SERVER_DATETIME_FORMAT) if rec.ks_item_start_date_2 else False,
-            'ks_item_end_date_2': rec.ks_item_end_date_2.strftime(
-                DEFAULT_SERVER_DATETIME_FORMAT) if rec.ks_item_end_date_2 else False,
+            'ks_item_start_date_2': fields.Datetime.to_string(rec.ks_item_start_date_2) if rec.ks_item_start_date_2 else False,
+            'ks_item_end_date_2': fields.Datetime.to_string(rec.ks_item_end_date_2) if rec.ks_item_end_date_2 else False,
             'ks_previous_period': rec.ks_previous_period,
             'ks_target_view': rec.ks_target_view,
             'ks_data_comparison': rec.ks_data_comparison,
@@ -882,7 +882,14 @@ class KsDashboardNinjaBoard(models.Model):
             dashboard_id = self.create(vals)
 
             if data['ks_gridstack_config']:
-                ks_gridstack_config = eval(data['ks_gridstack_config'])
+                try:
+                    ks_gridstack_config = safe_eval(data['ks_gridstack_config'])
+                except Exception:
+                    import ast
+                    try:
+                        ks_gridstack_config = ast.literal_eval(data['ks_gridstack_config'])
+                    except Exception:
+                        ks_gridstack_config = {}
             ks_grid_stack_config = {}
 
             item_ids = []

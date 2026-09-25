@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_benefit_definition_tree" model="ir.ui.view">
+        <field name="name">benefit.definition.tree</field>
+        <field name="model">benefit.definition</field>
+        <field name="arch" type="xml">
+            <tree string="Benefit Definitions">
+                <field name="department_id"/>
+                <field name="employee_id"/>
+                <field name="benefit_type_id"/>
+                <field name="amount" widget="monetary"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="interval_number"/>
+                <field name="interval_unit"/>
+                <field name="last_recurring_date"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_benefit_definition_form" model="ir.ui.view">
+        <field name="name">benefit.definition.form</field>
+        <field name="model">benefit.definition</field>
+        <field name="arch" type="xml">
+            <form string="Benefit Definition">
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" invisible="active"/>
+                    <group>
+                        <group string="Assignment">
+                            <field name="department_id" options="{'no_create': True}"/>
+                            <field name="employee_id" options="{'no_create': True}"/>
+                            <field name="benefit_type_id" options="{'no_create': True}"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                        <group string="Recurring &amp; Amount">
+                            <label for="amount"/>
+                            <div class="o_row">
+                                <field name="amount" widget="monetary"/>
+                                <field name="currency_id" options="{'no_create': True}" invisible="1"/>
+                            </div>
+                            <label for="interval_number" string="Every"/>
+                            <div class="o_row">
+                                <field name="interval_number" class="oe_inline"/>
+                                <field name="interval_unit" class="oe_inline"/>
+                            </div>
+                            <field name="last_recurring_date" readonly="1"/>
+                            <field name="next_due_date" readonly="1"/>
+                            <field name="reminder_lead_days"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Benefit Details">
+                            <field name="benefit_details" placeholder="Add specific terms, vehicle plate, fuel allocations, or conditions..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_benefit_definition_search" model="ir.ui.view">
+        <field name="name">benefit.definition.search</field>
+        <field name="model">benefit.definition</field>
+        <field name="arch" type="xml">
+            <search string="Search Benefit Definitions">
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <field name="benefit_type_id"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_department" string="Department" context="{'group_by': 'department_id'}"/>
+                    <filter name="group_employee" string="Employee" context="{'group_by': 'employee_id'}"/>
+                    <filter name="group_type" string="Benefit Type" context="{'group_by': 'benefit_type_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_benefit_definition" model="ir.actions.act_window">
+        <field name="name">Benefit Definitions</field>
+        <field name="res_model">benefit.definition</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_benefit_definition_tree"/>
+        <field name="search_view_id" ref="view_benefit_definition_search"/>
+    </record>
+</odoo>

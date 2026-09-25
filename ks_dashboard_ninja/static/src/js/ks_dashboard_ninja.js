@@ -1,37 +1,31 @@
-/** @odoo-module **/
-/*
- * ks_dashboard_ninja - Odoo 15 -> 17 conversion of ks_dashboard_ninja.js
- *
- * The whole dashboard action body below is byte-for-byte the original Odoo 15
- * implementation.  Only the shell changed:
- *   - odoo.define(...) wrapper  -> ES module (@odoo-module)
- *   - legacy requires           -> imports from the compat layer / real v17
- *     modules (@web/...)
- *   - AbstractAction.extend()   -> compat LegacyAbstractAction.extend() which
- *     reproduces the legacy class machinery (_super chains, prototype events)
- *   - core.action_registry.add  -> registers an OWL host component into the
- *     v17 "actions" registry (tag ks_dashboard_ninja)
- */
-import { core } from "./ks_legacy_compat.js";
-import { patch } from "@web/core/utils/patch";
-import { WebClient } from "@web/webclient/webclient";
-import { Dialog } from "./ks_legacy_compat.js";
-import { ksModelDisplayName } from "./ks_legacy_compat.js";
-import { config } from "./ks_legacy_compat.js";
-import { framework } from "./ks_legacy_compat.js";
-import { time } from "./ks_legacy_compat.js";
-import { datepicker } from "./ks_legacy_compat.js";
-import { ksSession as session } from "./ks_legacy_compat.js";
-import { LegacyAbstractAction as AbstractAction } from "./ks_legacy_compat.js";
-import { ajax } from "./ks_legacy_compat.js";
-import { field_utils } from "./ks_legacy_compat.js";
-import KsGlobalFunction from "./ks_global_functions.js";
-import * as KsQuickEditView from "./ks_quick_edit_view.js";
+odoo.define('ks_dashboard_ninja.ks_dashboard', function(require) {
+    "use strict";
 
-var _t = core._t;
-var QWeb = core.qweb;
+    var core = require('web.core');
+    const { patch } = require('web.utils');
+    const { WebClient } = require("@web/webclient/webclient");
+//    var export = require('ks_dashboard_ninja.import_button');
+    var Dialog = require('web.Dialog');
+    var viewRegistry = require('web.view_registry');
+    var _t = core._t;
+    var QWeb = core.qweb;
+    var utils = require('web.utils');
+    var config = require('web.config');
+    var framework = require('web.framework');
+    var time = require('web.time');
+    var datepicker = require("web.datepicker");
 
-var KsDashboardNinja = AbstractAction.extend({
+    const session = require('web.session');
+    var AbstractAction = require('web.AbstractAction');
+    var ajax = require('web.ajax');
+    var framework = require('web.framework');
+    var field_utils = require('web.field_utils');
+    var KsGlobalFunction = require('ks_dashboard_ninja.KsGlobalFunction');
+
+    var KsQuickEditView = require('ks_dashboard_ninja.quick_edit_view');
+
+
+    var KsDashboardNinja = AbstractAction.extend({
         // To show or hide top control panel flag.
         hasControlPanel: false,
 
@@ -42,9 +36,9 @@ var KsDashboardNinja = AbstractAction.extend({
          */
 
         jsLibs: [
-            '/ks_dashboard_ninja/static/lib/js/Chart.js',
+            '/ks_dashboard_ninja/static/lib/js/Chart.bundle.min.js',
             '/ks_dashboard_ninja/static/lib/js/gridstack-h5.js',
-            '/ks_dashboard_ninja/static/lib/js/chartjs-plugin-datalabels-v2.js',
+            '/ks_dashboard_ninja/static/lib/js/chartjs-plugin-datalabels.js',
             '/ks_dashboard_ninja/static/lib/js/pdfmake.min.js',
             '/ks_dashboard_ninja/static/lib/js/vfs_fonts.js',
         ],
@@ -179,23 +173,12 @@ var KsDashboardNinja = AbstractAction.extend({
 
         on_attach_callback: function() {
             var self = this;
-            window.__ksAttachStart = true;
             $.when(self.ks_fetch_items_data()).then(function(result){
-                try {
-                    window.__ksAttachThen = 'render-start';
-                    self.ksRenderDashboard();
-                    window.__ksAttachThen = 'render-done';
-                    self.ks_set_update_interval();
-                    if (self.ks_dashboard_data.ks_item_data) {
-                        session.user_context['gridstack_config'] = self.ks_get_current_gridstack_config();
-                    }
-                    window.__ksAttachThen = 'all-done';
-                } catch (e) {
-                    window.__ksAttachErr = String((e && e.stack) || e);
-                    console.error("ks render error", e);
+                self.ksRenderDashboard();
+                self.ks_set_update_interval();
+                if (self.ks_dashboard_data.ks_item_data) {
+                    session.user_context['gridstack_config'] = self.ks_get_current_gridstack_config();
                 }
-            }, function(err) {
-                window.__ksAttachFail = String((err && err.stack) || err);
             });
         },
 
@@ -302,43 +285,6 @@ var KsDashboardNinja = AbstractAction.extend({
             'click #dashboard_export': 'ksOnDashboardExportClick',
             'click #dashboard_import': 'ksOnDashboardImportClick',
             'click #dashboard_duplicate': 'ksOnDashboardDuplicateClick',
-
-            // Odoo 17 additions: bootstrap dropdown JS was removed from the web
-            // client, so the original data-bs-toggle dropdowns are toggled manually.
-            'click [data-bs-toggle="dropdown"]': '_ksOnDropdownToggleClick',
-            'click ul#ks_add_item_selection li': '_ksCloseAllDropdowns',
-            'click .config_dropdown a.dropdown-item': '_ksCloseAllDropdowns',
-            'click .ks_dashboard_top_settings ul li': '_ksCloseAllDropdowns',
-            'click #ks_date_selector_container li': '_ksCloseAllDropdowns',
-        },
-
-        _ksOnDropdownToggleClick: function(ev) {
-            ev.preventDefault();
-            ev.stopPropagation();
-            var $container = $(ev.currentTarget).closest('.dropdown, .btn-group');
-            if (!$container.length) {
-                return;
-            }
-            var wasOpen = $container.hasClass('show');
-            this._ksCloseAllDropdowns();
-            if (!wasOpen) {
-                $container.addClass('show');
-                $container.children('.dropdown-menu, ul[role="menu"]').addClass('show');
-                var self = this;
-                if (!self._ksOutsideBound) {
-                    self._ksOutsideBound = true;
-                    $(document).on('click.ks_dn_outside', function(e) {
-                        if (!$(e.target).closest('.dropdown, .btn-group').length) {
-                            self._ksCloseAllDropdowns();
-                        }
-                    });
-                }
-            }
-        },
-
-        _ksCloseAllDropdowns: function() {
-            this.$el.find('.dropdown.show, .btn-group.show').removeClass('show');
-            this.$el.find('.dropdown-menu.show').removeClass('show');
         },
 
         ksOnDashboardDuplicateClick: function(ev){
@@ -394,7 +340,7 @@ var KsDashboardNinja = AbstractAction.extend({
                         data: JSON.stringify(data)
                     },
                     complete: framework.unblockUI,
-                    error: (error) => self.call('crash_manager', 'rpc_error', error),
+                    error: (error) => this.call('crash_manager', 'rpc_error', error),
                 });
             });
         },
@@ -588,32 +534,22 @@ var KsDashboardNinja = AbstractAction.extend({
         },
 
         ks_set_default_chart_view: function() {
-            // chartjs-plugin-datalabels v2 (for Chart.js v4) is attached per
-            // chart through the `plugins:` array of `new Chart(...)`, so there
-            // is nothing to unregister globally. Keep a safe no-op for the
-            // cases where the plugin global already exists.
-            if (typeof window.ChartDataLabels !== 'undefined' && Chart.unregister) {
-                try {
-                    Chart.unregister(window.ChartDataLabels);
-                } catch (err) { /* noop */ }
-            }
+            Chart.plugins.unregister(ChartDataLabels);
             var backgroundColor = 'white';
-            Chart.register({
-                id: 'ks_white_background',
-                beforeDraw: function(chart) {
-                    var ctx = chart.ctx;
+            Chart.plugins.register({
+                beforeDraw: function(c) {
+                    var ctx = c.chart.ctx;
                     ctx.fillStyle = backgroundColor;
-                    ctx.fillRect(0, 0, chart.width, chart.height);
+                    ctx.fillRect(0, 0, c.chart.width, c.chart.height);
                 }
             });
-            Chart.register({
-                id: 'ks_no_data_message',
+            Chart.plugins.register({
                 afterDraw: function(chart) {
-                    if (chart.data.labels && chart.data.labels.length === 0) {
+                    if (chart.data.labels.length === 0) {
                         // No data is present
-                        var ctx = chart.ctx;
-                        var width = chart.width;
-                        var height = chart.height;
+                        var ctx = chart.chart.ctx;
+                        var width = chart.chart.width;
+                        var height = chart.chart.height
                         chart.clear();
 
                         ctx.save();
@@ -624,7 +560,17 @@ var KsDashboardNinja = AbstractAction.extend({
                         ctx.restore();
                     }
                 }
+
             });
+
+            Chart.Legend.prototype.afterFit = function() {
+                var chart_type = this.chart.config.type;
+                if (chart_type === "pie" || chart_type === "doughnut") {
+                    this.height = this.height;
+                } else {
+                    this.height = this.height + 20;
+                };
+            };
         },
 
         ksFetchUpdateItem: function(item_id) {
@@ -799,9 +745,7 @@ var KsDashboardNinja = AbstractAction.extend({
 
         ksRenderDashboard: function() {
             var self = this;
-            window.__ksRender = 'start';
             self.$el.empty();
-            window.__ksRender = 'emptied-kids:' + self.$el.children().length;
             self.$el.addClass('ks_dashboard_ninja d-flex flex-column');
             var dash_name = $('ul[id="ks_dashboard_layout_dropdown_container"] li[class="ks_dashboard_layout_event ks_layout_selected"] span').text()
             if (self.ks_dashboard_data.ks_child_boards) self.ks_dashboard_data.name = this.ks_dashboard_data.ks_child_boards[self.ks_dashboard_data.ks_selected_board_id][0];
@@ -913,7 +857,7 @@ var KsDashboardNinja = AbstractAction.extend({
                     } else if (items[i].ks_dashboard_item_type === 'ks_list_view') {
                         self._renderListView(items[i], self.grid)
                     }else if (items[i].ks_dashboard_item_type === 'ks_kpi') {
-                        var $kpi_preview = self.renderKpi(items[i], self.grid)
+                        var kpi_preview = self.renderKpi(items[i], self.grid)
                         if (items[i].id in self.gridstackConfig) {
                             self.grid.addWidget($kpi_preview[0], {x:self.gridstackConfig[items[i].id].x, y:self.gridstackConfig[items[i].id].y, w:self.gridstackConfig[items[i].id].w, h:self.gridstackConfig[items[i].id].h,autoPosition:true,minW:2,maxW:null,minH:2,maxH:null,id:items[i].id});
                         } else {
@@ -1311,34 +1255,35 @@ var KsDashboardNinja = AbstractAction.extend({
                 $ks_gridstack_container.find('.ks_dashboard_item_chart_info').hide();
             }
             item.$el = $ks_gridstack_container;
-            // Record limit removed for v17 — charts render with any number of records
+            if (chart_family === "circle") {
+                if (chart_data && chart_data['labels'].length > 30) {
+                    $ks_gridstack_container.find(".ks_dashboard_color_option").remove();
+                    $ks_gridstack_container.find(".card-body").empty().append($("<div style='font-size:20px;'>Too many records for selected Chart Type. Consider using <strong>Domain</strong> to filter records or <strong>Record Limit</strong> to limit the no of records under <strong>30.</strong>"));
+                    return;
+                }
+            }
 
             if (chart_data["ks_show_second_y_scale"] && item.ks_dashboard_item_type === 'ks_bar_chart') {
-                // Chart.js v4: cartesian axes are an object keyed by scale id.
-                // The main value axis must keep the default id "y" (datasets
-                // without an explicit yAxisID bind to it) while the secondary
-                // axis keeps the id "y-axis-1" used by the server-side data.
-                var scales = {
-                    x: {
-                        display: true,
-                        grid: {
-                            display: false
-                        }
-                    },
-                    y: {
+                var scales = {}
+                scales.yAxes = [{
                         type: "linear",
                         display: true,
                         position: "left",
-                        grid: {
+                        id: "y-axis-0",
+                        gridLines: {
                             display: true
+                        },
+                        labels: {
+                            show: true,
                         }
                     },
-                    'y-axis-1': {
+                    {
                         type: "linear",
                         display: true,
                         position: "right",
-                        grid: {
-                            display: true
+                        id: "y-axis-1",
+                        labels: {
+                            show: true,
                         },
                         ticks: {
                             beginAtZero: true,
@@ -1360,7 +1305,7 @@ var KsDashboardNinja = AbstractAction.extend({
                             },
                         }
                     }
-                }
+                ]
             }
             var chart_plugin = [];
             if (item.ks_show_data_value) {
@@ -1376,8 +1321,7 @@ var KsDashboardNinja = AbstractAction.extend({
 //                }
 //            }
             var ksMyChart = new Chart($ksChartContainer[0], {
-                // Chart.js v4 dropped the "horizontalBar" type (use indexAxis)
-                type: chart_type === "area" ? "line" : chart_type === "horizontalBar" ? "bar" : chart_type,
+                type: chart_type === "area" ? "line" : chart_type,
                 plugins: chart_plugin,
                 data: {
                     labels: chart_data['labels'],
@@ -1387,21 +1331,21 @@ var KsDashboardNinja = AbstractAction.extend({
                 },
                 options: {
                     maintainAspectRatio: false,
-                    indexAxis: chart_type === "horizontalBar" ? 'y' : undefined,
+                    responsiveAnimationDuration: 1000,
                     animation: {
                         easing: 'easeInQuad',
                     },
-                    scales: scales,
-                    layout: {
-                        padding: {
-                            bottom: 0,
-                        }
-                    },
-                    plugins: {
-                        legend: {
+                   legend: {
                             display: item.ks_hide_legend
                         },
-                        datalabels: {
+                    scales: scales,
+                   layout: {
+                        padding: {
+                        bottom: 0,
+                   }
+                },
+                plugins: {
+                    datalabels: {
                         backgroundColor: function(context) {
                             return context.dataset.backgroundColor;
                         },
@@ -1560,19 +1504,17 @@ var KsDashboardNinja = AbstractAction.extend({
             var chartColors = this.ks_chart_color_pallet(gradient, setsCount, palette, item);
             var datasets = ksMyChart.config.data.datasets;
             var options = ksMyChart.config.options;
-            options.plugins = options.plugins || {};
-            options.plugins.legend = options.plugins.legend || {};
-            options.plugins.legend.labels = options.plugins.legend.labels || {};
-            options.plugins.legend.labels.usePointStyle = true;
+
+            options.legend.labels.usePointStyle = true;
             if (ksChartFamily == "circle") {
                 if (ks_show_data_value) {
-                    options.plugins.legend.position = 'bottom';
+                    options.legend.position = 'bottom';
                     options.layout.padding.top = 10;
                     options.layout.padding.bottom = 20;
                     options.layout.padding.left = 20;
                     options.layout.padding.right = 20;
                 } else {
-                    options.plugins.legend.position = 'top';
+                    options.legend.position = 'top';
                 }
 
                 options = self.ksHideFunction(options, item, ksChartFamily, chartType);
@@ -1585,29 +1527,27 @@ var KsDashboardNinja = AbstractAction.extend({
                 options.plugins.datalabels.clamp = true;
                 options.plugins.datalabels.clip = false;
 
-                options.plugins.tooltip = options.plugins.tooltip || {};
-                options.plugins.tooltip.callbacks = {
-                    title: function(items) {
-                        if (!items || !items.length) return '';
-                        var tooltipItem = items[0];
-                        var data = tooltipItem.chart.data;
-                        var k_amount = data.datasets[tooltipItem.datasetIndex]['data'][tooltipItem.dataIndex];
+                options.tooltips.callbacks = {
+                    title: function(tooltipItem, data) {
+                        var ks_self = self;
+                        var k_amount = data.datasets[tooltipItem[0].datasetIndex]['data'][tooltipItem[0].index];
                         var ks_selection = chart_data.ks_selection;
                         if (ks_selection === 'monetary') {
                             var ks_currency_id = chart_data.ks_currency;
                             k_amount = KsGlobalFunction.ks_monetary(k_amount, ks_currency_id);
-                            return data.datasets[tooltipItem.datasetIndex]['label'] + " : " + k_amount
+                            return data.datasets[tooltipItem[0].datasetIndex]['label'] + " : " + k_amount
                         } else if (ks_selection === 'custom') {
                             var ks_field = chart_data.ks_field;
+                            //                                                        ks_type = field_utils.format.char(ks_field);
                             k_amount = field_utils.format.float(k_amount, Float64Array, {digits:[0,item.ks_precision_digits]});
-                            return data.datasets[tooltipItem.datasetIndex]['label'] + " : " + k_amount + " " + ks_field;
+                            return data.datasets[tooltipItem[0].datasetIndex]['label'] + " : " + k_amount + " " + ks_field;
                         } else {
                             k_amount = field_utils.format.float(k_amount, Float64Array, {digits:[0,item.ks_precision_digits]});
-                            return data.datasets[tooltipItem.datasetIndex]['label'] + " : " + k_amount
+                            return data.datasets[tooltipItem[0].datasetIndex]['label'] + " : " + k_amount
                         }
                     },
-                    label: function(context) {
-                        return context.label;
+                    label: function(tooltipItem, data) {
+                        return data.labels[tooltipItem.index];
                     },
                 }
                 for (var i = 0; i < datasets.length; i++) {
@@ -1615,25 +1555,14 @@ var KsDashboardNinja = AbstractAction.extend({
                     datasets[i].borderColor = "rgba(255,255,255,1)";
                 }
                 if (semi_circle && (chartType === "pie" || chartType === "doughnut")) {
-                    // Chart.js v4: rotation/circumference live on the dataset/arc
-                    for (var si = 0; si < datasets.length; si++) {
-                        datasets[si].rotation = 1 * Math.PI;
-                        datasets[si].circumference = 1 * Math.PI;
-                    }
+                    options.rotation = 1 * Math.PI;
+                    options.circumference = 1 * Math.PI;
                 }
             } else if (ksChartFamily == "square") {
                 options = self.ksHideFunction(options, item, ksChartFamily, chartType);
 
-                // Chart.js v4 keeps the raw user config, so single-axis charts
-                // have no scales yet at this point - create the x/y defaults
-                // the same way v4 would resolve them.
-                options.scales = options.scales || {};
-                options.scales.x = options.scales.x || { type: "category" };
-                options.scales.y = options.scales.y || { type: "linear" };
-                options.scales.x.grid = options.scales.x.grid || {};
-                options.scales.x.grid.display = false;
-                options.scales.y.ticks = options.scales.y.ticks || {};
-                options.scales.y.ticks.beginAtZero = true;
+                options.scales.xAxes[0].gridLines.display = false;
+                options.scales.yAxes[0].ticks.beginAtZero = true;
 
                 options.plugins.datalabels.align = 'end';
 
@@ -1661,8 +1590,7 @@ var KsDashboardNinja = AbstractAction.extend({
                 }
 
                 if (chartType === "horizontalBar") {
-                    options.scales.x.ticks = options.scales.x.ticks || {};
-                    options.scales.x.ticks.callback = function(value, index, values) {
+                    options.scales.xAxes[0].ticks.callback = function(value, index, values) {
                         var ks_selection = chart_data.ks_selection;
                         if (ks_selection === 'monetary') {
                             var ks_currency_id = chart_data.ks_currency;
@@ -1678,10 +1606,9 @@ var KsDashboardNinja = AbstractAction.extend({
                            return KsGlobalFunction._onKsGlobalFormatter(value, item.ks_data_formatting, item.ks_precision_digits);
                         }
                     }
-                    options.scales.x.ticks.beginAtZero = true;
+                    options.scales.xAxes[0].ticks.beginAtZero = true;
                 } else {
-                    options.scales.y.ticks = options.scales.y.ticks || {};
-                    options.scales.y.ticks.callback = function(value, index, values) {
+                    options.scales.yAxes[0].ticks.callback = function(value, index, values) {
                         var ks_selection = chart_data.ks_selection;
                         if (ks_selection === 'monetary') {
                             var ks_currency_id = chart_data.ks_currency;
@@ -1699,12 +1626,10 @@ var KsDashboardNinja = AbstractAction.extend({
                     }
                 }
 
-                options.plugins.tooltip = options.plugins.tooltip || {};
-                options.plugins.tooltip.callbacks = {
-                    label: function(context) {
-                        var data = context.chart.data;
-                        var tooltipItem = context;
-                        var k_amount = data.datasets[tooltipItem.datasetIndex]['data'][tooltipItem.dataIndex];
+                options.tooltips.callbacks = {
+                    label: function(tooltipItem, data) {
+                        var ks_self = self;
+                        var k_amount = data.datasets[tooltipItem.datasetIndex]['data'][tooltipItem.index];
                         var ks_selection = chart_data.ks_selection;
                         if (ks_selection === 'monetary') {
                             var ks_currency_id = chart_data.ks_currency;
@@ -1735,8 +1660,8 @@ var KsDashboardNinja = AbstractAction.extend({
                             } else {
                                 datasets[i].backgroundColor = chartColors[i];
                                 datasets[i].borderColor = "rgba(255,255,255,0)";
-                                options.scales.x.stacked = stack;
-                                options.scales.y.stacked = stack;
+                                options.scales.xAxes[0].stacked = stack;
+                                options.scales.yAxes[0].stacked = stack;
                             }
                             break;
                         case "line":
@@ -1764,16 +1689,14 @@ var KsDashboardNinja = AbstractAction.extend({
                     delete self.ksUpdateDashboard[item_id]
                 }
                 var myChart = self.chart_container[item_id];
-                if (!myChart) return;
-                var ksActive = myChart.getElementsAtEventForMode(evt, 'nearest', { intersect: true }, true);
-                var activePoint = ksActive[0];
+                var activePoint = myChart.getElementAtEvent(evt)[0];
                 if (activePoint) {
                     var item_data = self.ks_dashboard_data.ks_item_data[item_id];
                     var groupBy = JSON.parse(item_data["ks_chart_data"])['groupby'];
-                    if (myChart.config.data.domains) {
+                    if (activePoint._chart.data.domains) {
                         var sequnce = item_data.sequnce ? item_data.sequnce : 0;
 
-                        var domain = myChart.config.data.domains[activePoint.index]
+                        var domain = activePoint._chart.data.domains[activePoint._index]
                         if (item_data.max_sequnce != 0 && sequnce < item_data.max_sequnce) {
                             self._rpc({
                                 model: 'ks_dashboard_ninja.item',
@@ -2942,7 +2865,7 @@ var KsDashboardNinja = AbstractAction.extend({
                 count_1: KsGlobalFunction.ksNumFormatter(kpi_data[0]['record_data'], 1),
                 count_1_tooltip: kpi_data[0]['record_data'],
                 count_2: kpi_data[1] ? String(kpi_data[1]['record_data']) : false,
-                name: ksModelDisplayName(field),
+                name: field.name ? field.name : field.ks_model_id.data.display_name,
                 target_progress_deviation:target_progress_deviation,
                 icon_select: field.ks_icon_select,
                 default_icon: field.ks_default_icon,
@@ -3388,7 +3311,7 @@ var KsDashboardNinja = AbstractAction.extend({
                     data: JSON.stringify(data)
                 },
                 complete: framework.unblockUI,
-                error: (error) => self.call('crash_manager', 'rpc_error', error),
+                error: (error) => this.call('crash_manager', 'rpc_error', error),
             });
         },
 
@@ -3426,7 +3349,7 @@ var KsDashboardNinja = AbstractAction.extend({
                     data: JSON.stringify(data)
                 },
                 complete: framework.unblockUI,
-                error: (error) => self.call('crash_manager', 'rpc_error', error),
+                error: (error) => this.call('crash_manager', 'rpc_error', error),
             });
             e.stopPropagation();
         },
@@ -3512,22 +3435,20 @@ var KsDashboardNinja = AbstractAction.extend({
 
     core.action_registry.add('ks_dashboard_ninja', KsDashboardNinja);
 
-    // Odoo 17 patch() takes (objToPatch, extension) only - the legacy patch-name
-    // argument was removed (it throws at module load).  The v17 util re-links the
-    // prototype chain so patched methods call the parent with real `super`.
-    patch(WebClient.prototype, {
+    patch(WebClient.prototype, 'ks_dn.WebClient', {
         async loadRouterState(...args) {
-            const sup = await super.loadRouterState(...args);
-            try {
-                this.actionService.ksDnReloadMenu = async (menuId) => {
-                    await this.menuService.reload();
-                    this.menuService.setCurrentMenu(menuId);
-                };
-            } catch (e) {
-                console.error("ks_dashboard_ninja: unable to hook menu reload", e);
+            var self = this;
+            const sup = await this._super(...args);
+            const ks_reload_menu = async (id) =>  {
+                this.menuService.reload().then(() => {
+                      self.menuService.selectMenu(id);
+                  });
             }
+            this.actionService.ksDnReloadMenu = ks_reload_menu;
             return sup;
-        },
+        }
+
     });
 
-export default KsDashboardNinja;
+    return KsDashboardNinja;
+});

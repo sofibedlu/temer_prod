@@ -1,144 +1,170 @@
-/** @odoo-module **/
-/*
- * ks_dashboard_ninja - Odoo 15 -> 17 conversion of ks_quick_edit_view.js
- *
- * Odoo 15: the "quick edit" dropdown on each dashboard item embedded a legacy
- * QuickCreateFormView inline so the user could edit an item's core settings
- * (name, colors, icon, layout, count) without leaving the dashboard.
- * Odoo 17: QuickCreateFormView / web.data.DataSet / widget controllers were
- * removed from the web client.  The quick-edit flow is reproduced with the
- * Odoo 17 equivalent: the item record opens in a form dialog (target 'new')
- * and the dashboard item is refreshed once the dialog is closed.  The full
- * item form (navigation to the item form page) works exactly as before via
- * the 'openFullItemForm' event.
- *
- * The API surface used by the main dashboard action is unchanged:
- *   new QuickEditView(dashboardController, {item}) / .appendTo($menu)
- *   .on('canBeDestroyed'|'canBeRendered'|'openFullItemForm') / .destroy()
- */
-import { _t } from "@web/core/l10n/translation";
-import { renderToString } from "@web/core/utils/render";
+odoo.define('ks_dashboard_ninja.quick_edit_view', function(require) {
+    "use strict";
 
-export class QuickEditView {
-    constructor(parent, options) {
-        this.ksDashboardController = parent;
-        this.ksOriginalItemData = $.extend({}, options.item);
-        this.item = options.item;
-        this.item_name = options.item ? options.item.name : false;
-        this._events = {};
-        this._destroyed = false;
-    }
+    var core = require('web.core');
+    var Widget = require("web.Widget");
+    var _t = core._t;
+    var QWeb = core.qweb;
+    var data = require('web.data');
+    var QuickCreateFormView = require('web.QuickCreateFormView');
+    var AbstractAction = require('web.AbstractAction');
+    const session = require('web.session');
 
-    // --- tiny event emitter (legacy widget .on/.trigger) -------------------
-    on(eventName, obj, cb) {
-        if (typeof obj === "function") {
-            cb = obj;
-        }
-        (this._events[eventName] = this._events[eventName] || []).push(cb);
-        return this;
-    }
+    var QuickEditView = Widget.extend({
 
-    trigger(eventName, payload) {
-        (this._events[eventName] || []).forEach((cb) => {
-            try {
-                cb.call(this, payload);
-            } catch (e) {
-                console.error("ks quick edit handler error", e);
-            }
-        });
-        return this;
-    }
+        template: 'ksQuickEditViewOption',
 
-    appendTo($container) {
-        const self = this;
-        const title = this.item_name || _t("Quick edit");
-        const tpl =
-            '<div class="o_ks_quick_edit">' +
-            '<div class="o_ks_quick_edit_title px-2 pt-2 pb-1"><strong>' + title + "</strong></div>" +
-            '<div class="list-group list-group-flush">' +
-            '<a href="#" class="list-group-item list-group-item-action o_ks_qe_edit">' +
-            '<i class="fa fa-pencil"/> ' + _t("Edit in a form") + "</a>" +
-            '<a href="#" class="list-group-item list-group-item-action o_ks_qe_full">' +
-            '<i class="fa fa-external-link"/> ' + _t("Open full item form") + "</a>" +
-            "</div></div>";
-        this.$el = $(tpl);
-        $container.append(this.$el);
+        events: {
+            'click .ks_quick_edit_action': 'ksOnQuickEditViewAction',
+        },
 
-        this.$el.find(".o_ks_qe_edit").on("click", function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            self._ksOpenEditDialog();
-        });
-        this.$el.find(".o_ks_qe_full").on("click", function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            self.destroy();
-            self.trigger("openFullItemForm", {});
-        });
+        init: function(parent, options) {
+            this._super.apply(this, arguments);
+            this.ksDashboardController = parent;
 
-        // mirror the legacy widget lifecycle: content is rendered
-        this.trigger("canBeRendered", {});
-        return Promise.resolve(this);
-    }
+            this.ksOriginalItemData = $.extend({}, options.item);
+            this.item = options.item;
+            this.item_name = options.item ? options.item.name:false;
 
-    _ksOpenEditDialog() {
-        const self = this;
-        const controller = this.ksDashboardController;
-        if (!controller || typeof controller.do_action !== "function") {
-            this.ksDiscardChanges();
-            return;
-        }
-        const action = {
-            type: "ir.actions.act_window",
-            name: _t("Edit Dashboard Item"),
-            res_model: "ks_dashboard_ninja.item",
-            res_id: this.item.id,
-            views: [[false, "form"]],
-            view_mode: "form",
-            target: "new",
-            context: {
-                form_view_ref: "ks_dashboard_ninja.item_quick_edit_form_view",
-            },
-        };
-        controller
-            .do_action(action, {})
-            .finally(function () {
-                // refresh the dashboard item after the dialog is closed so the
-                // edited values (name, colors, icon, layout, count) show up
-                if (typeof controller.ksFetchUpdateItem === "function") {
-                    controller.ksFetchUpdateItem(self.item.id).catch(() => {});
-                } else if (typeof controller.ksUpdateDashboardItem === "function") {
-                    controller.ksUpdateDashboardItem([self.item.id]);
-                }
-                self.ksDiscardChanges();
+        },
+
+
+        willStart: function() {
+            var self = this;
+            return $.when(this._super()).then(function() {
+                return self._ksCreateController();
             });
-    }
+        },
 
-    ksDiscardChanges() {
-        const controller = this.ksDashboardController;
-        if (controller && typeof controller.ksFetchUpdateItem === "function") {
-            try {
-                controller.ksFetchUpdateItem(this.item.id);
-            } catch (e) {
-                console.error("ks quick edit refresh error", e);
+        _ksCreateController: function() {
+            var self = this;
+
+            self.context = $.extend({}, session.user_context);
+            self.context['form_view_ref'] = 'ks_dashboard_ninja.item_quick_edit_form_view';
+            self.context['res_id'] = this.item.id;
+            self.res_model = "ks_dashboard_ninja.item";
+            self.dataset = new data.DataSet(this, this.res_model, self.context);
+            var def = self.loadViews(this.dataset.model, self.context, [
+                [false, 'list'],
+                [false, 'form']
+            ], {});
+            return $.when(def).then(function(fieldsViews) {
+                self.formView = new QuickCreateFormView(fieldsViews.form, {
+                    context: self.context,
+                    modelName: self.res_model,
+                    userContext: self.getSession().user_context,
+                    currentId: self.item.id,
+                    index: 0,
+                    mode: 'edit',
+                    footerToButtons: true,
+                    default_buttons: false,
+                    withControlPanel: false,
+                    ids: [self.item.id],
+                });
+                var def2 = self.formView.getController(self);
+                return $.when(def2).then(function(controller) {
+                    self.controller = controller;
+                    self.controller._confirmChange = self._confirmChange.bind(self);
+                });
+            });
+        },
+
+        //This Function is replacing Controllers to intercept in between to fetch changed data and update our item view.
+        _confirmChange: function(id, fields, e) {
+            if (e.name === 'discard_changes' && e.target.reset) {
+                // the target of the discard event is a field widget.  In that
+                // case, we simply want to reset the specific field widget,
+                // not the full view
+                return e.target.reset(this.controller.model.get(e.target.dataPointID), e, true);
             }
-        }
-        this.destroy();
-    }
 
-    destroy() {
-        if (this._destroyed) {
-            return;
-        }
-        this._destroyed = true;
-        if (this.$el) {
-            this.$el.remove();
-            this.$el = null;
-        }
-        this.trigger("canBeDestroyed", {});
-    }
-}
+            var state = this.controller.model.get(this.controller.handle);
+            this.controller.renderer.confirmChange(state, id, fields, e);
+            return this.ks_Update_item();
+        },
 
-export default {
-    QuickEditView: QuickEditView,
-};
+        ks_Update_item: function() {
+            var self = this;
+            var ksChanges = this.controller.renderer.state.data;
+
+            if (ksChanges['name']) this.item['name'] = ksChanges['name'];
+
+            self.item['ks_font_color'] = ksChanges['ks_font_color'];
+            self.item['ks_icon_select'] = ksChanges['ks_icon_select'];
+//            self.item['ks_icon'] = ksChanges['ks_icon'];
+            self.item['ks_background_color'] = ksChanges['ks_background_color'];
+            self.item['ks_default_icon_color'] = ksChanges['ks_default_icon_color'];
+            self.item['ks_layout'] = ksChanges['ks_layout'];
+            self.item['ks_record_count'] = ksChanges['ks_record_count'];
+
+            if (ksChanges['ks_list_view_data']) self.item['ks_list_view_data'] = ksChanges['ks_list_view_data'];
+
+            if (ksChanges['ks_chart_data']) self.item['ks_chart_data'] = ksChanges['ks_chart_data'];
+
+            if (ksChanges['ks_kpi_data']) self.item['ks_kpi_data'] = ksChanges['ks_kpi_data'];
+
+            if (ksChanges['ks_list_view_type']) self.item['ks_list_view_type'] = ksChanges['ks_list_view_type'];
+
+            if (ksChanges['ks_chart_item_color']) self.item['ks_chart_item_color'] = ksChanges['ks_chart_item_color'];
+
+            self.ksUpdateItemView();
+
+        },
+
+        start: function() {
+            var self = this;
+            this._super.apply(this, arguments);
+
+        },
+
+        renderElement: function() {
+            var self = this;
+            self._super.apply(this, arguments);
+            self.controller.appendTo(self.$el.find(".ks_item_field_info"));
+
+            self.trigger('canBeRendered', {});
+        },
+
+        ksUpdateItemView: function() {
+            var self = this;
+            self.ksDashboardController.ksUpdateDashboardItem([self.item.id]);
+            self.item_el = $.find('#' + self.item.id + '.ks_dashboarditem_id');
+
+        },
+
+        ksDiscardChanges: function() {
+            var self = this;
+            self.ksDashboardController.ksFetchUpdateItem(self.item.id);
+            self.destroy();
+        },
+
+
+        ksOnQuickEditViewAction: function(e) {
+            var self = this;
+            self.need_reset = false;
+            var options = {
+                'need_item_reload': false
+            }
+            if (e.currentTarget.dataset['ksItemAction'] === 'saveItemInfo') {
+                this.controller.saveRecord().then(function() {
+                    self.ksDiscardChanges();
+                })
+            } else if (e.currentTarget.dataset['ksItemAction'] === 'fullItemInfo') {
+                this.trigger('openFullItemForm', {});
+            } else {
+                self.ksDiscardChanges();
+            }
+        },
+
+        destroy: function(options) {
+            this.trigger('canBeDestroyed', {});
+            this.controller.destroy();
+            this._super();
+        },
+    });
+
+
+    return {
+        QuickEditView: QuickEditView,
+    };
+});
